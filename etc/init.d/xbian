@@ -1,0 +1,36 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          xbian
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog 
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Xbian boot scripts
+# Description:
+#
+### END INIT INFO
+
+# Author: CurlyMo
+NAME=Xbian
+DESC="Xbian boot scripts"
+VERBOSE=no
+SCRIPTNAME=/etc/init.d/xbian
+do_start()
+{
+        /etc/rc.local
+}
+case "$1" in
+  start)
+        [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
+        do_start
+        case "$?" in
+                0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+                2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+        esac
+        ;;
+  *)
+        #echo "Usage: $SCRIPTNAME {start}" >&2
+        echo "Usage: $SCRIPTNAME {start}" >&2
+        exit 3
+        ;;
+esac
