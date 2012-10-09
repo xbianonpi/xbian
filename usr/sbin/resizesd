@@ -1,0 +1,232 @@
+#!/bin/bash
+# This script will resize your root partition
+# Version 0.7
+#
+# Created by r-win (Erwin Bovendeur)
+# Modified by CurlyMo for post-installation execution
+#
+# Tested by Fma965 and several others (thanks)
+#
+# Thanks to: deHakkelaar, eNORm, Biroka, RPi-101,
+# youtux, Lastb0isct, Tym and of course Koenkk 
+#
+echo
+echo "Partition Resize script by Erwin Bovendeur"
+echo "Version 0.7"
+echo
+echo "This script will try to resize your partition to the biggest possible size."
+
+function cleanup() {
+  [ -f /etc/profile.d/__resize.sh ] && rm /etc/profile.d/__resize.sh
+  [ -f /tmp/part.txt ] && rm /tmp/part.txt
+  [ -f /tmp/newpart.txt ] && rm /tmp/newpart.txt
+  [ -f /tmp/part.bin ] && rm /tmp/part.bin
+}
+
+# Extract the current partition table and make a backup to curpart.txt
+sfdisk -d /dev/mmcblk0 > /tmp/curpart.txt
+cp /tmp/curpart.txt /tmp/part.txt
+
+# Get the amount of total blocks on the SD card
+TOTALBLOCKS=$(fdisk -l /dev/mmcblk0 | grep total | awk '{printf "%s", $8}')
+# Get the start and end sectors, and the amount of sectors of the swap partition
+SWAPSTART=$(grep Id=82 /tmp/part.txt | awk '{printf "%d", $4}')
+SWAPEND=$(sfdisk -l -uS -q /dev/mmcblk0 2>&1 | grep swap | awk '{printf "%s", $3}')
+SWAPSIZE=$(grep Id=82 /tmp/part.txt | awk '{printf "%d", $6}')
+
+# Leave the last block alone
+LASTBLOCK=$((TOTALBLOCKS-1))
+
+# Should we move the swap partition to the end?
+if [ "$LASTBLOCK" -ne "$SWAPEND" ]; then
+  # Calculate the new swap partition offset
+  NEWSTART=$((TOTALBLOCKS-SWAPSIZE))
+
+  echo Swap partition will be moved to offset $NEWSTART 
+
+  # Change the start sector of the swap partition
+  sed s/$SWAPSTART/$NEWSTART/ /tmp/part.txt > /tmp/newpart.txt
+  mv /tmp/newpart.txt /tmp/part.txt
+
+  SWAPSTART=NEWSTART
+fi
+
+# Get the start and size of the Linux partition
+START=$(grep Id=83 /tmp/part.txt | awk '{printf "%d", $4}')
+SIZE=$(grep Id=83 /tmp/part.txt | awk '{printf "%d", $6}')
+
+# Calculate the new size of the linux partition
+NEWSIZE=$((SWAPSTART-START))
+
+# Change the size of the linux partition
+sed s/$SIZE/$NEWSIZE/ /tmp/part.txt > /tmp/newpart.txt
+mv /tmp/newpart.txt /tmp/part.txt
+
+# Check for differences between the current partition table and
+# the new partition table.
+# If there are differences, apply the new table
+# If there are no differences, assume we've already applied the table
+# and continue below with adding swap and resizing the partition
+diff /tmp/curpart.txt /tmp/part.txt > /dev/null
+if [ "$?" -ne "0" ]; then
+
+  # Check if the table can dynamically rescan the partition table
+  if [ ! -f /sys/block/mmcblk0/device/rescan ]; then
+    echo "A reboot is required during this script, after which you have to restart this script."
+    echo
+  fi
+
+  echo All data collected. Your partitions size will be increased.
+  echo If you continue the new partition will be written to the disc.
+  echo
+
+
+  # Write the partition table and make a backup of the original one
+  sfdisk --no-reread -q -f /dev/mmcblk0 -O /tmp/part.bin < /tmp/part.txt &> /dev/null
+
+  # Extract the table again
+  sfdisk -d /dev/mmcblk0 > /tmp/newpart.txt
+
+  # Check for the "new" size of the linux partition
+  CHECKSIZE=$(grep Id=83 /tmp/newpart.txt | awk '{printf "%d", $6}')
+
+  # Is the new size the expected size? 
+  if [ "$NEWSIZE" -ne "$CHECKSIZE" ]; then
+    # Did the partition table change at all? This should
+    # never happen. Ever...well...maybe if the lock switch is
+    # on on the SD card
+    diff /tmp/curpart.txt /tmp/newpart.txt > /dev/null
+    if [ "$?" -eq "0" ]; then
+      echo "Apparently the partition table could not be changed."
+      echo
+
+      cleanup
+      exit 2
+    fi
+
+    echo Something went wrong, but we will try to restore your partition table.
+    echo If that fails too, DO NOT reboot, but join us on IRC using the webchat.
+
+    # Restore the partition table, if the backup was succesfull
+    if [ -s /tmp/part.bin ]; then
+      echo Restoring original partition table
+      sfdisk --force -q -I /tmp/part.bin /dev/mmcblk0 &> /dev/null
+      echo Original partition table restored
+    else
+      # Notify the ppl to join IRC. For the ppl in IRC, let the user
+      # check for /tmp/curpart.txt. If it's available, try to restore
+      # it using 
+      # sfdisk --no-reread -q -f /dev/mmcblk0 \
+      #    -O /tmp/wrongpart.bin < /tmp/curpart.txt
+      # If that fails, use the current kernel size to rebuild the 
+      # original partition table. The original partition sizes can
+      # be found in /sys/block/mmcblk0/mmcblk0p<partitionnr>/(start|size)
+      echo "Partition backup is unavailable. Join IRC so we can help you fix the partition table. Do NOT reboot your Raspberry PI!" 
+    fi
+    echo
+
+    cleanup
+    exit 1
+  fi
+fi
+
+# Check to see if the kernel and the partition table have 
+# the same partition size (which means the system has been rebooted,
+# or that dynamic partition rescan is enabled)
+KERNELSIZE=$(cat /sys/block/mmcblk0/mmcblk0p2/size) 
+if [ "$KERNELSIZE" -ne "$NEWSIZE" ]; then
+  # Try to rescan the partition table dynamically
+  if [ -f /sys/block/mmcblk0/device/rescan ]; then
+    echo Rescanning partition table
+    echo 1 > /sys/block/mmcblk0/device/rescan
+    sleep 2
+  fi
+
+  # If rescanning is disabled or fails, you should reboot.
+  KERNELSIZE=$(cat /sys/block/mmcblk0/mmcblk0p2/size)
+  if [ "$KERNELSIZE" -ne "$NEWSIZE" ]; then
+    echo The kernel is not aware of the new size yet.
+    echo You must reboot your system, and run this script again after the reboot.
+    echo
+    cleanup
+	reboot
+    exit 0
+  fi
+fi
+
+# Recreate and add the swap partition. We only moved the partitions,
+# not the data. That means that the swap partition isn't a real
+# swap partition yet.
+SWAPDEVICE=$(grep Id=82 /tmp/part.txt | awk '{printf "%s", $1}')
+ISSWAPAVAIL=$(swapon -s | grep $SWAPDEVICE)
+
+# Is the swap partition already mounted?
+if [ -z "$ISSWAPAVAIL" ]; then
+  echo -n "Recreating swap partition..."
+  mkswap $SWAPDEVICE &> /dev/null
+  swapon $SWAPDEVICE &> /dev/null
+  echo done.
+fi
+
+# Get the current blocks of the partition, and of the filesystem
+# Tune2fs will tell you the block count (and size) of the current
+# filesystem. df will not work, since it will tell you the size you
+# can use, which is around 5% lower than the amount of sectors you
+# have. So calculate the block count using tune2fs and compare it
+# to the amount of blocks as returned by fdisk.
+BLOCKS=$(fdisk -l /dev/mmcblk0 | grep mmcblk0p2 | awk '{printf "%d", $4}')
+COUNT=$(tune2fs -l /dev/mmcblk0p2 | grep "Block count: " | awk '{printf "%d", $3}')
+SIZE=$(tune2fs -l /dev/mmcblk0p2 | grep "Block size: " | awk '{printf "%d", $3}')
+TUNEBLOCKS=$((COUNT*SIZE/1024))
+
+# Compare the amount of blocks of the partition, with the amount
+# of blocks used by the filesystem
+if [ "$BLOCKS" -eq "$TUNEBLOCKS" ]; then
+  echo "Your partition is already at it's maximum size."
+  echo
+  cleanup
+  exit 0
+fi
+
+# Start resize2fs on the background 
+echo "Start resizing the partition. This operation can take some time. Please be patient!" 
+resize2fs /dev/mmcblk0p2 &> /dev/null &
+
+# Draw a nice progressbar, again, use tune2fs to get the actual block
+# count.
+while [[ -n $(pgrep resize2fs) && "$BLOCKS" -ne "$TUNEBLOCKS" ]]; do
+  COUNT=$(tune2fs -l /dev/mmcblk0p2 | grep "Block count: " | awk '{printf "%d", $3}')
+
+  TUNEBLOCKS=$((COUNT*SIZE/1024)) 
+
+  PERCENTAGE=$((TUNEBLOCKS*100/BLOCKS))
+  WIDTH=$(($(tput cols)-7))
+  
+  AMOUNT=$((WIDTH*PERCENTAGE/100))
+  W=$((WIDTH-AMOUNT))
+  STR=""
+  while [ "$AMOUNT" -gt 0 ]; do
+    STR=$STR#
+    let AMOUNT-=1
+  done
+  while [ "$W" -gt 0 ]; do
+    STR="$STR "
+    let W-=1
+  done
+  if [ "$PERCENTAGE" -lt "10" ]; then
+    echo -ne "$STR (  $PERCENTAGE%)\r"
+  elif [ "$PERCENTAGE" -ne "100" ]; then
+    echo -ne "$STR ( $PERCENTAGE%)\r"
+  else
+    echo -ne "$STR ($PERCENTAGE%)\r"
+  fi
+done
+echo
+
+CURRENTSIZE=$(df -h / | tail -1 | awk '{printf "%s", $2}')
+
+echo "Resize completed. You have now $CURRENTSIZE available." 
+echo
+
+cleanup
+update-rc.d resizesd remove
