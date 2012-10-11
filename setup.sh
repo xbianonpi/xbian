@@ -9,6 +9,14 @@ sudo echo "xbian:raspberry" | chpasswd
 sudo userdel pi
 sudo rm -rf /home/pi
 
+#11-10-2012 23:15
+#Disabling root login
+sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+
+#Set hostname
+echo "xbian" > /etc/hostname
+hostname xbian
+
 #09-10-2012 22:00
 #Installing and dowloading git files
 apt-get install unzip
