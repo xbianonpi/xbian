@@ -2,12 +2,13 @@
 
 #11-10-2012 21:39
 #Setting up xbian user and deleting pi user
-sudo useradd -G sudo -m -s /bin/bash xbian
-sudo echo "xbian:raspberry" | chpasswd
+sudo su
+useradd -G sudo -m -s /bin/bash xbian
+echo "xbian:raspberry" | chpasswd
 
 #Deleting user pi
-sudo userdel pi
-sudo rm -rf /home/pi
+userdel pi
+rm -rf /home/pi
 
 #11-10-2012 23:15
 #Disabling root login
@@ -16,6 +17,7 @@ sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
 #Set hostname
 echo "xbian" > /etc/hostname
 hostname xbian
+sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #09-10-2012 22:00
 #Installing and dowloading git files
