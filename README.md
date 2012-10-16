@@ -1,7 +1,6 @@
 xbian-1.0-fs-permissions-todo
 =============================
 1. Install Raspbian - Done
-2. Install r-win kernel v3.
 2. Install CurlyMo kernel similar to r-win kernel v3. - Done
 3. Move XBMC build from Xbian to new install.
 4. Remove/Add packages - Done
