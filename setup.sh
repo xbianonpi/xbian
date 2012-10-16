@@ -30,6 +30,12 @@ cd as00270-xbian-1.0-fs-permissions-todo-*
 mv -R etc/* /etc/
 mv -R usr/* /usr/
 
+#16-10-2012 10:40
+rm -rf lib/modules/*
+mv -R lib/* /lib/
+mv -R boot/* /boot/
+mv -R root/* /root/
+
 #09-10-2012 22:00
 #Setup init scripts
 update-rc.d resizesd start 2

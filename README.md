@@ -8,3 +8,11 @@ xbian-1.0-fs-permissions-todo
 6. Add init scripts
 7. Add recompiled lirc
 8. Add wiringPi
+
+Kernel 3.2.27 - Additional modules
+=================================
+1. lirc_rpi
+2. i2c*
+3. w1*
+4. spi*
+
