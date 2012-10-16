@@ -1,0 +1,3 @@
+[submodule "opt/raspberry/linux"]
+	path = opt/raspberry/linux
+	url = https://github.com/raspberrypi/linux.git
