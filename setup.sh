@@ -6,6 +6,11 @@ sudo su
 useradd -G sudo -m -s /bin/bash xbian
 echo "xbian:raspberry" | chpasswd
 
+#Relogin with ssh as xbian user
+
+#Kill all processes started by user pi
+for i in $(pgrep -u pi); do kill -9 $i; done;
+
 #Deleting user pi
 userdel pi
 rm -rf /home/pi
@@ -23,21 +28,21 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 #Installing and dowloading git files
 apt-get install unzip
 
-wget https://github.com/as00270/xbian-1.0-fs-permissions-todo/zipball/master
-mv master xbian.zip
-unzip xbian.zip
-cd as00270-xbian-1.0-fs-permissions-todo-*
-mv -R etc/* /etc/
-mv -R usr/* /usr/
+cd /home/xbian/
+git clone --depth 1 https://github.com/as00270/xbian-1.0-fs-permissions-todo.git source
+cd source
+cp -R etc/* /etc/
+cp -R usr/* /usr/
 
 #16-10-2012 10:40
-rm -rf lib/modules/*
-mv -R lib/* /lib/
-mv -R boot/* /boot/
-mv -R root/* /root/
+rm -rf /lib/modules/*
+cp -R lib/* /lib/
+cp -R boot/* /boot/
+cp -R root/* /root/
 
 #09-10-2012 22:00
 #Setup init scripts
 update-rc.d resizesd start 2
 update-rc.d xbmc defaults
 update-rc.d xbian defaults
+update-rc.d lirc defaults
