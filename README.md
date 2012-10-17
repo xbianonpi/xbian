@@ -6,9 +6,9 @@ xbian-1.0-fs-permissions-todo
 4. Remove/Add packages - Done
 5. Add xbian user (optional) - Done
 6. Add init scripts - Done
-7. Add recompiled lirc
-8. Add wiringPi
-9. Patch raspi-config
+7. Add recompiled lirc - Done
+8. Add wiringPi (as additional module)
+9. Patch raspi-config --> create xbian-config
 
 Kernel 3.2.27 - Additional modules
 =================================
