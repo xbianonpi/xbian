@@ -6,6 +6,11 @@ sudo su
 useradd -G sudo -m -s /bin/bash xbian
 echo "xbian:raspberry" | chpasswd
 
+#Relogin with ssh as xbian user
+
+#Kill all processes started by user pi
+for i in $(pgrep -u pi); do kill -9 $i; done;
+
 #Deleting user pi
 userdel pi
 rm -rf /home/pi
