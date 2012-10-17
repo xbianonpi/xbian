@@ -28,18 +28,17 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 #Installing and dowloading git files
 apt-get install unzip
 
-wget https://github.com/as00270/xbian-1.0-fs-permissions-todo/zipball/master
-mv master xbian.zip
-unzip xbian.zip
-cd as00270-xbian-1.0-fs-permissions-todo-*
-mv -R etc/* /etc/
-mv -R usr/* /usr/
+cd /home/xbian/
+git clone --depth 1 https://github.com/as00270/xbian-1.0-fs-permissions-todo.git source
+cd source
+cp -R etc/* /etc/
+cp -R usr/* /usr/
 
 #16-10-2012 10:40
-rm -rf lib/modules/*
-mv -R lib/* /lib/
-mv -R boot/* /boot/
-mv -R root/* /root/
+rm -rf /lib/modules/*
+cp -R lib/* /lib/
+cp -R boot/* /boot/
+cp -R root/* /root/
 
 #09-10-2012 22:00
 #Setup init scripts
