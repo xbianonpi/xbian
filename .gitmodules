@@ -1,3 +1,6 @@
 [submodule "opt/raspberry/linux"]
 	path = opt/raspberry/linux
 	url = https://github.com/raspberrypi/linux.git
+[submodule "usr/src/tools"]
+	path = usr/src/tools
+	url = https://github.com/raspberrypi/tools.git
