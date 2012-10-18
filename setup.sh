@@ -45,4 +45,5 @@ cp -R root/* /root/
 update-rc.d resizesd start 2
 update-rc.d xbmc defaults
 update-rc.d xbian defaults
+chmod +x /etc/init.d/lirc
 update-rc.d lirc defaults
