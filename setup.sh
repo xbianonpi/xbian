@@ -46,4 +46,6 @@ update-rc.d resizesd start 2
 update-rc.d xbmc defaults
 update-rc.d xbian defaults
 chmod +x /etc/init.d/lirc
+chmod +x /usr/local/sbin/*
+chmod +x /usr/local/bin/*
 update-rc.d lirc defaults
