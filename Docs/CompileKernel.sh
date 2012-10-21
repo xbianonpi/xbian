@@ -2,7 +2,7 @@
 
 #Download compilation tools from the official raspberry pi github
 cd /usr/src
-sudo git clone --depth 1 https://github.com/raspberrypi/tools.git
+sudo git clone --depth 5 https://github.com/raspberrypi/tools.git
 cd tools
 #Revert to the version used when building the kernel to ensure success
 sudo git checkout 9c3d7b6ac692498dd36fec2872e0b55f910baac1
@@ -11,9 +11,9 @@ sudo ln -s /usr/src/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-
 #Download the official kernel from the raspberry pi github
 sudo mkdir /opt/raspberry
 cd /opt/raspberry
-sudo git clone --depth 1 git://github.com/raspberrypi/linux.git
+sudo git clone --depth 5 git://github.com/raspberrypi/linux.git
 cd linux
-#Revert tot the versuin used when building the kernel to ensure success
+#Revert tot the version used when building the kernel to ensure success
 sudo git checkout f9506a194ad6a4afef06cb423286367ab787dee6
 
 #Download the used config from the Xbian github
