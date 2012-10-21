@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /usr/src
-sudo git clone --depth 1 https://github.com/raspberrypi/tools.git
+sudo git clone --depth 5 https://github.com/raspberrypi/tools.git
 cd tools
 sudo git checkout 9c3d7b6ac692498dd36fec2872e0b55f910baac1
 sudo ln -s /usr/src/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-linux-gnueabi-gcc /usr/bin/arm-bcm2708-linux-gnueabi-gcc
