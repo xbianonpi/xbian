@@ -14,6 +14,7 @@ cd /usr/src
 sudo git clone --depth 5 git://lirc.git.sourceforge.net/gitroot/lirc/lirc
 cd lirc
 sudo ./autogen.sh
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/lirc/lirc_xbian.patch
 sudo patch -p1 < lirc_xbian.patch
 sudo ./configure --with-driver=all CROSS_COMPILE=/usr/bin/
 sudo make CROSS_COMPILE=/usr/bin/ LC_CTYPE=en_US.UTF-8
