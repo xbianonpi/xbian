@@ -1,4 +1,4 @@
-xbian-1.0-fs-permissions-todo
+xbian1.0
 =============================
 1. Install Raspbian - Done
 2. Install CurlyMo kernel similar to r-win kernel v3. - Done
