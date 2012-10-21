@@ -17,11 +17,11 @@ cd linux
 sudo git checkout f9506a194ad6a4afef06cb423286367ab787dee6
 
 #Download the used config from the Xbian github
-sudo wget https://raw.github.com/as00270/xbian-1.0-fs-permissions-todo/1dd59a8f8a056a833bca891c3bf94e60480cf6c8/root/patches/kernel/.config
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
 
 #Symlink the lirc drivers to get the patch working
 sudo ln -s drivers/staging/media/lirc drivers/staging/lirc
-sudo wget https://raw.github.com/as00270/xbian-1.0-fs-permissions-todo/1dd59a8f8a056a833bca891c3bf94e60480cf6c8/root/patches/kernel/kernel.lirc_rpi-0.2.patch
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/kernel.lirc_rpi-0.2.patch
 sudo patch -p1 < kernel.lirc_rpi-0.2.patch
 
 #Stop XBMC to increase compilation speed
