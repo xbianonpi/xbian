@@ -67,7 +67,7 @@
    	# Cloning xbmc
    	sudo mkdir /opt/
    	cd /opt/
-   	git clone git://github.com/xbmc/xbmc.git
+   	git clone --depth 5 git://github.com/xbmc/xbmc.git
 	
    	# Creating a bigger swap file
    	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
@@ -75,7 +75,7 @@
 
 # 2. Compiling libtag (XBMC dependency)
 	cd /opt/
-	git clone git://github.com/taglib/taglib.git
+	git clone --depth 5 git://github.com/taglib/taglib.git
 	cd /opt/taglib/
 	cmake -DCMAKE_INSTALsL_PREFIX=/usr -DCMAKE_RELEASE_TYPE=Release
 	make
@@ -84,7 +84,7 @@
 	
 # 3. Compiling libcec
 	cd /opt/
-	git clone git://github.com/Pulse-Eight/libcec.git
+	git clone --depth 5 git://github.com/Pulse-Eight/libcec.git
 	cd /opt/libcec/
 	autoreconf -vif
 	./configure
