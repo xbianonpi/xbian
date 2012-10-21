@@ -1,4 +1,4 @@
-xbian1.0
+XBian 1.0 Alpha 1
 =============================
 1. Install Raspbian - Done
 2. Install CurlyMo kernel similar to r-win kernel v3. - Done
