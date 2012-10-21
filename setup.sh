@@ -38,7 +38,6 @@ cp -R usr/* /usr/
 rm -rf /lib/modules/*
 cp -R lib/* /lib/
 cp -R boot/* /boot/
-cp -R root/* /root/
 
 #09-10-2012 22:00
 #Setup init scripts
