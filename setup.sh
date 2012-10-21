@@ -29,7 +29,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 apt-get install unzip
 
 cd /home/xbian/
-git clone --depth 1 https://github.com/as00270/xbian-1.0-fs-permissions-todo.git source
+git clone --depth 1 https://github.com/Koenkk/xbian.git source
 cd source
 cp -R etc/* /etc/
 cp -R usr/* /usr/
