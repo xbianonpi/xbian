@@ -10,6 +10,7 @@ XBian 1.0 Alpha 1
 8. Add wiringPi (as additional module)
 9. Patch raspi-config --> create xbian-config
 
+
 Kernel 3.2.27 - Additional modules
 =================================
 1. lirc_rpi
