@@ -299,7 +299,8 @@ settings() {
 }
 
 packages() {
-	dialog --backtitle "Xbian" --title "Config > Settings > Packages" --ok-label Close --msgbox "\n\n            Not implemented yet" 9 50
+	dialog --backtitle "Xbian" --title "Config > Settings > Packages" --ok-label Close --msgbox "\n\n	Not implemented yet" 9 50
+	mainmenu;
 }
 
 mainmenu() {
