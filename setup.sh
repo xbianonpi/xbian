@@ -54,3 +54,14 @@ update-rc.d lirc defaults
 #22-10-2012 14:40
 #Copying home folder
 cp -r home/* /home/
+
+#Fixing symbolic links
+rm /usr/local/lib/libshairport.so.0
+ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0 
+rm /usr/local/lib/libtag_c.so.0
+ln -s /usr/local/lib/libtag_c.so.0.0.0 /usr/local/lib/libtag_c.so.0
+rm /usr/local/lib/libtag.so.1
+ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+rm /usr/lib/libcec.so.2
+ln -s /usr/lib/libcec.so.2.0.0 /usr/lib/libcec.so.2
+
