@@ -20,7 +20,7 @@ sudo git checkout f9506a194ad6a4afef06cb423286367ab787dee6
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
 
 #Symlink the lirc drivers to get the patch working
-sudo ln -s drivers/staging/media/lirc drivers/staging/lirc
+sudo ln -s /opt/raspberry/linux/drivers/staging/media/lirc /opt/raspberry/linux/drivers/staging/lirc
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/kernel.lirc_rpi-0.2.patch
 sudo patch -p1 < kernel.lirc_rpi-0.2.patch
 

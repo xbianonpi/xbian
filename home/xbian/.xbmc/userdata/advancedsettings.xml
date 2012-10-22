@@ -1,0 +1,24 @@
+<advancedsettings>
+   <network>
+        <cachemembuffersize>5282880</cachemembuffersize>
+   </network>
+   <fanartheight>540</fanartheight>
+   <thumbsize>256</thumbsize>
+   <gui>
+       <algorithmdirtyregions>3</algorithmdirtyregions>      
+       <nofliptimeout>0</nofliptimeout>
+   </gui>
+   <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</cputempcommand>
+   <lookandfeel>
+        <webserver>true</webserver>
+   </lookandfeel>
+   <bginfoloadermaxthreads>2</bginfoloadermaxthreads>
+   <video>
+     <adjustrefreshrate>  
+       <override>
+         <fps>23.976</fps>
+         <refresh>24.0</refresh>
+       </override>
+     </adjustrefreshrate>
+   </video>
+</advancedsettings>

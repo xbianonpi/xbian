@@ -1,4 +1,4 @@
-xbian1.0
+XBian 1.0 Alpha 1
 =============================
 1. Install Raspbian - Done
 2. Install CurlyMo kernel similar to r-win kernel v3. - Done
@@ -9,6 +9,7 @@ xbian1.0
 7. Add recompiled lirc - Done
 8. Add wiringPi (as additional module)
 9. Patch raspi-config --> create xbian-config
+
 
 Kernel 3.2.27 - Additional modules
 =================================
