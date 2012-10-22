@@ -1,0 +1,34 @@
+# vim:enc=utf-8:nu:ai:si:et:ts=4:sw=4:ft=udevrules:
+#
+# /etc/udev/rules.d/10-my-media-automount.rules
+
+# start at sda
+KERNEL!="sd[a-z]*", GOTO="my_media_automount_end"
+ACTION=="add", PROGRAM!="/sbin/blkid %N", GOTO="my_media_automount_end"
+
+# import some useful filesystem info as variables
+IMPORT{program}="/sbin/blkid -o udev -p %N"
+
+# get the label if present, otherwise assign one based on device/partition
+ENV{ID_FS_LABEL}!="", ENV{dir_name}="%E{ID_FS_LABEL}"
+ENV{ID_FS_LABEL}=="", ENV{dir_name}="usbhd-%k"
+
+# create the dir in /media and symlink it to /mnt
+ACTION=="add", RUN+="/bin/mkdir -p '/media/%E{dir_name}'"
+
+# global mount options
+ACTION=="add", ENV{mount_options}="relatime"
+# filesystem-specific mount options (777/666 dir/file perms for ntfs/vfat)
+ACTION=="add", ENV{ID_FS_TYPE}=="vfat|ntfs", ENV{mount_options}="$env{mount_options},gid=100,dmask=000,fmask=111,utf8"
+
+# automount ntfs filesystems using ntfs-3g driver
+ACTION=="add", ENV{ID_FS_TYPE}=="ntfs", RUN+="/bin/mount -t ntfs-3g -o %E{mount_options} /dev/%k '/media/%E{dir_name}'"
+# automount all other filesystems
+ACTION=="add", ENV{ID_FS_TYPE}!="ntfs", RUN+="/bin/mount -t auto -o %E{mount_options} /dev/%k '/media/%E{dir_name}'"
+
+# clean up after device removal
+ACTION=="remove", ENV{dir_name}!="", RUN+="/bin/umount -l '/media/%E{dir_name}'", RUN+="/bin/rmdir '/media/%E{dir_name}'"
+
+# exit
+LABEL="my_media_automount_end"
+
