@@ -3,4 +3,3 @@ core_freq=375
 disable_overscan=1
 gpu_mem_256=128
 gpu_mem_512=384
-force_turbo=0
