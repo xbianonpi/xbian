@@ -89,33 +89,34 @@
 	sudo git clone --depth 5 git://github.com/Pulse-Eight/libcec.git
 	cd /opt/libcec/
 	sudo autoreconf -vif
-	sudo ./configure --prefix=/usr/local
+	sudo ./configure --prefix=/usr/
 	sudo make
 	sudo make install
 	
 
 # 4. Compiling libshairport
 	cd /opt/
-	wget http://mirrors.xbmc.org/build-deps/darwin-libs/libshairport-1.2.0.20310_lib.tar.gz
-	tar xzf libshairport-1.2.0.20310_lib.tar.gz
+	sudo wget http://mirrors.xbmc.org/build-deps/darwin-libs/libshairport-1.2.0.20310_lib.tar.gz
+	sudo tar xzf libshairport-1.2.0.20310_lib.tar.gz
+	sudo rm libshairport-1.2.0.20310_lib.tar.gz
 	cd /opt/libshairport-1.2.0.20310_lib/
 	
 	# Applying some patches
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/001_add_ao.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/002_fix_install_header.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/003_fix_deadlock.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/004_fix_bad_access.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/005_fix_shutdown.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/006_no_printf.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/007_fix_syslog_defines.patch  
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/008-add-missing-libs.patch  
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/009_fix_ipv6.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/010_handle_metadata.patch
-	wget https://raw.github.com/Memphiz/xbmc/203145a9b6049035dd3e9adbe1e10d8eeae629c9/lib/libshairport/011_fix_ipv4_fallback.patch
-	patch -Np0 -i 011_fix_ipv4_fallback.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/001_add_ao.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/002_fix_install_header.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/003_fix_deadlock.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/004_fix_bad_access.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/005_fix_shutdown.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/006_no_printf.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/007_fix_syslog_defines.patch  
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/008-add-missing-libs.patch  
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/009_fix_ipv6.patch
+	sudo patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/010_handle_metadata.patch
+	sudo wget https://raw.github.com/Memphiz/xbmc/master/lib/libshairport/011_fix_ipv4_fallback.patch
+	sudo patch -Np0 -i 011_fix_ipv4_fallback.patch
  
 	# Compiling
-	autreconf -vif  
+	autoreconf -vif
 	./configure --prefix=/usr/local --sysconfdir=/etc --disable-static --enable-shared
 	make
 	sudo make install
