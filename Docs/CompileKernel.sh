@@ -14,7 +14,7 @@ cd /opt/raspberry
 sudo git clone --depth 5 git://github.com/raspberrypi/linux.git
 cd linux
 #Revert tot the version used when building the kernel to ensure success
-sudo git checkout f9506a194ad6a4afef06cb423286367ab787dee6
+sudo git checkout 10182a3bc434b27740f81c2b836a1af943060241
 
 #Download the used config from the Xbian github
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
