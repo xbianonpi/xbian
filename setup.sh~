@@ -48,7 +48,3 @@ chmod +x /etc/init.d/lirc
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 update-rc.d lirc defaults
-
-#22-10-2012 14:40
-#Copying home folder
-cp -r home/* /home/
