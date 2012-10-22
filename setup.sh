@@ -12,6 +12,7 @@ echo "xbian:raspberry" | chpasswd
 for i in $(pgrep -u pi); do kill -9 $i; done;
 
 #Deleting user pi
+sudo su
 userdel pi
 rm -rf /home/pi
 
