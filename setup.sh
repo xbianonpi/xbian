@@ -26,7 +26,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #09-10-2012 22:00
 #Installing and dowloading git files
-apt-get install unzip
+apt-get install unzip git-core -y
 
 cd /home/xbian/
 git clone --depth 1 https://github.com/Koenkk/xbian.git source
