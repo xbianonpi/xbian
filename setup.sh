@@ -29,7 +29,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 apt-get install unzip
 
 cd /home/xbian/
-git clone --depth 1 https://github.com/as00270/xbian-1.0-fs-permissions-todo.git source
+git clone --depth 1 https://github.com/Koenkk/xbian.git source
 cd source
 cp -R etc/* /etc/
 cp -R usr/* /usr/
@@ -38,7 +38,6 @@ cp -R usr/* /usr/
 rm -rf /lib/modules/*
 cp -R lib/* /lib/
 cp -R boot/* /boot/
-cp -R root/* /root/
 
 #09-10-2012 22:00
 #Setup init scripts
@@ -49,3 +48,7 @@ chmod +x /etc/init.d/lirc
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 update-rc.d lirc defaults
+
+#22-10-2012 14:40
+#Copying home folder
+cp -r home/* /home/

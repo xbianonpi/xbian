@@ -1,0 +1,3 @@
+arm_freq=840
+core_freq=375
+disable_overscan=1
