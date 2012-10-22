@@ -71,6 +71,9 @@
    	cd ~/opt/
    	git clone --depth 5 git://github.com/xbmc/xbmc.git
 	
+	# This is the one who is used in the latest XBian versio
+	# sudo git checkout 1d7b1f1b69e2e320cec77c003085c4259ab61267
+	
    	# Creating a bigger swap file
    	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
 	sudo mkswap /moreswap
