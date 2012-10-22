@@ -116,9 +116,9 @@
 	sudo patch -Np0 -i 011_fix_ipv4_fallback.patch
  
 	# Compiling
-	autoreconf -vif
-	./configure --prefix=/usr/local --sysconfdir=/etc --disable-static --enable-shared
-	make
+	sudo autoreconf -vif
+	sudo ./configure --prefix=/usr/local --sysconfdir=/etc --disable-static --enable-shared
+	sudo make
 	sudo make install
 
 
