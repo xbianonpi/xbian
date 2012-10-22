@@ -48,6 +48,7 @@ update-rc.d xbian defaults
 chmod +x /etc/init.d/lirc
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
+chmod +x /usr/bin/*
 update-rc.d lirc defaults
 
 #22-10-2012 14:40
