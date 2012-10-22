@@ -298,13 +298,13 @@ settings() {
     exit 0
 }
 
-packages() {
-	dialog --backtitle "Xbian" --title "Config > Settings > Packages" --ok-label Close --msgbox "\n\n	Not implemented yet" 9 50
+notimplementedyet() {
+	dialog --backtitle "Xbian" --title "Config > *" --ok-label Close --msgbox "\n\n             Not implemented yet" 9 50
 	mainmenu;
 }
 
 mainmenu() {
-    RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 3 "Update - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
+    RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
     
     case "$RETURN" in
 		1)
@@ -314,7 +314,10 @@ mainmenu() {
 			settings;
 		;;
 		3)
-			packages;
+			notimplementedyet;
+		;;
+		4)
+			notimplementedyet;
 		;;
 		"")
 			if [ $ASK_TO_REBOOT -eq 1 ]; then
