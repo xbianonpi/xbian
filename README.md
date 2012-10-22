@@ -9,6 +9,7 @@ XBian 1.0 Alpha 1
 7. Add recompiled lirc - Done
 8. Add wiringPi (as additional module)
 9. Patch raspi-config --> create xbian-config
+10. Create a 512MB swap file with setup.sh
 
 
 Kernel 3.2.27 - Additional modules
