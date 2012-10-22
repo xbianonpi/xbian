@@ -110,7 +110,7 @@
         </musicfiles>
     </viewstates>
     <general>
-        <systemtotaluptime>0</systemtotaluptime>
+        <systemtotaluptime>11</systemtotaluptime>
         <addonautoupdate>true</addonautoupdate>
         <addonnotifications>true</addonnotifications>
         <addonforeignfilter>false</addonforeignfilter>
@@ -191,8 +191,8 @@
         <playerregion>0</playerregion>
     </dvds>
     <epg>
-        <daystodisplay>2</daystodisplay>
-        <defaultguideview>1</defaultguideview>
+        <daystodisplay>3</daystodisplay>
+        <defaultguideview>3</defaultguideview>
         <epgupdate>120</epgupdate>
         <hidenoinfoavailable>true</hidenoinfoavailable>
         <ignoredbforclient>false</ignoredbforclient>
@@ -210,7 +210,7 @@
     <input>
         <enablemouse>true</enablemouse>
         <peripherals></peripherals>
-        <remoteaskeyboard>false</remoteaskeyboard>
+        <remoteaskeyboard>true</remoteaskeyboard>
     </input>
     <karaoke>
         <autopopupselector>false</autopopupselector>
@@ -225,11 +225,11 @@
     <locale>
         <audiolanguage>original</audiolanguage>
         <charset>DEFAULT</charset>
-        <country>USA</country>
+        <country>USA (24h)</country>
         <language>english</language>
         <subtitlelanguage>original</subtitlelanguage>
-        <timezone>Etc/UTC</timezone>
-        <timezonecountry></timezonecountry>
+        <timezone>America/New_York</timezone>
+        <timezonecountry>United States</timezonecountry>
     </locale>
     <lookandfeel>
         <enablerssfeeds>false</enablerssfeeds>
@@ -259,8 +259,8 @@
         <usetags>true</usetags>
     </musicfiles>
     <musiclibrary>
-        <albumsscraper>metadata.albums.allmusic.com</albumsscraper>
-        <artistsscraper>metadata.artists.allmusic.com</artistsscraper>
+        <albumsscraper>metadata.album.universal</albumsscraper>
+        <artistsscraper>metadata.artists.universal</artistsscraper>
         <backgroundupdate>false</backgroundupdate>
         <cleanup></cleanup>
         <downloadinfo>false</downloadinfo>
@@ -313,7 +313,7 @@
         <shutdowntime>0</shutdowntime>
     </powermanagement>
     <pvrmanager>
-        <backendchannelorder>false</backendchannelorder>
+        <backendchannelorder>true</backendchannelorder>
         <channelmanager></channelmanager>
         <channelscan></channelscan>
         <enabled>false</enabled>
@@ -339,7 +339,7 @@
     <pvrplayback>
         <channelentrytimeout>0</channelentrytimeout>
         <playminimized>true</playminimized>
-        <scantime>15</scantime>
+        <scantime>10</scantime>
         <signalquality>true</signalquality>
         <startlast>0</startlast>
         <switchautoclose>true</switchautoclose>
@@ -355,21 +355,21 @@
     <pvrrecord>
         <defaultlifetime>99</defaultlifetime>
         <defaultpriority>50</defaultpriority>
-        <instantrecordtime>180</instantrecordtime>
+        <instantrecordtime>120</instantrecordtime>
         <marginend>10</marginend>
         <marginstart>2</marginstart>
         <timernotifications>true</timernotifications>
     </pvrrecord>
     <scrapers>
         <moviesdefault>metadata.themoviedb.org</moviesdefault>
-        <musicvideosdefault>metadata.yahoomusic.com</musicvideosdefault>
+        <musicvideosdefault>metadata.musicvideos.last.fm</musicvideosdefault>
         <tvshowsdefault>metadata.tvdb.com</tvshowsdefault>
     </scrapers>
     <screensaver>
-        <mode></mode>
+        <mode>screensaver.xbmc.builtin.dim</mode>
         <preview></preview>
         <settings></settings>
-        <time>59</time>
+        <time>3</time>
         <usedimonpause>true</usedimonpause>
         <usemusicvisinstead>true</usemusicvisinstead>
     </screensaver>
@@ -383,7 +383,7 @@
         <librefmusername></librefmusername>
     </scrobbler>
     <services>
-        <airplay>true</airplay>
+        <airplay>false</airplay>
         <airplaypassword></airplaypassword>
         <devicename>XBMC</devicename>
         <esallinterfaces>false</esallinterfaces>
@@ -459,7 +459,7 @@
         <haslcd>false</haslcd>
         <resolution>0</resolution>
         <screenmode>DESKTOP</screenmode>
-        <vsync>0</vsync>
+        <vsync>3</vsync>
     </videoscreen>
     <weather>
         <addon>weather.wunderground</addon>
@@ -489,15 +489,13 @@
         <setting type="bool" name="skin.confluence.HomeMenuNoMusicButton">false</setting>
         <setting type="bool" name="skin.confluence.HomeMenuNoProgramsButton">false</setting>
         <setting type="bool" name="skin.confluence.AutoScroll">false</setting>
+        <setting type="bool" name="skin.confluence.HideFilenameFlagging">false</setting>
+        <setting type="bool" name="skin.confluence.View508HideInfo">false</setting>
+        <setting type="bool" name="skin.confluence.ActivateTvTunes">false</setting>
         <setting type="bool" name="skin.confluence.Show_SlideShow_Paused">false</setting>
         <setting type="bool" name="skin.confluence.WindowedTrailer">false</setting>
-        <setting type="bool" name="skin.confluence.HideFilenameFlagging">false</setting>
-        <setting type="bool" name="skin.confluence.TVShowsUsePosters">false</setting>
-        <setting type="bool" name="skin.confluence.ActivateTvTunes">false</setting>
         <setting type="bool" name="skin.confluence.HideVisualizationFanart">false</setting>
-        <setting type="bool" name="skin.confluence.View508HideInfo">false</setting>
         <setting type="string" name="skin.confluence.CustomBackgroundPath"></setting>
-        <setting type="string" name="skin.confluence.Home_Custom_Back_Pictures_Folder"></setting>
         <setting type="string" name="skin.confluence.HomeVideosButton1"></setting>
         <setting type="string" name="skin.confluence.HomeVideosButton2"></setting>
         <setting type="string" name="skin.confluence.HomeVideosButton3"></setting>
