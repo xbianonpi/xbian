@@ -37,6 +37,7 @@ cp -R usr/* /usr/
 #16-10-2012 10:40
 rm -rf /lib/modules/*
 cp -R lib/* /lib/
+rm -rf /boot/*
 cp -R boot/* /boot/
 
 #09-10-2012 22:00
