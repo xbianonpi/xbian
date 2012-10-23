@@ -10,7 +10,6 @@ XBian 1.0 Alpha 1
 8. Add wiringPi (as additional module)
 9. Patch raspi-config --> create xbian-config
 10. Resize partition on boot and create a swap partition depending on SD card size - Done
-11. Added Samba server as an optional package.
 
 Kernel 3.2.27 - Additional modules
 =================================
