@@ -445,7 +445,7 @@ packages() {
 		case "$?" in
 			0) 
 				RETURN=$(($RETURN-1));
-				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of package being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
+				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packages being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
 				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
 				packages;
 			;;
