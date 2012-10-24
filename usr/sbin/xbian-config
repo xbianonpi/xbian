@@ -1,11 +1,13 @@
 #!/bin/bash
 #TODO: Check if packages are already installed
 #Check if SD card is already resized
+#Give the option to save an packages on local storage, and to install from file
 
 #trap '' 2 
 
 DISABLE_ROOTSSH=0; 
 ASK_TO_REBOOT=0;
+PACKAGELOCATION=0;
 
 if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
@@ -149,7 +151,7 @@ changetimezone() {
 
 changepass() {
 	PASS=$(dialog --backtitle "Xbian" --title "Config > Settings > Change password" --ok-label Change --inputbox "Password:" 10 80 3>&1 1>&2 2>&3)
-	if [ $PASS != "" ]; then
+	if [ ! -z $PASS ]; then
 		echo "pi:$PASS" | chpasswd
 		dialog --backtitle "Xbian" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n\n\n Xbian password succesfully changed" 11 44
 	fi
@@ -304,11 +306,38 @@ notimplementedyet() {
 	mainmenu;
 }
 
+savepackage() {
+	PKGFILE=$2
+	PKGPATH=$1
+	TITLE=$3
+
+	NAME=$(basename $PKGFILE);
+	NAME=${NAME%.*}
+
+	LOCATION=$(dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Change --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	if [ $LOCATION != "" ]; then
+		if [ -d $LOCATION ]; then
+			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/*
+			tar -rf "$LOCATION/$NAME.tar" $2
+			gzip "$LOCATION/$NAME.tar"
+			dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Save --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
+			if [ $PACKAGELOCATION -eq 1 ]; then
+				remotepackages;
+			elif [ $PACKAGELOCATION -eq 2 ]; then
+				packages;
+			fi
+		else
+			dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
+			savepackage $1 $2 $3
+		fi
+		exit;
+	fi
+}
+
 #Installs a set of packages
 #$1 = Installation file
 #$2 = Title of dialogs
 installpackage() {
-
 INSTALLS=$1;
 TITLE=$2;
 #Read package file
@@ -323,6 +352,8 @@ while read X; do \
 if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
 if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
 done));
+
+if [ $PACKAGELOCATION -eq 1 ]; then
 
 dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
 DEPENDENCIES=()
@@ -374,7 +405,7 @@ PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
 BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K');\
 PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K');\
 if [ -z $PERCENT ]; then PERCENT=0; fi;\
-if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
+if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTES=0; BYTESDOWNLOADED=$TOTALSIZE; fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
 if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\
 cat <<EOF
 XXX
@@ -383,9 +414,15 @@ $TOTALPERCENT
 XXX
 EOF
 done | dialog --title "Config > $TITLE" --gauge "\n   Please wait..." 11 70 0;
-sleep 1
+sleep 2;
 dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
 sleep 1;
+
+else
+
+DEPENDENCIES=($(ls -l /tmp/xbiancache/*.deb | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
+
+fi
 
 #Install all apt packages
 NRPACKAGES=${#DEPENDENCIES[@]};
@@ -393,10 +430,9 @@ CURRENTPACKAGE=1;
 #Install apt packages
 for PACKAGE in "${DEPENDENCIES[@]}"
 do
-FILE=$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " " | awk -F/ '{print $NF}');
+FILE=$(basename $PACKAGE);
 dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
 dpkg -i "/tmp/xbiancache/"$FILE >/dev/null;
-sleep 1;
 CURRENTPACKAGE=$(($CURRENTPACKAGE+1));
 done
 
@@ -407,24 +443,44 @@ for STEP in "${POSTINSTALL[@]}"
 do
 dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
 CURRENTSTEP=$(($CURRENTSTEP+1));
-eval "$STEP";
+#eval "$STEP";
 done
 
 sleep 1;
 dialog --backtitle "Xbian" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
 
+dialog --no-kill --backtitle "Xbian" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
+case "$?" in
+	0) 
+		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
+		if [ $PACKAGELOCATION -eq 1 ]; then
+			remotepackages;
+		elif [ $PACKAGELOCATION -eq 2 ]; then
+			packages;
+		fi
+	;;
+	*)
+		if [ $PACKAGELOCATION -eq 1 ]; then
+			remotepackages;
+		elif [ $PACKAGELOCATION -eq 2 ]; then
+			packages;
+		fi
+	;;
+esac
+
 #Remove download directory
 rm -rf /tmp/xbiancache
 }
 
-packages() {
+remotepackages() {
+	PACKAGELOCATION=1;
 	if [ ! -d "/tmp/xbianpackages" ]; then
 		dialog --backtitle "Xbian" --title "Config > Packages" --infobox "\n\n   Downloading package list..." 7 50
 		git clone -q --depth 5 https://github.com/Koenkk/packages.git /tmp/xbianpackages
 		chmod +x /tmp/xbianpackages/*.sh
 	fi
 	
-	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | awk '{print $9}' | awk '!/^[:space:]*$/'));
+	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
 	LIST=();
 	NRITEMS=0;
 	for ITEM in ${PKGLIST[@]}
@@ -433,9 +489,9 @@ packages() {
 		DESC=$(cat /tmp/xbianpackages/$ITEM | grep "Description" | awk '{print substr($0,15,length)}');
 		ITEM=$(sed 's/\<./\u&/g' <<< $ITEM | cut -f 1 -d.);
 		if [ ${#ITEM} -gt 6 ]; then
-			ITEM=$(echo -e "$ITEM\t\"$DESC\"");
+			ITEM=$(echo -e "$ITEM\t- \"$DESC\"");
 		else
-			ITEM=$(echo -e "$ITEM\t\t\"$DESC\"");
+			ITEM=$(echo -e "$ITEM\t\t- \"$DESC\"");
 		fi
 		LIST+=($NRITEMS "$ITEM");
 	done
@@ -445,7 +501,7 @@ packages() {
 		case "$?" in
 			0) 
 				RETURN=$(($RETURN-1));
-				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packages being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
+				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packagesn being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
 				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
 				packages;
 			;;
@@ -454,13 +510,57 @@ packages() {
 			;;
 		esac
 	else
-		mainmenu;
+		packages;
 	fi
 	exit 0;
 }
 
+localpackages() {
+	PACKAGELOCATION=2;
+	LOCATION=$(dialog --backtitle "Xbian" --title "Config > Package" --ok-label Open --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	if [ ! -z $LOCATION ]; then
+		if [ -f $LOCATION ]; then
+			NAME=$(basename $LOCATION);
+			NAME=${NAME%.tar.gz}
+			INSTALLEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "$NAME.sh" | wc -l);
+			CACHEPATHEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "tmp/xbiancache" | wc -l);
+			PKGPATHEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "tmp/xbianpackages" | wc -l);
+			if [[ $INSTALLEXISTS -eq 1 && $CACHEPATHEXISTS -ge 1 && $PKGPATHEXISTS -eq 1 ]]; then
+				tar -zxvf $LOCATION -C / >/dev/null;
+				installpackage "/tmp/xbianpackages/$NAME.sh" "Packages"
+			else
+				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "\n  File is not a valid Xbian script." 7 50
+				localpackages
+			fi
+		else
+			dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "No package found at this location." 9 50
+			localpackages
+		fi
+		packages
+	fi
+	packages
+}
+
+packages() {
+	RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --ok-label Select --cancel-label Return  --menu '' 9 80 5 1 "Remote - \"Install packages from internet\"" 2 "Local  - \"Install package from *.tar.gz\"" 3>&1 1>&2 2>&3)
+	case "$RETURN" in
+		1)
+			remotepackages;
+		;;
+		2)
+			localpackages;
+		;;
+		"")
+			mainmenu
+		;;
+		*)
+			mainmenu
+		;;
+	esac
+}
+
 mainmenu() {
-    RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
+    RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
     
     case "$RETURN" in
 		1)
@@ -480,19 +580,19 @@ mainmenu() {
 				REBOOT=$(dialog --backtitle "Xbian" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55 3>&1 1>&2 2>&3)
 				case "$REBOOT" in
 					1)
-						rm -rf /tmp/xbianpackages
-						rm -rf /tmp/xbiancache
+						#rm -rf /tmp/xbianpackages
+						#rm -rf /tmp/xbiancache
 						reboot;
 					;;
 					0)
-						rm -rf /tmp/xbianpackages
-						rm -rf /tmp/xbiancache
+						#rm -rf /tmp/xbianpackages
+						#rm -rf /tmp/xbiancache
 						exit 0;
 					;;
 				esac
 			else
-				rm -rf /tmp/xbianpackages
-				rm -rf /tmp/xbiancache
+				#rm -rf /tmp/xbianpackages
+				#rm -rf /tmp/xbiancache
 				exit 0;
 			fi
 		;;
