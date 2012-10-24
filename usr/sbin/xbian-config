@@ -1,5 +1,6 @@
-
 #!/bin/bash
+#TODO: Check if packages are already installed
+#Check if SD card is already resized
 
 #trap '' 2 
 
@@ -303,6 +304,161 @@ notimplementedyet() {
 	mainmenu;
 }
 
+#Installs a set of packages
+#$1 = Installation file
+#$2 = Title of dialogs
+installpackage() {
+
+INSTALLS=$1;
+TITLE=$2;
+#Read package file
+PACKAGESAPT=()
+PACKAGESAPT=($(cat $INSTALLS | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}'));
+PACKAGESDIRECT=()
+PACKAGESDIRECT=($(cat $INSTALLS | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
+POSTINSTALL=()
+IFS=$'\n';
+POSTINSTALL=($(cat $INSTALLS 2>&1 | \
+while read X; do \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+done));
+
+dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
+DEPENDENCIES=()
+DEPENDENCIES=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
+while read X; do \
+grep 'Inst ' <<< $X | awk '{print $2}';\
+done));
+
+#Get all dependencies of a apt package
+URLS=()
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+URLS+=("http://archive.raspbian.org/raspbian/$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")");
+done
+
+#Add all custom linkx
+for PACKAGE in "${PACKAGESDIRECT[@]}"
+do
+URLS+=("$PACKAGE");
+done
+
+#Get individual file sizes
+NRFILE=0;
+TOTALFILES=${#URLS[@]};
+PKGSIZES=()
+PKGSIZES=($(wget --spider ${URLS[@]} 2>&1 | \
+while read X; do \
+SIZE=$(grep -i 'length' <<< "$X" | awk '{print $2}' | sed 's:^.*[^0-9]\([0-9]*\)$:\1:');\
+if [ ! -z $SIZE ]; then echo $SIZE; fi;\
+done));
+
+#Calculate total download size
+TOTALSIZE=0;
+for SIZE in ${PKGSIZES[@]}; do
+	TOTALSIZE=$(($(($TOTALSIZE))+$(($SIZE))));
+done
+
+BYTESDOWNLOADED=0;
+NRFILE=0;
+TOTALPERCENT=0;
+LIST="";
+FIRSTFILE=0;
+
+#Download package and create progress bar
+wget -P /tmp/xbiancache/ --progress=bar:force ${URLS[@]} 2>&1 | \
+while read -d "%" X; do \
+FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}');\
+PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
+BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K');\
+PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K');\
+if [ -z $PERCENT ]; then PERCENT=0; fi;\
+if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
+if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\
+cat <<EOF
+XXX
+$TOTALPERCENT
+\n$LIST $PERCENT%\n\n\n  Total percentage done ($(($(($BYTESDOWNLOADED))+$(($BYTES))))/$TOTALSIZE):\n 
+XXX
+EOF
+done | dialog --title "Config > $TITLE" --gauge "\n   Please wait..." 11 70 0;
+sleep 1
+dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
+sleep 1;
+
+#Install all apt packages
+NRPACKAGES=${#DEPENDENCIES[@]};
+CURRENTPACKAGE=1;
+#Install apt packages
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+FILE=$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " " | awk -F/ '{print $NF}');
+dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
+dpkg -i "/tmp/xbiancache/"$FILE >/dev/null;
+sleep 1;
+CURRENTPACKAGE=$(($CURRENTPACKAGE+1));
+done
+
+#Post installation
+NRSTEPS=${#POSTINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${POSTINSTALL[@]}"
+do
+dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+CURRENTSTEP=$(($CURRENTSTEP+1));
+eval "$STEP";
+done
+
+sleep 1;
+dialog --backtitle "Xbian" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
+
+#Remove download directory
+rm -rf /tmp/xbiancache
+}
+
+packages() {
+	if [ ! -d "/tmp/xbianpackages" ]; then
+		dialog --backtitle "Xbian" --title "Config > Packages" --infobox "\n\n   Downloading package list..." 7 50
+		git clone -q --depth 5 https://github.com/Koenkk/packages.git /tmp/xbianpackages
+		chmod +x /tmp/xbianpackages/*.sh
+	fi
+	
+	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | awk '{print $9}' | awk '!/^[:space:]*$/'));
+	LIST=();
+	NRITEMS=0;
+	for ITEM in ${PKGLIST[@]}
+	do
+		NRITEMS=$(($NRITEMS+1));
+		DESC=$(cat /tmp/xbianpackages/$ITEM | grep "Description" | awk '{print substr($0,15,length)}');
+		ITEM=$(sed 's/\<./\u&/g' <<< $ITEM | cut -f 1 -d.);
+		if [ ${#ITEM} -gt 6 ]; then
+			ITEM=$(echo -e "$ITEM\t\"$DESC\"");
+		else
+			ITEM=$(echo -e "$ITEM\t\t\"$DESC\"");
+		fi
+		LIST+=($NRITEMS "$ITEM");
+	done
+	RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --no-collapse --ok-label Install --cancel-label Return --menu '' 11 80 ${NRITEMS} "${LIST[@]}" 3>&1 1>&2 2>&3);
+	if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
+		dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --yesno '\n  Are you sure you want to install this package?' 7 60;
+		case "$?" in
+			0) 
+				RETURN=$(($RETURN-1));
+				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of package being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
+				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
+				packages;
+			;;
+			*)
+				packages;
+			;;
+		esac
+	else
+		mainmenu;
+	fi
+	exit 0;
+}
+
 mainmenu() {
     RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
     
@@ -314,7 +470,7 @@ mainmenu() {
 			settings;
 		;;
 		3)
-			notimplementedyet;
+			packages;
 		;;
 		4)
 			notimplementedyet;
@@ -324,14 +480,21 @@ mainmenu() {
 				REBOOT=$(dialog --backtitle "Xbian" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55 3>&1 1>&2 2>&3)
 				case "$REBOOT" in
 					1)
+						rm -rf /tmp/xbianpackages
+						rm -rf /tmp/xbiancache
 						reboot;
 					;;
 					0)
+						rm -rf /tmp/xbianpackages
+						rm -rf /tmp/xbiancache
 						exit 0;
 					;;
 				esac
-			fi;
-			exit 0;
+			else
+				rm -rf /tmp/xbianpackages
+				rm -rf /tmp/xbiancache
+				exit 0;
+			fi
 		;;
 		*)
 			mainmenu
