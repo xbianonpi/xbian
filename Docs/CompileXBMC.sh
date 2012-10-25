@@ -154,7 +154,7 @@
 	make -C tools/rbp/depends/xbmc/
 	
 	# Configure  
-	./configure --prefix=/usr/local --localstatedir=/var/lib --with-platform=raspberry-pi --disable-gl --enable-gles --disable-x11 --disable-sdl \
+	./configure --prefix=/usr/local --build=arm-linux-gnueabihf --host=arm-linux-gnueabihf --localstatedir=/var/lib --with-platform=raspberry-pi --disable-gl --enable-gles --disable-x11 --disable-sdl \
               --enable-ccache --disable-optimizations --disable-external-libraries --disable-goom --disable-hal --disable-pulse --disable-vaapi \
               --disable-vdpau --disable-xrandr --enable-airplay --disable-alsa --enable-avahi --disable-libbluray --enable-dvdcss --disable-debug \
               --disable-joystick --disable-mid --enable-nfs --disable-profiling --disable-projectm --enable-rsxs --enable-rtmp --disable-vaapi \
