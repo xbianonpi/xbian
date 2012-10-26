@@ -345,10 +345,10 @@ savepackage() {
 
 	NAME=$(basename $PKGFILE);
 	NAME=${NAME%.*}
-	LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Change --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Save --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
 	if [ $LOCATION != "" ]; then
 		if [ -d $LOCATION ]; then
-			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
+			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/nullf
 			tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
 			gzip "$LOCATION/$NAME.tar" >/dev/null
 			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
@@ -382,6 +382,15 @@ POSTINSTALL=($(cat $INSTALLS 2>&1 | \
 while read X; do \
 if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
 if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+
+done));
+PREINSTALL=()
+IFS=$'\n';
+PREINSTALL=($(cat $INSTALLS 2>&1 | \
+while read X; do \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 1 ]]; then START=0; fi; \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PreInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
 done));
 
 #if PACKAGELOCATION
@@ -463,6 +472,20 @@ fi
 NRPACKAGES=${#DEPENDENCIES[@]};
 CURRENTPACKAGE=1;
 
+#Pre installation
+NRSTEPS=${#PREINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${PREINSTALL[@]}"
+do
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+CURRENTSTEP=$(($CURRENTSTEP+1));
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
+done
+exit;
 #Install apt packages
 for PACKAGE in "${DEPENDENCIES[@]}"
 do
