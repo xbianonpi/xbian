@@ -1,16 +1,37 @@
 #!/bin/bash
 #TODO: Check if packages are already installed
 #Check if SD card is already resized
-#Give the option to save an packages on local storage, and to install from file
+#Ask confirmation before resizesd
 
-#trap '' 2 
+if [ ! $(id -u) -eq 0 ]; then
+	echo "This program must be run as root.";
+	exit 0;
+fi	
+	
+
+#Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
+DEBUG=0;
+BACKTITLE="XBian $(cat /etc/xbian_version)";
+if [ $DEBUG -eq 0 ]; then
+	trap '' 2
+fi
 
 DISABLE_ROOTSSH=0; 
-ASK_TO_REBOOT=0;
+ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 
 if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
+	exit 0;
+fi
+
+if [ $(dpkg-query -W -f='${Status}\n' screen | grep 'not-installed' | wc -l) -eq 1 ]; then
+	echo "This program requires the screen package: apt-get install screen";
+	exit 0;
+fi
+
+if [ $(dpkg-query -W -f='${Status}\n' git | grep 'not-installed' | wc -l) -eq 1 ]; then
+	echo "This program requires the git package: apt-get install git";
 	exit 0;
 fi
 
@@ -26,15 +47,15 @@ check_rootssh_status() {
 } 
 
 xbianinfo() {
-    dialog --title "Xbian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of Xbian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
+    dialog --backtitle "$BACKTITLE" --title "Xbian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of Xbian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
 	mainmenu;
 }
 
 changesdsize() {
 	SWAPSIZE=0;
 	SWAPEXISTS=$(fdisk /dev/mmcblk0 -l | grep "swap" | awk '{print $1}' | awk '{print substr($0,length,length+1)}');
-	PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 2 -d: | awk '{print substr($0,0,length)}')
-	SDEND=$(parted /dev/mmcblk0 -ms unit s p | grep "/dev/" | cut -f 2 -d: | awk '{print substr($0,0,length)}');
+	PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 2 -d: | awk '{print substr($0,0,length-1)}')
+	SDEND=$(parted /dev/mmcblk0 -ms unit s p | grep "/dev/" | cut -f 2 -d: | awk '{print substr($0,0,length-1)}');
 	SDEND=$(($SDEND-1));
 	SDSIZE=$((($SDEND*512)/1024/1024));
 
@@ -44,7 +65,7 @@ changesdsize() {
 	
 	if [ $SDSIZE -gt 4000 ]; then
 		SWAPSIZE=$(((1000*1024*1024)/512));
-	elif [ $SDSIZE -gt 2000]; then
+	elif [ $SDSIZE -gt 2000 ]; then
 		SWAPSIZE=$(((750*1024*1024)/512));
 	else
 		SWAPSIZE=$(((500*1024*1024)/512));
@@ -54,8 +75,9 @@ changesdsize() {
 	SWAP_START=$(($PART_END+1));
 	SWAP_END=$(($SDEND));
 	
-	if [ ! -z $SWAPEXISTS ]; then
-fdisk /dev/mmcblk0 <<EOF
+	if [ $DEBUG -eq 0 ]; then
+		if [ ! -z $SWAPEXISTS ]; then
+fdisk /dev/mmcblk0 >/dev/null <<EOF
 p
 d
 2
@@ -78,10 +100,13 @@ t
 p
 w
 EOF
-	else
-fdisk /dev/mmcblk0 <<EOF
+		else
+fdisk /dev/mmcblk0 >/dev/null <<EOF
 p
 d
+2
+n
+p
 2
 $PART_START
 $PART_END
@@ -96,17 +121,19 @@ t
 p
 w
 EOF
+		fi
+	$ASKFORREBOOT=1;
 	fi
-	$ASK_FOR_REBOOT=1;
 	
 	FSEDIT=$(cat /etc/fstab | grep /dev/mmcblk0p3 | grep swap | wc -l);
 	
-	if [ $FSEDIT -eq 0 ]; then
+	if [[ $FSEDIT -eq 0 && $DEBUG -eq 0 ]]; then
 		echo "/dev/mmcblk0p3	swap	swap	defaults	0	0" >> /etc/fstab
 	fi
 	
   # now set up an init.d script
-	cat > /etc/init.d/resize2fs_once << EOF
+	if [ $DEBUG -eq 0 ]; then
+	cat > /etc/init.d/resize2fs_once >/dev/null << EOF
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          resize2fs_once
@@ -122,10 +149,10 @@ EOF
 
 case "$1" in
   start)
-    log_daemon_msg "Starting resize2fs_once" &&
-    resize2fs /dev/mmcblk0p2 &&
-    rm /etc/init.d/resize2fs_once &&
-    update-rc.d resize2fs_once remove &&
+    log_daemon_msg "Starting resize2fs_once"
+    resize2fs /dev/mmcblk0p2
+    rm /etc/init.d/resize2fs_once
+    update-rc.d resize2fs_once remove
     log_end_msg $?
     ;;
   *)
@@ -134,26 +161,29 @@ case "$1" in
     ;;
 esac
 EOF
-  chmod +x /etc/init.d/resize2fs_once &&
-  update-rc.d resize2fs_once defaults &&
-  dialog --backtitle "Xbian" --title "Config > Settings > Resize SD" --ok-label Close --msgbox "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
-  settings;
+	chmod +x /etc/init.d/resize2fs_once >/dev/null;
+	update-rc.d resize2fs_once defaults >/dev/null;
+	fi
+	dialog --backtitle "Xbian" --title "Config > Settings > Resize SD" --ok-label Close --msgbox "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
+	settings;
 }
 
 changetimezone() {
 	if [ $(dpkg-query -W -f='${Status}\n' tzdata | grep 'not-installed' | wc -l) -eq 0 ]; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --infobox "\n\n  Please wait while 'tzdata' is loading..." 7 47
 		dpkg-reconfigure tzdata
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --ok-label Close --msgbox "\n      Timezone succesfully changed" 7 44
 	else
-		dialog --backtitle "Xbian" --title "Config > Settings > Set timezone" --ok-label Close --msgbox "\n\n\n TZData not installed" 11 44
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --ok-label Close --msgbox "\n         TZData not installed" 7 44
 	fi
 	settings;
 }
 
 changepass() {
-	PASS=$(dialog --backtitle "Xbian" --title "Config > Settings > Change password" --ok-label Change --inputbox "Password:" 10 80 3>&1 1>&2 2>&3)
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --inputbox "Password:" 10 80 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
 		echo "pi:$PASS" | chpasswd
-		dialog --backtitle "Xbian" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n\n\n Xbian password succesfully changed" 11 44
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n\n\n Xbian password succesfully changed" 11 44
 	fi
 	settings;
 	exit 0
@@ -162,45 +192,46 @@ changepass() {
 changesshroot() {
 	if [ $DISABLE_ROOTSSH -eq 0 ]; then
 		sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config
-		dialog --backtitle "Xbian" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n\n\n SSH root login succesfully enabled" 11 44
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n  SSH root login succesfully enabled" 7 44
 	else
 		sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
-		dialog --backtitle "Xbian" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n\n\n SSH root login succesfully disabled" 11 44
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n  SSH root login succesfully disabled" 7 44
 	fi
 	settings;
 } 
 
 set_config_var() {
-  lua - "$1" "$2" "$3" > "$3.bak" << EOF
+  lua - "$1" "$2" "$3" <<EOF > "$3.bak
 local key=assert(arg[1])
 local value=assert(arg[2])
 local fn=assert(arg[3])
 local file=assert(io.open(fn))
 local made_change=false
 for line in file:lines() do
-	if line:match("^#?%s*"..key.."=.*$") then
-		line=key.."="..value
-		made_change=true
-	end
-	print(line)
+  if line:match("^#?%s*"..key.."=.*$") then
+    line=key.."="..value
+    made_change=true
+  end
+  print(line)
 end
 
 if not made_change then
-	print(key.."="..value)
+  print(key.."="..value)
 end
 EOF
 mv "$3.bak" "$3"
 }
 
 set_overclock() {
-    ASK_TO_REBOOT=1
+	if [ $DEBUG -eq 0 ]; then
+    ASKFORREBOOT=1
 	set_config_var arm_freq $2 /boot/config.txt &&
 	set_config_var core_freq $3 /boot/config.txt &&
 	set_config_var sdram_freq $4 /boot/config.txt &&
 	set_config_var over_voltage $5 /boot/config.txt &&
 	
 	# now set up an init.d script
-	cat > /etc/init.d/switch_cpu_governor << EOF
+cat <<\EOF > /etc/init.d/switch_cpu_governor
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          switch_cpu_governor
@@ -215,36 +246,35 @@ set_overclock() {
 . /lib/lsb/init-functions
 
 case "$1" in
-	start)
-		log_daemon_msg "Checking if shift key is held down"
-		timeout 1 thd --dump /dev/input/event* | grep -q "LEFTSHIFT\|RIGHTSHIFT"
-		if [ $? -eq 0 ]; then
-			printf " Yes. Not switching scaling governor"
-			log_end_msg 0
-		else
-			SYS_CPUFREQ_GOVERNOR=/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-			[ -e $SYS_CPUFREQ_GOVERNOR ] && echo "ondemand" > $SYS_CPUFREQ_GOVERNOR
-			printf " No. Switching to ondemand scaling governor"
-			log_end_msg 0
-		fi
-	;;
-	*)
-		echo "Usage: $0 start" >&2
-		exit 3
-	;;
+  start)
+    log_daemon_msg "Checking if shift key is held down"
+    timeout 1 thd --dump /dev/input/event* | grep -q "LEFTSHIFT\|RIGHTSHIFT"
+    if [ $? -eq 0 ]; then
+      printf " Yes. Not switching scaling governor"
+      log_end_msg 0
+    else
+      SYS_CPUFREQ_GOVERNOR=/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+      [ -e $SYS_CPUFREQ_GOVERNOR ] && echo "ondemand" > $SYS_CPUFREQ_GOVERNOR
+      printf " No. Switching to ondemand scaling governor"
+      log_end_msg 0
+    fi
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
 esac
-EOF
-	
+EOF	
 	chmod +x /etc/init.d/switch_cpu_governor &&
-	update-rc.d switch_cpu_governor defaults &&
-	dialog --backtitle "Xbian" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
+	update-rc.d switch_cpu_governor defaults
+	fi
+	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
 	settings;
 }
 
 changeoverclock() {
-	dialog --backtitle "Xbian" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "Be aware that overclocking may reduce the lifetime of your Raspberry Pi. If overclocking at a certain level causes system instability, try a more modest overclock. See http://elinux.org/RPi_Overclocking for more information." 9 65
-	
-	OVERCLOCK=$(dialog --backtitle "Xbian" --title 'Config > Settings > Overclocking' --ok-label Select --cancel-label Cancel --menu '' 11 80 5 1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" 2 "Modest   800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt" 3 "Medium   900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt" 4 "High     950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt" 5 "Turbo    1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt" 3>&1 1>&2 2>&3);
+	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "Be aware that overclocking may reduce the lifetime of your Raspberry Pi. If overclocking at a certain level causes system instability, try a more modest overclock. See http://elinux.org/RPi_Overclocking for more information." 9 65
+	OVERCLOCK=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Overclocking' --ok-label Select --cancel-label Cancel --menu '' 11 80 5 1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" 2 "Modest   800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt" 3 "Medium   900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt" 4 "High     950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt" 5 "Turbo    1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt" 3>&1 1>&2 2>&3);
 	case "$OVERCLOCK" in
 		1)
 			set_overclock None 700 250 400 0
@@ -276,10 +306,12 @@ settings() {
     if [ $DISABLE_ROOTSSH -eq 1 ]; then
         ROOTSSHSTATUS="Disable"
     fi
-	
-	RETURN=$(dialog --backtitle "Xbian" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 5 1 "Resize SD - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Set timezone - \"Set the default timezone\"" 4 "SSH root login - \"$ROOTSSHSTATUS SSH root login\"" 5 "Overclocking - \"Configure overclocking\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 5 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Set timezone    - \"Set the default timezone\"" 4 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 5 "Overclocking    - \"Configure overclocking\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
-	    2)
+		1)
+			changesdsize;
+		;;
+		2)
 			changepass;
 		;;
 		3)
@@ -302,7 +334,7 @@ settings() {
 }
 
 notimplementedyet() {
-	dialog --backtitle "Xbian" --title "Config > *" --ok-label Close --msgbox "\n\n             Not implemented yet" 9 50
+	dialog --backtitle "$BACKTITLE" --title "Config > *" --ok-label Close --msgbox "\n\n             Not implemented yet" 9 50
 	mainmenu;
 }
 
@@ -313,24 +345,23 @@ savepackage() {
 
 	NAME=$(basename $PKGFILE);
 	NAME=${NAME%.*}
-
-	LOCATION=$(dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Change --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Change --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
 	if [ $LOCATION != "" ]; then
 		if [ -d $LOCATION ]; then
-			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/*
-			tar -rf "$LOCATION/$NAME.tar" $2
-			gzip "$LOCATION/$NAME.tar"
-			dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Save --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
+			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
+			tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
+			gzip "$LOCATION/$NAME.tar" >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
 			if [ $PACKAGELOCATION -eq 1 ]; then
 				remotepackages;
 			elif [ $PACKAGELOCATION -eq 2 ]; then
 				packages;
 			fi
 		else
-			dialog --backtitle "Xbian" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
+			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
 			savepackage $1 $2 $3
 		fi
-		exit;
+		exit 0;
 	fi
 }
 
@@ -353,11 +384,12 @@ if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 
 if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
 done));
 
+#if PACKAGELOCATION
 if [ $PACKAGELOCATION -eq 1 ]; then
 
-dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
 DEPENDENCIES=()
-DEPENDENCIES=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
+DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
 while read X; do \
 grep 'Inst ' <<< $X | awk '{print $2}';\
 done));
@@ -415,24 +447,32 @@ XXX
 EOF
 done | dialog --title "Config > $TITLE" --gauge "\n   Please wait..." 11 70 0;
 sleep 2;
-dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
 sleep 1;
 
+#else PACKAGELOCATION
 else
 
+#Save depency order
 DEPENDENCIES=($(ls -l /tmp/xbiancache/*.deb | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
 
+#fi PACKAGELOCATION
 fi
 
 #Install all apt packages
 NRPACKAGES=${#DEPENDENCIES[@]};
 CURRENTPACKAGE=1;
+
 #Install apt packages
 for PACKAGE in "${DEPENDENCIES[@]}"
 do
 FILE=$(basename $PACKAGE);
-dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
-dpkg -i "/tmp/xbiancache/"$FILE >/dev/null;
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
+if [ $DEBUG -eq 0 ]; then
+	dpkg -i "/tmp/xbiancache/"$(basename $(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")) >/dev/null;
+else
+	sleep 1;
+fi;
 CURRENTPACKAGE=$(($CURRENTPACKAGE+1));
 done
 
@@ -441,18 +481,22 @@ NRSTEPS=${#POSTINSTALL[@]};
 CURRENTSTEP=1;
 for STEP in "${POSTINSTALL[@]}"
 do
-dialog --backtitle "Xbian" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
 CURRENTSTEP=$(($CURRENTSTEP+1));
-#eval "$STEP";
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
 done
 
 sleep 1;
-dialog --backtitle "Xbian" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
-
-dialog --no-kill --backtitle "Xbian" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
+dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
 case "$?" in
 	0) 
 		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
+				
 		if [ $PACKAGELOCATION -eq 1 ]; then
 			remotepackages;
 		elif [ $PACKAGELOCATION -eq 2 ]; then
@@ -467,15 +511,12 @@ case "$?" in
 		fi
 	;;
 esac
-
-#Remove download directory
-rm -rf /tmp/xbiancache
 }
 
 remotepackages() {
 	PACKAGELOCATION=1;
 	if [ ! -d "/tmp/xbianpackages" ]; then
-		dialog --backtitle "Xbian" --title "Config > Packages" --infobox "\n\n   Downloading package list..." 7 50
+		dialog --backtitle "$BACKTITLE" --title "Config > Packages" --infobox "\n\n   Downloading package list..." 7 50
 		git clone -q --depth 5 https://github.com/Koenkk/packages.git /tmp/xbianpackages
 		chmod +x /tmp/xbianpackages/*.sh
 	fi
@@ -495,13 +536,13 @@ remotepackages() {
 		fi
 		LIST+=($NRITEMS "$ITEM");
 	done
-	RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --no-collapse --ok-label Install --cancel-label Return --menu '' 11 80 ${NRITEMS} "${LIST[@]}" 3>&1 1>&2 2>&3);
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config > Packages' --no-collapse --ok-label Install --cancel-label Return --menu '' 11 80 ${NRITEMS} "${LIST[@]}" 3>&1 1>&2 2>&3);
 	if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
-		dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --yesno '\n  Are you sure you want to install this package?' 7 60;
+		dialog --no-kill --backtitle "$BACKTITLE" --title 'Config > Packages' --yesno '\n  Are you sure you want to install this package?' 7 60;
 		case "$?" in
 			0) 
 				RETURN=$(($RETURN-1));
-				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packagesn being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
+				dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packagesn being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
 				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
 				packages;
 			;;
@@ -517,7 +558,7 @@ remotepackages() {
 
 localpackages() {
 	PACKAGELOCATION=2;
-	LOCATION=$(dialog --backtitle "Xbian" --title "Config > Package" --ok-label Open --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > Package" --ok-label Open --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
 	if [ ! -z $LOCATION ]; then
 		if [ -f $LOCATION ]; then
 			NAME=$(basename $LOCATION);
@@ -529,11 +570,11 @@ localpackages() {
 				tar -zxvf $LOCATION -C / >/dev/null;
 				installpackage "/tmp/xbianpackages/$NAME.sh" "Packages"
 			else
-				dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "\n  File is not a valid Xbian script." 7 50
+				dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "\n  File is not a valid Xbian script." 7 50
 				localpackages
 			fi
 		else
-			dialog --backtitle "Xbian" --title "Config > Packages" --msgbox "No package found at this location." 9 50
+			dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "No package found at this location." 9 50
 			localpackages
 		fi
 		packages
@@ -542,7 +583,7 @@ localpackages() {
 }
 
 packages() {
-	RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config > Packages' --ok-label Select --cancel-label Return  --menu '' 9 80 5 1 "Remote - \"Install packages from internet\"" 2 "Local  - \"Install package from *.tar.gz\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config > Packages' --ok-label Select --cancel-label Return  --menu '' 9 80 5 1 "Remote - \"Install packages from internet\"" 2 "Local  - \"Install package from *.tar.gz\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
 		1)
 			remotepackages;
@@ -560,7 +601,7 @@ packages() {
 }
 
 mainmenu() {
-    RETURN=$(dialog --no-kill --backtitle "Xbian" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 11 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 10 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
     
     case "$RETURN" in
 		1)
@@ -576,24 +617,30 @@ mainmenu() {
 			notimplementedyet;
 		;;
 		"")
-			if [ $ASK_TO_REBOOT -eq 1 ]; then
-				REBOOT=$(dialog --backtitle "Xbian" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55 3>&1 1>&2 2>&3)
+			if [ $ASKFORREBOOT -eq 1 ]; then
+				REBOOT=$(dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55 3>&1 1>&2 2>&3)
 				case "$REBOOT" in
 					1)
-						#rm -rf /tmp/xbianpackages
-						#rm -rf /tmp/xbiancache
+						if [ $DEBUG -eq 0 ]; then
+							rm -rf /tmp/xbianpackages
+							rm -rf /tmp/xbiancache
+						fi
 						reboot;
 					;;
 					0)
-						#rm -rf /tmp/xbianpackages
-						#rm -rf /tmp/xbiancache
-						exit 0;
+						if [ $DEBUG -eq 0 ]; then
+							rm -rf /tmp/xbianpackages
+							rm -rf /tmp/xbiancache
+						fi
+						exit 0
 					;;
 				esac
 			else
-				#rm -rf /tmp/xbianpackages
-				#rm -rf /tmp/xbiancache
-				exit 0;
+				if [ $DEBUG -eq 0 ]; then
+					rm -rf /tmp/xbianpackages
+					rm -rf /tmp/xbiancache
+				fi
+				exit 0
 			fi
 		;;
 		*)
@@ -602,4 +649,10 @@ mainmenu() {
     esac
     exit 0
 }
-mainmenu;
+#Run script inside screen, so it's doesn't fill the whole terminal history
+SCREEN=$(screen -r | grep "Attached" | wc -l);
+if [ $SCREEN -eq 0 ]; then
+	`screen $0`
+else
+	mainmenu;
+fi
