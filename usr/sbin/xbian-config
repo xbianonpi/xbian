@@ -53,13 +53,13 @@ xbianinfo() {
 
 changesdsize() {
 	SWAPSIZE=0;
-	SWAPEXISTS=$(fdisk /dev/mmcblk0 -l | grep "swap" | awk '{print $1}' | awk '{print substr($0,length,length+1)}');
-	PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 2 -d: | awk '{print substr($0,0,length-1)}')
-	SDEND=$(parted /dev/mmcblk0 -ms unit s p | grep "/dev/" | cut -f 2 -d: | awk '{print substr($0,0,length-1)}');
+	SWAPEXISTS=$(fdisk /dev/mmcblk0 -l | grep "swap" | awk '{print $1}' | awk '{print substr($0,length,length+1)}' | wc -l);
+	PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 2 -d: | awk '{print substr($0,0,length)}')
+	SDEND=$(parted /dev/mmcblk0 -ms unit s p | grep "/dev/" | cut -f 2 -d: | awk '{print substr($0,0,length)}');
 	SDEND=$(($SDEND-1));
 	SDSIZE=$((($SDEND*512)/1024/1024));
 
-	if [ ! -z $SWAPEXISTS ]; then
+	if [ $SWAPEXISTS -eq 1 ]; then
 		swapoff -a
 	fi
 	
@@ -76,8 +76,8 @@ changesdsize() {
 	SWAP_END=$(($SDEND));
 	
 	if [ $DEBUG -eq 0 ]; then
-		if [ ! -z $SWAPEXISTS ]; then
-fdisk /dev/mmcblk0 >/dev/null <<EOF
+		if [ $SWAPEXISTS -eq 1 ]; then
+fdisk /dev/mmcblk0 <<EOF
 p
 d
 2
@@ -101,7 +101,7 @@ p
 w
 EOF
 		else
-fdisk /dev/mmcblk0 >/dev/null <<EOF
+fdisk /dev/mmcblk0 <<EOF
 p
 d
 2
@@ -122,9 +122,9 @@ p
 w
 EOF
 		fi
-	$ASKFORREBOOT=1;
-	fi
 	
+	fi
+	ASKFORREBOOT=1;
 	FSEDIT=$(cat /etc/fstab | grep /dev/mmcblk0p3 | grep swap | wc -l);
 	
 	if [[ $FSEDIT -eq 0 && $DEBUG -eq 0 ]]; then
@@ -133,7 +133,7 @@ EOF
 	
   # now set up an init.d script
 	if [ $DEBUG -eq 0 ]; then
-	cat > /etc/init.d/resize2fs_once << EOF
+cat <<\EOF > /etc/init.d/resize2fs_once
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          resize2fs_once
@@ -149,10 +149,10 @@ EOF
 
 case "$1" in
   start)
-    log_daemon_msg "Starting resize2fs_once"
-    resize2fs /dev/mmcblk0p2
-    rm /etc/init.d/resize2fs_once
-    update-rc.d resize2fs_once remove
+    log_daemon_msg "Starting resize2fs_once" &&
+    resize2fs /dev/mmcblk0p2 &&
+    rm /etc/init.d/resize2fs_once &&
+    update-rc.d resize2fs_once remove &&
     log_end_msg $?
     ;;
   *)
@@ -231,7 +231,7 @@ set_overclock() {
 	set_config_var over_voltage $5 /boot/config.txt >/dev/null
 	
 	# now set up an init.d script
-cat <<\EOF > /etc/init.d/switch_cpu_governor
+cat <<\EOF > /etc/init.d/switch_cpu_governor &&
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          switch_cpu_governor
@@ -265,7 +265,7 @@ case "$1" in
     ;;
 esac
 EOF
-	chmod +x /etc/init.d/switch_cpu_governor
+	chmod +x /etc/init.d/switch_cpu_governor >/dev/null
 	update-rc.d switch_cpu_governor defaults >/dev/null
 	fi
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
@@ -618,16 +618,17 @@ mainmenu() {
 		;;
 		"")
 			if [ $ASKFORREBOOT -eq 1 ]; then
-				REBOOT=$(dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55 3>&1 1>&2 2>&3)
-				case "$REBOOT" in
-					1)
+				dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55;
+				
+				case "$?" in
+					0)
 						if [ $DEBUG -eq 0 ]; then
 							rm -rf /tmp/xbianpackages
 							rm -rf /tmp/xbiancache
 						fi
 						reboot;
 					;;
-					0)
+					1)
 						if [ $DEBUG -eq 0 ]; then
 							rm -rf /tmp/xbianpackages
 							rm -rf /tmp/xbiancache
@@ -650,9 +651,9 @@ mainmenu() {
     exit 0
 }
 #Run script inside screen, so it's doesn't fill the whole terminal history
-SCREEN=$(screen -r | grep "Attached" | wc -l);
-if [ $SCREEN -eq 0 ]; then
-	`screen $0`
-else
+#SCREEN=$(screen -r | grep "Attached" | wc -l);
+#if [ $SCREEN -eq 0 ]; then
+#	`screen $0`
+#else
 	mainmenu;
-fi
+#fi
