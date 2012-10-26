@@ -51,6 +51,7 @@ chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 chmod +x /usr/bin/*
 update-rc.d lirc defaults
+update-rc.d rpcbind defaults
 
 #22-10-2012 14:40
 #Copying home folder
