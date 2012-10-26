@@ -201,7 +201,7 @@ changesshroot() {
 } 
 
 set_config_var() {
-  lua - "$1" "$2" "$3" <<EOF > "$3.bak
+  lua - "$1" "$2" "$3" <<EOF > "$3.bak"
 local key=assert(arg[1])
 local value=assert(arg[2])
 local fn=assert(arg[3])
@@ -225,10 +225,10 @@ mv "$3.bak" "$3"
 set_overclock() {
 	if [ $DEBUG -eq 0 ]; then
     ASKFORREBOOT=1
-	set_config_var arm_freq $2 /boot/config.txt &&
-	set_config_var core_freq $3 /boot/config.txt &&
-	set_config_var sdram_freq $4 /boot/config.txt &&
-	set_config_var over_voltage $5 /boot/config.txt &&
+	set_config_var arm_freq $2 /boot/config.txt >/dev/null
+	set_config_var core_freq $3 /boot/config.txt >/dev/null
+	set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
+	set_config_var over_voltage $5 /boot/config.txt >/dev/null
 	
 	# now set up an init.d script
 cat <<\EOF > /etc/init.d/switch_cpu_governor
@@ -264,9 +264,9 @@ case "$1" in
     exit 3
     ;;
 esac
-EOF	
-	chmod +x /etc/init.d/switch_cpu_governor &&
-	update-rc.d switch_cpu_governor defaults
+EOF
+	chmod +x /etc/init.d/switch_cpu_governor
+	update-rc.d switch_cpu_governor defaults >/dev/null
 	fi
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
 	settings;
