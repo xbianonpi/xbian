@@ -133,7 +133,7 @@ EOF
 	
   # now set up an init.d script
 	if [ $DEBUG -eq 0 ]; then
-	cat > /etc/init.d/resize2fs_once >/dev/null << EOF
+	cat > /etc/init.d/resize2fs_once << EOF
 #!/bin/sh
 ### BEGIN INIT INFO
 # Provides:          resize2fs_once
