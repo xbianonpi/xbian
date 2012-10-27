@@ -93,7 +93,7 @@
 	git clone --depth 5 git://github.com/Pulse-Eight/libcec.git
 	cd ~/opt/libcec/
 	autoreconf -vif
-	./configure --prefix=/usr
+	./configure --prefix=/usr/local
 	make
 	sudo make install
 	
