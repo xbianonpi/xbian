@@ -74,7 +74,7 @@
    	# Creating a bigger swap file
    	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
 	sudo mkswap /moreswap
-	
+	sudo echo /moreswap swap swap defaults 0 0 >> /etc/fstab
 
 # 2. Compiling taglib (XBMC dependency)
 	cd ~/opt/
@@ -137,13 +137,10 @@
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-march=$TARGET_SUBARCH -mtune=$TARGET_CPU $TARGET_LOPT"
 
-	# Swapon swap and cd to the directory
-	cd ~/opt/xbmc/
-	sudo swapon /moreswap
-	
-	nano configure.in # set use_texturepacker_native=yes to use_texturepacker_native=no @ line 668
-	
 	# Preparing the XBMC code for compilation
+	cd ~/opt/xbmc/
+	nano configure.in # set use_texturepacker_native=yes to use_texturepacker_native=no @ line 668
+
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
     	sudo sh tools/rbp/setup-sdk.sh
