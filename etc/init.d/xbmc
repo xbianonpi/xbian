@@ -20,11 +20,26 @@ SCRIPTNAME=/etc/init.d/xbmc
 VERBOSE=no
 
 # Exit if the package is not installed
-[ -x $DAEMON ] || exit 0
+#[ -x $DAEMON ] || exit 0
 
 do_start()
 {
-	su - root -c  "/usr/bin/startxbmc $PIDFILE $DAEMON $DAEMON_ARGS &"
+	RETURN=$(start-stop-daemon -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test; return $? | return 1);
+	RETURN=$(start-stop-daemon -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; return $? | return 2);
+
+	case "$RETURN" in
+		0 )
+		echo do normal exit.....
+		;;
+		64 )
+		echo do power off.....
+		halt
+		;;
+		66 )
+		echo do reboot.....
+		reboot
+		;;
+	esac
 }
 
 do_stop()

@@ -674,9 +674,9 @@ mainmenu() {
     exit 0
 }
 #Run script inside screen, so it's doesn't fill the whole terminal history
-#SCREEN=$(screen -r | grep "Attached" | wc -l);
-#if [ $SCREEN -eq 0 ]; then
-#	`screen $0`
-#else
+SCREEN=$(screen -r | grep "Attached" | wc -l);
+if [ $SCREEN -eq 0 ]; then
+	`screen $0`
+else
 	mainmenu;
-#fi
+fi
