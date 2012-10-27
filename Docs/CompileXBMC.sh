@@ -69,15 +69,12 @@
    	# Cloning xbmc
 	mkdir ~/opt
    	cd ~/opt/
-   	git clone  git://github.com/xbmc/xbmc.git
-	# Reverting to the latest known working xbmc
-	cd ~/opt/xbmc
-	git reset --hard 0aa1e1dd28c53272f4bf4f39756768d3d74a8d38
+   	git clone --depth 5  git://github.com/xbmc/xbmc.git
 	
    	# Creating a bigger swap file
    	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
 	sudo mkswap /moreswap
-	
+	sudo echo /moreswap swap swap defaults 0 0 >> /etc/fstab
 
 # 2. Compiling taglib (XBMC dependency)
 	cd ~/opt/
@@ -93,7 +90,7 @@
 	git clone --depth 5 git://github.com/Pulse-Eight/libcec.git
 	cd ~/opt/libcec/
 	autoreconf -vif
-	./configure --prefix=/usr
+	./configure --prefix=/usr/local
 	make
 	sudo make install
 	
@@ -103,21 +100,21 @@
 	wget http://mirrors.xbmc.org/build-deps/darwin-libs/libshairport-1.2.0.20310_lib.tar.gz
 	tar xzf libshairport-1.2.0.20310_lib.tar.gz
 	rm libshairport-1.2.0.20310_lib.tar.gz
-	cd ~/opt/libshairport-1.2.0.20310_lib/
+	mv libshairport-1.2.0.20310_lib libshairport
+	cd ~/opt/libshairport/
 	
-	# Applying some patches
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/001_add_ao.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/002_fix_install_header.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/003_fix_deadlock.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/004_fix_bad_access.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/005_fix_shutdown.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/006_no_printf.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/007_fix_syslog_defines.patch  
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/008-add-missing-libs.patch  
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/009_fix_ipv6.patch
-	patch -Np0 -i /opt/xbmc/tools/rbp/depends/libshairport/010_handle_metadata.patch
-	wget https://raw.github.com/Memphiz/xbmc/master/lib/libshairport/011_fix_ipv4_fallback.patch
-	patch -Np0 -i 011_fix_ipv4_fallback.patch
+	# Applying required patches
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/001_add_ao.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/002_fix_install_header.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/003_fix_deadlock.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/004_fix_bad_access.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/005_fix_shutdown.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/006_no_printf.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/007_fix_syslog_defines.patch  
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/008-add-missing-libs.patch  
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/009_fix_ipv6.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/010_handle_metadata.patch
+	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/011_fix_ipv4_fallback.patch
  
 	# Compiling
 	autoreconf -vif
@@ -140,13 +137,10 @@
 	export CXXFLAGS="$CFLAGS"
 	export LDFLAGS="-march=$TARGET_SUBARCH -mtune=$TARGET_CPU $TARGET_LOPT"
 
-	# Swapon swap and cd to the directory
-	cd ~/opt/xbmc/
-	sudo swapon /moreswap
-	
-	nano configure.in # set use_texturepacker_native=yes to use_texturepacker_native=no @ line 668
-	
 	# Preparing the XBMC code for compilation
+	cd ~/opt/xbmc/
+	nano configure.in # set use_texturepacker_native=yes to use_texturepacker_native=no @ line 668
+
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
     	sudo sh tools/rbp/setup-sdk.sh
