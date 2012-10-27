@@ -69,10 +69,7 @@
    	# Cloning xbmc
 	mkdir ~/opt
    	cd ~/opt/
-   	git clone  git://github.com/xbmc/xbmc.git
-	# Reverting to the latest known working xbmc
-	cd ~/opt/xbmc
-	git reset --hard 0aa1e1dd28c53272f4bf4f39756768d3d74a8d38
+   	git clone --depth 5  git://github.com/xbmc/xbmc.git
 	
    	# Creating a bigger swap file
    	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
