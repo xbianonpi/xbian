@@ -64,6 +64,6 @@ rm /usr/local/lib/libtag_c.so.0
 ln -s /usr/local/lib/libtag_c.so.0.0.0 /usr/local/lib/libtag_c.so.0
 rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
-rm /usr/lib/libcec.so.2
-ln -s /usr/lib/libcec.so.2.0.0 /usr/lib/libcec.so.2
+rm /usr/local/lib/libcec.so.2
+ln -s /usr/local/lib/libcec.so.2.0.0 /usr/local/lib/libcec.so.2
 
