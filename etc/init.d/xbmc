@@ -13,7 +13,7 @@
 # Author: CurlyMo
 DESC=XBMC
 NAME=xbmc.bin
-DAEMON=/usr/lib/xbmc/$NAME
+DAEMON=/usr/local/lib/xbmc/$NAME
 DAEMON_ARGS="--standalone"
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/xbmc
