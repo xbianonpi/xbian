@@ -1,0 +1,19 @@
+<window id="113">
+	<defaultcontrol>-</defaultcontrol>
+	<include>dialogeffect</include>
+	<coordinates>
+		<system>0</system>
+		<posx>0</posx>
+		<posy>0</posy>
+	</coordinates>
+	<controls>
+		<control type="image">
+			<posx>50r</posx>
+			<posy>2</posy>
+			<width>45</width>
+			<height>45</height>
+			<aspectratio>keep</aspectratio>
+			<texture>icon-mute.png</texture>
+		</control>
+	</controls>
+</window>

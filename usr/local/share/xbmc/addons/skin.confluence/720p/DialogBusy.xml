@@ -1,0 +1,51 @@
+<window id="136">
+	<animation effect="fade" time="100">WindowOpen</animation>
+	<animation effect="fade" time="200">WindowClose</animation>
+	<coordinates>
+		<system>1</system>
+		<posx>0</posx>
+		<posy>0</posy>
+	</coordinates>
+	<controls>
+		<control type="group">
+			<posx>1070</posx>
+			<posy>640</posy>
+			<control type="image">
+				<description>background image</description>
+				<posx>0</posx>
+				<posy>0</posy>
+				<width>200</width>
+				<height>70</height>
+				<texture border="20">OverlayDialogBackground.png</texture>
+			</control>
+			<control type="image">
+				<description>Busy animation</description>
+				<posx>20</posx>
+				<posy>20</posy>
+				<width>32</width>
+				<height>32</height>
+				<texture>busy.png</texture>
+				<aspectratio>keep</aspectratio>
+				<animation effect="rotate" start="0" end="360" center="36,36" time="1200" loop="true" condition="true">conditional</animation>
+			</control>
+			<control type="label">
+				<description>Busy label</description>
+				<posx>60</posx>
+				<posy>20</posy>
+				<width>120</width>
+				<height>32</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$LOCALIZE[31004]</label>
+				<font>font12</font>
+			</control>
+			<control type="progress" id="10">
+				<description>Progressbar</description>
+				<posx>20</posx>
+				<posy>53</posy>
+				<width>160</width>
+				<height>8</height>
+			</control>
+		</control>
+	</controls>
+</window>
