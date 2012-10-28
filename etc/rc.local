@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -e
 #
 # rc.local
 #
@@ -11,22 +11,6 @@
 #
 # By default this script does nothing.
 
-# Check if I need to run MrEngman script
-if [ -f /etc/install-rtl8188cus-latest.sh ]; then
-        /etc/install-rtl8188cus-latest.sh
-        rm /etc/install-rtl8188cus-latest.sh
-        reboot
-fi
-
-# Check if I need to run MPEG2/VC1 setup script
-if [ -f /etc/licensesetup.sh ]; then
-        /etc/licensesetup.sh
-        rm /etc/licensesetup.sh
-        reboot
-fi
-
-LD_PRELOAD=/etc/libcofi_rpi.so
+/etc/init.d/rpcbind start
 chmod a+rw /dev/vchiq
-clear
 exit 0
-

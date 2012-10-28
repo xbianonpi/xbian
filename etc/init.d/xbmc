@@ -15,36 +15,28 @@ DESC=XBMC
 NAME=xbmc.bin
 DAEMON=/usr/local/lib/xbmc/$NAME
 DAEMON_ARGS="--standalone"
-PIDFILE=/var/run/$NAME.pid
+PIDFILE=/var/run/xbmc.pid
 SCRIPTNAME=/etc/init.d/xbmc
-VERBOSE=no
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
 
 # Exit if the package is not installed
-#[ -x $DAEMON ] || exit 0
+[ -x $DAEMON ] || exit 0
 
 do_start()
 {
-	RETURN=$(start-stop-daemon -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test; return $? | return 1);
-	RETURN=$(start-stop-daemon -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; return $? | return 2);
-
-	case "$RETURN" in
-		0 )
-		echo do normal exit.....
-		;;
-		64 )
-		echo do power off.....
-		halt
-		;;
-		66 )
-		echo do reboot.....
-		reboot
-		;;
-	esac
+	if [ $(($(ps -A | grep xbmc.bin | wc -l))) -eq 0 ]; then
+		start-stop-daemon -c xbian -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test || return 1;
+		su - xbian -c "$DAEMON $DAEMON_ARGS; case \"$?\" in 0) echo do normal exit.....; ;; 64) echo do power off.....; sudo halt ;; 66) echo do reboot.....; sudo reboot; ;; esac" &
+		sleep 1;
+		pgrep xbmc.bin > $PIDFILE;
+	fi
 }
 
 do_stop()
 {
-       kill -9 $(pgrep -o xbmc)
+       start-stop-daemon --stop --signal 9 --retry 5 --quiet --pidfile $PIDFILE
 }
 
 case "$1" in
