@@ -43,7 +43,6 @@ cp -R boot/* /boot/
 
 #09-10-2012 22:00
 #Setup init scripts
-update-rc.d resizesd start 2
 update-rc.d xbmc defaults
 update-rc.d xbian defaults
 chmod +x /etc/init.d/lirc
@@ -58,12 +57,12 @@ update-rc.d rpcbind defaults
 cp -r home/* /home/
 
 #Fixing symbolic links
-rm /usr/local/lib/libshairport.so.0
-ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0 
-rm /usr/local/lib/libtag_c.so.0
-ln -s /usr/local/lib/libtag_c.so.0.0.0 /usr/local/lib/libtag_c.so.0
-rm /usr/local/lib/libtag.so.1
-ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
-rm /usr/local/lib/libcec.so.2
+ln -s /usr/local/lib/libcec.so.2.0.0 /usr/local/lib/libcec.so
 ln -s /usr/local/lib/libcec.so.2.0.0 /usr/local/lib/libcec.so.2
-
+ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so.0
+ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so
+ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0
+ln -s /usr/local/lib/libtag_c.so.0.0.0 /usr/local/lib/libtag_c.so.0
+ln -s /usr/local/lib/libtag_c.so.0 /usr/local/lib/libtag_c.so
+ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+ln -s /usr/local/lib/libtag.so.1 /usr/local/lib/libtag.so
