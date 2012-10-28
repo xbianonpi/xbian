@@ -35,14 +35,3 @@ if [ -d /etc/profile.d ]; then
   done
   unset i
 fi
-
-if [ "$SSH_CONNECTION" != "" ]; then
-  return
-else
-	if [ "`id -u`" -eq 0 ]; then
-		echo -e '\e[40;30m'
-	fi
-	dmesg -n 1
-	clear
-	
-fi

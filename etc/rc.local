@@ -11,6 +11,4 @@
 #
 # By default this script does nothing.
 
-/etc/init.d/rpcbind start
-chmod a+rw /dev/vchiq
 exit 0
