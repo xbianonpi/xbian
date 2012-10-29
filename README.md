@@ -3,6 +3,7 @@ XBian 1.0 Alpha 1
 Minor bugs
 =============================
 1. XBMC thumbnail aspect ratio wrong
+2. XBMC still hangs occasionally
 
 Missing features
 =============================
