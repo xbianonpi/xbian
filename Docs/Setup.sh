@@ -77,4 +77,6 @@ rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
-export LANG=c
+export LANG=C
+export LC_ALL=C
+export LANGUAGE=C
