@@ -15,7 +15,7 @@ netmask 255.255.255.0
 broadcast 192.168.0.255
 gateway 192.168.0.1
 
-Wireless
+Wireless NOT COMPLETED YET, MAY CHANGE!!
 ============================
 
 Unprotected; add this to /etc/network/interfaces:
