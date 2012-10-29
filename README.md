@@ -42,4 +42,5 @@ Kernel 3.2.27 - Additional modules
 2. i2c*
 3. w1*
 4. spi*
+5. Realtek 8192cu
 
