@@ -84,6 +84,7 @@ export LC_ALL=C
 export LANGUAGE=C
 
 #Remove user pi from sudoers and add xbian user
+sed -i '$d' /etc/suoders > /etc/suoders
 echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
 
 #Delete auto start of raspi-config
