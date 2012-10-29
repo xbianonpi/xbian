@@ -43,7 +43,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #Clone xbian git
 cd /home/xbian/
-git clone --depth 1 https://github.com/Koenkk/xbian.git source
+git clone --depth 5 https://github.com/Koenkk/xbian.git source
 cd source
 
 #Installation
