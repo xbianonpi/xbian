@@ -9,7 +9,7 @@ libmtdev1 libogg0 libpciaccess0 libportmidi0 libsndfile1 libts-0.0-0 libvorbis0a
 
 sudo apt-get install screen git dialog libsamplerate0 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev libjpeg-dev libpython2.7 libfribidi-dev libpcre3-dev libcdio-dev libfreetype6
 
-sudo apt-get autoremove -y
+sudo apt-get autoremove -y 
 
 sudo apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
 
