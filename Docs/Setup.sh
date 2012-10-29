@@ -74,6 +74,7 @@ rm /usr/local/lib/libshairport.so.0
 ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0
 rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+ldconfig
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
 export LANG=C
