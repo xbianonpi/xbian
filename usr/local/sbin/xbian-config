@@ -151,6 +151,8 @@ case "$1" in
   start)
     log_daemon_msg "Starting resize2fs_once" &&
     resize2fs /dev/mmcblk0p2 &&
+    mkswap /dev/mmcblk0p3 &&
+    swapon /dev/mmcblk0p3 &&
     rm /etc/init.d/resize2fs_once &&
     update-rc.d resize2fs_once remove &&
     log_end_msg $?
