@@ -1,8 +1,23 @@
 XBian 1.0 Alpha 1
 =============================
+Minor bugs
+=============================
+1. XBMC thumbnail aspect ratio wrong
+
+Missing features
+=============================
+1. XBOX remote to lirc
+2. Implement xbian-config update script
+
+Needs testing
+=============================
+1. Test wireless with existing kernel modules
+
+Major steps
+=============================
 1. Install Raspbian - Done
 2. Install CurlyMo kernel similar to r-win kernel v3. - Done
-3. Move XBMC build from Xbian to new install.
+3. Move XBMC build from Xbian to new install. Done
 4. Remove/Add packages - Done
 5. Add xbian user (optional) - Done
 6. Add init scripts - Done
