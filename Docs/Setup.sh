@@ -89,3 +89,6 @@ echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/
 
 #Delete auto start of raspi-config
 rm /etc/profile.d/raspi-config.sh
+
+#Enable root autologin
+sed -i 's/1:2345:respawn:\/sbin\/getty 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f root tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
