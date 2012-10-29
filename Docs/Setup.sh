@@ -62,7 +62,6 @@ chmod +x /usr/local/bin/*
 chmod +x /usr/local/lib/xbmc/xbmc.bin
 chown -hR xbian /home/xbian
 
-
 #Update rc.d
 update-rc.d xbmc defaults
 update-rc.d xbian defaults
@@ -76,3 +75,6 @@ rm /usr/local/lib/libshairport.so.0
 ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0
 rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+
+# Set locale to c to prevent weird characters in xbian-config and c compiling
+export LANG=c
