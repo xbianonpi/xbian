@@ -89,3 +89,20 @@ echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/
 
 #Delete auto start of raspi-config
 rm /etc/profile.d/raspi-config.sh
+
+#Added new profile scripts
+cat <<\EOF > /etc/profile.d/xbian-config.sh
+#!/bin/bash
+if [ `/usr/bin/id -u` != "0" ]; then
+        sudo xbian-config
+fi
+EOF
+
+cat <<\EOF > /etc/profile.d/hideoutput.sh
+#!/bin/bash
+if [ $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 ]; then
+        echo -e '\e[40;30m'
+        dmesg -n 1
+        clear
+fi
+EOF
