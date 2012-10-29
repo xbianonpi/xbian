@@ -51,7 +51,9 @@ rm -rf /lib/modules/*
 cp -R lib/* /lib/
 rm -rf /boot/*
 cp -R boot/* /boot/
-cp -r home/* /home/
+#cp -r home/* /home/
+rm -rf /opt/vc
+cp -r opt/vc /opt
 
 # Correcting permissions
 chmod +x /etc/init.d/*
