@@ -10,6 +10,7 @@ Missing features
 1. XBOX remote to lirc
 2. Implement xbian-config update function
 3. Implement xbian-config license setup
+4. Add licenses and author information to all (custom made) scripts.
 
 Needs testing
 =============================
