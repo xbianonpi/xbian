@@ -29,7 +29,7 @@ do_start()
 	if [ $(($(ps -A | grep xbmc.bin | wc -l))) -eq 0 ]; then
 		start-stop-daemon -c xbian -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test || return 1;
 		chmod a+rw /dev/vchiq
-		if [ -z $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*") ]; then
+		if [ $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 ]; then
 			echo -e '\e[40;30m'
 			dmesg -n 1
 			clear
