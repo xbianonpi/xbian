@@ -84,25 +84,11 @@ export LC_ALL=C
 export LANGUAGE=C
 
 #Remove user pi from sudoers and add xbian user
-sed -i '$d' /etc/suoders > /etc/suoders
+sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
 echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
 
 #Delete auto start of raspi-config
 rm /etc/profile.d/raspi-config.sh
 
-#Added new profile scripts
-cat <<\EOF > /etc/profile.d/xbian-config.sh
-#!/bin/bash
-if [ `/usr/bin/id -u` != "0" ]; then
-        sudo xbian-config
-fi
-EOF
-
-cat <<\EOF > /etc/profile.d/hideoutput.sh
-#!/bin/bash
-if [ $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 ]; then
-        echo -e '\e[40;30m'
-        dmesg -n 1
-        clear
-fi
-EOF
+#Enable root autologin
+sed -i 's/1:2345:respawn:\/sbin\/getty 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f root tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
