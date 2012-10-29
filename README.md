@@ -8,7 +8,8 @@ Minor bugs
 Missing features
 =============================
 1. XBOX remote to lirc
-2. Implement xbian-config update script
+2. Implement xbian-config update function
+3. Implement xbian-config license setup
 
 Needs testing
 =============================
