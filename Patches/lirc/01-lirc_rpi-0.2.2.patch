@@ -1,199 +1,72 @@
-diff -crB lirc/configure.ac lirc1/configure.ac
-*** lirc/configure.ac	2012-10-17 22:58:48.669960425 +0000
---- lirc1/configure.ac	2012-10-17 23:12:44.322228937 +0000
-***************
-*** 171,178 ****
-  	(lirc_dev lirc_parallel) \
-  	(lirc_dev lirc_sasem) \
-  	(lirc_dev lirc_serial) \
-! 	(lirc_dev lirc_sir) \
-! 	(lirc_dev lirc_wpc8769l)"
-  fi
-  
-  AH_TEMPLATE([DAEMONIZE],
---- 171,178 ----
-  	(lirc_dev lirc_parallel) \
-  	(lirc_dev lirc_sasem) \
-  	(lirc_dev lirc_serial) \
-! 	(lirc_dev lirc_rpi) \
-! 	(lirc_dev lirc_sir)"
-  fi
-  
-  AH_TEMPLATE([DAEMONIZE],
-***************
-*** 441,447 ****
-                            pcmak_usb, pctv, pixelview_bt878,
-                            pixelview_pak, pixelview_pro, provideo,
-                            realmagic, remotemaster, sa1100, samsung,
-!                           sasem, sb0540, serial, silitek, sir, slinke,
-                            srm7500libusb, tekram,
-                            tekram_bt829, tira, tira_raw, ttusbir,
-                            tuxbox, tvbox, udp, uirt2, uirt2_raw,
---- 441,447 ----
-                            pcmak_usb, pctv, pixelview_bt878,
-                            pixelview_pak, pixelview_pro, provideo,
-                            realmagic, remotemaster, sa1100, samsung,
-!                           sasem, sb0540, serial, rpi, silitek, sir, slinke,
-                            srm7500libusb, tekram,
-                            tekram_bt829, tira, tira_raw, ttusbir,
-                            tuxbox, tvbox, udp, uirt2, uirt2_raw,
-***************
-*** 606,614 ****
-  		;;
-  	lirc_dev-lirc_serial)
-  		;;
-! 	lirc_dev-lirc_sir)
-  		;;
-! 	lirc_dev-lirc_wpc8769l)
-  		;;
-  	lirc_flyvideo)
-  		;;
---- 606,614 ----
-  		;;
-  	lirc_dev-lirc_serial)
-  		;;
-! 	lirc_dev-lirc_rpi)
-  		;;
-! 	lirc_dev-lirc_sir)
-  		;;
-  	lirc_flyvideo)
-  		;;
-***************
-*** 1297,1302 ****
---- 1297,1306 ----
-    lirc_driver="lirc_dev lirc_serial"
-  fi
-  
-+ if test "$driver" = "rpi"; then
-+   lirc_driver="lirc_dev lirc_rpi"
-+ fi
-+ 
-  if test "$driver" = "silitek"; then
-    lirc_driver="none"
-    hw_module="hw_silitek.o serial.o"
-***************
-*** 1402,1412 ****
-    lircd_conf="adstech/lircd.conf.usbx-707"
-  fi
-  
-- if test "$driver" = "wpc8769l"; then
--   lirc_driver="lirc_dev lirc_wpc8769l"
--   lircd_conf="acer/lircd.conf.Aspire_6530G"
-- fi
-- 
-  
-  #END HARDWARE HEURISTIC
-  
---- 1406,1411 ----
-***************
-*** 1511,1519 ****
-  	lirc_parallel \
-  	lirc_sasem \
-  	lirc_serial \
-  	lirc_sir \
-! 	lirc_ttusbir \
-! 	lirc_wpc8769l"
-  fi
-  if kernel_module=$(expr "$lirc_driver" : 'lirc_dev \(.*\)'); then
-    :
---- 1510,1518 ----
-  	lirc_parallel \
-  	lirc_sasem \
-  	lirc_serial \
-+ 	lirc_rpi \
-  	lirc_sir \
-! 	lirc_ttusbir"
-  fi
-  if kernel_module=$(expr "$lirc_driver" : 'lirc_dev \(.*\)'); then
-    :
-***************
-*** 1778,1785 ****
-    drivers/lirc_parallel/Makefile
-    drivers/lirc_sasem/Makefile
-    drivers/lirc_serial/Makefile
-    drivers/lirc_sir/Makefile
--   drivers/lirc_wpc8769l/Makefile
-    daemons/Makefile
-    tools/Makefile
-    doc/Makefile
---- 1777,1784 ----
-    drivers/lirc_parallel/Makefile
-    drivers/lirc_sasem/Makefile
-    drivers/lirc_serial/Makefile
-+   drivers/lirc_rpi/Makefile
-    drivers/lirc_sir/Makefile
-    daemons/Makefile
-    tools/Makefile
-    doc/Makefile
-Only in lirc1: configure.ac.orig
-Only in lirc1: configure.ac.rej
-diff -crB lirc/drivers/lirc_atiusb/lirc_atiusb.c lirc1/drivers/lirc_atiusb/lirc_atiusb.c
-*** lirc/drivers/lirc_atiusb/lirc_atiusb.c	2012-10-17 22:58:48.849958784 +0000
---- lirc1/drivers/lirc_atiusb/lirc_atiusb.c	2012-10-17 23:09:07.484248580 +0000
-***************
-*** 48,54 ****
-  #include <linux/slab.h>
-  #include <linux/module.h>
-  #include <linux/kmod.h>
-! #include <linux/smp_lock.h>
-  #include <linux/completion.h>
-  #include <linux/uaccess.h>
-  #include <linux/usb.h>
---- 48,54 ----
-  #include <linux/slab.h>
-  #include <linux/module.h>
-  #include <linux/kmod.h>
-! //#include <linux/smp_lock.h>
-  #include <linux/completion.h>
-  #include <linux/uaccess.h>
-  #include <linux/usb.h>
-diff -crB lirc/drivers/lirc_i2c/lirc_i2c.c lirc1/drivers/lirc_i2c/lirc_i2c.c
-*** lirc/drivers/lirc_i2c/lirc_i2c.c	2012-10-17 22:58:48.869958602 +0000
---- lirc1/drivers/lirc_i2c/lirc_i2c.c	2012-10-17 23:09:35.463987856 +0000
-***************
-*** 556,562 ****
-  		return -EINVAL;
-  	}
-  	printk(KERN_INFO "lirc_i2c: chip 0x%x found @ 0x%02x (%s)\n",
-! 	       adap->id, addr, ir->c.name);
-  
-  #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 31)
-  	/* register device */
---- 556,562 ----
-  		return -EINVAL;
-  	}
-  	printk(KERN_INFO "lirc_i2c: chip 0x%x found @ 0x%02x (%s)\n",
-! 	       0, addr, ir->c.name);
-  
-  #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 31)
-  	/* register device */
-Only in lirc1/drivers: lirc_rpi
-diff -crB lirc/drivers/Makefile.am lirc1/drivers/Makefile.am
-*** lirc/drivers/Makefile.am	2012-10-17 22:58:48.849958784 +0000
---- lirc1/drivers/Makefile.am	2012-10-17 23:10:31.463466146 +0000
-***************
-*** 18,23 ****
---- 18,24 ----
-  	lirc_parallel \
-  	lirc_sasem \
-  	lirc_serial \
-+ 	lirc_rpi \
-  	lirc_sir \
-  	lirc_ttusbir \
-  	lirc_wpc8769l
-Only in lirc: lirc.patch
-diff -crB lirc/setup.data lirc1/setup.data
-*** lirc/setup.data	2012-10-17 22:58:49.009957326 +0000
---- lirc1/setup.data	2012-10-17 23:10:31.473466052 +0000
-***************
-*** 1,5 ****
---- 1,6 ----
-  hw_menu_entry: @any
-  	serial: "Home-brew (16x50 UART compatible serial port)"
-+ 	rpi: "Raspberry Pi Home-brew (GPIO input)"
-  	parallel: "Home-brew (parallel port)"
-  	@hw-soundcard: "Home-brew (soundcard input)"
-  	@hw-other-serial: "Other serial port devices"
+diff --git a/configure.ac b/configure.ac
+index ff4780f..196717c 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -171,6 +171,7 @@ if test x${no_kernel} != xyes; then
+ 	(lirc_dev lirc_parallel) \
+ 	(lirc_dev lirc_sasem) \
+ 	(lirc_dev lirc_serial) \
++	(lirc_dev lirc_rpi) \
+ 	(lirc_dev lirc_sir) \
+ 	(lirc_dev lirc_wpc8769l)"
+ fi
+@@ -441,7 +442,7 @@ AC_ARG_WITH(driver,
+                           pcmak_usb, pctv, pixelview_bt878,
+                           pixelview_pak, pixelview_pro, provideo,
+                           realmagic, remotemaster, sa1100, samsung,
+-                          sasem, sb0540, serial, silitek, sir, slinke,
++                          sasem, sb0540, serial, rpi, silitek, sir, slinke,
+                           srm7500libusb, tekram,
+                           tekram_bt829, tira, tira_raw, ttusbir,
+                           tuxbox, tvbox, udp, uirt2, uirt2_raw,
+@@ -606,6 +607,8 @@ if test "$driver" = "userspace" -o "$driver" = "all"; then
+ 		;;
+ 	lirc_dev-lirc_serial)
+ 		;;
++	lirc_dev-lirc_rpi)
++		;;
+ 	lirc_dev-lirc_sir)
+ 		;;
+ 	lirc_dev-lirc_wpc8769l)
+@@ -1297,6 +1300,10 @@ if test "$driver" = "serial"; then
+   lirc_driver="lirc_dev lirc_serial"
+ fi
+ 
++if test "$driver" = "rpi"; then
++  lirc_driver="lirc_dev lirc_rpi"
++fi
++
+ if test "$driver" = "silitek"; then
+   lirc_driver="none"
+   hw_module="hw_silitek.o serial.o"
+@@ -1511,6 +1518,7 @@ elif test "$lirc_driver" = "all"; then
+ 	lirc_parallel \
+ 	lirc_sasem \
+ 	lirc_serial \
++	lirc_rpi \
+ 	lirc_sir \
+ 	lirc_ttusbir \
+ 	lirc_wpc8769l"
+@@ -1778,6 +1786,7 @@ AC_CONFIG_FILES([
+   drivers/lirc_parallel/Makefile
+   drivers/lirc_sasem/Makefile
+   drivers/lirc_serial/Makefile
++  drivers/lirc_rpi/Makefile
+   drivers/lirc_sir/Makefile
+   drivers/lirc_wpc8769l/Makefile
+   daemons/Makefile
+diff --git a/drivers/Makefile.am b/drivers/Makefile.am
+index 3f207e9..9e1a109 100644
+--- a/drivers/Makefile.am
++++ b/drivers/Makefile.am
+@@ -18,6 +18,7 @@ DIST_SUBDIRS = \
+ 	lirc_parallel \
+ 	lirc_sasem \
+ 	lirc_serial \
++	lirc_rpi \
+ 	lirc_sir \
+ 	lirc_ttusbir \
+ 	lirc_wpc8769l
 diff --git a/drivers/lirc_rpi/Makefile.am b/drivers/lirc_rpi/Makefile.am
 new file mode 100644
 index 0000000..a06724b
@@ -900,3 +773,14 @@ index 0000000..5bb6521
 +
 +module_param(softcarrier, bool, S_IRUGO);
 +MODULE_PARM_DESC(softcarrier, "Software carrier (0 = off, 1 = on, default on)");
+diff --git a/setup.data b/setup.data
+index 407d6b2..d24166d 100644
+--- a/setup.data
++++ b/setup.data
+@@ -1,5 +1,6 @@
+ hw_menu_entry: @any
+ 	serial: "Home-brew (16x50 UART compatible serial port)"
++	rpi: "Raspberry Pi Home-brew (GPIO input)"
+ 	parallel: "Home-brew (parallel port)"
+ 	@hw-soundcard: "Home-brew (soundcard input)"
+ 	@hw-other-serial: "Other serial port devices"

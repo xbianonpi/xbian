@@ -1,0 +1,11 @@
+--- a/drivers/lirc_xbox/lirc_xbox.c	2012-10-30 15:00:29.005920005 +0100
++++ b/drivers/lirc_xbox/lirc_xbox.c	2012-10-30 15:01:11.315488163 +0100
+@@ -48,7 +48,7 @@
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ #include <linux/kmod.h>
+-#include <linux/smp_lock.h>
++//#include <linux/smp_lock.h>
+ #include <linux/completion.h>
+ #include <linux/uaccess.h>
+ #include <linux/usb.h>

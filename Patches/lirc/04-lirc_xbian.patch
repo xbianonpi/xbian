@@ -1,0 +1,11 @@
+--- a/drivers/lirc_i2c/lirc_i2c.c	2012-10-30 14:56:44.928207588 +0100
++++ b/drivers/lirc_i2c/lirc_i2c.c	2012-10-30 14:56:58.908064844 +0100
+@@ -556,7 +556,7 @@
+ 		return -EINVAL;
+ 	}
+ 	printk(KERN_INFO "lirc_i2c: chip 0x%x found @ 0x%02x (%s)\n",
+-	       adap->id, addr, ir->c.name);
++	       0, addr, ir->c.name);
+ 
+ #if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 31)
+ 	/* register device */
