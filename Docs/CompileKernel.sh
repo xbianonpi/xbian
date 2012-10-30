@@ -35,5 +35,9 @@ sudo make modules_install CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_L
 #Implement the new kernel
 cp arch/arm/boot/Image /boot/kernel.img
 
+#Build custom 8192co module
+#Follow this guide:
+#http://www.raspberrypi.org/phpBB3/viewtopic.php?f=53&t=11162
+
 #Reboot
 reboot
