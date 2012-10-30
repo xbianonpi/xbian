@@ -1,4 +1,22 @@
 #!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the 
+#terms of the GNU General Public License as published by the Free Software 
+#Foundation, either version 3 of the License, or (at your option) any later 
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY 
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+#details.
+#
+#You should have received a copy of the GNU General Public License along 
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+#
 #TODO: Check if packages are already installed
 
 if [ ! $(id -u) -eq 0 ]; then
@@ -168,7 +186,7 @@ check_rootssh_status() {
 } 
 
 xbianinfo() {
-    dialog --backtitle "$BACKTITLE" --title "Xbian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of Xbian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
+    dialog --backtitle "$BACKTITLE" --title "XBian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of XBian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
 	mainmenu;
 }
 
@@ -320,7 +338,7 @@ EOF
 	chmod +x /etc/init.d/resize2fs_once >/dev/null;
 	update-rc.d resize2fs_once defaults >/dev/null;
 	fi
-	dialog --backtitle "Xbian" --title "Config > Settings > Resize SD" --ok-label Close --msgbox "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
+	dialog --backtitle "XBian" --title "Config > Settings > Resize SD" --ok-label Close --msgbox "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
 	settings;
 }
 
@@ -339,7 +357,7 @@ changepass() {
 	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --insecure --passwordbox "Password:" 7 80 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
 		echo "pi:$PASS" | chpasswd
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n      Xbian password succesfully changed" 7 55
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n      XBian password succesfully changed" 7 55
 	fi
 	settings;
 	exit 0
@@ -822,7 +840,7 @@ localpackages() {
 				tar -zxvf $LOCATION -C / >/dev/null;
 				installpackage "/tmp/xbianpackages/$NAME.sh" "Packages"
 			else
-				dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "\n  File is not a valid Xbian script." 7 50
+				dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "\n  File is not a valid XBian script." 7 50
 				localpackages
 			fi
 		else
@@ -853,7 +871,7 @@ packages() {
 }
 
 mainmenu() {
-	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 10 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 10 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for XBian Updates\"" 3>&1 1>&2 2>&3)
 
     case "$RETURN" in
 		1)
