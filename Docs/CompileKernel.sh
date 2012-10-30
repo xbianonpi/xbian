@@ -1,4 +1,24 @@
 #!/bin/bash
+#
+#Copyright 2012 CurlyMo, Erwin Bovendeur <development@xbian.org>
+#Aron Robert Szabo <aron@reon.hu>
+#Frank Buss <fb@frank-buss.de>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the 
+#terms of the GNU General Public License as published by the Free Software 
+#Foundation, either version 3 of the License, or (at your option) any later 
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY 
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+#details.
+#
+#You should have received a copy of the GNU General Public License along 
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+#
 
 #Download compilation tools from the official raspberry pi github
 cd /usr/src
@@ -16,7 +36,7 @@ cd linux
 #Revert tot the version used when building the kernel to ensure success
 sudo git checkout 10182a3bc434b27740f81c2b836a1af943060241
 
-#Download the used config from the Xbian github
+#Download the used config from the XBian github
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
 
 #Symlink the lirc drivers to get the patch working
