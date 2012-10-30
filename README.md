@@ -46,18 +46,18 @@ Kernel 3.2.27 - Additional modules
 
 xbian-config
 =================================
-1. Info
-2. Settings
-2.1 Resize SD
-2.2 Change password
-2.3 Set timezone
-2.4 SSH root login
-2.5 Overclocking
-2.6 License MPG2
-2.7 License VC-1
-3. Packages
-3.1 Remote
-3.1.1 Development
-3.1.2 Web
-3.2 Local
-4. Update
+1. Info<br />
+2. Settings<br />
+2.1. Resize SD<br />
+2.2. Change password<br />
+2.3. Set timezone<br />
+2.4. SSH root login<br />
+2.5. Overclocking<br />
+2.6. License MPG2<br />
+2.7. License VC-1<br />
+3. Packages<br />
+3.1. Remote<br />
+3.1.1. Development<br />
+3.1.2. Web<br />
+3.2. Local<br />
+4. Update<br />
