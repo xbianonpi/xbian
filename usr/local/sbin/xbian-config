@@ -854,7 +854,7 @@ packages() {
 
 mainmenu() {
 	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config' --ok-label Select --cancel-label Exit  --menu '' 10 80 5 1 "Info     - \"Information about this tool\"" 2 "Settings - \"Change various system settings\"" 3 "Packages - \"Install or remove packages\"" 4 "Update   - \"Check for Xbian Updates\"" 3>&1 1>&2 2>&3)
-    
+
     case "$RETURN" in
 		1)
 			xbianinfo;
@@ -871,13 +871,14 @@ mainmenu() {
 		"")
 			if [ $ASKFORREBOOT -eq 1 ]; then
 				dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55;
-				
+
 				case "$?" in
 					0)
 						if [ $DEBUG -eq 0 ]; then
 							rm -rf /tmp/xbianpackages
 							rm -rf /tmp/xbiancache
 						fi
+						echo 1 | sudo tee /proc/sys/vm/drop_caches
 						reboot;
 					;;
 					1)
@@ -885,6 +886,7 @@ mainmenu() {
 							rm -rf /tmp/xbianpackages
 							rm -rf /tmp/xbiancache
 						fi
+						echo 1 | sudo tee /proc/sys/vm/drop_caches
 						exit 0
 					;;
 				esac
@@ -893,6 +895,7 @@ mainmenu() {
 					rm -rf /tmp/xbianpackages
 					rm -rf /tmp/xbiancache
 				fi
+				echo 1 | sudo tee /proc/sys/vm/drop_caches
 				exit 0
 			fi
 		;;
