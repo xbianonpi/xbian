@@ -44,3 +44,20 @@ Kernel 3.2.27 - Additional modules
 4. spi*
 5. Realtek 8192cu
 
+xbian-config
+=================================
+1. Info
+2. Settings
+2.1 Resize SD
+2.2 Change password
+2.3 Set timezone
+2.4 SSH root login
+2.5 Overclocking
+2.6 License MPG2
+2.7 License VC-1
+3. Packages
+3.1 Remote
+3.1.1 Development
+3.1.2 Web
+3.2 Local
+4. Update
