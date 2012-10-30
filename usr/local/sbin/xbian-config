@@ -47,7 +47,7 @@ fi
 #$6 = Specific files?
 #$7 = Only file extensions
 filedirselect() {
-	DELIMITER="%";
+
 	IFS=$'\n'
 	ITEMS=($(ls -AlQ $4 | grep ^d | grep -o "\(\".*\"\)"));
 	if [ $5 -eq 1 ]; then
@@ -61,15 +61,8 @@ filedirselect() {
 	else
 		MESSAGE="\nPlease select a directory";
 	fi
-	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
-		DELIMITER='@';
-	fi
-	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
-		DELIMITER='^';
-	fi
-	
 	if [ $4 != "/" ]; then
-		LIST="0$DELIMITER[..]$DELIMITER";
+		LIST="0%[..]%";
 		N=1;
 	else
 		LIST="";
@@ -80,9 +73,9 @@ filedirselect() {
 	do
 		ITEM=$(echo $ITEM | sed -e 's/\ /\_/g' | sed -e 's/\"//g');
 		if [ -d $4$ITEM ]; then
-			LIST="$LIST$N$DELIMITER[$ITEM]$DELIMITER";
+			LIST="$LIST$N%[$ITEM]%";
 		else
-			LIST="$LIST$N$DELIMITER$ITEM$DELIMITER";
+			LIST="$LIST$N%$ITEM%";
 		fi
 		
 		N=$(($N+1));
@@ -92,7 +85,7 @@ filedirselect() {
 		NRITEMS=8;
 	fi
 	LIST=$(echo \"$LIST\" | awk '{print substr($0,2,length-3)'} | sed -e 's/\_/\ /g');
-	IFS="$DELIMITER";
+	IFS="%";
 	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $3" --extra-button --extra-label Select --ok-label Open --cancel-label Return  --menu $MESSAGE 14 60 $NRITEMS $LIST  3>&1 1>&2 2>&3);
 	BUTTON=$?;
 	IFS=" ";
