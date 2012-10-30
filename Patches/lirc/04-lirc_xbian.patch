@@ -1,0 +1,11 @@
+--- a/drivers/lirc_atiusb/lirc_atiusb.c	2012-10-30 14:52:26.470825327 +0100
++++ b/drivers/lirc_atiusb/lirc_atiusb.c	2012-10-30 14:52:09.380996874 +0100
+@@ -48,7 +48,7 @@
+ #include <linux/slab.h>
+ #include <linux/module.h>
+ #include <linux/kmod.h>
+-//#include <linux/smp_lock.h>
++#include <linux/smp_lock.h>
+ #include <linux/completion.h>
+ #include <linux/uaccess.h>
+ #include <linux/usb.h>
