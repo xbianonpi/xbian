@@ -33,6 +33,8 @@ sudo apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}
 
 sudo rm -rf /var/cache/apt/archives/*
 
+sudo apt-get clean
+
 #Setting up xbian user and deleting pi user
 sudo su
 useradd -G sudo -m -s /bin/bash xbian
