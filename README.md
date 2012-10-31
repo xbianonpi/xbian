@@ -7,7 +7,7 @@ How-to install
 2. Follow the instructions of the Setup.sh located in the Docs folder.
 3. Enjoy!
 
-Minor bugs
+Rare issues
 =============================
 1. XBMC thumbnail aspect ratio wrong
 2. XBMC still hangs occasionally
