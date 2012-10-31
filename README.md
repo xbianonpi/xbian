@@ -15,13 +15,18 @@ Minor bugs
 Missing features
 =============================
 1. XBOX remote to lirc (Tried but not working)
-2. Implement xbian-config update function (will implement after the release of Xbian 1.0 Alpha)
+2. Implement xbian-config update function (CurlyMo will this implement after the release of Xbian 1.0 Alpha)
 3. Implement xbian-config license setup - Done
 4. Add licenses and author information to all (custom made) scripts - Done
+<<<<<<< HEAD
 5. Implement all wireless driver
 6. Implement xbian-config hostname setup
 7. PVR Addons
 8. Drivers for PVR Backend
+=======
+5. Implement all wireless drivers
+6. Implement xbian-config hostname setup - Done
+>>>>>>> b10f543d9b2e5b2fd861a9c5088387b22e096f77
 
 Needs testing
 =============================
@@ -59,6 +64,7 @@ xbian-config
 2.5. Overclocking<br />
 2.6. License MPG2<br />
 2.7. License VC-1<br />
+2.8. Hostname<br />
 3. Packages<br />
 3.1. Remote<br />
 3.1.1. Development<br />
