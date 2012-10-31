@@ -70,7 +70,7 @@ rm -rf /lib/modules/*
 cp -R lib/* /lib/
 rm -rf /boot/*
 cp -R boot/* /boot/
-#cp -r home/* /home/
+cp -R home/* /home/
 rm -rf /opt/vc
 cp -r opt/vc /opt
 
