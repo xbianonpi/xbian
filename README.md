@@ -4,7 +4,7 @@ XBian 1.0 Alpha 1
 How-to install
 =============================
 1. Download and restore the latest raspbian image to a SD-card.
-2. Follow the insturctions of the Setup.sh located in the Docs folder.
+2. Follow the instructions of the Setup.sh located in the Docs folder.
 3. Enjoy!
 
 Minor bugs
