@@ -23,9 +23,8 @@ Missing features
 6. Implement xbian-config hostname setup
 7. PVR Addons
 8. Drivers for PVR Backend
-=======
-5. Implement all wireless drivers
-6. Implement xbian-config hostname setup - Done
+9. Implement all wireless drivers
+10. Implement xbian-config hostname setup - Done
 >>>>>>> b10f543d9b2e5b2fd861a9c5088387b22e096f77
 
 Needs testing
