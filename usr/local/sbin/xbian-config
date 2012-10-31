@@ -2,7 +2,9 @@
 #
 #Copyright 2012 CurlyMo <development@xbian.org>
 #
-#Based on raspi-config by Alex Bradbury <asb@asbradbury.org>
+#Resize SD function is based on the corresponding function in raspi-config 
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -450,7 +452,7 @@ EOF
 
 changeoverclock() {
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "Be aware that overclocking may reduce the lifetime of your Raspberry Pi. If overclocking at a certain level causes system instability, try a more modest overclock. See http://elinux.org/RPi_Overclocking for more information." 9 65
-	OVERCLOCK=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Overclocking' --ok-label Select --cancel-label Cancel --menu '' 11 80 5 1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" 2 "Modest   800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt" 3 "Medium   900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt" 4 "High     950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt" 5 "Turbo    1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt" 3>&1 1>&2 2>&3);
+	OVERCLOCK=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Overclocking' --ok-label Select --cancel-label Cancel --menu '' 11 80 5 1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" 2 "Modest   800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt" 3 "XBian    840MHz ARM, 375MHz core, 400MHz SDRAM, 0 overvolt" 4 "Medium   900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt" 5 "High     950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt" 6 "Turbo    1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt" 3>&1 1>&2 2>&3);
 	case "$OVERCLOCK" in
 		1)
 			set_overclock None 700 250 400 0
@@ -459,12 +461,15 @@ changeoverclock() {
 			set_overclock Modest 800 300 400 0
 		;;
 		3)
-			set_overclock Medium 900 333 450 2
+			set_overclock XBian 840 375 400 0
 		;;
 		4)
-			set_overclock High 950 450 450 6
+			set_overclock Medium 900 333 450 2
 		;;
 		5)
+			set_overclock High 950 450 450 6
+		;;
+		6)
 			set_overclock Turbo 1000 500 500 6
 		;;
 		"")
