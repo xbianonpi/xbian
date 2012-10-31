@@ -19,11 +19,9 @@ Missing features
 3. Implement xbian-config license setup - Done
 4. Add licenses and author information to all (custom made) scripts - Done
 5. Implement all wireless driver
-6. Implement xbian-config hostname setup
+6. Implement xbian-config hostname setup - Done
 7. PVR Addons
 8. Drivers for PVR Backend
-9. Implement all wireless drivers
-10. Implement xbian-config hostname setup - Done
 
 Needs testing
 =============================
