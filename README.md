@@ -24,7 +24,7 @@ Missing features
 8. Drivers for PVR Backend
 9. Implement all wireless drivers
 10. Implement xbian-config hostname setup - Done
-                                          - 
+
 Needs testing
 =============================
 1. Test wireless with existing kernel modules (Seems to work)
