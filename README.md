@@ -57,6 +57,7 @@ xbian-config
 2.5. Overclocking<br />
 2.6. License MPG2<br />
 2.7. License VC-1<br />
+2.8. Hostname<br />
 3. Packages<br />
 3.1. Remote<br />
 3.1.1. Development<br />
