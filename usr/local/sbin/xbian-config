@@ -541,13 +541,27 @@ changelicensevc1() {
 	exit 0
 }
 
+changehostname() {
+	CHOSTNAME=$(cat /etc/hostname);
+	HOSTNAME=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Hostname" --ok-label Change --inputbox "Hostname:" 7 80 $CHOSTNAME 3>&1 1>&2 2>&3)
+	if [ ! -z $HOSTNAME ]; then
+		echo $HOSTNAME > /etc/hostname
+		hostname $HOSTNAME
+		eval "sed -i 's/$CHOSTNAME/$HOSTNAME/g' /etc/hosts";
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Hostname" --ok-label Close --msgbox "\n           Hostname succesfully changed" 7 55
+		ASKFORREBOOT=1;
+	fi
+	settings;
+	exit 0
+}
+
 settings() {
 	check_rootssh_status
 	ROOTSSHSTATUS="Enable";
     if [ $DISABLE_ROOTSSH -eq 1 ]; then
         ROOTSSHSTATUS="Disable"
     fi
-	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Set timezone    - \"Set the default timezone\"" 4 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 5 "Overclocking    - \"Configure overclocking\"" 6 "License MPG2    - \"Insert, update or delete MPG2 license\"" 7 "License VC-1    - \"Insert, update or delete VC-1 license\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Set timezone    - \"Set the default timezone\"" 4 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 5 "Overclocking    - \"Configure overclocking\"" 6 "License MPG2    - \"Insert, update or delete MPG2 license\"" 7 "License VC-1    - \"Insert, update or delete VC-1 license\"" 8 "Hostname        - \"Change the default hostname\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
 		1)
 			changesdsize;
@@ -569,6 +583,9 @@ settings() {
 		;;
 		7)
 			changelicensevc1
+		;;
+		8)
+			changehostname
 		;;
 		"")
 			mainmenu;
