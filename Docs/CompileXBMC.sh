@@ -25,6 +25,7 @@
 # 3. Compiling libcec 
 # 4. Compiling libshairport
 # 5. Compiling XBMC
+# 6. Compiling PVR Addons
 
 
 # 1. Cloning XBMC repo & installing needed packages
@@ -174,6 +175,15 @@
 
   	make # (THIS WILL TAKE LOOOONG! +- 14 hours)
   	sudo make install
+
+
+# 6. Compiling PVR Addons
+	cd ~/opt/
+	git clone git://github.com/opdenkamp/xbmc-pvr-addons.git
+	cd xbmc-pvr-addons/
+	./bootstrap 
+	./configure --prefix=/usr/local/lib/xbmc
+	sudo make install
 
 # Many thanks to http://www.raspbian.org/RaspbianXBMC !
 
