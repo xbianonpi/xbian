@@ -179,7 +179,7 @@
 
 # 6. Compiling PVR Addons
 	cd ~/opt/
-	git clone git://github.com/opdenkamp/xbmc-pvr-addons.git
+	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
 	cd xbmc-pvr-addons/
 	./bootstrap 
 	./configure --prefix=/usr/local/lib/xbmc
