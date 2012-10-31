@@ -23,6 +23,7 @@ allow-hotplug wlan0
 auto wlan0
 iface wlan0 inet dhcp
 wireless-essid "SSIDHERE"
+wireless-power off
 
 WEP; add this to /etc/network/interfaces:
 allow-hotplug wlan0
@@ -30,7 +31,7 @@ auto wlan0
 iface wlan0 inet dhcp
 wireless-essid "SSIDHERE"
 wireless-key "KEYHERE"
-
+wireless-power off
 WPA and WPA2; add this to /etc/network/interfaces:
 allow-hotplug wlan0
 auto wlan0

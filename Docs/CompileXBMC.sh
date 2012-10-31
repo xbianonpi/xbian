@@ -25,6 +25,7 @@
 # 3. Compiling libcec 
 # 4. Compiling libshairport
 # 5. Compiling XBMC
+# 6. Compiling PVR Addons
 
 
 # 1. Cloning XBMC repo & installing needed packages
@@ -54,7 +55,7 @@
    	x11proto-core-dev x11proto-damage-dev x11proto-dri2-dev x11proto-fixes-dev x11proto-gl-dev x11proto-input-dev x11proto-kb-dev x11proto-randr-dev \
    	x11proto-record-dev x11proto-render-dev x11proto-scrnsaver-dev x11proto-xext-dev x11proto-xf86vidmode-dev x11proto-xinerama-dev xtrans-dev \
    	libnfs-dev libplist-dev avahi-daemon zlib1g-dev:armhf swig java-package libafpclient-dev liblockdev1-dev autoconf automake libtool gcc udev openjdk-6-jre \
-	cmake
+	cmake g++ libudev-dev
 
    	sudo apt-get clean
 	
@@ -174,6 +175,15 @@
 
   	make # (THIS WILL TAKE LOOOONG! +- 14 hours)
   	sudo make install
+
+
+# 6. Compiling PVR Addons
+	cd ~/opt/
+	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
+	cd xbmc-pvr-addons/
+	./bootstrap 
+	./configure --prefix=/usr/local/lib/xbmc
+	sudo make install
 
 # Many thanks to http://www.raspbian.org/RaspbianXBMC !
 
