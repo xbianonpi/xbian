@@ -18,7 +18,7 @@ Missing features
 2. Implement xbian-config update function (CurlyMo will this implement after the release of Xbian 1.0 Alpha)
 3. Implement xbian-config license setup - Done
 4. Add licenses and author information to all (custom made) scripts - Done
-5. Implement all wireless driver
+5. Implement all wireless driver - Done
 6. Implement xbian-config hostname setup - Done
 7. PVR Addons
 8. Drivers for PVR Backend
