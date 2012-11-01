@@ -84,7 +84,7 @@ chown -hR xbian /home/xbian
 
 #Update rc.d
 update-rc.d xbmc defaults
-update-rc.d bootlocal defaults
+update-rc.d xbian defaults
 update-rc.d lirc defaults
 update-rc.d rpcbind defaults
 

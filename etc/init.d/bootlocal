@@ -18,20 +18,20 @@
 #with Xbian. If not, see <http://www.gnu.org/licenses/>
 #
 ### BEGIN INIT INFO
-# Provides:          xbian
+# Provides:          bootlocal
 # Required-Start:    $remote_fs $syslog
 # Required-Stop:     $remote_fs $syslog 
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
-# Short-Description: Xbian boot scripts
+# Short-Description: XBian boot scripts
 # Description:
 #
 ### END INIT INFO
 
-NAME=Xbian
-DESC="Xbian boot scripts"
+NAME=bootlocal
+DESC="XBian boot scripts"
 VERBOSE=no
-SCRIPTNAME=/etc/init.d/xbian
+SCRIPTNAME=/etc/init.d/bootlocal
 do_start()
 {
         /etc/rc.local
