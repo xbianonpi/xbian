@@ -357,22 +357,38 @@ changetimezone() {
 	settings;
 }
 
-changepass() {
+changexbianpass() {
 	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --insecure --passwordbox "Password:" 7 80 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
-		echo "pi:$PASS" | chpasswd
+		echo "xbian:$PASS" | chpasswd
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n      XBian password succesfully changed" 7 55
 	fi
 	settings;
 	exit 0
 } 
 
+changerootpass() {
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Change --insecure --passwordbox "Password:" 7 80 3>&1 1>&2 2>&3)
+	if [ ! -z $PASS ]; then
+		echo "root:$PASS" | chpasswd
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n        Root password succesfully changed" 7 55
+	fi
+	settings;
+	exit 0;
+}
+
 changesshroot() {
+	if [ -z $(cat /etc/shadow | grep root | cut -f 2 -d:) ]; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n  User root has an empty password, without a\n  password user root cannot login through ssh\n  so please set this first." 9 51
+		settings;
+	fi
 	if [ $DISABLE_ROOTSSH -eq 0 ]; then
 		sed -i 's/PermitRootLogin no/PermitRootLogin yes/g' /etc/ssh/sshd_config
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n  SSH root login succesfully enabled" 7 44
+		/etc/init.d/ssh restart >/dev/null
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n   SSH root login succesfully enabled" 7 44
 	else
 		sed -i 's/PermitRootLogin yes/PermitRootLogin no/g' /etc/ssh/sshd_config
+		/etc/init.d/ssh restart >/dev/null
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n  SSH root login succesfully disabled" 7 44
 	fi
 	settings;
@@ -566,30 +582,33 @@ settings() {
     if [ $DISABLE_ROOTSSH -eq 1 ]; then
         ROOTSSHSTATUS="Disable"
     fi
-	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Set timezone    - \"Set the default timezone\"" 4 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 5 "Overclocking    - \"Configure overclocking\"" 6 "License MPG2    - \"Insert, update or delete MPG2 license\"" 7 "License VC-1    - \"Insert, update or delete VC-1 license\"" 8 "Hostname        - \"Change the default hostname\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Change Password - \"Change password for 'root' user\"" 4 "Set timezone    - \"Set the default timezone\"" 5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 6 "Overclocking    - \"Configure overclocking\"" 7 "License MPG2    - \"Insert, update or delete MPG2 license\"" 8 "License VC-1    - \"Insert, update or delete VC-1 license\"" 9 "Hostname        - \"Change the default hostname\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
 		1)
 			changesdsize;
 		;;
 		2)
-			changepass;
+			changexbianpass;
 		;;
 		3)
-			changetimezone
+			changerootpass;
 		;;
 		4)
-			changesshroot;
+			changetimezone
 		;;
 		5)
-			changeoverclock;
+			changesshroot;
 		;;
 		6)
-			changelicensempg2
+			changeoverclock;
 		;;
 		7)
-			changelicensevc1
+			changelicensempg2
 		;;
 		8)
+			changelicensevc1
+		;;
+		9)
 			changehostname
 		;;
 		"")
