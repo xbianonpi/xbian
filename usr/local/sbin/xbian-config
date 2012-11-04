@@ -40,22 +40,22 @@ DISABLE_ROOTSSH=0;
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 
-if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' dialog | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' screen | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' screen | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the screen package: apt-get install screen";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' git | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' git | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the git package: apt-get install git";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' wget | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' wget | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the wget package: apt-get install wget";
 	exit 0;
 fi
@@ -423,6 +423,46 @@ set_overclock() {
 	set_config_var core_freq $3 /boot/config.txt >/dev/null
 	set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
 	set_config_var over_voltage $5 /boot/config.txt >/dev/null
+<<<<<<< HEAD
+=======
+	# now set up an init.d script
+cat <<\EOF > /etc/init.d/switch_cpu_governor &&
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: switch_cpu_governor
+# Required-Start: udev mountkernfs $remote_fs
+# Required-Stop:
+# Default-Start: S
+# Default-Stop:
+# Short-Description: Switch to ondemand cpu governor (unless shift key is pressed)
+# Description:
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_daemon_msg "Checking if shift key is held down"
+    timeout 1 thd --dump /dev/input/event* | grep -q "LEFTSHIFT\|RIGHTSHIFT"
+    if [ $? -eq 0 ]; then
+      printf " Yes. Not switching scaling governor"
+      log_end_msg 0
+    else
+      SYS_CPUFREQ_GOVERNOR=/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+      [ -e $SYS_CPUFREQ_GOVERNOR ] && echo "ondemand" > $SYS_CPUFREQ_GOVERNOR
+      printf " No. Switching to ondemand scaling governor"
+      log_end_msg 0
+    fi
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac
+EOF
+chmod +x /etc/init.d/switch_cpu_governor >/dev/null
+update-rc.d switch_cpu_governor defaults >/dev/null
+>>>>>>> 3d68022e262560173a59dd6ebcd074cd163e2a29
 	fi
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
 	settings;
