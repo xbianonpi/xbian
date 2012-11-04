@@ -17,7 +17,6 @@ index 526ec0f..c7c6288 100644
 +	depends on LIRC
 +	help
 +	  Driver for Homebrew GPIO Port Receiver/Transmitter for the RaspberryPi
-+
 
  config LIRC_SASEM
  	tristate "Sasem USB IR Remote"
