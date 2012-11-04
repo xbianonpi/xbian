@@ -1,35 +1,95 @@
-XBian 1.0 Alpha 1
-=============================
+XBian 1.0 Alpha 1 Changelog
+==================================
+XBian 1.0 Alpha 1 is a fresh start. One of the biggest changes
+is that we are now using GitHub. GitHub allows us to make XBian
+100% open to everyone. We hope this motivates people to help
+us with developing XBian.
 
-How-to install
-=============================
-1. Download and restore the latest raspbian image to a SD-card.
-2. Follow the instructions of the Setup.sh located in the Docs folder.
-3. Enjoy!
-
-Kernel 3.2.27 - Additional modules
+GPL 3.0 Licenses
 =================================
-1. lirc_rpi
-2. i2c*
-3. w1*
-4. spi*
-5. Realtek 8192cu
+XBian has adopted the GPL 3.0 licenses on all it's code.
+So we're completely open source.
 
-xbian-config
+New XBian basis
 =================================
-1. Info<br />
-2. Settings<br />
-2.1. Resize SD<br />
-2.2. Change password<br />
-2.3. Set timezone<br />
-2.4. SSH root login<br />
-2.5. Overclocking<br />
-2.6. License MPG2<br />
-2.7. License VC-1<br />
-2.8. Hostname<br />
-3. Packages<br />
-3.1. Remote<br />
-3.1.1. Development<br />
-3.1.2. Web<br />
-3.2. Local<br />
-4. Update<br />
+XBian 1.0 is build from scratch from the latest Raspbian (28-10)
+version. This fixes a lot of issues that were present on the
+previous XBian versions.
+
+XBian Config
+=================================
+XBian config allows users to setup their XBian installation
+very easily. Currently it's allows you to set the following
+settings:
+
+- Resize SD: This option resizes your root partition to take
+  full advantage of the space available on your SD card. It
+  will also make a swap partition based on the size of your
+  SD card.
+- Change password: This allows you to change the password
+  of the default user and root user (the default user is xbian).
+- Set timezone: This allows you to change the timezone of
+  the system.
+- SSH root login: Enable/disable root login through SSH
+- Overclocking: This option allows you to set different over
+  clocking options. We recommend using the default XBian
+  overclock because this is a very stable over clock. If you
+  want more performance you can set a higher over clock. Keep
+  in mind that we are NOT responsible for any damage caused
+  to your raspberry pi.
+- License MPG2/VC-1: This option allows you to easily set
+  your MPG2 and VC-1 license keys.
+- Hostname: You can easily change the hostname of you pi.
+- Configure LAN: Enables static of DHCP configuration
+  of you're wired network connection.
+- Configure WLAN: Enables static of DHCP configuration
+  of you're wired network connection. Also gives options
+  to enter you're SSID and password.
+
+We also added a 'extra package' option. This allows you to
+easily install extra packages, for example: web server.
+We will also introduce a update system once XBian 1.0
+hits final.
+
+Kernel
+==============================
+This XBian is build with a custom kernel. We've added
+some custom modules:
+- lirc_rpi
+- i2c*
+- w1*
+- spi*
+
+These modules will allow developers to add and control
+additional electronics through the GPIO pins.
+
+Another improvement is that we're using "performance"
+as the default governor. This will make all supported
+overclocking static without voiding you're warranty.
+The difference with force_turbo=1 is that kernel
+doesn't directly control the voltage level.
+
+Other improvements & features
+==============================
+- Blocked the root ssh login for security reasons.
+- Improved USB mounting
+- Improved boot time
+- Improved the startup process by using init scripts.
+- Finally got rid of all the command line text
+  appearing behind XBMC user interface.
+- Running XBMC as xbian user
+- Added a LOT of wireless drivers.
+- Improved performance of XBMC
+
+Special thanks to
+==============================
+Hexagon and deHakkelaar
+
+
+Final note by Koenkk
+==============================
+As you might have already noticed a new main developper
+appeared in our team, his name is CurlyMo. I really
+really really want to thank him a LOT! He did a very
+big part of the development of XBian 1.0. We couldn't
+have done this without him!
