@@ -424,6 +424,7 @@ set_overclock() {
 	set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
 	set_config_var over_voltage $5 /boot/config.txt >/dev/null
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 	# now set up an init.d script
 cat <<\EOF > /etc/init.d/switch_cpu_governor &&
@@ -463,6 +464,8 @@ EOF
 chmod +x /etc/init.d/switch_cpu_governor >/dev/null
 update-rc.d switch_cpu_governor defaults >/dev/null
 >>>>>>> 3d68022e262560173a59dd6ebcd074cd163e2a29
+=======
+>>>>>>> fd4cf08c5661cfea18b08948a0fff7ee3e16deca
 	fi
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
 	settings;

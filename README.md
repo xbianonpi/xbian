@@ -7,39 +7,6 @@ How-to install
 2. Follow the instructions of the Setup.sh located in the Docs folder.
 3. Enjoy!
 
-Rare issues
-=============================
-1. XBMC thumbnail aspect ratio wrong
-2. XBMC still hangs occasionally
-
-Missing features
-=============================
-1. XBOX remote to lirc (Tried but not working)
-2. Implement xbian-config update function (CurlyMo will this implement after the release of Xbian 1.0 Alpha)
-3. Implement xbian-config license setup - Done
-4. Add licenses and author information to all (custom made) scripts - Done
-5. Implement all wireless driver - Done
-6. Implement xbian-config hostname setup - Done
-7. PVR Addons
-8. Drivers for PVR Backend
-
-Needs testing
-=============================
-1. Test wireless with existing kernel modules (Seems to work)
-
-Major steps
-=============================
-1. Install Raspbian - Done
-2. Install CurlyMo kernel similar to r-win kernel v3. - Done
-3. Move XBMC build from Xbian to new install. Done
-4. Remove/Add packages - Done
-5. Add xbian user (optional) - Done
-6. Add init scripts - Done
-7. Add recompiled lirc - Done
-8. Add wiringPi (as additional module)
-9. Patch raspi-config --> create xbian-config
-10. Resize partition on boot and create a swap partition depending on SD card size - Done
-
 Kernel 3.2.27 - Additional modules
 =================================
 1. lirc_rpi
