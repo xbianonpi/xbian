@@ -1,18 +1,72 @@
 XBian 1.0 Alpha 1 Changelog
 ==================================
-XBian 1.0 Alpha 1 is a fresh start. One of the biggest changes is that we are now using GitHub. GitHub allows us to make XBian 100% open for everyone. We hope this motivates people to help us with developing XBian. 
+XBian 1.0 Alpha 1 is a fresh start. One of the biggest changes 
+is that we are now using GitHub. GitHub allows us to make XBian 
+100% open for everyone. We hope this motivates people to help 
+us with developing XBian. 
+
+GPL 3.0 Licenses
+=================================
+XBian has adopted the GPL 3.0 licenses on all it's code.
+So we're completely open source.
+
+New XBian basis
+=================================
+XBian 1.0 is build from scratch from the latest Raspbian (28-10)
+version. This fixes a lot of issues that were present on the 
+previous XBian versions.
 
 XBian Config
 =================================
-XBian config allows users to setup their XBian installation very easily. Currently its allows you to set the following settings:
-- Resize SD: This option resizes your root partition to take full advantage of the space available on your SD card. It will also make a swap partition based on the size of your SD card. 
-- Change password: This allows you to change the password of the default user (the default user is xbian).
-- Set timezone: This allows you to change the timezone of the system.
-- Overclocking: This option allows you to set different over clocking options. We recommend using the default XBian overclock because this is a very stable over clock. If you want more performance you can set a higher over clock. Keep in mind that we are NOT responsible for any damage caused to your raspberry pi. 
-- License MPG2/VC-1: This option allows you to easily set your MPG2 and VC-1 license keys.
-- Hostname: You can easily change the hostname of your raspberry pi. 
+XBian config allows users to setup their XBian installation 
+very easily. Currently it's allows you to set the following 
+settings:
 
-We also added a 'extra package' option. This allows you to easily install extra packages, for example: web server. We will also introduce a update system once XBian 1.0 hits final.
+- Resize SD: This option resizes your root partition to take 
+  full advantage of the space available on your SD card. It 
+  will also make a swap partition based on the size of your 
+  SD card. 
+- Change password: This allows you to change the password 
+  of the default user and root user (the default user is xbian).
+- Set timezone: This allows you to change the timezone of 
+  the system.
+- SSH root login: Enable/disable root login through SSH
+- Overclocking: This option allows you to set different over 
+  clocking options. We recommend using the default XBian 
+  overclock because this is a very stable over clock. If you
+  want more performance you can set a higher over clock. Keep 
+  in mind that we are NOT responsible for any damage caused 
+  to your raspberry pi. 
+- License MPG2/VC-1: This option allows you to easily set 
+  your MPG2 and VC-1 license keys.
+- Hostname: You can easily change the hostname of you pi. 
+- Configure LAN: Enables static of DHCP configuration
+  of you're wired network connection.
+- Configure WLAN: Enables static of DHCP configuration
+  of you're wired network connection. Also gives options
+  to enter you're SSID and password.
+
+We also added a 'extra package' option. This allows you to 
+easily install extra packages, for example: web server. 
+We will also introduce a update system once XBian 1.0 
+hits final.
+
+Kernel
+==============================
+This XBian is build with a custom kernel. We've added
+some custom modules:
+- lirc_rpi
+- i2c*
+- w1*
+- spi*
+These modules will allow developers to add and control
+additional electronics through the GPIO pins.
+
+Another improvement is that we're using "performance"
+as the default governor. This will make all supported
+overclocking static without voiding you're warranty. 
+The difference with force_turbo=1 is that kernel 
+doesn't directly control the voltage level.
 
 Other improvements & features
 ==============================
@@ -20,10 +74,12 @@ Other improvements & features
 - Improved USB mounting
 - Improved boot time
 - Improved the startup process by using init scripts.
-- Finally got rid of all the command line text appearing behind XBMC user interface.
-- Updated the kernel & firmware
-- Added lirc gpio module
+- Finally got rid of all the command line text 
+  appearing behind XBMC user interface.
+- Running XBMC as xbian user
 - Added a LOT of wireless drivers.
 - Improved performance of XBMC
 
-
+Special thanks to
+==============================
+Hexagon and deHakkelaar
