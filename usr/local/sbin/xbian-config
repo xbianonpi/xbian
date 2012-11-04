@@ -40,22 +40,22 @@ DISABLE_ROOTSSH=0;
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 
-if [ $(dpkg-query -W -f='${Status}\n' dialog | grep ' installed' | wc -l) -eq 0 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' screen | grep ' installed' | wc -l) -eq 0 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' screen | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the screen package: apt-get install screen";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' git | grep ' installed' | wc -l) -eq 0 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' git | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the git package: apt-get install git";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' wget | grep ' installed' | wc -l) -eq 0 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' wget | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the wget package: apt-get install wget";
 	exit 0;
 fi
@@ -358,7 +358,7 @@ changetimezone() {
 }
 
 changexbianpass() {
-	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --insecure --passwordbox "Password:" 7 80 3>&1 1>&2 2>&3)
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
 		echo "xbian:$PASS" | chpasswd
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n      XBian password succesfully changed" 7 55
@@ -368,7 +368,7 @@ changexbianpass() {
 } 
 
 changerootpass() {
-	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Change --insecure --passwordbox "Password:" 7 80 3>&1 1>&2 2>&3)
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
 		echo "root:$PASS" | chpasswd
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n        Root password succesfully changed" 7 55
@@ -423,43 +423,6 @@ set_overclock() {
 	set_config_var core_freq $3 /boot/config.txt >/dev/null
 	set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
 	set_config_var over_voltage $5 /boot/config.txt >/dev/null
-	# now set up an init.d script
-cat <<\EOF > /etc/init.d/switch_cpu_governor &&
-#!/bin/sh
-### BEGIN INIT INFO
-# Provides: switch_cpu_governor
-# Required-Start: udev mountkernfs $remote_fs
-# Required-Stop:
-# Default-Start: S
-# Default-Stop:
-# Short-Description: Switch to ondemand cpu governor (unless shift key is pressed)
-# Description:
-### END INIT INFO
-
-. /lib/lsb/init-functions
-
-case "$1" in
-  start)
-    log_daemon_msg "Checking if shift key is held down"
-    timeout 1 thd --dump /dev/input/event* | grep -q "LEFTSHIFT\|RIGHTSHIFT"
-    if [ $? -eq 0 ]; then
-      printf " Yes. Not switching scaling governor"
-      log_end_msg 0
-    else
-      SYS_CPUFREQ_GOVERNOR=/sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
-      [ -e $SYS_CPUFREQ_GOVERNOR ] && echo "ondemand" > $SYS_CPUFREQ_GOVERNOR
-      printf " No. Switching to ondemand scaling governor"
-      log_end_msg 0
-    fi
-    ;;
-  *)
-    echo "Usage: $0 start" >&2
-    exit 3
-    ;;
-esac
-EOF
-chmod +x /etc/init.d/switch_cpu_governor >/dev/null
-update-rc.d switch_cpu_governor defaults >/dev/null
 	fi
 	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
 	settings;
@@ -575,13 +538,562 @@ changehostname() {
 	exit 0
 }
 
+changelandhcp() {
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
+		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n     LAN settings set to DHCP." 7 40
+		settings;
+	else
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n    LAN settings already set to DHCP." 7 45
+		settings;
+	fi
+}
+
+changelanstatic() {
+	if [ ! -z "$1" ]; then
+		CIP=();
+		CSM=();
+		CGW=();
+		I=0;
+		
+		echo -e "$1" > /tmp/xbian-config-args
+		
+		while read LINE; do
+			if [ $I -gt 7 ]; then
+				CGW[$(($I-8))]=$LINE;
+			elif [ $I -gt 3 ]; then
+				CSM[$(($I-4))]=$LINE;
+			else
+				CIP[$I]=$LINE;
+			fi
+			I=$(($I+1));
+		done < /tmp/xbian-config-args;
+		rm /tmp/xbian-config-args;
+	else
+		CONTENT=$(cat /etc/network/interfaces | grep -A5 "^iface eth0 inet static");
+		CIP=($(echo -e "$CONTENT" | grep address | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CSM=($(echo -e "$CONTENT" | grep netmask | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CGW=($(echo -e "$CONTENT" | grep gateway | cut -f 2 -d " " | sed 's/\./\ /g'));
+	fi
+	IP=();
+	SM=();
+	GW=();
+	
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --form "\n  Press up/down to move between fields" 14 45 0 \
+		"Address:" 1 1 "${CIP[0]}" 1 15 4 3 \
+			"." 1 19 "${CIP[1]}" 1 20 4 3 \
+			"." 1 24 "${CIP[2]}" 1 25 4 3 \
+			"." 1 29 "${CIP[3]}" 1 30 4 3 \
+		"Subnet:" 3 1 "${CSM[0]}" 3 15 4 3 \
+			"." 3 19 "${CSM[1]}" 3 20 4 3 \
+			"." 3 24 "${CSM[2]}" 3 25 4 3 \
+			"." 3 29 "${CSM[3]}" 3 30 4 3 \
+		"Gateway:" 5 1 "${CGW[0]}" 5 15 4 3 \
+			"." 5 19 "${CGW[1]}" 5 20 4 3 \
+			"." 5 24 "${CGW[2]}" 5 25 4 3 \
+			"." 5 29 "${CGW[3]}" 5 30 4 3 \
+	3>&1 1>&2 2>&3);
+	
+	
+	if [ $? -ge 1 ]; then
+		settings;
+		exit 0
+	fi
+	
+	I=0;
+
+	echo -e "$VALUES" > /tmp/xbian-config-args
+	
+	while read LINE; do
+		if [ $I -gt 7 ]; then
+			GW[$(($I-8))]=$LINE;
+		elif [ $I -gt 3 ]; then
+			SM[$(($I-4))]=$LINE;
+		else
+			IP[$I]=$LINE;
+		fi
+		I=$(($I+1));
+	done < /tmp/xbian-config-args;
+	rm /tmp/xbian-config-args;
+	
+	if ! case "$(echo ${IP[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n      You didn't enter a valid ip address" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi
+	
+	if ! case "$(echo ${SM[@]} | sed 's/\ /\./g')" in
+		255.0.0.0 | 255.255.0.0 | 255.255.255.0 | 255.255.255.255 ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n       You didn't enter a valid subnet" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi	
+	
+	if ! case "$(echo ${GW[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n       You didn't enter a valid gateway" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi
+	
+	CONFIG="iface eth0 inet static\naddress ";
+	I=0;
+	for VALUE in ${IP[@]}; do
+		CONFIG+="$VALUE";
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetwork ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=0;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetmask ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${SM[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nbroadcast ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=255;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\ngateway ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${GW[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		fi
+		I=$(($I+1));
+	done;
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
+		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces	
+	fi
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -gt 0 ]; then
+		eval "sed -i 's/iface eth0 inet dhcp/$CONFIG/g' /etc/network/interfaces"
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n     LAN static settings changed." 7 41
+		settings;
+	fi
+}	
+
+changelan() {
+	TYPE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure LAN' --ok-label Select --cancel-label Return --menu '' 8 40 2 1 "DHCP" 2 "Fixed" 3>&1 1>&2 2>&3)
+	case "$TYPE" in
+		1)
+			changelandhcp;
+		;;
+		2)
+			changelanstatic;
+		;;
+		*)
+			settings;
+		;;
+	esac
+}
+
+changewlanunprotected() {
+	SSID=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Change --inputbox "SSID:" 7 60 $2 3>&1 1>&2 2>&3)
+	if [ $? -eq 0 ]; then
+		if [ ! -z $SSID ]; then
+			eval "$1=\"$SSID\""
+		else
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n    Please enter you're network name" 7 45
+			changewlanunprotected $1 $2;
+		fi
+	else
+		changewlanunprotected $1 $2;
+	fi
+}
+
+changewlanprotected() {
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --form "\n  Press up/down to move between fields" 11 45 0 \
+		"SSID:" 1 1 "$3" 1 15 21 20 \
+		"Password:" 3 1 "$4" 3 15 21 20 \
+	3>&1 1>&2 2>&3);
+	if [ $? -ge 1 ]; then
+		changewlanprotected $1 $2 $3 $4;
+		exit 0
+	fi
+	
+	echo -e "$VALUES" > /tmp/xbian-config-args
+	
+	if [ $(cat /tmp/xbian-config-args | wc -l) -lt 2 ]; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n    Please enter you're network name and password" 7 55
+		changewlanprotected $1 $2 $3 $4
+		exit 0
+	fi
+	
+	I=0;
+	while read LINE; do
+	if [ $I -eq 0 ]; then
+		SSID=$LINE;
+	elif [ $I -eq 1 ]; then
+		PASSWD=$LINE;
+	fi
+	I=$(($I+1));
+	done < /tmp/xbian-config-args;
+	rm /tmp/xbian-config-args;
+
+	eval "$1=\"$SSID\"";
+	eval "$2=\"$PASSWD\"";
+}
+
+changewlandhcp() {
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
+		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
+		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+		if [ -z $CPASSWD ]; then
+			CMODE=1;
+		else
+			CMODE=2;
+		fi
+	fi
+	
+	MODE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure WLAN' --ok-label Select --cancel-label Return --menu '' 8 40 2 1 "Unprotected" 2 "WPA/WPA2 & WEP Security" 3>&1 1>&2 2>&3)
+	case "$MODE" in
+		1)
+			changewlanunprotected SSID $CSSID;
+		;;
+		2)
+			changewlanprotected SSID PASSWD $CSSID $CPASSWD;
+		;;
+		*)
+			changewlanstatic
+		;;
+	esac	
+	
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
+		if [ $MODE -eq 1 ]; then
+			echo -e "\nnetwork={\nssid=\"$SSID\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+		else
+			echo -e "\nnetwork={\nssid=\"$SSID\"\npsk=\"$PASSWD\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+		fi
+	else
+		if [ $MODE -eq 1 ]; then
+			if [ $CMODE -eq 1 ]; then
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			else
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
+			fi
+		else
+			if [ $CMODE -eq 2 ]; then
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+				eval "sed -i 's/psk=\"$CPASSWD\"/psk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			else
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"\npsk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			fi
+		fi
+	fi
+
+	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 1 ]; then
+		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces			
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n     WLAN settings set to DHCP." 7 40
+		settings;
+	else
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n    WLAN settings already set to DHCP." 7 45
+		settings;
+	fi
+}	
+
+
+changewlanstatic() {
+	if [ ! -z "$1" ]; then
+		CIP=();
+		CSM=();
+		CGW=();
+		I=0;
+		
+		echo -e "$1" > /tmp/xbian-config-args
+		
+		while read LINE; do
+			if [ $I -gt 7 ]; then
+				CGW[$(($I-8))]=$LINE;
+			elif [ $I -gt 3 ]; then
+				CSM[$(($I-4))]=$LINE;
+			else
+				CIP[$I]=$LINE;
+			fi
+			I=$(($I+1));
+		done < /tmp/xbian-config-args;
+		rm /tmp/xbian-config-args;
+	else
+		CONTENT=$(cat /etc/network/interfaces | grep -A6 "^iface wlan0 inet manual");
+		CIP=($(echo -e "$CONTENT" | grep address | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CSM=($(echo -e "$CONTENT" | grep netmask | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CGW=($(echo -e "$CONTENT" | grep gateway | cut -f 2 -d " " | sed 's/\./\ /g'));
+	fi
+	IP=();
+	SM=();
+	GW=();
+	
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
+		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
+		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+		if [ -z $CPASSWD ]; then
+			CMODE=1;
+		else
+			CMODE=2;
+		fi
+	fi
+	
+	MODE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure WLAN' --ok-label Select --cancel-label Return --menu '' 8 40 2 1 "Unprotected" 2 "WPA/WPA2 & WEP Security" 3>&1 1>&2 2>&3)
+	case "$MODE" in
+		1)
+			changewlanunprotected SSID $CSSID;
+		;;
+		2)
+			changewlanprotected SSID PASSWD $CSSID $CPASSWD;
+		;;
+		*)
+			changewlanstatic
+		;;
+	esac	
+	
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --form "\n  Press up/down to move between fields" 14 45 0 \
+		"Address:" 1 1 "${CIP[0]}" 1 15 4 3 \
+			"." 1 19 "${CIP[1]}" 1 20 4 3 \
+			"." 1 24 "${CIP[2]}" 1 25 4 3 \
+			"." 1 29 "${CIP[3]}" 1 30 4 3 \
+		"Subnet:" 3 1 "${CSM[0]}" 3 15 4 3 \
+			"." 3 19 "${CSM[1]}" 3 20 4 3 \
+			"." 3 24 "${CSM[2]}" 3 25 4 3 \
+			"." 3 29 "${CSM[3]}" 3 30 4 3 \
+		"Gateway:" 5 1 "${CGW[0]}" 5 15 4 3 \
+			"." 5 19 "${CGW[1]}" 5 20 4 3 \
+			"." 5 24 "${CGW[2]}" 5 25 4 3 \
+			"." 5 29 "${CGW[3]}" 5 30 4 3 \
+	3>&1 1>&2 2>&3);
+	
+	
+	if [ $? -ge 1 ]; then
+		settings;
+		exit 0
+	fi
+	
+	I=0;
+
+	echo -e "$VALUES" > /tmp/xbian-config-args
+	
+	while read LINE; do
+		if [ $I -gt 7 ]; then
+			GW[$(($I-8))]=$LINE;
+		elif [ $I -gt 3 ]; then
+			SM[$(($I-4))]=$LINE;
+		else
+			IP[$I]=$LINE;
+		fi
+		I=$(($I+1));
+	done < /tmp/xbian-config-args;
+	rm /tmp/xbian-config-args;
+	
+	if ! case "$(echo ${IP[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n      You didn't enter a valid ip address" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi
+	
+	if ! case "$(echo ${SM[@]} | sed 's/\ /\./g')" in
+		255.0.0.0 | 255.255.0.0 | 255.255.255.0 | 255.255.255.255 ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n       You didn't enter a valid subnet" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi	
+	
+	if ! case "$(echo ${GW[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure LAN" --ok-label Close --msgbox "\n       You didn't enter a valid gateway" 7 50
+		changelanstatic "$VALUES";
+		exit 0;
+	fi
+	
+	CONFIG="wpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf\naddress ";
+	I=0;
+	for VALUE in ${IP[@]}; do
+		CONFIG+="$VALUE";
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetwork ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=0;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetmask ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${SM[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nbroadcast ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=255;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\ngateway ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${GW[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		fi
+		I=$(($I+1));
+	done;
+	
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
+		if [ $MODE -eq 1 ]; then
+			echo -e "\nnetwork={\nssid=\"$SSID\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+		else
+			echo -e "\nnetwork={\nssid=\"$SSID\"\npsk=\"$PASSWD\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+		fi
+	else
+		if [ $MODE -eq 1 ]; then
+			if [ $CMODE -eq 1 ]; then
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			else
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
+			fi
+		else
+			if [ $CMODE -eq 2 ]; then
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+				eval "sed -i 's/psk=\"$CPASSWD\"/psk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			else
+				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"\npsk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
+			fi
+		fi
+	fi
+	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -gt 0 ]; then
+		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces			
+	fi		
+	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 0 ]; then
+		eval "sed -i 's/wpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/$CONFIG/g' /etc/network/interfaces"
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n     WLAN static settings changed." 7 41
+		settings;	
+	fi
+}
+
+changewlan() {
+	TYPE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure WLAN' --ok-label Select --cancel-label Return --menu '' 8 40 2 1 "DHCP" 2 "Fixed" 3>&1 1>&2 2>&3)
+	case "$TYPE" in
+		1)
+			changewlandhcp;
+		;;
+		2)
+			changewlanstatic;
+		;;
+		*)
+			settings;
+		;;
+	esac
+}
+
+changeforcehdmi() {
+	dialog --no-kill --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --yesno "\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 12 60
+	case "$?" in
+		0) 
+			set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully enabled" 7 55
+		;;
+		1)
+			set_config_var force_hdmi_hotplug 0 /boot/config.txt >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully disabled" 7 55
+		;;
+	esac
+	settings;
+}
+
 settings() {
 	check_rootssh_status
 	ROOTSSHSTATUS="Enable";
     if [ $DISABLE_ROOTSSH -eq 1 ]; then
         ROOTSSHSTATUS="Disable"
     fi
-	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Change Password - \"Change password for 'root' user\"" 4 "Set timezone    - \"Set the default timezone\"" 5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 6 "Overclocking    - \"Configure overclocking\"" 7 "License MPG2    - \"Insert, update or delete MPG2 license\"" 8 "License VC-1    - \"Insert, update or delete VC-1 license\"" 9 "Hostname        - \"Change the default hostname\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Change Password - \"Change password for 'root' user\"" 4 "Set timezone    - \"Set the default timezone\"" 5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 6 "Overclocking    - \"Configure overclocking\"" 7 "License MPG2    - \"Insert, update or delete MPG2 license\"" 8 "License VC-1    - \"Insert, update or delete VC-1 license\"" 9 "Hostname        - \"Change the default hostname\"" 10 "Configure WLAN  - \"Configure wireless network connection\"" 11 "Configure LAN   - \"Configure wired network connection\"" 12 "HDMI hotplug    - \"Change the HDMI hotplug mode\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
 		1)
 			changesdsize;
@@ -602,13 +1114,22 @@ settings() {
 			changeoverclock;
 		;;
 		7)
-			changelicensempg2
+			changelicensempg2;
 		;;
 		8)
-			changelicensevc1
+			changelicensevc1;
 		;;
 		9)
-			changehostname
+			changehostname;
+		;;
+		10)
+			changewlan;
+		;;
+		11)
+			changelan;
+		;;
+		12)
+			changeforcehdmi;
 		;;
 		"")
 			mainmenu;
