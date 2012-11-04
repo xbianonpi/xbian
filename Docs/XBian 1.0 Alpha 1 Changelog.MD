@@ -87,5 +87,8 @@ Hexagon and deHakkelaar
 
 Final note by Koenkk
 ==============================
-As you might have already noticed a new main developper appeared in our team, his name is CurlyMo. I really really really
-want to thank him a LOT! He did a very big part of the development of XBian 1.0. We couldn't have done this without him!
+As you might have already noticed a new main developper 
+appeared in our team, his name is CurlyMo. I really 
+really really want to thank him a LOT! He did a very 
+big part of the development of XBian 1.0. We couldn't 
+have done this without him!
