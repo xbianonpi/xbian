@@ -3,3 +3,6 @@ core_freq=375
 disable_overscan=1
 gpu_mem_256=128
 gpu_mem_512=384
+sdram_freq=400
+over_voltage=0
+
