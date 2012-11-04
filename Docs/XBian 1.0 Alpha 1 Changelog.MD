@@ -5,6 +5,11 @@ is that we are now using GitHub. GitHub allows us to make XBian
 100% open for everyone. We hope this motivates people to help 
 us with developing XBian. 
 
+GPL 3.0 Licenses
+=================================
+XBian has adopted the GPL 3.0 licenses on all it's code.
+So we're completely open source.
+
 New XBian basis
 =================================
 XBian 1.0 is build from scratch from the latest Raspbian (28-10)
@@ -74,3 +79,7 @@ Other improvements & features
 - Running XBMC as xbian user
 - Added a LOT of wireless drivers.
 - Improved performance of XBMC
+
+Special thanks to
+==============================
+Hexagon and deHakkelaar
