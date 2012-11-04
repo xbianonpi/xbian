@@ -30,12 +30,12 @@
 
 # 1. Cloning XBMC repo & installing needed packages
    	# Updating all packages & installing the ones who are needed and creating a bigger swap file           
-  	sudo apt-get update
+  	sudo apt-get update 
    	sudo apt-get upgrade
 
-	sudo apt-get install build-essential autoconf ccache gawk gperf mesa-utils zip unzip
+	sudo apt-get -y install build-essential autoconf ccache gawk gperf mesa-utils zip unzip
 
-   	sudo apt-get install autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev:armhf libass-dev:armhf libatk1.0-dev \
+   	sudo apt-get install -y autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev:armhf libass-dev:armhf libatk1.0-dev \
    	libavahi-client-dev libavahi-common-dev libavcodec-dev libavformat-dev libavutil-dev libbison-dev:armhf libbluray-dev:armhf libboost1.49-dev \
    	libbz2-dev:armhf libc-dev-bin libc6-dev:armhf libcaca-dev libcairo2-dev libcdio-dev libclalsadrv-dev libcrypto++-dev libcups2-dev libcurl3-gnutls-dev \
    	libdbus-1-dev libdbus-glib-1-dev libdirectfb-dev libdrm-dev libegl1-mesa-dev libelf-dev libenca-dev libept-dev libevent-dev libexpat1-dev libflac-dev:armhf \
