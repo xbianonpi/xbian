@@ -59,6 +59,7 @@ some custom modules:
 - i2c*
 - w1*
 - spi*
+
 These modules will allow developers to add and control
 additional electronics through the GPIO pins.
 
