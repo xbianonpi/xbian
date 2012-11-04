@@ -2,7 +2,7 @@ XBian 1.0 Alpha 1 Changelog
 ==================================
 XBian 1.0 Alpha 1 is a fresh start. One of the biggest changes
 is that we are now using GitHub. GitHub allows us to make XBian
-100% open for everyone. We hope this motivates people to help
+100% open to everyone. We hope this motivates people to help
 us with developing XBian.
 
 GPL 3.0 Licenses
