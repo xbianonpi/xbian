@@ -394,6 +394,21 @@ changesshroot() {
 	settings;
 } 
 
+changeforcehdmi() {
+	dialog --no-kill --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --yesno "\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 12 60
+	case "$?" in
+		0) 
+			set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully enabled" 7 55
+		;;
+		1)
+			set_config_var force_hdmi_hotplug 0 /boot/config.txt >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully disabled" 7 55
+		;;
+	esac
+	settings;
+} 
+
 set_config_var() {
   lua - "$1" "$2" "$3" <<EOF > "$3.bak"
 local key=assert(arg[1])
@@ -581,7 +596,7 @@ settings() {
     if [ $DISABLE_ROOTSSH -eq 1 ]; then
         ROOTSSHSTATUS="Disable"
     fi
-	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Change Password - \"Change password for 'root' user\"" 4 "Set timezone    - \"Set the default timezone\"" 5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 6 "Overclocking    - \"Configure overclocking\"" 7 "License MPG2    - \"Insert, update or delete MPG2 license\"" 8 "License VC-1    - \"Insert, update or delete VC-1 license\"" 9 "Hostname        - \"Change the default hostname\"" 3>&1 1>&2 2>&3)
+	RETURN=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings' --ok-label Select --cancel-label Return --menu '' 11 80 7 1 "Resize SD       - \"Expand root partition to fill SD card\"" 2 "Change Password - \"Change password for 'xbian' user\"" 3 "Change Password - \"Change password for 'root' user\"" 4 "Set timezone    - \"Set the default timezone\"" 5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" 6 "Overclocking    - \"Configure overclocking\"" 7 "License MPG2    - \"Insert, update or delete MPG2 license\"" 8 "License VC-1    - \"Insert, update or delete VC-1 license\"" 9 "Hostname        - \"Change the default hostname\"" 10 "HDMI hotplug        - \"Change the HDMI hotplug mode\"" 3>&1 1>&2 2>&3)
 	case "$RETURN" in
 		1)
 			changesdsize;
@@ -609,6 +624,9 @@ settings() {
 		;;
 		9)
 			changehostname
+		;;
+		10)
+			changeforcehdmi
 		;;
 		"")
 			mainmenu;
