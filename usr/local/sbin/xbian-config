@@ -40,22 +40,22 @@ DISABLE_ROOTSSH=0;
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 
-if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' dialog | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' screen | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' screen | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the screen package: apt-get install screen";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' git | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' git | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the git package: apt-get install git";
 	exit 0;
 fi
 
-if [ $(dpkg-query -W -f='${Status}\n' wget | grep 'not-installed' | wc -l) -eq 1 ]; then
+if [ $(dpkg-query -W -f='${Status}\n' wget | grep ' installed' | wc -l) -eq 0 ]; then
 	echo "This program requires the wget package: apt-get install wget";
 	exit 0;
 fi
