@@ -35,7 +35,7 @@ libgnome-keyring0:armhf libsoup-gnome2.4-1:armhf idle desktop-base desktop-file-
 fbset fonts-freefont-ttf gconf2 gdb gtk2-engines:armhf hicolor-icon-theme libgdk-pixbuf2.0-0:armhf \ 
 libgl1-mesa-glx:armhf menu omxplayer penguinspuzzle x11-common xdg-utils xkb-data libatasmart4:armhf \
 libcairo-gobject2:armhf libcups2:armhf aptitude-common curl debconf-utils debian-reference-common debian-reference-en \
-dphys-swapfile dpkg-dev fake-hwclock g++ gcc hardlink keyboard-configuration libatasmart4:armhf libblas3 libblas3gf \
+dphys-swapfile dpkg-dev g++ gcc hardlink keyboard-configuration libatasmart4:armhf libblas3 libblas3gf \
 libbluetooth3:armhf libboost-iostreams1.50.0 libdrm2:armhf libgfortran3:armhf libglib2.0-data libgudev-1.0-0:armhf \
 libiw30:armhf liblapack3 liblapack3gf libluajit-5.1-common libpci3:armhf libpolkit-gobject-1-0:armhf libsgutils2-2 \
 libusb-1.0-0:armhf luajit menu-xdg module-init-tools ncdu pciutils pkg-config python-rpi.gpio python3 python3-minimal \
