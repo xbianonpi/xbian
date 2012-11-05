@@ -51,6 +51,8 @@ easily install extra packages, for example: web server.
 We will also introduce a update system once XBian 1.0
 hits final.
 
+You can easily access xbian-config by ssh'ing into your pi (user:xbian pass:raspberry). 
+
 Kernel
 ==============================
 This XBian is build with a custom kernel. We've added
