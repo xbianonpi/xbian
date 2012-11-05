@@ -1346,7 +1346,7 @@ remotepackages() {
 		chmod +x /tmp/xbianpackages/*.sh
 	fi
 	
-	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
+	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | grep -iv 'COPYING' | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
 	LIST=();
 	NRITEMS=0;
 	for ITEM in ${PKGLIST[@]}
