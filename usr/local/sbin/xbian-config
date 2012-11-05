@@ -361,10 +361,10 @@ changexbianpass() {
 } 
 
 changerootpass() {
-	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
 	if [ ! -z $PASS ]; then
 		echo "root:$PASS" | chpasswd
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > SSH root login" --ok-label Close --msgbox "\n        Root password succesfully changed" 7 55
+		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Change password" --ok-label Close --msgbox "\n        Root password succesfully changed" 7 55
 	fi
 	settings;
 	exit 0;
