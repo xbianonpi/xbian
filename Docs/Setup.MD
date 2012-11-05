@@ -148,3 +148,10 @@ reboot
 
 #After the reboot execute this command
 depmod -a
+
+#Clear logs
+rm /var/log/*.gz
+rm /var/log/*log.*
+for logs in `find /var/log -type f`; do echo '' > $logs; done
+echo "" > /root/.bash_history
+echo "" > /home/xbian/.bash_history
