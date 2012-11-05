@@ -1,3 +1,4 @@
-Bugs from XBian 1.0 Alpha 1 which are currently fixed 
+Bugfixes for XBian 1.0 Alpha 1
 ======================================================
-- Fixed a bug where keyboard & other input devices did not work.
+- Bug #8 Keyboard not working
+- Fix: sudo usermod -a -G input xbian
