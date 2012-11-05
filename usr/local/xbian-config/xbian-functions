@@ -179,21 +179,57 @@ EOF
 mv "$3.bak" "$3"
 }
 
+# Show a normal dialog (messagebox)
+# $1 Title
+# $2 Ok label
+# $3 Text
+# $4 (optional) Height
+# $5 (optional) Width
 showdialog() {
-    dialog \
-	--backtitle "$BACKTITLE" \
-	--title "$1" \
-	--ok-label "$2" \
-	--msgbox "$3" $4 $5
+	# Default width and heigt
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 3 ]; then
+		HEIGHT=$4
+	fi
+	if [ $# -gt 4 ]; then
+		WIDTH=$5
+	fi
+	# Show messagebox
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--ok-label "$2" \
+		--msgbox "$3" $HEIGHT $WIDTH
 }
 
+# Show a yes/no dialog
+# $1 Title
+# $2 Text
+# $3 (optional) Height
+# $4 (optional) Width
 showyesno() {
-    dialog \
-	--backtitle "$BACKTITLE" \
-	--title "$1" \
-	--yesno "$2" $3 $4
+	# Default width and heigt
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 2 ]; then
+		HEIGHT=$3
+	fi
+	if [ $# -gt 3 ]; then
+		WIDTH=$4
+	fi
+	# Show yes/no dialog
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--yesno "$2" $HEIGHT $WIDTH
 }
 
+#Show menu
+# $1 Title
+# $2-n Menu items
 showmenu () {
 	TITLE="$1"
 	shift

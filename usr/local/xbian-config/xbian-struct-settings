@@ -22,7 +22,8 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 changesdsize() {
-	dialog --no-kill --backtitle "$BACKTITLE" --title "Config > Settings > Resize SD" --yesno "\n      Are you sure you want to resize you SD card?" 7 60;
+	showyesno	"Config > Settings > Resize SD" \
+			"\n      Are you sure you want to resize you SD card?" 7 60;
 	case "$?" in
 		1)
 			settings;
@@ -170,7 +171,9 @@ changetimezone() {
 	if [ $(dpkg-query -W -f='${Status}\n' tzdata | grep 'not-installed' | wc -l) -eq 0 ]; then
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --infobox "\n\n  Please wait while 'tzdata' is loading..." 7 47
 		dpkg-reconfigure tzdata
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --ok-label Close --msgbox "\n      Timezone succesfully changed" 7 44
+		showdialog 	"Config > Settings > Set timezone" \
+				"Close" \
+				"\n      Timezone succesfully changed" 9 42
 	else
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Set timezone" --ok-label Close --msgbox "\n         TZData not installed" 7 44
 	fi
@@ -860,15 +863,20 @@ changewlan() {
 }
 
 changeforcehdmi() {
-	dialog --no-kill --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --yesno "\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 12 60
+	showyesno 	"Config > Settings > Force HDMI hotplug" \
+			"\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 12 60
 	case "$?" in
 		0) 
 			set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
-			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully enabled" 7 55
+			showdialog 	"Config > Settings > Force HDMI hotplug" \
+					"Close" \
+					"\n   Force HDMI hotplug succesfully enabled" 7 55
 		;;
 		1)
 			set_config_var force_hdmi_hotplug 0 /boot/config.txt >/dev/null
-			dialog --backtitle "$BACKTITLE" --title "Config > Settings > Force HDMI hotplug" --ok-label Close --msgbox "\n   Force HDMI hotplug succesfully disabled" 7 55
+			showdialog 	"Config > Settings > Force HDMI hotplug" \
+					"Close" \
+					"\n   Force HDMI hotplug succesfully disabled" 7 55
 		;;
 	esac
 	settings;

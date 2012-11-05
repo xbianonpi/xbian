@@ -43,7 +43,9 @@ source xbian-struct
 
 # Catch-all for not yet implemented functions
 notimplementedyet() {
-	dialog --backtitle "$BACKTITLE" --title "Config > *" --ok-label Close --msgbox "\n\n             Not implemented yet" 9 50
+	showdialog 	"Config > *" \
+			"Close" \
+			"\n\n             Not implemented yet" 9 50
 	mainmenu;
 }
 
