@@ -43,9 +43,9 @@ settings:
   your MPG2 and VC-1 license keys.
 - Hostname: You can easily change the hostname of you pi.
 - Configure LAN: Enables static of DHCP configuration
-  of you're wired network connection.
+  of your wired network connection.
 - Configure WLAN: Enables static of DHCP configuration
-  of you're wired network connection. Also gives options
+  of your wireless network connection. Also gives options
   to enter you're SSID and password.
 
 We also added a 'extra package' option. This allows you to
