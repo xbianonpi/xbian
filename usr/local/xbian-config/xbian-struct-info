@@ -22,6 +22,8 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 xbianinfo() {
-    dialog --backtitle "$BACKTITLE" --title "XBian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of XBian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
+    	showdialog 	"XBian Config - Info" \
+			"Ok" \
+			"This tool provides a straight-forward way of doing initial configuration of XBian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
 	mainmenu;
 }

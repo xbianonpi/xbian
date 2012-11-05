@@ -289,21 +289,3 @@ localpackages() {
 	fi
 	packages
 }
-
-packages() {
-	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title 'Config > Packages' --ok-label Select --cancel-label Return  --menu '' 9 80 5 1 "Remote - \"Install packages from internet\"" 2 "Local  - \"Install package from *.tar.gz\"" 3>&1 1>&2 2>&3)
-	case "$RETURN" in
-		1)
-			remotepackages;
-		;;
-		2)
-			localpackages;
-		;;
-		"")
-			mainmenu
-		;;
-		*)
-			mainmenu
-		;;
-	esac
-}

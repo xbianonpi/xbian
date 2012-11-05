@@ -179,14 +179,47 @@ EOF
 mv "$3.bak" "$3"
 }
 
+showdialog() {
+    dialog \
+	--backtitle "$BACKTITLE" \
+	--title "$1" \
+	--ok-label "$2" \
+	--msgbox "$3" $4 $5
+}
+
+showyesno() {
+    dialog \
+	--backtitle "$BACKTITLE" \
+	--title "$1" \
+	--yesno "$2" $3 $4
+}
+
+showmenu () {
+	TITLE="$1"
+	shift
+	ROWS=$(($#/2))
+	HEIGHT=$(($ROWS+6))
+	RETURN=$( \
+		dialog \
+			--no-kill \
+			--backtitle "$BACKTITLE" \
+			--title "lol" \
+			--ok-label Select \
+			--cancel-label Return \
+			--menu '' $HEIGHT 80 $ROWS \
+			"$@" 3>&1 1>&2 2>&3)
+}
+
 set_overclock() {
 	if [ $DEBUG -eq 0 ]; then
-    ASKFORREBOOT=1
-	set_config_var arm_freq $2 /boot/config.txt >/dev/null
-	set_config_var core_freq $3 /boot/config.txt >/dev/null
-	set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
-	set_config_var over_voltage $5 /boot/config.txt >/dev/null
+		ASKFORREBOOT=1
+		set_config_var arm_freq $2 /boot/config.txt >/dev/null
+		set_config_var core_freq $3 /boot/config.txt >/dev/null
+		set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
+		set_config_var over_voltage $5 /boot/config.txt >/dev/null
 	fi
-	dialog --backtitle "$BACKTITLE" --title "Config > Settings > Overclocking" --ok-label Close --msgbox "\n\n       Set overlock to preset '$1'" 9 50
+	showdialog 	"Config > Settings > Overclocking" \
+			"Close" \
+			"\n\n       Set overlock to preset '$1'" 9 50
 	settings;
 }

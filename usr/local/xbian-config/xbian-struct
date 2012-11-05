@@ -1,0 +1,115 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+# Info menu
+source xbian-struct-info
+
+# Settings menu
+source xbian-struct-settings
+settings() {
+	check_rootssh_status
+	ROOTSSHSTATUS="Enable";
+	if [ $DISABLE_ROOTSSH -eq 1 ]; then
+        	ROOTSSHSTATUS="Disable"
+	fi
+	showmenu 'Config > Settings' \
+		 	1 "Resize SD       - \"Expand root partition to fill SD card\"" \
+			2 "Change Password - \"Change password for 'xbian' user\"" \
+			3 "Change Password - \"Change password for 'root' user\"" \
+			4 "Set timezone    - \"Set the default timezone\"" \
+			5 "SSH root login  - \"$ROOTSSHSTATUS SSH root login\"" \
+			6 "Overclocking    - \"Configure overclocking\"" \
+			7 "License MPG2    - \"Insert, update or delete MPG2 license\"" \
+			8 "License VC-1    - \"Insert, update or delete VC-1 license\"" \
+			9 "Hostname        - \"Change the default hostname\"" \
+			10 "Configure WLAN  - \"Configure wireless network connection\"" \
+			11 "Configure LAN   - \"Configure wired network connection\"" \
+			12 "HDMI hotplug    - \"Change the HDMI hotplug mode\""
+	case "$RETURN" in
+		1)
+			changesdsize;
+		;;
+		2)
+			changexbianpass;
+		;;
+		3)
+			changerootpass;
+		;;
+		4)
+			changetimezone
+		;;
+		5)
+			changesshroot;
+		;;
+		6)
+			changeoverclock;
+		;;
+		7)
+			changelicensempg2;
+		;;
+		8)
+			changelicensevc1;
+		;;
+		9)
+			changehostname;
+		;;
+		10)
+			changewlan;
+		;;
+		11)
+			changelan;
+		;;
+		12)
+			changeforcehdmi;
+		;;
+		"")
+			mainmenu;
+		;;
+        *)
+			settings;
+        ;;
+    esac
+    exit 0
+}
+
+# Packages menu
+source xbian-struct-packages
+packages() {
+	showmenu 'Config > Packages' \
+		1 "Remote - \"Install packages from internet\"" \
+		2 "Local  - \"Install package from *.tar.gz\""
+	case "$RETURN" in
+		1)
+			remotepackages;
+		;;
+		2)
+			localpackages;
+		;;
+		"")
+			mainmenu
+		;;
+		*)
+			mainmenu
+		;;
+	esac
+}

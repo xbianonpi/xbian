@@ -39,9 +39,7 @@ PACKAGELOCATION=0;
 # Source partial scripts
 source xbian-prereqs
 source xbian-functions
-source xbian-struct-info
-source xbian-struct-settings
-source xbian-struct-packages
+source xbian-struct
 
 # Catch-all for not yet implemented functions
 notimplementedyet() {
@@ -50,21 +48,16 @@ notimplementedyet() {
 }
 
 mainmenu() {
-	RETURN=$( \
-		dialog 	--no-kill \
-				--backtitle "$BACKTITLE" \
-				--title 'Config' \
-				--ok-label Select --cancel-label Exit \
-				--menu '' 10 80 5 \
-					1 "Info     - \"Information about this tool\"" \
-					2 "Settings - \"Change various system settings\"" \
-					3 "Packages - \"Install or remove packages\"" \
-					4 "Update   - \"Check for XBian Updates\"" 3>&1 1>&2 2>&3)
+	showmenu 'Config' \
+		1 "Info     - \"Information about this tool\"" \
+		2 "Settings - \"Change various system settings\"" \
+		3 "Packages - \"Install or remove packages\"" \
+		4 "Update   - \"Check for XBian Updates\""
 
-    case "$RETURN" in
+	case "$RETURN" in
 		1)
 			xbianinfo;
-	    ;;
+		;;
 		2)
 			settings;
 		;;
@@ -76,8 +69,8 @@ mainmenu() {
 		;;
 		"")
 			if [ $ASKFORREBOOT -eq 1 ]; then
-				dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55;
-
+				showyesno	"Reboot?" \
+						"\n\n  A reboot is required. Do you want to reboot now?" 9 55;
 				case "$?" in
 					0)
 						if [ $DEBUG -eq 0 ]; then
