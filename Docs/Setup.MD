@@ -1,5 +1,3 @@
-#!/bin/bash
-#
 #Copyright 2012 CurlyMo, Koen Kanters <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
@@ -134,6 +132,9 @@ dpkg-reconfigure locales
 export LANG=C
 export LC_ALL=C
 export LANGUAGE=C
+
+#Make locale settings permanent
+sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUAGE=C/g' /etc/profile
 
 #Remove user pi from sudoers and add xbian user
 sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
