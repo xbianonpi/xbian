@@ -5,6 +5,8 @@ is that we are now using GitHub. GitHub allows us to make XBian
 100% open to everyone. We hope this motivates people to help
 us with developing XBian.
 
+NOTE: If you are connecting via SSH use user:xbian pass:raspberry
+
 GPL 3.0 Licenses
 =================================
 XBian has adopted the GPL 3.0 licenses on all it's code.
