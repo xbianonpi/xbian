@@ -63,7 +63,7 @@ sudo apt-get clean
 
 #Setting up xbian user and deleting pi user
 sudo su
-useradd -G sudo -m -s /bin/bash xbian
+useradd -G sudo -G input -m -s /bin/bash xbian
 echo "xbian:raspberry" | chpasswd
 
 # Relogin with ssh; user:xbian pass:raspberry
