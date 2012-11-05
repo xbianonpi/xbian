@@ -27,9 +27,10 @@
 # 5. Compiling XBMC
 # 6. Compiling PVR Addons
 
+# Make sure you run the resize sd in xbian-config. 8GB+ SD Card recommended.
 
 # 1. Cloning XBMC repo & installing needed packages
-   	# Updating all packages & installing the ones who are needed and creating a bigger swap file           
+   	# Updating all packages & installing the ones who are needed          
   	sudo apt-get update 
    	sudo apt-get upgrade
 
@@ -87,11 +88,7 @@
 	mkdir ~/opt
    	cd ~/opt/
    	git clone --depth 5  git://github.com/xbmc/xbmc.git
-	
-   	# Creating a bigger swap file
-   	sudo dd if=/dev/zero of=/moreswap bs=1024 count=512000
-	sudo mkswap /moreswap
-	sudo echo /moreswap swap swap defaults 0 0 >> /etc/fstab
+
 
 # 2. Compiling taglib (XBMC dependency)
 	cd ~/opt/
