@@ -1,0 +1,121 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+#
+#TODO: Check if packages are already installed
+
+if [ ! $(id -u) -eq 0 ]; then
+	echo "This program must be run as root.";
+	exit 0;
+fi
+
+# Global variables
+BACKTITLE="XBian $(cat /etc/xbian_version)";
+
+DEBUG=1;
+DISABLE_ROOTSSH=0;
+ASKFORREBOOT=0;
+PACKAGELOCATION=0;
+
+# Source partial scripts
+source xbian-prereqs
+source xbian-functions
+source xbian-struct-info
+source xbian-struct-settings
+source xbian-struct-packages
+
+# Catch-all for not yet implemented functions
+notimplementedyet() {
+	dialog --backtitle "$BACKTITLE" --title "Config > *" --ok-label Close --msgbox "\n\n             Not implemented yet" 9 50
+	mainmenu;
+}
+
+mainmenu() {
+	RETURN=$( \
+		dialog 	--no-kill \
+				--backtitle "$BACKTITLE" \
+				--title 'Config' \
+				--ok-label Select --cancel-label Exit \
+				--menu '' 10 80 5 \
+					1 "Info     - \"Information about this tool\"" \
+					2 "Settings - \"Change various system settings\"" \
+					3 "Packages - \"Install or remove packages\"" \
+					4 "Update   - \"Check for XBian Updates\"" 3>&1 1>&2 2>&3)
+
+    case "$RETURN" in
+		1)
+			xbianinfo;
+	    ;;
+		2)
+			settings;
+		;;
+		3)
+			packages;
+		;;
+		4)
+			notimplementedyet;
+		;;
+		"")
+			if [ $ASKFORREBOOT -eq 1 ]; then
+				dialog --backtitle "$BACKTITLE" --title "Reboot?" --ok-label Reboot --cancel-label Exit --yesno "\n\n  A reboot is required. Do you want to reboot now?" 9 55;
+
+				case "$?" in
+					0)
+						if [ $DEBUG -eq 0 ]; then
+							rm -rf /tmp/xbianpackages
+							rm -rf /tmp/xbiancache
+						fi
+						echo 1 | sudo tee /proc/sys/vm/drop_caches
+						reboot;
+					;;
+					1)
+						if [ $DEBUG -eq 0 ]; then
+							rm -rf /tmp/xbianpackages
+							rm -rf /tmp/xbiancache
+						fi
+						echo 1 | sudo tee /proc/sys/vm/drop_caches
+						exit 0
+					;;
+				esac
+			else
+				if [ $DEBUG -eq 0 ]; then
+					rm -rf /tmp/xbianpackages
+					rm -rf /tmp/xbiancache
+				fi
+				echo 1 | sudo tee /proc/sys/vm/drop_caches
+				exit 0
+			fi
+		;;
+		*)
+			mainmenu
+	    ;;
+    esac
+    exit 0
+}
+
+#Run script inside screen, so it's doesn't fill the whole terminal history
+SCREEN=$(screen -r | grep "Attached" | wc -l);
+if [ $SCREEN -eq 0 ]; then
+	`screen $0`
+else
+	mainmenu;
+fi

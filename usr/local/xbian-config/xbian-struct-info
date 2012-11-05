@@ -1,0 +1,27 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+xbianinfo() {
+    dialog --backtitle "$BACKTITLE" --title "XBian Config - Info" --msgbox "This tool provides a straight-forward way of doing initial configuration of XBian. Although it can be run at any time, some of the options may have difficulties if you have heavily customised your installation." 10 50
+	mainmenu;
+}
