@@ -20,7 +20,7 @@
 
 # - IMPORTANT - 
 # Restore the official Raspbian image from: http://www.raspberrypi.org/downloads to your 
-#SD card (28-10-2012). First boot: Select 'Finish' to dimiss initial tutorial (raspi-#config). 
+#SD card (28-10-2012). First boot: Select 'Finish' to dimiss initial tutorial (raspi-config). 
 #SSH will be running (on bootup, IP is printed in logs). 
 #Now SSH into your Pi with the following credentials Username: pi Password: raspbian
 
