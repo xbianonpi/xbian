@@ -91,12 +91,9 @@
 
 
 # 2. Compiling taglib (XBMC dependency)
-	cd ~/opt/
-	git clone --depth 5 git://github.com/taglib/taglib.git
-	cd ~/opt/taglib/
-	cmake -DCMAKE_INSTALL_PREFIX=/usr/local 
-	make
-	sudo make install
+	cd ~/opt/xbmc
+	make -C lib/taglib
+   	sudo make -C lib/taglib install
 	
 	
 # 3. Compiling libcec
