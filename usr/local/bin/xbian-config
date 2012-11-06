@@ -52,14 +52,6 @@ done
 # Import menu structure
 MENU=$(cat $BASEPATH/xbian-struct);
 
-# Catch-all for not yet implemented functions
-notimplementedyet() {
-	showdialog 	"Config > *" \
-			"Close" \
-			"\n\n             Not implemented yet" 9 50
-	mainmenu;
-}
-
 end() {
 	if [ $ASKFORREBOOT -eq 1 ]; then
 		showyesno	"Reboot?" \
@@ -115,36 +107,47 @@ function menu() {
 	if [ $# -gt 2 ]; then
 		CPATH=$3;
 	else
-		CPATH='Config';
+		CPATH=' Config ';
 	fi
 
-	# Draw menu
+	# Prepare menu
 	IFS=$'\n';
 	for ITEM in $MENU; do
+		# Add all relevant menu items to the new menu
 		if [ $(echo $ITEM | cut -f 1 -d: ) == "$LEVEL$ADD$I" ]; then
 			NAME=$(echo $ITEM | cut -f 2 -d:);
 			DESC=$(echo $ITEM | cut -f 3 -d:);
 			ITEMS="$ITEMS$I%$NAME - \"$DESC\"%";
 			I=$(($I+1));
 		fi
+		# Save current title for later use
+		if [ $(echo $ITEM | cut -f 1 -d: ) == "$LEVEL" ]; then
+			CURNAME=$(echo $ITEM | cut -f 2 -d:);
+		fi
 	done;
 
-	# Execute script
+	# Execute script ...
 	if [ -z "$ITEMS" ]; then
 		FILE=$(echo -e "$MENU" | grep ^$2 | cut -f 4 -d:);
 		IFS="%";
 		eval $FILE;
 		IFS=$'\n';
 		menu $(($1-1)) ${LEVEL%.*} ${CPATH% > *};
+
+	# ... or ascend/descend to adjacent menu
 	else
 		IFS="%";
+		if [ $1 -ne 1 ]; then
+			CPATH="$CPATH > $CURNAME"
+		fi;
 		showmenu $CPATH $ITEMS;
 		if [ $? -eq 1 ]; then
 			IFS=$'\n';
+			CPATH=${CPATH% > *}
        			menu $(($1-1)) ${LEVEL%.*} ${CPATH% > *};
     		else
 			IFS=$'\n';
-			menu $(($1+1)) "$LEVEL$ADD$RETURN" "$CPATH > $NAME";
+			menu $(($1+1)) "$LEVEL$ADD$RETURN" "$CPATH";
     		fi;
 	fi;
 }
