@@ -51,7 +51,7 @@ libxdmcp6 make libx11-6
 
 sudo apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind nfs-common screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
-libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7
+libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev samba-common-bin
 
 sudo apt-get autoremove -y
 
