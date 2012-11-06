@@ -37,16 +37,21 @@ sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
 
 #Symlink the lirc drivers to get the patch working
 sudo ln -s /opt/raspberry/linux/drivers/staging/media/lirc /opt/raspberry/linux/drivers/staging/lirc
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/kernel.lirc_rpi-0.2.patch
-sudo patch -p1 < kernel.lirc_rpi-0.2.patch
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/Kernel.lirc_rpi-0.2+lirc_xbox.patch
+sudo patch -p1 < Kernel.lirc_rpi-0.2+lirc_xbox.patch
+
+#Download latest lirc_rpi version
+sudo wget https://github.com/ar0n/linux/blob/rpi-patches/drivers/staging/lirc/lirc_rpi.c
+sudo mv lirc_rpi.c drivers/staging/lirc
+sudo cat drivers/staging/lirc_rpi.c | sed -e 's/lirc_rpi/lirc_rp1/g' > drivers/staging/lirc_rp1.c
 
 #Stop XBMC to increase compilation speed
 sudo kill -9 $(pgrep xbmc)
 
 #Make steps with custom commands not supported by the official config
-sudo make CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m
-sudo make modules CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m
-sudo make modules_install CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m INSTALL_MOD_PATH=/
+sudo make CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
+sudo make modules CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
+sudo make modules_install CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m INSTALL_MOD_PATH=/
 
 #Implement the new kernel
 cp arch/arm/boot/Image /boot/kernel.img
