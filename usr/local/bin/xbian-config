@@ -119,6 +119,7 @@ function menu() {
 	fi
 
 	# Draw menu
+	IFS=$'\n';
 	for ITEM in $MENU; do
 		if [ $(echo $ITEM | cut -f 1 -d: ) == "$LEVEL$ADD$I" ]; then
 			NAME=$(echo $ITEM | cut -f 2 -d:);
