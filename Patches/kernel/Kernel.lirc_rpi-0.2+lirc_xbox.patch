@@ -2,7 +2,7 @@ diff --git a/drivers/staging/lirc/Kconfig b/drivers/staging/lirc/Kconfig
 index 526ec0f..c7c6288 100644
 --- a/drivers/staging/lirc/Kconfig
 +++ b/drivers/staging/lirc/Kconfig
-@@ -38,6 +38,12 @@ config LIRC_PARALLEL
+@@ -38,6 +38,24 @@ config LIRC_PARALLEL
  	help
  	  Driver for Homebrew Parallel Port Receivers
  
@@ -13,17 +13,17 @@ index 526ec0f..c7c6288 100644
 +	  Driver for Homebrew GPIO Port Receiver/Transmitter for the RaspberryPi
 +
 +config LIRC_RP1
-+ tristate "Homebrew GPIO Port Receiver/Transmitter for the RaspberryPi"
++       tristate "Homebrew GPIO Port Receiver/Transmitter for the RaspberryPi"
 +	depends on LIRC
 +	help
 +	  Driver for Homebrew GPIO Port Receiver/Transmitter for the RaspberryPi
 +
 +config LIRC_XBOX
-+ tristate "Homebrew XBOX Receiver for the RaspberryPi"
++       tristate "Homebrew XBOX Receiver for the RaspberryPi"
 +	depends on LIRC
 +	help
 +	  Homebrew XBOX Receiver for the RaspberryPi
-
++
  config LIRC_SASEM
  	tristate "Sasem USB IR Remote"
  	depends on LIRC && USB
@@ -31,12 +31,12 @@ diff --git a/drivers/staging/lirc/Makefile b/drivers/staging/lirc/Makefile
 index d76b0fa..7ff0f23 100644
 --- a/drivers/staging/lirc/Makefile
 +++ b/drivers/staging/lirc/Makefile
-@@ -12,3 +12,4 @@ obj-$(CONFIG_LIRC_SERIAL)	+= lirc_serial.o
+@@ -12,3 +12,6 @@ obj-$(CONFIG_LIRC_SERIAL)	+= lirc_serial.o
  obj-$(CONFIG_LIRC_SIR)		+= lirc_sir.o
  obj-$(CONFIG_LIRC_TTUSBIR)	+= lirc_ttusbir.o
  obj-$(CONFIG_LIRC_ZILOG)	+= lirc_zilog.o
 +obj-$(CONFIG_LIRC_RPI)		+= lirc_rpi.o
-+obj-$(CONFIG_LIRC_RPI) 	+= lirc_rp1.o
++obj-$(CONFIG_LIRC_RP1)		+= lirc_rp1.o
 +obj-$(CONFIG_LIRC_XBOX) 	+= lirc_xbox.o
 diff --git a/drivers/staging/lirc/lirc_rpi.c b/drivers/staging/lirc/lirc_rpi.c
 new file mode 100644
@@ -2418,7 +2418,7 @@ index 0000000..d873455
 +module_param(repeat, int, S_IRUGO | S_IWUSR);
 +MODULE_PARM_DESC(repeat, "Repeat timeout (1/100 sec) (default: 10)");
 --- /dev/null	1970-01-01 00:00:03.520000003 +0000
-+++ /opt/raspberry/linux/drivers/staging/lirc/kcompat.h	2012-11-05 23:29:17.304196000 +0000
++++ drivers/staging/lirc/kcompat.h	2012-11-05 23:29:17.304196000 +0000
 @@ -0,0 +1,139 @@
 +/*
 + * Support header for building lirc drivers on kernels older than the
