@@ -54,7 +54,7 @@
         x11proto-core-dev x11proto-damage-dev x11proto-dri2-dev x11proto-fixes-dev x11proto-gl-dev x11proto-input-dev x11proto-kb-dev x11proto-randr-dev \
         x11proto-record-dev x11proto-render-dev x11proto-scrnsaver-dev x11proto-xext-dev x11proto-xf86vidmode-dev x11proto-xinerama-dev xtrans-dev \
         libnfs-dev libplist-dev avahi-daemon zlib1g-dev:armhf swig java-package libafpclient-dev liblockdev1-dev autoconf automake libtool gcc udev openjdk-6-jre \
-        cmake g++ libudev-dev build-essential autoconf ccache gawk gperf mesa-utils zip unzip
+        cmake g++ libudev-dev build-essential autoconf ccache gawk gperf mesa-utils zip unzip curl 
 
    	sudo apt-get clean
 	
