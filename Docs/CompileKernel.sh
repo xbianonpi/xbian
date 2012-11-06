@@ -37,7 +37,7 @@ sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
 
 #Symlink the lirc drivers to get the patch working
 sudo ln -s /opt/raspberry/linux/drivers/staging/media/lirc /opt/raspberry/linux/drivers/staging/lirc
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/kernel.lirc_rpi-0.2.patch
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/Kernel.lirc_rpi-0.2+lirc_xbox.patch
 sudo patch -p1 < Kernel.lirc_rpi-0.2+lirc_xbox.patch
 
 #Download latest lirc_rpi version
