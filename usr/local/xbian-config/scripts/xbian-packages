@@ -38,8 +38,8 @@ savepackage() {
 			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
 			if [ $PACKAGELOCATION -eq 1 ]; then
 				remotepackages;
-			elif [ $PACKAGELOCATION -eq 2 ]; then
-				packages;
+			#elif [ $PACKAGELOCATION -eq 2 ]; then
+				#packages;
 			fi
 		else
 			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
@@ -206,15 +206,15 @@ case "$?" in
 
 		if [ $PACKAGELOCATION -eq 1 ]; then
 			remotepackages;
-		elif [ $PACKAGELOCATION -eq 2 ]; then
-			packages;
+		#elif [ $PACKAGELOCATION -eq 2 ]; then
+		#	packages;
 		fi
 	;;
 	*)
 		if [ $PACKAGELOCATION -eq 1 ]; then
 			remotepackages;
-		elif [ $PACKAGELOCATION -eq 2 ]; then
-			packages;
+		#elif [ $PACKAGELOCATION -eq 2 ]; then
+		#	packages;
 		fi
 	;;
 esac
@@ -227,7 +227,6 @@ remotepackages() {
 		git clone -q --depth 5 https://github.com/Koenkk/packages.git /tmp/xbianpackages
 		chmod +x /tmp/xbianpackages/*.sh
 	fi
-	
 	PKGLIST=($(ls -l /tmp/xbianpackages | grep -iv 'README.md' | grep -iv 'COPYING' | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
 	LIST=();
 	NRITEMS=0;
@@ -251,16 +250,16 @@ remotepackages() {
 				RETURN=$(($RETURN-1));
 				dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "The installation can take a while depending on the number of packagesn being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 50
 				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
-				packages;
+				#packages;
 			;;
-			*)
-				packages;
-			;;
+			#*)
+			#	packages;
+			#;;
 		esac
-	else
-		packages;
+	#else
+	#	packages;
 	fi
-	exit 0;
+	#exit 0;
 }
 
 localpackages() {
@@ -285,7 +284,7 @@ localpackages() {
 			dialog --backtitle "$BACKTITLE" --title "Config > Packages" --msgbox "No package found at this location." 9 50
 			localpackages
 		fi
-		packages
+		#packages
 	fi
-	packages
+	#packages
 }

@@ -35,7 +35,7 @@ DEBUG=0;
 DISABLE_ROOTSSH=0;
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
-BASEPATH="../xbian-config"
+BASEPATH="/usr/local/xbian-config"
 
 # Source sub scripts
 source $BASEPATH/xbian-prereqs
@@ -50,7 +50,7 @@ done
 
 
 # Import menu structure
-MENU=$(cat ../xbian-config/xbian-struct);
+MENU=$(cat $BASEPATH/xbian-struct);
 
 # Catch-all for not yet implemented functions
 notimplementedyet() {
@@ -149,9 +149,9 @@ function menu() {
 }
 
 #Run script inside screen, so it's doesn't fill the whole terminal history
-#SCREEN=$(screen -r | grep "Attached" | wc -l);
-#if [ $SCREEN -eq 0 ]; then
-#	`screen $0`
-#else
+SCREEN=$(screen -r | grep "Attached" | wc -l);
+if [ $SCREEN -eq 0 ]; then
+	`screen $0`
+else
 	menu 1 "";
-#fi
+fi

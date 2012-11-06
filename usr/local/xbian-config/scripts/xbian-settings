@@ -239,9 +239,6 @@ changeoverclock() {
 		"")
 			exit 0;
 		;;
-		*)
-			settings
-		;;
 	esac
 }
 
@@ -530,21 +527,21 @@ changewlanunprotected() {
 changewlanprotected() {
 	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --form "\n  Press up/down to move between fields" 11 45 0 \
 		"SSID:" 1 1 "$3" 1 15 21 20 \
-		"Password:" 3 1 "$4" 3 15 21 20 \
+		"Password:" 3 1 "$4" 3 15 21 64 \
 	3>&1 1>&2 2>&3);
 	if [ $? -ge 1 ]; then
 		changewlanprotected $1 $2 $3 $4;
 		exit 0
 	fi
-	
+
 	echo -e "$VALUES" > /tmp/xbian-config-args
-	
+
 	if [ $(cat /tmp/xbian-config-args | wc -l) -lt 2 ]; then
 		dialog --backtitle "$BACKTITLE" --title "Config > Settings > Configure WLAN" --ok-label Close --msgbox "\n    Please enter you're network name and password" 7 55
 		changewlanprotected $1 $2 $3 $4
 		exit 0
 	fi
-	
+
 	I=0;
 	while read LINE; do
 	if [ $I -eq 0 ]; then
@@ -571,7 +568,7 @@ changewlandhcp() {
 			CMODE=2;
 		fi
 	fi
-	
+
 	MODE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure WLAN' --ok-label Select --cancel-label Return --menu '' 8 40 2 1 "Unprotected" 2 "WPA/WPA2 & WEP Security" 3>&1 1>&2 2>&3)
 	case "$MODE" in
 		1)

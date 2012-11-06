@@ -257,5 +257,4 @@ set_overclock() {
 	showdialog 	"Config > Settings > Overclocking" \
 			"Close" \
 			"\n\n       Set overlock to preset '$1'" 9 50
-	settings;
 }
