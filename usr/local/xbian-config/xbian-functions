@@ -239,7 +239,7 @@ showmenu () {
 		dialog \
 			--no-kill \
 			--backtitle "$BACKTITLE" \
-			--title "lol" \
+			--title $TITLE \
 			--ok-label Select \
 			--cancel-label Return \
 			--menu '' $HEIGHT 80 $ROWS \
