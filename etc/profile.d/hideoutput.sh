@@ -17,7 +17,7 @@
 #You should have received a copy of the GNU General Public License along 
 #with Xbian. If not, see <http://www.gnu.org/licenses/>
 #
-if [[ $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX"  ]]; then
+if [[ -z $SSH_CONNECTION" && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX"  ]]; then
         echo -e '\e[40;30m'
         dmesg -n 1
         clear
