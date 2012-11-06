@@ -1,0 +1,18 @@
+1:Information:Information about this tool:xbianinfo
+2:Settings:Change various system settings:
+2.1:Resize SD:Expand root partition to fill SD card:changesdsize
+2.2:Change Password:Change password for 'xbian' user:changexbianpass
+2.3:Change Password:Change password for 'root' user:changerootpass
+2.4:Set timezone:Set the default timezone:changetimezone
+2.5:SSH root login:$ROOTSSHSTATUS SSH root login:changesshroot
+2.6:Overclocking:Configure overclocking:changeoverclock
+2.7:Licence MPG2:Insert, update or delete MPG2 license:changelicensempg2
+2.8:Licence VC-1:Insert, update or delete VC1 license:changelicensevc1
+2.9:Hostname:Change the default hostname:changehostname
+2.10:Configure WLAN:Configure wireless network connection:changewlan
+2.11:Configure LAN:Configure wired network connection:changelan
+2.12:HDMI hotplug:Change the HDMI hotplug mode:changeforcehdmi
+3:Packages:Install or remove additional packages:
+3.1:Remote:Install packages from internet:remotepackages
+3.2:Local:Install packages from *.tar.gz:remotepackages
+4:Updates:Check for XBian updates:notimplemented

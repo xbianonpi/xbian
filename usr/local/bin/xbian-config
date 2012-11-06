@@ -1,0 +1,161 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+#
+#TODO: Check if packages are already installed
+
+if [ ! $(id -u) -eq 0 ]; then
+	echo "This program must be run as root.";
+	exit 0;
+fi
+
+# Global variables
+BACKTITLE="XBian $(cat /etc/xbian_version)";
+
+DEBUG=0;
+DISABLE_ROOTSSH=0;
+ASKFORREBOOT=0;
+PACKAGELOCATION=0;
+BASEPATH="/usr/local/xbian-config"
+
+# Source sub scripts
+source $BASEPATH/xbian-prereqs
+source $BASEPATH/xbian-functions
+
+# Source all supplementary functions
+FNCFILES=$BASEPATH/scripts/*
+for f in $FNCFILES
+do
+	source $f
+done 
+
+
+# Import menu structure
+MENU=$(cat $BASEPATH/xbian-struct);
+
+end() {
+	if [ $ASKFORREBOOT -eq 1 ]; then
+		showyesno	"Reboot?" \
+					"\n\n  A reboot is required. Do you want to reboot now?" 9 55;
+		case "$?" in
+			0)
+				if [ $DEBUG -eq 0 ]; then
+					rm -rf /tmp/xbianpackages
+					rm -rf /tmp/xbiancache
+				fi
+				echo 1 | sudo tee /proc/sys/vm/drop_caches
+				reboot;
+			;;
+			1)
+				if [ $DEBUG -eq 0 ]; then
+					rm -rf /tmp/xbianpackages
+					rm -rf /tmp/xbiancache
+				fi
+				echo 1 | sudo tee /proc/sys/vm/drop_caches
+				exit 0
+			;;
+		esac
+	else
+		if [ $DEBUG -eq 0 ]; then
+			rm -rf /tmp/xbianpackages
+			rm -rf /tmp/xbiancache
+		fi
+		echo 1 | sudo tee /proc/sys/vm/drop_caches
+		exit 0
+	fi
+}
+
+function menu() {
+
+	# Do different things depending on which level we are
+	if [ $1 -eq 0 ]; then
+		# Exit menu
+		end;
+	elif [ $1 -eq 1 ]; then
+		# Show root level
+		LEVEL="";
+		ADD="";
+	else
+		# Show descendant
+		LEVEL="$2";
+		ADD=".";
+	fi
+
+	I=1;
+	ITEMS="";
+
+	# Prepare path
+	if [ $# -gt 2 ]; then
+		CPATH=$3;
+	else
+		CPATH=' Config ';
+	fi
+
+	# Prepare menu
+	IFS=$'\n';
+	for ITEM in $MENU; do
+		# Add all relevant menu items to the new menu
+		if [ $(echo $ITEM | cut -f 1 -d: ) == "$LEVEL$ADD$I" ]; then
+			NAME=$(echo $ITEM | cut -f 2 -d:);
+			DESC=$(echo $ITEM | cut -f 3 -d:);
+			ITEMS="$ITEMS$I%$NAME - \"$DESC\"%";
+			I=$(($I+1));
+		fi
+		# Save current title for later use
+		if [ $(echo $ITEM | cut -f 1 -d: ) == "$LEVEL" ]; then
+			CURNAME=$(echo $ITEM | cut -f 2 -d:);
+		fi
+	done;
+
+	# Execute script ...
+	if [ -z "$ITEMS" ]; then
+		FILE=$(echo -e "$MENU" | grep ^$2 | cut -f 4 -d:);
+		IFS="%";
+		eval $FILE;
+		IFS=$'\n';
+		menu $(($1-1)) ${LEVEL%.*} ${CPATH% > *};
+
+	# ... or ascend/descend to adjacent menu
+	else
+		IFS="%";
+		if [ $1 -ne 1 ]; then
+			CPATH="$CPATH > $CURNAME"
+		fi;
+		showmenu $CPATH $ITEMS;
+		if [ $? -eq 1 ]; then
+			IFS=$'\n';
+			CPATH=${CPATH% > *}
+       			menu $(($1-1)) ${LEVEL%.*} ${CPATH% > *};
+    		else
+			IFS=$'\n';
+			menu $(($1+1)) "$LEVEL$ADD$RETURN" "$CPATH";
+    		fi;
+	fi;
+}
+
+#Run script inside screen, so it's doesn't fill the whole terminal history
+SCREEN=$(screen -r | grep "Attached" | wc -l);
+if [ $SCREEN -eq 0 ]; then
+	`screen $0`
+else
+	menu 1 "";
+fi
