@@ -39,6 +39,7 @@ fi
 DISABLE_ROOTSSH=0; 
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
+ORIGINALIFS=$IFS;
 
 if [ $(dpkg-query -W -f='${Status}\n' dialog | grep 'not-installed' | wc -l) -eq 1 ]; then
 	echo "This program requires the dialog package: apt-get install dialog";
@@ -120,6 +121,7 @@ filedirselect() {
 	IFS=" ";
 	case $BUTTON in
 		1)
+			IFS=$ORIGINALIFS;
 			eval $2;
 		;;
 		3)
@@ -130,6 +132,7 @@ filedirselect() {
 			fi
 			if [[ $RETURN -gt 0 || $4 == "/" ]]; then
 				if [[ $5 -eq 1 && -f $SELECTED ]] || [[ $5 -eq 0 && -d $SELECTED ]]; then
+					IFS=$ORIGINALIFS;
 					eval "$1=\"$SELECTED\"";
 				else
 					if [ $4 == "/" ]; then
@@ -138,6 +141,7 @@ filedirselect() {
 						SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
 					fi
 					if [ -f "$SELECTED" ]; then
+						IFS=$ORIGINALIFS;
 						eval "$1=\"$SELECTED\"";
 					else
 						filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
@@ -169,6 +173,7 @@ filedirselect() {
 				SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
 			fi
 			if [ -f "$SELECTED" ]; then
+				IFS=$ORIGINALIFS;
 				eval "$1=\"$SELECTED\"";
 			else
 				filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
@@ -1150,8 +1155,12 @@ savepackage() {
 	filedirselect LOCATION "packages" "Settings > $TITLE > Save" "/home/xbian/" 0 0 " ";
 	if [ $LOCATION != "" ]; then
 		if [ -d $LOCATION ]; then
-			tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/nullf
-			tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
+			if [[  -d "/tmp/xbiancache" && $(ls -l "/tmp/xbiancache/" | grep -v "total" | wc -l) -gt 0 ]]; then
+				tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
+				tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
+			else
+				tar -cf "$LOCATION/$NAME.tar" $2 >/dev/null
+			fi
 			gzip "$LOCATION/$NAME.tar" >/dev/null
 			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
 			if [ $PACKAGELOCATION -eq 1 ]; then
@@ -1174,21 +1183,23 @@ installpackage() {
 INSTALLS=$1;
 TITLE=$2;
 #Read package file
+CONTENT=$(cat $INSTALLS);
+CONTENT=$(echo -e "$CONTENT\n");
 PACKAGESAPT=()
-PACKAGESAPT=($(cat $INSTALLS | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}'));
+PACKAGESAPT=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}'));
 PACKAGESDIRECT=()
-PACKAGESDIRECT=($(cat $INSTALLS | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
+PACKAGESDIRECT=($(echo -e "$CONTENT" | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
 POSTINSTALL=()
 IFS=$'\n';
-POSTINSTALL=($(cat $INSTALLS 2>&1 | \
+POSTINSTALL=($(echo -e "$CONTENT" 2>&1 | \
 while read X; do \
 if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
 if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
-
 done));
+
 PREINSTALL=()
 IFS=$'\n';
-PREINSTALL=($(cat $INSTALLS 2>&1 | \
+PREINSTALL=($(echo -e "$CONTENT" 2>&1 | \
 while read X; do \
 if [[ "$X" == "#PostInstall" && $(($START)) -eq 1 ]]; then START=0; fi; \
 if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
@@ -1316,6 +1327,7 @@ fi;
 done
 
 sleep 1;
+IFS=$ORIGINALIFS;
 dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
 dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
 case "$?" in
