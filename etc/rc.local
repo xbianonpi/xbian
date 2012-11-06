@@ -10,5 +10,6 @@
 # bits.
 #
 # By default this script does nothing.
-
+modprobe -r hid_logitech_dj
+modprobe hid_logitech_dj
 exit 0
