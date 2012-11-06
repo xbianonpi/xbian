@@ -97,41 +97,15 @@
 	
 	
 # 3. Compiling libcec
-	cd ~/opt/
-	git clone --depth 5 git://github.com/Pulse-Eight/libcec.git
-	cd ~/opt/libcec/
-	autoreconf -vif
-	./configure --prefix=/usr/local
-	make
-	sudo make install
+	cd ~/opt/xbmc
+	make -C lib/libcec
+   	sudo make -C lib/libcec install
 	
 
 # 4. Compiling libshairport
-	cd ~/opt/
-	wget http://mirrors.xbmc.org/build-deps/darwin-libs/libshairport-1.2.0.20310_lib.tar.gz
-	tar xzf libshairport-1.2.0.20310_lib.tar.gz
-	rm libshairport-1.2.0.20310_lib.tar.gz
-	mv libshairport-1.2.0.20310_lib libshairport
-	cd ~/opt/libshairport/
-	
-	# Applying required patches
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/001_add_ao.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/002_fix_install_header.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/003_fix_deadlock.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/004_fix_bad_access.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/005_fix_shutdown.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/006_no_printf.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/007_fix_syslog_defines.patch  
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/008-add-missing-libs.patch  
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/009_fix_ipv6.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/010_handle_metadata.patch
-	patch -Np0 -i ~/opt/xbmc/tools/rbp/depends/libshairport/011_fix_ipv4_fallback.patch
- 
-	# Compiling
-	autoreconf -vif
-	./configure --prefix=/usr/local --sysconfdir=/etc --disable-static --enable-shared
-	make
-	sudo make install
+	cd ~/opt/xbmc
+	make -C lib/libshairport
+   	sudo make -C lib/libshairport install
 
 
 # 5. Compiling XBMC	
