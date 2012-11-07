@@ -1,9 +1,28 @@
 #!/bin/bash
 
 function xbian-rootpass() {
-	PASS=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
-	if [ ! -z $PASS ]; then
-		echo "root:$PASS" | chpasswd
-		showdialog "$1" "Close" "\n        Root password succesfully changed" 7 55
+	VALUES=$(dialog --ok-label "Change" \
+		  --backtitle "$BACKTITLE" \
+		  --title "$1" \
+		  --insecure \
+		  --passwordform "\n   Change root password\n " \
+		12 50 0 \
+		"Password:" 1 3		"" 1 15 15 0 \
+		"Confirm:"  2 3		"" 2 15 15 0 \
+		3>&1 1>&2 2>&3)
+	if [ ${#VALUES} -ne 0 ]; then
+		VALUES=( $VALUES )
+		if [ ${#VALUES[@]} -eq 2 ]; then
+			if [ ! -z ${VALUES[0]} ] && [ ! -z ${VALUES[1]} ] && [ "${VALUES[0]}" == "${VALUES[1]}" ]; then
+				echo "root:${VALUES[0]}" | chpasswd
+				showdialog "$1" "Close" "\n        Root password succesfully changed" 7 55
+			else
+				showdialog "$1" "Retry" "\n      Passwords did not match"
+				xbian-rootpass;
+			fi
+		else
+			showdialog "$1" "Retry" "\n     You have to enter both a new password and a confirmation."
+			xbian-rootpass;
+		fi
 	fi
 }
