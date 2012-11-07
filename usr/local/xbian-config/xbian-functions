@@ -192,3 +192,8 @@ set_overclock() {
 			"\n\n       Set overlock to preset '$1'" 9 50
 }
 
+# Check if a package is installed on the system
+#  $1 package name
+function pkg_installed() {
+	return $(dpkg-query -W -f='${Status}\n' "$1" | grep ' installed' | wc -l);
+}
