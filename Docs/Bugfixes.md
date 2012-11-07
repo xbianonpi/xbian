@@ -1,5 +1,6 @@
 Bugfixes for XBian 1.0 Alpha 1
 ======================================================
+- Bug #23 Movies/TvShows not being added to Libraries, fix: adding a new XBMC build.
 - Bug #8 Keyboard not working, fix: sudo usermod -a -G input xbian
 - Bug #27 Unable to add a library source by NFS, fix: https://github.com/Koenkk/xbian/issues/29
 - Fixed an issue where the logitech K400 keyboard did not always work. People say it's due to the 3.2.27 kernel and should be fixed in 3.6.x (unconfirmed). 
