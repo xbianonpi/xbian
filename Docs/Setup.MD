@@ -61,6 +61,9 @@ sudo rm -rf /var/cache/apt/archives/*
 
 sudo apt-get clean
 
+#Regenerating SSH unique SSH keys:
+rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
+
 #Setting up xbian user and deleting pi user
 sudo su
 useradd -G sudo -G input -m -s /bin/bash xbian
