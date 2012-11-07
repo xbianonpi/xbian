@@ -2418,7 +2418,7 @@ index 0000000..d873455
 +module_param(repeat, int, S_IRUGO | S_IWUSR);
 +MODULE_PARM_DESC(repeat, "Repeat timeout (1/100 sec) (default: 10)");
 --- /dev/null	1970-01-01 00:00:03.520000003 +0000
-+++ drivers/staging/lirc/kcompat.h	2012-11-05 23:29:17.304196000 +0000
++++ b/drivers/staging/lirc/kcompat.h	2012-11-05 23:29:17.304196000 +0000
 @@ -0,0 +1,139 @@
 +/*
 + * Support header for building lirc drivers on kernels older than the
