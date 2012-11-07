@@ -1,0 +1,261 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+#Select a file or directory
+#$1 = Return value
+#$2 = Previous menu
+#$3 = Title
+#$4 = Path
+#$5 = Only files?
+#$6 = Specific files?
+#$7 = Only file extensions
+filedirselect() {
+	DELIMITER="%";
+	IFS=$'\n'
+	ITEMS=($(ls -AlQ $4 | grep ^d | grep -o "\(\".*\"\)"));
+	if [ $5 -eq 1 ]; then
+		if [ $6 -eq 1 ]; then
+			MESSAGE="\nPlease select a *$7 file";
+			ITEMS+=($(ls -AlQ $4 | grep -v ^d | awk '{print $9}' | grep -o "\(\".*\"\)" | grep $7));
+		else
+			MESSAGE="\nPlease select a file";
+			ITEMS+=($(ls -AlQ $4 | grep -v ^d | awk '{print $9}' | grep -o "\(\".*\"\)"));
+		fi
+	else
+		MESSAGE="\nPlease select a directory";
+	fi
+	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
+		DELIMITER='@';
+	fi
+	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
+		DELIMITER='^';
+	fi
+
+	if [ $4 != "/" ]; then
+		LIST="0$DELIMITER[..]$DELIMITER";
+		N=1;
+	else
+		LIST="";
+		N=0;
+	fi
+
+	for ITEM in ${ITEMS[@]}
+	do
+		ITEM=$(echo $ITEM | sed -e 's/\ /\_/g' | sed -e 's/\"//g');
+		if [ -d $4$ITEM ]; then
+			LIST="$LIST$N$DELIMITER[$ITEM]$DELIMITER";
+		else
+			LIST="$LIST$N$DELIMITER$ITEM$DELIMITER";
+		fi
+
+		N=$(($N+1));
+	done
+	NRITEMS=${#ITEMS[@]};
+	if [ $NRITEMS -lt 8 ]; then
+		NRITEMS=8;
+	fi
+	LIST=$(echo \"$LIST\" | awk '{print substr($0,2,length-3)'} | sed -e 's/\_/\ /g');
+	IFS="$DELIMITER";
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $3" --extra-button --extra-label Select --ok-label Open --cancel-label Return  --menu $MESSAGE 14 60 $NRITEMS $LIST  3>&1 1>&2 2>&3);
+	BUTTON=$?;
+	IFS=" ";
+	case $BUTTON in
+		1)
+			eval $2;
+		;;
+		3)
+			if [ $4 == "/" ]; then
+				SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+			else
+				SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+			fi
+			if [[ $RETURN -gt 0 || $4 == "/" ]]; then
+				if [[ $5 -eq 1 && -f $SELECTED ]] || [[ $5 -eq 0 && -d $SELECTED ]]; then
+					eval "$1=\"$SELECTED\"";
+				else
+					if [ $4 == "/" ]; then
+						SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+					else
+						SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+					fi
+					if [ -f "$SELECTED" ]; then
+						eval "$1=\"$SELECTED\"";
+					else
+						filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
+					fi
+				fi
+			else
+				LASTDIR=$(echo $4 | sed -e 's/\ /\_/g' | rev | cut -f2 -d "/" | rev);
+				if [ -z $LASTDIR ]; then
+					SELECTED="/";
+				else
+					SELECTED=$(eval "echo \"$4\" | sed -e 's/\ /\_/g' | sed -e 's/$LASTDIR\///g' | sed -e 's/\_/\ /g'");
+				fi
+				filedirselect $1 $2 "$3" "$SELECTED" $5 $6 $7;
+			fi
+		;;
+		0)
+		if [[ $RETURN -eq 0 && $4 != "/" ]]; then
+			LASTDIR=$(echo $4 | sed -e 's/\ /\_/g' | rev | cut -f2 -d "/" | rev);
+			if [ -z $LASTDIR ]; then
+				SELECTED="/";
+			else
+				SELECTED=$(eval "echo \"$4\" | sed -e 's/\ /\_/g' | sed -e 's/$LASTDIR\///g' | sed -e 's/\_/\ /g'");
+			fi
+			filedirselect $1 $2 "$3" "$SELECTED" $5 $6 $7;
+		else
+			if [ $4 == "/" ]; then
+				SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+			else
+				SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+			fi
+			if [ -f "$SELECTED" ]; then
+				eval "$1=\"$SELECTED\"";
+			else
+				filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
+			fi
+		fi
+		;;
+	esac;
+}
+
+# Check if root is valid for SSH-login
+# return boolean
+check_rootssh_status() {
+	if [ -f "/etc/ssh/sshd_config" ]; then
+		STATUS=$(cat /etc/ssh/sshd_config | grep PermitRootLogin | grep "yes" | wc -l)
+		if [ $STATUS -eq 1 ]; then
+			DISABLE_ROOTSSH=1;
+		else
+			DISABLE_ROOTSSH=0;
+		fi
+	fi
+} 
+
+# Set Raspberry PI config variable
+# ToDo: Save backup of $3 with history
+# $1 key
+# $2 value
+# $3 file
+set_config_var() {
+  lua - "$1" "$2" "$3" <<EOF > "$3.bak"
+local key=assert(arg[1])
+local value=assert(arg[2])
+local fn=assert(arg[3])
+local file=assert(io.open(fn))
+local made_change=false
+for line in file:lines() do
+  if line:match("^#?%s*"..key.."=.*$") then
+    line=key.."="..value
+    made_change=true
+  end
+  print(line)
+end
+
+if not made_change then
+  print(key.."="..value)
+end
+EOF
+mv "$3.bak" "$3"
+}
+
+# Show a normal dialog (messagebox)
+# $1 Title
+# $2 Ok label
+# $3 Text
+# $4 (optional) Height
+# $5 (optional) Width
+showdialog() {
+	# Default width and heigt
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 3 ]; then
+		HEIGHT=$4
+	fi
+	if [ $# -gt 4 ]; then
+		WIDTH=$5
+	fi
+	# Show messagebox
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--ok-label "$2" \
+		--msgbox "$3" $HEIGHT $WIDTH
+}
+
+# Show a yes/no dialog
+# $1 Title
+# $2 Text
+# $3 (optional) Height
+# $4 (optional) Width
+showyesno() {
+	# Default width and heigt
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 2 ]; then
+		HEIGHT=$3
+	fi
+	if [ $# -gt 3 ]; then
+		WIDTH=$4
+	fi
+	# Show yes/no dialog
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--yesno "$2" $HEIGHT $WIDTH
+}
+
+#Show menu
+# $1 Title
+# $2-n Menu items
+showmenu () {
+	TITLE="$1"
+	shift
+	ROWS=$(($#/2))
+	HEIGHT=$(($ROWS+6))
+	RETURN=$( \
+		dialog \
+			--no-kill \
+			--backtitle "$BACKTITLE" \
+			--title $TITLE \
+			--ok-label Select \
+			--cancel-label Return \
+			--menu '' $HEIGHT 80 $ROWS \
+			"$@" 3>&1 1>&2 2>&3)
+}
+
+set_overclock() {
+	if [ $DEBUG -eq 0 ]; then
+		ASKFORREBOOT=1
+		set_config_var arm_freq $2 /boot/config.txt >/dev/null
+		set_config_var core_freq $3 /boot/config.txt >/dev/null
+		set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
+		set_config_var over_voltage $5 /boot/config.txt >/dev/null
+	fi
+	showdialog 	"Config > Settings > Overclocking" \
+			"Close" \
+			"\n\n       Set overlock to preset '$1'" 9 50
+}
+
