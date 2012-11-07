@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function xbian-rootpass() {
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
+	if [ ! -z $PASS ]; then
+		echo "root:$PASS" | chpasswd
+		showdialog "$1" "Close" "\n        Root password succesfully changed" 7 55
+	fi
+}
