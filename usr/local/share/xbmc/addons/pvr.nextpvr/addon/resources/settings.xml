@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <!-- Connection -->
+  <category label="30040">
+    <setting id="host" type="text" label="30000" option="urlencoded" default="127.0.0.1" />
+    <setting id="port" type="number" label="30001" default="8866" />
+    <setting id="pin" type="text" label="30002" default="0000" />
+  </category>
+</settings>

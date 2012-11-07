@@ -1,0 +1,27 @@
+0.1.7
+
+[added] The Recording Service version 1.21 or higher is now required. Download the latest version from the DVBViewer members area and install it.
+[added] Display a notification if the add-on can't connect to the Recording Service. Please, check that the RS is enabled and the IP, webinterface port, username and pass are correct.
+[added] If the favourites.xml selector is empty, the favourites are loaded from the web interface.
+[added] Don't fetch recording thumbnails at startup if there are more than 20 recordings.
+[fixed] The add-on crashed if favourites.xml had entries with the old 32 bits ID.
+[fixed] Channel names with ansi chars are converted to utf8 so they can be displayed properly (a reset of the PVR database may be required).
+[fixed] Channel names with more than 25 chars.
+
+
+0.1.5
+
+[added] Timers support.
+[added] An option to load the channels from favourites.xml instead of from channels.dat (a reset of the PVR database is required).
+        It is usually located at c:\ProgramData\CMUV\DVBViewer\
+        This is a hidden folder so be sure to enable the "Settings\Appearance\File Lists\Show hidden files and directories" option.
+[added] Always grab the EPG data after a channel switch.
+[added] Recording thumbnails.
+[added] Receiving device name to the status info.
+[fixed] The preferred language is loaded from the DVBViewer config and used to get the correct EPG in case it supports multi language entries.
+[fixed] When the EPG is missing the description entry, the event entry is used instead.
+
+
+0.1.0
+
+First version.

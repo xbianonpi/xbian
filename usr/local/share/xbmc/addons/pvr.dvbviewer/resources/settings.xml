@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="host" type="text" label="30000" default="127.0.0.1" />
+    <setting id="webport" type="number" label="30001" default="8089" />
+    <setting id="streamport" type="number" label="30002" default="7522" />    
+    <setting id="recordingport" type="number" label="30003" default="8090" />
+    <setting id="user" type="text" label="30004" default="" />
+    <setting id="pass" type="text" label="30005" option="hidden" default="" />
+    <setting label="30006" type="bool" id="usefavourites" default="false"/>    
+    <setting id="favouritespath" type="file" label="30007" default="" />    
+</settings>
