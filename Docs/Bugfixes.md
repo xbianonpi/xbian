@@ -1,5 +1,6 @@
 Bugfixes for XBian 1.0 Alpha 1
 ======================================================
+- Issue #37 Airplay is not working in XBian 1.0 Alpha 1, fix: sudo apt-get install avahi-daemon
 - Issue #23 Movies/TvShows not being added to Libraries, fix: adding a new XBMC build.
 - Issue #8 Keyboard not working, fix: sudo usermod -a -G input xbian
 - Issue #27 Unable to add a library source by NFS, fix: https://github.com/Koenkk/xbian/issues/29
