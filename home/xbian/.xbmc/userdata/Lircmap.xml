@@ -1,0 +1,31 @@
+<lircmap>
+    <remote device="Xbox_Remote">
+        <play>play</play>
+        <pause>pause</pause>
+        <stop>stop</stop>
+        <forward>ffwd</forward>
+        <reverse>rewind</reverse>
+        <left>left</left>
+        <right>right</right>
+        <up>up</up>
+        <down>down</down>
+        <select>enter</select>
+        <back>back</back>
+        <menu>menu</menu>
+        <title>title</title>
+        <info>info</info>
+        <skipplus>skip+</skipplus>
+        <skipminus>skip-</skipminus>
+        <display>display</display>
+        <one>1</one>
+        <two>2</two>
+        <three>3</three>
+        <four>4</four>
+        <five>5</five>
+        <six>6</six>
+        <seven>7</seven>
+        <eight>8</eight>
+        <nine>9</nine>
+        <zero>0</zero>
+    </remote>
+</lircmap>
