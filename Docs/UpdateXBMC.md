@@ -12,6 +12,7 @@ cd source<br />
 <br />
 \# Installing the new XBMC build<br />
 sudo cp -R usr/local/lib/xbmc /usr/local/lib<br />
+sudo cp -R usr/local/share/xbmc /usr/local/share<br />
 sudo chmod +x /usr/local/lib/xbmc/xbmc.bin<br />
 <br />
 \# Starting the new XBMC build<br />
