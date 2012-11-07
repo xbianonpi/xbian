@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function xbian-xbianpass() {
+	PASS=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
+	if [ ! -z $PASS ]; then
+		echo "xbian:$PASS" | chpasswd
+		showdialog "$1" "Close" "\n      XBian password succesfully changed"
+	fi
+}
