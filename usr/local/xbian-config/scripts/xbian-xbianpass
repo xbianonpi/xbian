@@ -1,9 +1,28 @@
 #!/bin/bash
 
 function xbian-xbianpass() {
-	PASS=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Change --insecure --passwordbox "Password:" 7 60 3>&1 1>&2 2>&3)
-	if [ ! -z $PASS ]; then
-		echo "xbian:$PASS" | chpasswd
-		showdialog "$1" "Close" "\n      XBian password succesfully changed"
-	fi
+        VALUES=$(dialog --ok-label "Change" \
+                  --backtitle "$BACKTITLE" \
+                  --title "$1" \
+                  --insecure \
+                  --passwordform "\n   Change xbian user password:\n " \
+                12 50 0 \
+                "Password:" 1 3         "" 1 15 15 0 \
+                "Confirm:"  2 3         "" 2 15 15 0 \
+                3>&1 1>&2 2>&3)
+        if [ ${#VALUES} -ne 0 ]; then
+                VALUES=( $VALUES )
+                if [ ${#VALUES[@]} -eq 2 ]; then
+                        if [ ! -z ${VALUES[0]} ] && [ ! -z ${VALUES[1]} ] && [ "${VALUES[0]}" == "${VALUES[1]}" ]; then
+                                echo "xbian:${VALUES[0]}" | chpasswd
+                                showdialog "$1" "Close" "\n      xbian password successfully changed" 7 55
+                        else
+                                showdialog "$1" "Retry" "\n      Passwords did not match"
+                                xbian-xbianpass;
+                        fi
+                else
+                        showdialog "$1" "Retry" "\n     You have to enter both a new password and a confirmation."
+                        xbian-xbianPASS;
+                fi
+        fi
 }
