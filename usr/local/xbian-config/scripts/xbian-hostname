@@ -10,7 +10,7 @@ function xbian-hostname() {
 		echo $HOSTNAME > /etc/hostname
 		hostname $HOSTNAME
 		eval "sed -i 's/$CHOSTNAME/$HOSTNAME/g' /etc/hosts";
-		showdialog "$1" "Close" "\n           Hostname succesfully changed" 7 55
+		showdialog "$1" "Close" "\n           Hostname successfully changed" 7 55
 		ASKFORREBOOT=1;
 	fi
 }

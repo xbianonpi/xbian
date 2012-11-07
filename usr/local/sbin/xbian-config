@@ -35,8 +35,8 @@ DEBUG=1;
 DISABLE_ROOTSSH=0;
 ASKFORREBOOT=0;
 PACKAGELOCATION=0;
-#BASEPATH="/usr/local/xbian-config"
-BASEPATH="../xbian-config"
+BASEPATH="/usr/local/xbian-config"
+
 # Source sub scripts
 source $BASEPATH/xbian-functions
 source $BASEPATH/xbian-prereqs
