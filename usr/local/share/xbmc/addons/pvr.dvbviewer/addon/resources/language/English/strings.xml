@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<strings>
+    <!-- settings labels -->
+    <string id="30000">DVBViewer Recording Service IP Address</string>
+    <string id="30001">Webinterface Port</string>
+    <string id="30002">Streaming Port</string>    
+    <string id="30003">Recordings Port</string>
+    <string id="30004">Username</string>
+    <string id="30005">Password</string>
+    <string id="30006">Load channels from favourites.xml instead of from channels.dat</string>
+    <string id="30007">Select the favourites.xml file</string>
+
+    <!-- notifications -->
+    <string id="30500">Can't connect to the Recording Service</string>
+    <string id="30501">Recording Service version 1.%d or higher required</string>
+</strings>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+    <setting id="n7host" type="text" label="30000" default="127.0.0.1" />
+    <setting id="n7port" type="number" label="30001" default="80" />
+</settings>
+

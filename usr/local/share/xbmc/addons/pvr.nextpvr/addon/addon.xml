@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="pvr.nextpvr"
+  version="1.0.0.0"
+  name="NextPVR PVR Client"
+  provider-name="Graeme Blackley">
+  <requires>
+    <c-pluff version="0.1"/>
+  </requires>
+  <extension
+    point="xbmc.pvrclient"
+    library_linux="XBMC_NextPVR.pvr"
+    library_osx="XBMC_NextPVR.pvr"
+    library_wingl="XBMC_NextPVR_win32.pvr"
+    library_windx="XBMC_NextPVR_win32.pvr"/>
+  <extension point="xbmc.addon.metadata">
+    <summary>XBMC frontend for the NextPVR</summary>
+    <description>NextPVR frontend. Supports streaming of Live TV &amp; Recordings, listening to Radio channels and EPG.</description>
+    <disclaimer>This is a work in progress. Use at your own risk.</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>
