@@ -3,7 +3,6 @@
 \# Stopping XBMC and making a backup of the current XBMC<br />
 sudo /etc/init.d/xbmc stop<br />
 sudo mv /usr/local/lib/xbmc /usr/local/lib/xbmc.bak<br />
-sudo mv /usr/local/share/xbmc /usr/local/share/xbmc.bak<br />
 <br />
 \# Cloning XBian GitHub<br />
 sudo rm -rf /home/xbian/source<br />
@@ -13,7 +12,6 @@ cd source<br />
 <br />
 \# Installing the new XBMC build<br />
 sudo cp -R usr/local/lib/xbmc /usr/local/lib<br />
-sudo cp -R usr/local/share/xbmc /usr/local/share<br />
 sudo chmod +x /usr/local/lib/xbmc/xbmc.bin<br />
 <br />
 \# Starting the new XBMC build<br />
@@ -22,7 +20,5 @@ sudo /etc/init.d/xbmc start<br />
 \# If you want to restore to the old XBMC build execute the following commands<br />
 sudo /etc/init.d/xbmc stop<br />
 sudo rm -rf /usr/local/lib/xbmc<br />
-sudo rm -rf /usr/local/share/xbmc<br />
 sudo mv /usr/local/lib/xbmc.bak /usr/local/lib/xbmc<br />
-sudo mv /usr/local/share/xbmc.bak /usr/local/share/xbmc<br />
 sudo /etc/init.d/xbmc start<br />
