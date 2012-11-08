@@ -19,7 +19,7 @@
 #
 ### BEGIN INIT INFO
 # Provides:          xbmc
-# Required-Start:    $all bootlocal
+# Required-Start:    bootlocal
 # Required-Stop:     
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
