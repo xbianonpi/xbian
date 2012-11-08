@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+# Show a normal dialog (messagebox)
+# $1 Title
+# $2 Ok label
+# $3 Text
+# $4 (optional) Height
+# $5 (optional) Width
+showdialog() {
+	# Default width and height
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 3 ]; then
+		HEIGHT=$4
+	fi
+	if [ $# -gt 4 ]; then
+		WIDTH=$5
+	fi
+	# Show messagebox
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--ok-label "$2" \
+		--msgbox "$3" $HEIGHT $WIDTH
+}
+
+# Show a information box
+# $1 Title
+# $2 Text
+# $3 (optional) Height
+# $4 (optional) Width
+showinfo() {
+	# Default width and height
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 2 ]; then
+		HEIGHT=$3
+	fi
+	if [ $# -gt 3 ]; then
+		WIDTH=$4
+	fi
+	# Show messagebox
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--infobox "$2" $HEIGHT $WIDTH
+}
+
+# Show a yes/no dialog
+# $1 Title
+# $2 Text
+# $3 (optional) Height
+# $4 (optional) Width
+showyesno() {
+	# Default width and heigt
+	HEIGHT=12
+	WIDTH=70
+	# Overridden width and height
+	if [ $# -gt 2 ]; then
+		HEIGHT=$3
+	fi
+	if [ $# -gt 3 ]; then
+		WIDTH=$4
+	fi
+	# Show yes/no dialog
+	dialog \
+		--backtitle "$BACKTITLE" \
+		--title "$1" \
+		--yesno "$2" $HEIGHT $WIDTH
+}
+
+#Show menu
+# $1 Title
+# $2-n Menu items
+showmenu () {
+	TITLE="$1"
+	shift
+	ROWS=$(($#/2))
+	HEIGHT=$(($ROWS+6))
+	RETURN=$( \
+		dialog \
+			--no-kill \
+			--backtitle "$BACKTITLE" \
+			--title $TITLE \
+			--ok-label Select \
+			--cancel-label Return \
+			--menu '' $HEIGHT 80 $ROWS \
+			"$@" 3>&1 1>&2 2>&3)
+}
+
+notimplementedyet() {
+	showdialog 	"Config > *" \
+			"Close" \
+			"\n\n             Not implemented yet" 9 50
+	mainmenu;
+}

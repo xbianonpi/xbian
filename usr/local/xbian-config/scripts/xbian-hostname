@@ -1,0 +1,16 @@
+#!/bin/bash
+function xbian-hostname() {
+	CHOSTNAME=$(cat /etc/hostname);
+	HOSTNAME=$(dialog 	--backtitle "$BACKTITLE" \
+				--title "$1" \
+				--ok-label Change \
+				--inputbox "Hostname:" 7 80 $CHOSTNAME \
+				3>&1 1>&2 2>&3)
+	if [ ! -z $HOSTNAME ]; then
+		echo $HOSTNAME > /etc/hostname
+		hostname $HOSTNAME
+		eval "sed -i 's/$CHOSTNAME/$HOSTNAME/g' /etc/hosts";
+		showdialog "$1" "Close" "\n           Hostname successfully changed" 7 55
+		ASKFORREBOOT=1;
+	fi
+}

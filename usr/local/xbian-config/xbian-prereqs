@@ -1,0 +1,27 @@
+#!/bin/bash
+
+#Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
+if [ $DEBUG -eq 0 ]; then
+	trap '' 2;
+fi
+
+# Check that required packages are already installed
+pkg_installed "dialog"; if [ $? -eq 0 ]; then
+	echo "This program requires the dialog package: apt-get install dialog";
+	exit 0;
+fi
+
+pkg_installed "screen"; if [ $? -eq 0 ]; then
+	echo "This program requires the screen package: apt-get install screen";
+	exit 0;
+fi
+
+pkg_installed "git"; if [ $? -eq 0 ]; then
+	echo "This program requires the git package: apt-get install git";
+	exit 0;
+fi
+
+pkg_installed "git"; if [ $? -eq 0 ]; then
+	echo "This program requires the wget package: apt-get install wget";
+	exit 0;
+fi
