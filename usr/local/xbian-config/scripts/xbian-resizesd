@@ -124,6 +124,42 @@ EOF
 	if [[ $FSEDIT -eq 0 && $DEBUG -eq 0 ]]; then
 		echo "/dev/mmcblk0p3	swap	swap	defaults	0	0" >> /etc/fstab
 	fi
-	
+
+# now set up an init.d script
+	if [ $DEBUG -eq 0 ]; then
+cat <<\EOF > /etc/init.d/resize2fs_once
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides: resize2fs_once
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5 S
+# Default-Stop:
+# Short-Description: Resize the root filesystem to fill partition
+# Description:
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+    log_daemon_msg "Starting resize2fs_once" &&
+    resize2fs /dev/mmcblk0p2 &&
+    mkswap /dev/mmcblk0p3 &&
+    swapon /dev/mmcblk0p3 &&
+    rm /etc/init.d/resize2fs_once &&
+    update-rc.d resize2fs_once remove &&
+    log_end_msg $?
+    ;;
+  *)
+    echo "Usage: $0 start" >&2
+    exit 3
+    ;;
+esac
+EOF
+	chmod +x /etc/init.d/resize2fs_once >/dev/null;
+	update-rc.d resize2fs_once defaults >/dev/null;
+	fi
+
 	showdialog "$1 > Resize SD" "Ok" "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
 }
