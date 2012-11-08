@@ -151,5 +151,13 @@
 	./configure --prefix=/usr/local/lib/xbmc
 	sudo make install
 
+	# Compiling the XVDR addon
+	cd ~/opt/
+	git clone git://github.com/pipelka/xbmc-addon-xvdr.git
+	cd xbmc-addon-xvdr
+	sh autogen.sh
+	./configure --prefix=/usr/local/share/xbmc
+	make install
+
 # Many thanks to http://www.raspbian.org/RaspbianXBMC !
 
