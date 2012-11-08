@@ -43,7 +43,7 @@ case "$1" in
         esac
         ;;
   stop)
-        #No-op
+        sync
         ;;
   *)
         echo "Usage: $SCRIPTNAME {start|stop}" >&2
