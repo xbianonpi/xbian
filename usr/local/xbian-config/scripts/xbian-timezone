@@ -1,16 +1,9 @@
 #!/bin/bash
 function xbian-timezone() {
-	pkg_installed "wget"
-	if [ $? -eq 1 ]; then
-		showinfo	"$1" \
-				"\n\n  Please wait while 'tzdata' is loading..." 7 47
-		dpkg-reconfigure tzdata
-		showdialog 	"$1" \
-				"Close" \
-				"\n      Timezone succesfully changed" 9 42
-	else
-		showdialog 	"$1" \
-				"Close" \
-				"\n         TZData not installed" 7 44
-	fi
+	showinfo	"$1" \
+			"\n\n  Please wait while 'tzdata' is loading..." 7 47
+	dpkg-reconfigure tzdata
+	showdialog 	"$1" \
+			"Close" \
+			"\n      Timezone succesfully changed" 9 42
 }
