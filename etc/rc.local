@@ -11,7 +11,7 @@
 #
 # By default this script does nothing.
 
-chmod 0777 /dev/tty0
+chmod 0644 /dev/tty0
 
 #modprobe -r hid_logitech_dj
 #modprobe hid_logitech_dj
