@@ -1,5 +1,6 @@
 Bugfixes for XBian 1.0 Alpha 1
 ======================================================
+- Issue #36 Keyboard not working, fix: sudo sed -i '$d' /etc/rc.local && sudo echo -e "chmod 0777 /dev/tty0\nexit 0" >> /etc/rc.local
 - Issue #37 Airplay/Zeroconf is not working in XBian 1.0 Alpha 1, fix: sudo apt-get install avahi-daemon
 - Issue #23 Movies/TvShows not being added to Libraries, fix: adding a new XBMC build.
 - Issue #8 Keyboard not working, fix: sudo usermod -a -G input xbian
