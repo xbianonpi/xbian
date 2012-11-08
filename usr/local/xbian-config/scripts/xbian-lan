@@ -1,0 +1,331 @@
+#!/bin/bash
+
+changelandhcp() {
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
+		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces
+		showdialog "$1" "Close" "\n          LAN settings set to DHCP."
+	else
+		showdialog "$1" "Close" "\n      LAN settings already set to DHCP."
+	fi
+}
+
+changelanstatic() {
+
+	OLDIFS=$IFS; IFS=$' \t\n';
+
+	# Read IP, netmask and gateway from /etc/network/interfaces
+	if [ ! -z "$2" ]; then
+		CIP=();
+		CSM=();
+		CGW=();
+		I=0;
+
+		echo -e "$2" > /tmp/xbian-config-args
+
+		while read LINE; do
+			if [ $I -gt 19 ]; then
+				NS3[$(($I-20))]=$LINE;
+			elif [ $I -gt 15 ]; then
+				NS2[$(($I-16))]=$LINE;
+			elif [ $I -gt 11 ]; then
+				NS1[$(($I-12))]=$LINE;
+			elif [ $I -gt 7 ]; then
+				CGW[$(($I-8))]=$LINE;
+			elif [ $I -gt 3 ]; then
+				CSM[$(($I-4))]=$LINE;
+			else
+				CIP[$I]=$LINE;
+			fi
+			I=$(($I+1));
+		done < /tmp/xbian-config-args;
+		rm /tmp/xbian-config-args;
+	else
+		CONTENT=$(cat /etc/network/interfaces | grep -A5 "^iface eth0 inet static");
+		CIP=($(echo -e "$CONTENT" | grep address | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CSM=($(echo -e "$CONTENT" | grep netmask | cut -f 2 -d " " | sed 's/\./\ /g'));
+		CGW=($(echo -e "$CONTENT" | grep gateway | cut -f 2 -d " " | sed 's/\./\ /g'));
+
+		# Read nameservers from /etc/resolv.conf
+		NS1=();
+		NS2=();
+		NS3=();
+		if [ $(cat /etc/resolv.conf | grep nameserver | wc -l) -gt 0 ]; then
+			RNS=($(cat /etc/resolv.conf | grep nameserver | sed 's/nameserver //g' ))
+			if [ ${#RNS[@]} -gt 0 ]; then
+				NS1=($(echo -e "${RNS[0]}" | sed 's/\./\ /g'));
+			fi
+			if [ ${#RNS[@]} -gt 1 ]; then
+				NS2=($(echo -e "${RNS[1]}" | sed 's/\./\ /g'));
+			fi
+			if [ ${#RNS[@]} -gt 2 ]; then
+				NS3=($(echo -e "${RNS[2]}" | sed 's/\./\ /g'));
+			fi
+		fi
+	fi
+
+	IP=();
+	SM=();
+	GW=();
+	ONS1=();
+	ONS2=();
+	ONS3=();
+
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "$1" --form "\n  Press up/down to move between fields" 19 55 0 \
+		"Address:" 1 1 "${CIP[0]}" 1 15 4 3 \
+			"." 1 19 "${CIP[1]}" 1 20 4 3 \
+			"." 1 24 "${CIP[2]}" 1 25 4 3 \
+			"." 1 29 "${CIP[3]}" 1 30 4 3 \
+		"Subnet:" 3 1 "${CSM[0]}" 3 15 4 3 \
+			"." 3 19 "${CSM[1]}" 3 20 4 3 \
+			"." 3 24 "${CSM[2]}" 3 25 4 3 \
+			"." 3 29 "${CSM[3]}" 3 30 4 3 \
+		"Gateway:" 5 1 "${CGW[0]}" 5 15 4 3 \
+			"." 5 19 "${CGW[1]}" 5 20 4 3 \
+			"." 5 24 "${CGW[2]}" 5 25 4 3 \
+			"." 5 29 "${CGW[3]}" 5 30 4 3 \
+		"NS 1:" 7 1 "${NS1[0]}" 7 15 4 3 \
+			"." 7 19 "${NS1[1]}" 7 20 4 3 \
+			"." 7 24 "${NS1[2]}" 7 25 4 3 \
+			"." 7 29 "${NS1[3]}" 7 30 4 3 \
+		"NS 2:" 9 1 "${NS2[0]}" 9 15 4 3 \
+			"." 9 19 "${NS2[1]}" 9 20 4 3 \
+			"." 9 24 "${NS2[2]}" 9 25 4 3 \
+			"." 9 29 "${NS2[3]}" 9 30 4 3 \
+		"NS 3:" 11 1 "${NS3[0]}" 11 15 4 3 \
+			"." 11 19 "${NS3[1]}" 11 20 4 3 \
+			"." 11 24 "${NS3[2]}" 11 25 4 3 \
+			"." 11 29 "${NS3[3]}" 11 30 4 3 \
+	3>&1 1>&2 2>&3);
+
+	if [ $? -ge 1 ]; then
+		xbian-lan "$1"
+		return 0;
+	fi
+
+	I=0;
+
+	echo -e "$VALUES" > /tmp/xbian-config-args
+
+	while read LINE; do
+		if [ $I -gt 19 ]; then
+			ONS3[$(($I-20))]=$LINE;
+		elif [ $I -gt 15 ]; then
+			ONS2[$(($I-16))]=$LINE;
+		elif [ $I -gt 11 ]; then
+			ONS1[$(($I-12))]=$LINE;
+		elif [ $I -gt 7 ]; then
+			GW[$(($I-8))]=$LINE;
+		elif [ $I -gt 3 ]; then
+			SM[$(($I-4))]=$LINE;
+		else
+			IP[$I]=$LINE;
+		fi
+		I=$(($I+1));
+	done < /tmp/xbian-config-args;
+	rm /tmp/xbian-config-args;
+
+	# Check that ip is valid
+	if ! case "$(echo ${IP[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		showdialog "$1" "Close" "\n        You didn't enter a valid ip address"
+		changelanstatic "$1" "$VALUES";
+		exit 0;
+	fi
+
+	# Check that netmask is valid
+	if ! case "$(echo ${SM[@]} | sed 's/\ /\./g')" in
+		255.0.0.0 | 255.255.0.0 | 255.255.255.0 | 255.255.255.255 ) true ;;
+		*) false ;;
+	esac; then
+		showdialog "$1" "Close" "\n       You didn't enter a valid subnet"
+		changelanstatic "$1" "$VALUES";
+		exit 0;
+	fi
+
+	# Check that gateway is a valid ip
+	if ! case "$(echo ${GW[@]} | sed 's/\ /\./g')" in
+		*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+		*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+		[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+		*.*.*.* ) true ;;
+		*) false ;;
+	esac; then
+		showdialog "$1" "Close" "\n         You didn't enter a valid gateway"
+		changelanstatic "$1" "$VALUES";
+		exit 0;
+	fi
+
+	# Check that ns1 is valid, if existing
+	if [ ${#ONS1[@]} -gt 0 ]; then
+		if ! case "$(echo ${ONS1[@]} | sed 's/\ /\./g')" in
+			*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+			*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+			[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+			*.*.*.* ) true ;;
+			*) false ;;
+		esac; then
+			showdialog "$1" "Close" "\n         Invalid address for nameserver 1"
+			changelanstatic "$1" "$VALUES";
+			exit 0;
+		fi
+	fi
+
+	# Check that ns2 is valid, if existing
+	if [ ${#ONS2[@]} -gt 0 ]; then
+		if ! case "$(echo ${ONS2[@]} | sed 's/\ /\./g')" in
+			*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+			*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+			[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+			*.*.*.* ) true ;;
+			*) false ;;
+		esac; then
+			showdialog "$1" "Close" "\n         Invalid address for nameserver 2"
+			changelanstatic "$1" "$VALUES";
+			exit 0;
+		fi
+	fi
+
+	# Check that ns3 is valid, if existing
+	if [ ${#ONS3[@]} -gt 0 ]; then
+		if ! case "$(echo ${ONS3[@]} | sed 's/\ /\./g')" in
+			*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
+			*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
+			[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
+			*.*.*.* ) true ;;
+			*) false ;;
+		esac; then
+			showdialog "$1" "Close" "\n         Invalid address for nameserver 3"
+			changelanstatic "$1" "$VALUES";
+			exit 0;
+		fi
+	fi
+
+	CONFIG="iface eth0 inet static\naddress ";
+	I=0;
+	for VALUE in ${IP[@]}; do
+		CONFIG+="$VALUE";
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetwork ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=0;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nnetmask ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${SM[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\nbroadcast ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${IP[@]}; do
+		if [ $I -eq 3 ]; then
+			CONFIG+=255;
+		else
+			CONFIG+=$VALUE;
+		fi
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		else
+			CONFIG+="\ngateway ";
+		fi
+		I=$(($I+1));
+	done;
+	I=0;
+	for VALUE in ${GW[@]}; do
+		CONFIG+=$VALUE;
+		if [ $I -lt 3 ]; then
+			CONFIG+=".";
+		fi
+		I=$(($I+1));
+	done;
+
+	# Modify /etc/resolv.conf
+	eval "sed -i '/nameserver/d' /etc/resolv.conf"
+	NNS=0;
+	if [ ${#ONS1[@]} -eq 4 ]; then
+		I=0;
+		NSLINE="";
+		for VALUE in ${ONS1[@]}; do
+			NSLINE+=$VALUE;
+			if [ $I -lt 3 ]; then
+				NSLINE+=".";
+			fi
+			I=$(($I+1));
+		done;
+		echo -e "nameserver $NSLINE" >> /etc/resolv.conf
+		NNS=$(($NNS+1))
+	fi
+	if [ ${#ONS2[@]} -eq 4 ]; then
+		I=0;
+		NSLINE="";
+		for VALUE in ${ONS2[@]}; do
+			NSLINE+=$VALUE;
+			if [ $I -lt 3 ]; then
+				NSLINE+=".";
+			fi
+			I=$(($I+1));
+		done;
+		echo -e "nameserver $NSLINE" >> /etc/resolv.conf
+		NNS=$(($NNS+1))
+	fi
+	if [ ${#ONS3[@]} -eq 4 ]; then
+		I=0;
+		NSLINE="";
+		for VALUE in ${ONS3[@]}; do
+			NSLINE+=$VALUE;
+			if [ $I -lt 3 ]; then
+				NSLINE+=".";
+			fi
+			I=$(($I+1));
+		done;
+		echo -e "nameserver $NSLINE" >> /etc/resolv.conf
+		NNS=$(($NNS+1))
+	fi
+
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
+		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
+		mv /etc/network/interfaces.new /etc/network/interfaces	
+	fi
+	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -gt 0 ]; then
+		eval "sed -i 's/iface eth0 inet dhcp/$CONFIG/g' /etc/network/interfaces"
+		showdialog "$1" "Close" "\n          LAN static settings changed."
+	fi
+}
+
+xbian-lan() {
+	TYPE=$(dialog --backtitle "$BACKTITLE" --title 'Config > Settings > Configure LAN' --ok-label Select --cancel-label Return --menu '' 8 55 2 1 "DHCP" 2 "Fixed" 3>&1 1>&2 2>&3)
+	case "$TYPE" in
+		1)
+			changelandhcp $1;
+		;;
+		2)
+			changelanstatic $1;
+		;;
+	esac
+}
+

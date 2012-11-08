@@ -10,8 +10,8 @@
 2.2.1:XBian Password:Change password for xbian user:xbian-xbianpass
 2.2.2:Root Password :Change password for root user:xbian-rootpass
 2.3:Networking:e.g. LAN/WLAN Settings, SSH:
-2.3.1:WLAN          :Configure wireless network connection:changewlan
-2.3.2:LAN           :Configure wired network connection:changelan 
+2.3.1:WLAN          :Configure wireless network connection:xbian-wlan
+2.3.2:LAN           :Configure wired network connection:xbian-lan
 2.3.3:SSH root login:Enable/Disable SSH root login:changesshroot 
 3:Packages   :Install or remove additional packages:
 3.1:Remote:Install packages from internet:remotepackages
