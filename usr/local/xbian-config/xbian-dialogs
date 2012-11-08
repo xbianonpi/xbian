@@ -29,8 +29,8 @@
 # $5 (optional) Width
 showdialog() {
 	# Default width and height
-	HEIGHT=12
-	WIDTH=70
+	HEIGHT=7
+	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 3 ]; then
 		HEIGHT=$4
@@ -53,8 +53,8 @@ showdialog() {
 # $4 (optional) Width
 showinfo() {
 	# Default width and height
-	HEIGHT=12
-	WIDTH=70
+	HEIGHT=7
+	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 2 ]; then
 		HEIGHT=$3
@@ -76,8 +76,8 @@ showinfo() {
 # $4 (optional) Width
 showyesno() {
 	# Default width and heigt
-	HEIGHT=12
-	WIDTH=70
+	HEIGHT=7
+	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 2 ]; then
 		HEIGHT=$3
@@ -114,6 +114,6 @@ showmenu () {
 notimplementedyet() {
 	showdialog 	"Config > *" \
 			"Close" \
-			"\n\n             Not implemented yet" 9 50
+			"\n\n             Not implemented yet"
 	mainmenu;
 }
