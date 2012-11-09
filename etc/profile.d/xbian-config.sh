@@ -17,6 +17,8 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 #
-if [ $(id -u) -eq 1001 ]; then
-        sudo xbian-config
+if ! [[ -z $SSH_CONNECTION && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX" ]]; then
+        if [ $(id -u) -eq 1001 ]; then
+                sudo xbian-config
+        fi
 fi
