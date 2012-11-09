@@ -13,6 +13,9 @@
 2.3.1:WLAN          :Configure wireless network connection:xbian-wlan
 2.3.2:LAN           :Configure wired network connection:xbian-lan
 2.3.3:SSH root login:Enable/Disable SSH root login:xbian-sshroot
+2.4:Licenses  :Add/Remove hardware decoding licenses:
+2.4.1:VC1         :Enter/remove your VC1 license:xbian-licensevc1
+2.4.2:MPG2        :Enter/remove your MPG2 license:xbian-licensempg2
 3:Packages   :Install or remove additional packages:
 3.1:Remote:Install packages from internet:remotepackages
 3.2:Local :Install packages from *.tar.gz:remotepackages
