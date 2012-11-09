@@ -19,6 +19,5 @@
 #
 if [[ -z $SSH_CONNECTION && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX"  ]]; then
         echo -e '\e[40;30m'
-        dmesg -n 1
         clear
 fi
