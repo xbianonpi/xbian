@@ -1,0 +1,30 @@
+#!/bin/bash
+
+function xbian-licensempg2() {
+	SETTING=$(cat /boot/config.txt | grep 'decode_MPG2');
+	CLICENSE=$(cat /boot/config.txt | grep 'decode_MPG2' | cut -f 2 -d=);
+	if [ ! -z $SETTING ]; then
+		BUTTON="Change";
+		MESSAGE="changed";
+	else
+		BUTTON="Insert";
+		MESSAGE="inserted";
+	fi
+	LICENSE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label $BUTTON --inputbox "License MPG2:" 7 80 $CLICENSE 3>&1 1>&2 2>&3)
+	if [ $? -eq 0 ]; then
+		if [ ! -z $LICENSE ]; then
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING/decode_MPG2=$LICENSE/g" /boot/config.txt
+			else
+				echo "decode_MPG2=$LICENSE" >> /boot/config.txt
+			fi
+			showdialog "$1" "Close" "\n        MPG2 license succesfully $MESSAGE"
+		else
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING//g" /boot/config.txt
+				showdialog "$1" "Close" "\n        VC-1 license succesfully deleted"
+			fi
+		fi
+	fi
+	sed -i '/^$/d' /boot/config.txt
+}
