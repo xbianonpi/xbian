@@ -18,6 +18,6 @@
 #with Xbian. If not, see <http://www.gnu.org/licenses/>
 #
 if [[ -z $SSH_CONNECTION && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX"  ]]; then
-        echo -e '\e[40;30m'
+        export PS1="\e[40;30m";
         clear
 fi
