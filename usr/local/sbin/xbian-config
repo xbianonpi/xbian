@@ -468,24 +468,22 @@ changelicensempg2() {
 		MESSAGE="inserted";
 	fi
 	LICENSE=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > License MPG2" --ok-label $BUTTON --inputbox "License MPG2:" 7 80 $CLICENSE 3>&1 1>&2 2>&3)
-	if [ ! -z $LICENSE ]; then
-		if [ ! -z $SETTING ]; then
-			CHANGE="sed -i 's/$SETTING/decode_MPG2=$LICENSE/g' /boot/config.txt";
-			eval $CHANGE;
+	if [ $? -eq 0 ]; then
+		if [ ! -z $LICENSE ]; then
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING/decode_MPG2=$LICENSE/g" /boot/config.txt
+			else
+				echo "decode_MPG2=$LICENSE" >> /boot/config.txt
+			fi
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > License MPG2" --ok-label Close --msgbox "\n        MPG2 license succesfully $MESSAGE" 7 55
 		else
-			echo "goed";
-			echo "decode_MPG2=$LICENSE" >> /boot/config.txt
-		fi
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > License MPG2" --ok-label Close --msgbox "\n        MPG2 license succesfully $MESSAGE" 7 55
-	else
-		if [ ! -z $SETTING ]; then
-			CHANGE="sed -i 's/$SETTING//g' /boot/config.txt";
-			eval $CHANGE;
-			dialog --backtitle "$BACKTITLE" --title "Config > Settings > License MPG2" --ok-label Close --msgbox "\n        VC-1 license succesfully deleted" 7 55
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING//g" /boot/config.txt
+				dialog --backtitle "$BACKTITLE" --title "Config > Settings > License MPG2" --ok-label Close --msgbox "\n        VC-1 license succesfully deleted" 7 55
+			fi
 		fi
 	fi
-	grep -v '^$' /boot/config.txt > /boot/config.new
-	mv /boot/config.new /boot/config.txt
+	sed -i '/^$/d' /boot/config.txt
 	settings;
 	exit 0
 }
@@ -501,23 +499,22 @@ changelicensevc1() {
 		MESSAGE="inserted";
 	fi
 	LICENSE=$(dialog --backtitle "$BACKTITLE" --title "Config > Settings > License VC-1" --ok-label $BUTTON --inputbox "License VC-1:" 7 80 $CLICENSE 3>&1 1>&2 2>&3)
-	if [ ! -z $LICENSE ]; then
-		if [ ! -z $SETTING ]; then
-			CHANGE="sed -i 's/$SETTING/decode_WVC1=$LICENSE/g' /boot/config.txt";
-			eval $CHANGE;
+	if [ $? -eq 0 ]; then
+		if [ ! -z $LICENSE ]; then
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING/decode_WVC1=$LICENSE/g" /boot/config.txt;
+			else
+				echo "decode_WVC1=$LICENSE" >> /boot/config.txt
+			fi
+			dialog --backtitle "$BACKTITLE" --title "Config > Settings > License VC-1" --ok-label Close --msgbox "\n        VC-1 license succesfully $MESSAGE" 7 55
 		else
-			echo "decode_WVC1=$LICENSE" >> /boot/config.txt
-		fi
-		dialog --backtitle "$BACKTITLE" --title "Config > Settings > License VC-1" --ok-label Close --msgbox "\n        VC-1 license succesfully $MESSAGE" 7 55
-	else
-		if [ ! -z $SETTING ]; then
-			CHANGE="sed -i 's/$SETTING//g' /boot/config.txt";
-			eval $CHANGE;
-			dialog --backtitle "$BACKTITLE" --title "Config > Settings > License VC-1" --ok-label Close --msgbox "\n        VC-1 license succesfully deleted" 7 55
+			if [ ! -z $SETTING ]; then
+				sed -i "s/$SETTING//g" /boot/config.txt
+				dialog --backtitle "$BACKTITLE" --title "Config > Settings > License VC-1" --ok-label Close --msgbox "\n        VC-1 license succesfully deleted" 7 55
+			fi
 		fi
 	fi
-	grep -v '^$' /boot/config.txt > /boot/config.new
-	mv /boot/config.new /boot/config.txt
+	sed -i '/^$/d' /boot/config.txt
 	settings;
 	exit 0
 }
