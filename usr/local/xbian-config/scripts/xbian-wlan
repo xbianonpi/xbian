@@ -129,9 +129,7 @@ changewlanstatic() {
 		echo -e "$2" > /tmp/xbian-config-args
 
 		while read LINE; do
-			if [ $I -gt 19 ]; then
-				NS3[$(($I-20))]=$LINE;
-			elif [ $I -gt 15 ]; then
+			if [ $I -gt 15 ]; then
 				NS2[$(($I-16))]=$LINE;
 			elif [ $I -gt 11 ]; then
 				NS1[$(($I-12))]=$LINE;
@@ -154,7 +152,6 @@ changewlanstatic() {
 		# Read nameservers from /etc/resolv.conf
 		NS1=();
 		NS2=();
-		NS3=();
 		if [ $(cat /etc/resolv.conf | grep nameserver | wc -l) -gt 0 ]; then
 			RNS=($(cat /etc/resolv.conf | grep nameserver | sed 's/nameserver //g' ))
 			if [ ${#RNS[@]} -gt 0 ]; then
@@ -163,12 +160,7 @@ changewlanstatic() {
 			if [ ${#RNS[@]} -gt 1 ]; then
 				NS2=($(echo -e "${RNS[1]}" | sed 's/\./\ /g'));
 			fi
-			if [ ${#RNS[@]} -gt 2 ]; then
-				NS3=($(echo -e "${RNS[2]}" | sed 's/\./\ /g'));
-			fi
-	
 		fi
-
 	fi
 
 	IP=();
@@ -176,7 +168,6 @@ changewlanstatic() {
 	GW=();
 	ONS1=();
 	ONS2=();
-	ONS3=();
 
 	# Read SSID and PSK from wpa_supplicant.conf
 	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
@@ -218,18 +209,14 @@ changewlanstatic() {
 			"." 5 19 "${CGW[1]}" 5 20 4 3 \
 			"." 5 24 "${CGW[2]}" 5 25 4 3 \
 			"." 5 29 "${CGW[3]}" 5 30 4 3 \
-		"NS 1:" 7 1 "${NS1[0]}" 7 15 4 3 \
+		"Nameserver:" 7 1 "${NS1[0]}" 7 15 4 3 \
 			"." 7 19 "${NS1[1]}" 7 20 4 3 \
 			"." 7 24 "${NS1[2]}" 7 25 4 3 \
 			"." 7 29 "${NS1[3]}" 7 30 4 3 \
-		"NS 2:" 9 1 "${NS2[0]}" 9 15 4 3 \
+		"Nameserver:" 9 1 "${NS2[0]}" 9 15 4 3 \
 			"." 9 19 "${NS2[1]}" 9 20 4 3 \
 			"." 9 24 "${NS2[2]}" 9 25 4 3 \
 			"." 9 29 "${NS2[3]}" 9 30 4 3 \
-		"NS 3:" 11 1 "${NS3[0]}" 11 15 4 3 \
-			"." 11 19 "${NS3[1]}" 11 20 4 3 \
-			"." 11 24 "${NS3[2]}" 11 25 4 3 \
-			"." 11 29 "${NS3[3]}" 11 30 4 3 \
 	3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
@@ -242,9 +229,7 @@ changewlanstatic() {
 	echo -e "$VALUES" > /tmp/xbian-config-args
 
 	while read LINE; do
-		if [ $I -gt 19 ]; then
-			ONS3[$(($I-20))]=$LINE;
-		elif [ $I -gt 15 ]; then
+		if [ $I -gt 15 ]; then
 			ONS2[$(($I-16))]=$LINE;
 		elif [ $I -gt 11 ]; then
 			ONS1[$(($I-12))]=$LINE;
@@ -320,21 +305,6 @@ changewlanstatic() {
 			*) false ;;
 		esac; then
 			showdialog "$1" "Close" "\n         Invalid address for nameserver 2"
-			changewlanstatic "$1" "$VALUES";
-			exit 0;
-		fi
-	fi
-
-	# Check that ns3 is valid, if existing
-	if [ ${#ONS3[@]} -gt 0 ]; then
-		if ! case "$(echo ${ONS3[@]} | sed 's/\ /\./g')" in
-			*[!.0-9]* | *.*.*.*.* | *..* | [!0-9]* | *[!0-9] ) false ;;
-			*25[6-9]* | *2[6-9][0-9]* | *[3-9][0-9][0-9]* | *[0-9][0-9][0-9][0-9]* ) false ;;
-			[!1-9].*.*.* | *.*.*.[!1-9] ) false ;;
-			*.*.*.* ) true ;;
-			*) false ;;
-		esac; then
-			showdialog "$1" "Close" "\n         Invalid address for nameserver 3"
 			changewlanstatic "$1" "$VALUES";
 			exit 0;
 		fi
@@ -418,19 +388,6 @@ changewlanstatic() {
 		I=0;
 		NSLINE="";
 		for VALUE in ${ONS2[@]}; do
-			NSLINE+=$VALUE;
-			if [ $I -lt 3 ]; then
-				NSLINE+=".";
-			fi
-			I=$(($I+1));
-		done;
-		echo -e "nameserver $NSLINE" >> /etc/resolv.conf		
-		NNS=$(($NNS+1))
-	fi
-	if [ ${#ONS3[@]} -eq 4 ]; then
-		I=0;
-		NSLINE="";
-		for VALUE in ${ONS3[@]}; do
 			NSLINE+=$VALUE;
 			if [ $I -lt 3 ]; then
 				NSLINE+=".";
