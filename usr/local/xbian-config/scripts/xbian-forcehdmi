@@ -11,7 +11,7 @@ function xbian-forcehdmi() {
 					"\n      Force HDMI hotplug successfully enabled"
 		;;
 		1)
-			set_config_var force_hdmi_hotplug 0 /boot/config.txt >/dev/null
+			remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
 			showdialog 	"$1" \
 					"Close" \
 					"\n      Force HDMI hotplug successfully disabled"
