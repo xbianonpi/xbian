@@ -30,13 +30,42 @@ sudo ln -s /usr/src/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-
 sudo mkdir /opt/raspberry
 cd /opt/raspberry
 sudo git clone --depth 5 git://github.com/raspberrypi/linux.git
-cd linux
+mv linux linux3.2.27
 
-#Download the used config from the XBian github
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config
+#Begin 3.6.1
+cp -R linux3.2.27 linux3.6.1
+cd linux3.6.1/
+git checkout rpi-3.6.y
+cd /opt/raspberry
+rm -r linux3.6.1/drivers/misc/vc04_services
+cp -R linux3.2.27/drivers/misc/vc04_services linux3.6.1/drivers/misc/
+rm -r linux3.6.1/sound/arm
+cp -R linux3.2.27/sound/arm linux3.6.1/sound
+rm -r linux3.6.1/drivers/staging/media/lirc
+cp -R linux3.2.27/drivers/staging/media/lirc linux3.6.1/drivers/staging/media/
+cd /opt/linux3.6.1
+#End 3.6.1
+
+
+#Begin 3.2.27
+cd linux3.2.27
+#End 3.2.27
+
+#Begin 3.2.27
+#Download the used config from the XBian github for 3.2.27
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config3_2_27
+mv .config3_2_27 .config
+sudo ln -s /opt/raspberry/linux3.2.27/drivers/staging/media/lirc /opt/raspberry/linux3.2.27/drivers/staging/lirc
+#End 3.2.27
+
+#Begin 3.6.1
+#Download the used config from the XBian github for 3.2.27
+sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config3_6_1
+mv .config3_6.1 .config
+sudo ln -s /opt/raspberry/linux3.6.1/drivers/staging/media/lirc /opt/raspberry/linux3.6.1/drivers/staging/lirc
+#End 3.6.1
 
 #Symlink the lirc drivers to get the patch working
-sudo ln -s /opt/raspberry/linux/drivers/staging/media/lirc /opt/raspberry/linux/drivers/staging/lirc
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/additional-lirc_rpi+lirc_xbox.patch
 sudo patch -p1 < additional-lirc_rpi+lirc_xbox.patch
 
