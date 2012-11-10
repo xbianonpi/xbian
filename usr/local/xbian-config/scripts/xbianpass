@@ -3,7 +3,7 @@
 function xbianpass() {
         VALUES=$(dialog --ok-label "Change" \
                   --backtitle "$BACKTITLE" \
-                  --title "$1" \
+                  --title " $1 " \
                   --insecure \
                   --passwordform "\n   Change xbian user password: " \
                 10 55 0 \

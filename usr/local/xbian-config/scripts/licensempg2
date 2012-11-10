@@ -10,7 +10,7 @@ function licensempg2() {
 		BUTTON="Insert";
 		MESSAGE="inserted";
 	fi
-	LICENSE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label $BUTTON --inputbox "License MPG2:" 7 80 $CLICENSE 3>&1 1>&2 2>&3)
+	LICENSE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label $BUTTON --inputbox "License MPG2:" 7 55 $CLICENSE 3>&1 1>&2 2>&3)
 	if [ $? -eq 0 ]; then
 		if [ ! -z $LICENSE ]; then
 			if [ ! -z $SETTING ]; then

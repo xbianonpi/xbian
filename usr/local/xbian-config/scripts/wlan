@@ -1,7 +1,7 @@
 #!/bin/bash
 
 changewlanunprotected() {
-	SSID=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Change --inputbox "SSID:" 7 55 $3 3>&1 1>&2 2>&3)
+	SSID=$(dialog --backtitle "$BACKTITLE" --title " $1 " --ok-label Change --inputbox "SSID:" 7 55 $3 3>&1 1>&2 2>&3)
 	if [ $? -eq 0 ]; then
 		if [ ! -z $SSID ]; then
 			eval "$2=\"$SSID\""
@@ -15,9 +15,9 @@ changewlanunprotected() {
 }
 
 changewlanprotected() {
-	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "$1" --form "\n  Press up/down to move between fields" 11 55 0 \
-		"SSID:" 1 1 "$4" 1 15 21 20 \
-		"Password:" 3 1 "$5" 3 15 21 20 \
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title " $1 " --form "\n  Press up/down to move between fields" 11 55 0 \
+		"SSID:" 1 1 "$4" 1 15 21 128 \
+		"Password:" 3 1 "$5" 3 15 21 128 \
 		3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
@@ -109,9 +109,9 @@ changewlandhcp() {
 	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 1 ]; then
 		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
 		mv /etc/network/interfaces.new /etc/network/interfaces
-		showdialog "$1" "Close" "\n          WLAN settings set to DHCP." 
+		showdialog " $1 " "Close" "\n          WLAN settings set to DHCP." 
 	else
-		showdialog "$1" "Close" "\n      WLAN settings already set to DHCP."
+		showdialog " $1 " "Close" "\n      WLAN settings already set to DHCP."
 	fi
 }
 
