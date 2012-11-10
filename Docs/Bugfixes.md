@@ -1,1 +1,0 @@
-All bugfixes can be found on our wiki: https://github.com/Koenkk/xbian/wiki/Bugfixes-XBian-1.0-Alpha-1
