@@ -81,7 +81,7 @@ filedirselect() {
 	IFS=" ";
 	case $BUTTON in
 		1)
-			eval $2;
+			return 0;
 		;;
 		3)
 			if [ $4 == "/" ]; then
@@ -213,4 +213,193 @@ set_overclock() {
 #  $1 package name
 function pkg_installed() {
 	return $(dpkg-query -W -f='${Status}\n' "$1" | grep ' installed' | wc -l);
+}
+
+savepackage() {
+	PKGFILE=$2
+	PKGPATH=$1
+	TITLE=$3
+
+	NAME=$(basename $PKGFILE);
+	NAME=${NAME%.*}
+	#LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Save --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	filedirselect LOCATION "packages" "Settings > $TITLE > Save" "/home/xbian/" 0 0 " ";
+	if [ $LOCATION != "" ]; then
+		if [ -d $LOCATION ]; then
+			if [[  -d "/tmp/xbiancache" && $(ls -l "/tmp/xbiancache/" | grep -v "total" | wc -l) -gt 0 ]]; then
+				tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
+				tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
+			else
+				tar -cf "$LOCATION/$NAME.tar" $2 >/dev/null
+			fi
+			gzip "$LOCATION/$NAME.tar" >/dev/null
+			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
+			return 0;
+		else
+			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
+			savepackage $1 $2 $3
+		fi
+		exit 0;
+	fi
+}
+
+#Installs a set of packages
+#$1 = Installation file
+#$2 = Title of dialogs
+installpackage() {
+INSTALLS=$1;
+TITLE=$2;
+#Read package file
+CONTENT=$(cat $INSTALLS);
+CONTENT=$(echo -e "$CONTENT\n");
+PACKAGESAPT=()
+PACKAGESAPT=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}'));
+PACKAGESDIRECT=()
+PACKAGESDIRECT=($(echo -e "$CONTENT" | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
+POSTINSTALL=()
+IFS=$'\n';
+POSTINSTALL=($(echo -e "$CONTENT" 2>&1 | \
+while read X; do \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+done));
+
+PREINSTALL=()
+IFS=$'\n';
+PREINSTALL=($(echo -e "$CONTENT" 2>&1 | \
+while read X; do \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 1 ]]; then START=0; fi; \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PreInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+done));
+
+#if PACKAGELOCATION
+if [ $PACKAGELOCATION -eq 1 ]; then
+
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
+DEPENDENCIES=()
+DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
+while read X; do \
+grep 'Inst ' <<< $X | awk '{print $2}';\
+done));
+
+#Get all dependencies of a apt package
+URLS=()
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+URLS+=("http://archive.raspbian.org/raspbian/$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")");
+done
+
+#Add all custom linkx
+for PACKAGE in "${PACKAGESDIRECT[@]}"
+do
+URLS+=("$PACKAGE");
+done
+
+#Get individual file sizes
+NRFILE=0;
+TOTALFILES=${#URLS[@]};
+PKGSIZES=()
+PKGSIZES=($(wget --spider ${URLS[@]} 2>&1 | \
+while read X; do \
+SIZE=$(grep -i 'length' <<< "$X" | awk '{print $2}' | sed 's:^.*[^0-9]\([0-9]*\)$:\1:');\
+if [ ! -z $SIZE ]; then echo $SIZE; fi;\
+done));
+
+#Calculate total download size
+TOTALSIZE=0;
+for SIZE in ${PKGSIZES[@]}; do
+	TOTALSIZE=$(($(($TOTALSIZE))+$(($SIZE))));
+done
+
+BYTESDOWNLOADED=0;
+NRFILE=0;
+TOTALPERCENT=0;
+LIST="";
+FIRSTFILE=0;
+
+#Download package and create progress bar
+wget -P /tmp/xbiancache/ --progress=bar:force ${URLS[@]} 2>&1 | \
+while read -d "%" X; do \
+FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}');\
+PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
+BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K');\
+PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K');\
+if [ -z $PERCENT ]; then PERCENT=0; fi;\
+if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTES=0; BYTESDOWNLOADED=$TOTALSIZE; fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
+if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\
+cat <<EOF
+XXX
+$TOTALPERCENT
+\n$LIST $PERCENT%\n\n\n  Total percentage done ($(($(($BYTESDOWNLOADED))+$(($BYTES))))/$TOTALSIZE):\n 
+XXX
+EOF
+done | dialog --title "Config > $TITLE" --gauge "\n   Please wait..." 11 70 0;
+sleep 2;
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
+sleep 1;
+
+#else PACKAGELOCATION
+else
+
+#Save depency order
+DEPENDENCIES=($(ls -l /tmp/xbiancache/*.deb | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
+
+#fi PACKAGELOCATION
+fi
+
+#Install all apt packages
+NRPACKAGES=${#DEPENDENCIES[@]};
+CURRENTPACKAGE=1;
+
+#Pre installation
+NRSTEPS=${#PREINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${PREINSTALL[@]}"
+do
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+CURRENTSTEP=$(($CURRENTSTEP+1));
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
+done
+
+#Install apt packages
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+FILE=$(basename $PACKAGE);
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
+if [ $DEBUG -eq 0 ]; then
+	dpkg -i "/tmp/xbiancache/"$(basename $(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")) >/dev/null;
+else
+	sleep 1;
+fi;
+CURRENTPACKAGE=$(($CURRENTPACKAGE+1));
+done
+
+#Post installation
+NRSTEPS=${#POSTINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${POSTINSTALL[@]}"
+do
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+CURRENTSTEP=$(($CURRENTSTEP+1));
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
+done
+
+sleep 1;
+IFS=$ORIGINALIFS;
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
+dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
+case "$?" in
+	0) 
+		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
+	;;
+esac
 }

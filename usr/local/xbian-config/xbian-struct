@@ -18,5 +18,5 @@
 2.4.2:MPG2        :Enter/remove your MPG2 license:licensempg2
 3:Packages   :Install or remove additional packages:
 3.1:Remote:Install packages from internet:remotepackages
-3.2:Local :Install packages from *.tar.gz:remotepackages
+3.2:Local :Install packages from *.tar.gz:localpackages
 4:Updates    :Check for XBian updates:notimplemented
