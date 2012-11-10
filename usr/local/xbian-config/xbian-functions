@@ -233,10 +233,10 @@ savepackage() {
 				tar -cf "$LOCATION/$NAME.tar" $2 >/dev/null
 			fi
 			gzip "$LOCATION/$NAME.tar" >/dev/null
-			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --msgbox "\n Package saved to:\n $LOCATION/$NAME.tar.gz" 8 44
+			showdialog "Config > $TITLE > Save" "Ok" "\n       Package saved to:\n  $LOCATION/$NAME.tar.gz" 8 55
 			return 0;
 		else
-			dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Close --msgbox "\n\n\n This location doesn't exist" 8 44
+			showdialog "Config > $TITLE > Save" "Close" "\n         This location doesn't exist"
 			savepackage $1 $2 $3
 		fi
 		exit 0;
@@ -247,6 +247,14 @@ savepackage() {
 #$1 = Installation file
 #$2 = Title of dialogs
 installpackage() {
+
+	# First check that package db is updated
+	if [ $PACKAGEDBUPDATED -eq 0 ]; then
+		showinfo " $1 " "\n\n         Updating package database..."
+		apt-get update > /dev/null 2>&1
+		PACKAGEDBUPDATED=1
+	fi
+
 INSTALLS=$1;
 TITLE=$2;
 #Read package file
@@ -276,7 +284,7 @@ done));
 #if PACKAGELOCATION
 if [ $PACKAGELOCATION -eq 1 ]; then
 
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
+showinfo "$TITLE > $1" "\n\n          Generating packages list..."
 IFS=$ORIGINALIFS;
 DEPENDENCIES=()
 DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
@@ -335,9 +343,9 @@ $TOTALPERCENT
 \n$LIST $PERCENT%\n\n\n  Total percentage done ($(($(($BYTESDOWNLOADED))+$(($BYTES))))/$TOTALSIZE):\n 
 XXX
 EOF
-done | dialog --title "Config > $TITLE" --gauge "\n   Please wait..." 11 70 0;
+done | dialog --title " $TITLE > $1 " --gauge "\n   Please wait..." 11 70 0;
 sleep 2;
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   All packages downloaded." 7 50
+showinfo "$TITLE > $1" "\n\n   All packages downloaded."
 sleep 1;
 
 #else PACKAGELOCATION
@@ -358,7 +366,7 @@ NRSTEPS=${#PREINSTALL[@]};
 CURRENTSTEP=1;
 for STEP in "${PREINSTALL[@]}"
 do
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+showinfo "$TITLE > $1" "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP"
 CURRENTSTEP=$(($CURRENTSTEP+1));
 if [ $DEBUG -eq 0 ]; then
 	eval "$STEP";
@@ -371,7 +379,7 @@ done
 for PACKAGE in "${DEPENDENCIES[@]}"
 do
 FILE=$(basename $PACKAGE);
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE." 7 50
+showinfo "$TITLE > $1" "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE."
 if [ $DEBUG -eq 0 ]; then
 	dpkg -i "/tmp/xbiancache/"$(basename $(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")) >/dev/null;
 else
@@ -396,8 +404,8 @@ done
 
 sleep 1;
 IFS=$ORIGINALIFS;
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --msgbox "\n   Installation complete." 7 50
-dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $TITLE" --yesno "\n  Do you want to save package to you're local storage\n  so you don't have to download them again?" 8 60;
+showdialog "$TITLE > $1" "Ok" "\n   Installation complete."
+dialog --no-kill --backtitle "$BACKTITLE" --title "$1 > $TITLE" --yesno "\n  Do you want to save package to your local storage\n  so you don't have to download them again?" 8 60;
 case "$?" in
 	0) 
 		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
