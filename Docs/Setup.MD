@@ -37,7 +37,7 @@ dphys-swapfile dpkg-dev fake-hwclock g++ gcc hardlink keyboard-configuration lib
 libbluetooth3:armhf libboost-iostreams1.50.0 libdrm2:armhf libgfortran3:armhf libglib2.0-data libgudev-1.0-0:armhf \
 libiw30:armhf liblapack3 liblapack3gf libluajit-5.1-common libpci3:armhf libpolkit-gobject-1-0:armhf libsgutils2-2 \
 libusb-1.0-0:armhf luajit menu-xdg module-init-tools ncdu pciutils pkg-config python-rpi.gpio python3 python3-minimal \
-python3-numpy python3-rpi.gpio python3.2 python3.2-minimal raspi-copies-and-fills rsyslog shared-mime-info strace \ 
+python3-numpy python3-rpi.gpio python3.2 python3.2-minimal raspi-copies-and-fills rsyslog shared-mime-info strace \
 usbutils dillo fontconfig-config libbluetooth3 libfltk1.3:armhf libfontconfig1:armhf libfreetype6:armhf \
 libjbig2dec0 libopenjpeg2 libxext6 libxft2 libxinerama1 libxrender1 mupdf ttf-dejavu-core fuse gettext-base \
 libasprintf0c2 libasyncns0 libaudit0 libcaca0 libdirectfb-1.2-9 libflac8 libfm-data libfuse2 libgif4 libid3tag0 \
