@@ -41,7 +41,7 @@ showdialog() {
 	# Show messagebox
 	dialog \
 		--backtitle "$BACKTITLE" \
-		--title "$1" \
+		--title " $1 " \
 		--ok-label "$2" \
 		--msgbox "$3" $HEIGHT $WIDTH
 }
@@ -65,7 +65,7 @@ showinfo() {
 	# Show messagebox
 	dialog \
 		--backtitle "$BACKTITLE" \
-		--title "$1" \
+		--title " $1 " \
 		--infobox "$2" $HEIGHT $WIDTH
 }
 
@@ -88,7 +88,7 @@ showyesno() {
 	# Show yes/no dialog
 	dialog \
 		--backtitle "$BACKTITLE" \
-		--title "$1" \
+		--title " $1 " \
 		--yesno "$2" $HEIGHT $WIDTH
 }
 
@@ -96,7 +96,7 @@ showyesno() {
 # $1 Title
 # $2-n Menu items
 showmenu () {
-	TITLE="$1"
+	TITLE=" $1 "
 	shift
 	ROWS=$(($#/2))
 	HEIGHT=$(($ROWS+6))

@@ -14,7 +14,7 @@ function videoflags() {
 	if [ -z $DCEC ]; then DCEC="off"; else DCEC="on"; fi
 	if [ -z $DOSC ]; then DOSC="off"; else DOSC="on"; fi
 
-	RESULT=$(dialog --checklist "\n Various Raspberry PI video output options" 13 80 10 \
+	RESULT=$(dialog --title "$1" --checklist "\n Various Raspberry PI video output options" 13 80 10 \
 			"Force HDMI output when no tv is identified" 1 $FHDMI \
 			"Ignore HDMI output even if a tv is connected" 2 $IHDMI \
 			"Ignore CEC init, preventing wakeup of tv at reboot" 3 $ICECI \
