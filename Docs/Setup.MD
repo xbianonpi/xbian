@@ -149,7 +149,7 @@ sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUA
 #Delete auto start of raspi-config
 rm /etc/profile.d/raspi-config.sh
 
-#Enable root autologin
+#Enable xbian autologin
 sed -i 's/1:2345:respawn:\/sbin\/getty --noclear 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f xbian tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
 reboot
 
