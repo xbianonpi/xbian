@@ -37,7 +37,7 @@ ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 PACKAGEDBUPDATED=0;
 ORIGINALIFS=$IFS;
-BASEPATH="/usr/local/xbian-config"
+BASEPATH="/usr/local/include/xbian-config"
 
 # Source sub scripts
 source $BASEPATH/xbian-functions
