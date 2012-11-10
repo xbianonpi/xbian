@@ -277,6 +277,7 @@ done));
 if [ $PACKAGELOCATION -eq 1 ]; then
 
 dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n\n   Generating packages list..." 7 50
+IFS=$ORIGINALIFS;
 DEPENDENCIES=()
 DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
 while read X; do \
@@ -323,8 +324,8 @@ wget -P /tmp/xbiancache/ --progress=bar:force ${URLS[@]} 2>&1 | \
 while read -d "%" X; do \
 FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}');\
 PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
-BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K');\
-PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K');\
+BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K' | grep -iv 'M');\
+PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K' | grep -iv 'M');\
 if [ -z $PERCENT ]; then PERCENT=0; fi;\
 if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTES=0; BYTESDOWNLOADED=$TOTALSIZE; fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
 if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\

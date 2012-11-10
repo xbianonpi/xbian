@@ -1,0 +1,108 @@
+#!/bin/bash
+
+function videoflags() {
+
+	FHDMI=$(grep force_hdmi_hotplug=1 /boot/config.txt);
+	IHDMI=$(grep ignore_hdmi_hotplug=1 /boot/config.txt);
+	ICECI=$(grep ignore_cec_init=1 /boot/config.txt);
+	DCEC=$(grep ignore_cec=1 /boot/config.txt);
+	DOSC=$(grep disable_overscan=1 /boot/config.txt);
+
+	if [ -z $FHDMI ]; then FHDMI="off"; else FHDMI="on"; fi
+	if [ -z $IHDMI ]; then IHDMI="off"; else IHDMI="on"; fi
+	if [ -z $ICECI ]; then ICECI="off"; else ICECI="on"; fi
+	if [ -z $DCEC ]; then DCEC="off"; else DCEC="on"; fi
+	if [ -z $DOSC ]; then DOSC="off"; else DOSC="on"; fi
+
+	RESULT=$(dialog --checklist "\n Various Raspberry PI video output options" 13 80 10 \
+			"Force HDMI output when no tv is identified" 1 $FHDMI \
+			"Ignore HDMI output even if a tv is connected" 2 $IHDMI \
+			"Ignore CEC init, preventing wakeup of tv at reboot" 3 $ICECI \
+			"Disable CEC" 4 $DCEC \
+			"Disable overscan" 5 $DOSC 3>&1 1>&2 2>&3 )
+
+	if [ $? -eq 0 ]; then
+		case $RESULT in
+			*"Force HDMI"*) 
+				if [ $FHDMI == "off" ]; then
+					set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Force HDMI hotplug successfully enabled"
+				fi
+			;;
+			*)
+				if [ $FHDMI == "on" ]; then
+					remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Force HDMI hotplug successfully disabled"
+				fi
+			;;
+		esac
+		case $RESULT in
+			*"Ignore HDMI"*) 
+				if [ $IHDMI == "off" ]; then
+					set_config_var ignore_hdmi_hotplug 1 /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Ignore HDMI hotplug successfully enabled"
+				fi
+			;;
+			*)
+				if [ $IHDMI == "on" ]; then
+					remove_config_var "ignore_hdmi_hotplug" /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Ignore HDMI hotplug successfully disabled"
+				fi
+			;;
+		esac
+		case $RESULT in
+			*"Ignore CEC"*) 
+				if [ $ICECI == "off" ]; then
+					set_config_var ignore_cec_init 1 /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Ignore CEC init successfully enabled"
+				fi
+			;;
+			*)
+				if [ $ICECI == "on" ]; then
+					remove_config_var "ignore_cec_init" /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Ignore CEC init successfully disabled"
+				fi
+			;;
+		esac
+		case $RESULT in
+			*"Disable CEC"*) 
+				if [ $DCEC == "off" ]; then
+					set_config_var ignore_cec 1 /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      CEC is now disabled"
+				fi
+			;;
+			*)
+				if [ $DCEC == "on" ]; then
+					remove_config_var "ignore_cec" /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      CEC is now enabled"
+				fi
+			;;
+		esac
+		case $RESULT in
+			*"Disable overscan"*) 
+				if [ $DOSC == "off" ]; then
+					set_config_var disable_overscan 1 /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Overscan is now disabled"
+				fi
+			;;
+			*)
+				if [ $DOSC == "on" ]; then
+					remove_config_var "disable_overscan" /boot/config.txt >/dev/null
+					showdialog 	"$1" "Close" \
+							"\n      Overscan is now enabled"
+				fi
+			;;
+		esac
+
+	fi
+}
+
