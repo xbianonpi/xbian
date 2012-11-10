@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-rootpass() {
+function rootpass() {
 	VALUES=$(dialog --ok-label "Change" \
 		  --backtitle "$BACKTITLE" \
 		  --title "$1" \

@@ -1,5 +1,5 @@
 #!/bin/bash
-function xbian-hostname() {
+function xbhostname() {
 	CHOSTNAME=$(cat /etc/hostname);
 	HOSTNAME=$(dialog 	--backtitle "$BACKTITLE" \
 				--title "$1" \

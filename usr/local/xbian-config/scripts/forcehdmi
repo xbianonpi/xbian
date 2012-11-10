@@ -1,8 +1,8 @@
 #!/bin/bash
 
-function xbian-forcehdmi() {
+function forcehdmi() {
 	showyesno 	"$1" \
-			"\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 12 60
+			"\n  Enabling this option forces the pi to enable HDMI\n  at boot, even if no TV is connected. \n\n  Is this what you want?" 10 55
 	case "$?" in
 		0) 
 			set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null

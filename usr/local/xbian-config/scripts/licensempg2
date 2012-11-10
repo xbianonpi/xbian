@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-licensempg2() {
+function licensempg2() {
 	SETTING=$(cat /boot/config.txt | grep 'decode_MPG2');
 	CLICENSE=$(cat /boot/config.txt | grep 'decode_MPG2' | cut -f 2 -d=);
 	if [ ! -z $SETTING ]; then
