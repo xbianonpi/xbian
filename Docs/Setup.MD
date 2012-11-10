@@ -72,7 +72,7 @@ echo "xbian:raspberry" | chpasswd
 
 #Remove user pi from sudoers and add xbian user
 sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
-echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
+echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot, /bin/su" >> /etc/sudoers
 
 # Relogin with ssh; user:xbian pass:raspberry
 
