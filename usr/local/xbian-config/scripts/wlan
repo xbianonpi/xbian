@@ -75,7 +75,7 @@ changewlandhcp() {
 			changewlanprotected $1 SSID PASSWD $CSSID $CPASSWD;
 		;;
 		*)
-			xbian-wlan $1
+			wlan $1
 			return 0
 		;;
 	esac
@@ -191,7 +191,7 @@ changewlanstatic() {
 		;;
 		*)
 			IFS=$OLDIFS;
-			xbian-wlan "$1"
+			wlan "$1"
 			return 0;
 		;;
 	esac
@@ -220,7 +220,7 @@ changewlanstatic() {
 	3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
-		xbian-wlan "$1"
+		wlan "$1"
 		return 0;
 	fi
 
@@ -433,7 +433,7 @@ changewlanstatic() {
 	IFS=$OLDIFS;
 }
 
-function xbian-wlan() {
+function wlan() {
 	MODE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Select --cancel-label Return --menu '' 8 55 2 1 "DHCP" 2 "Static" 3>&1 1>&2 2>&3)
 	case "$MODE" in
 		1)

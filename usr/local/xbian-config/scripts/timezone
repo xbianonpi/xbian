@@ -1,5 +1,5 @@
 #!/bin/bash
-function xbian-timezone() {
+function timezone() {
 	showinfo	"$1" \
 			"\n   Please wait while 'tzdata' is loading..."
 	dpkg-reconfigure tzdata

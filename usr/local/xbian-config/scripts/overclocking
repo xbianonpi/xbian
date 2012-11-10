@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-overclocking() {
+function overclocking() {
 	showdialog "$1" "Close" "\nBe aware that overclocking may reduce the lifetime of your Raspberry Pi. If overclocking at a certain level causes system instability, try a more modest overclock. See http://elinux.org/RPi_Overclocking for more information." 10 65
 	showmenu	"$1" \
 			1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" \

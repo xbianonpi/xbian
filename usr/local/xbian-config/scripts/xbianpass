@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-xbianpass() {
+function xbianpass() {
         VALUES=$(dialog --ok-label "Change" \
                   --backtitle "$BACKTITLE" \
                   --title "$1" \

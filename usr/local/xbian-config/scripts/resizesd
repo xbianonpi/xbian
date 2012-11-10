@@ -21,7 +21,7 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-function xbian-resizesd() {
+function resizesd() {
 	showyesno	"$1 > Resize SD" \
 			"\n      Are you sure you want to resize you SD card?" 7 60;
 	case "$?" in

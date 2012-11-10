@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-sshroot() {
+function sshroot() {
 	if [ -z $(cat /etc/shadow | grep root | cut -f 2 -d:) ]; then
 		showdialog "$1" "Close" "\n  User root has an empty password, without a\n  password user root cannot login through ssh\n  so please set this first."
 		return 0;

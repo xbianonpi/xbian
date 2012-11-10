@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-notimplemented() {
+function notimplemented() {
         showdialog      "Config > Not implemented" \
                         "Close" \
                         "\n       This function is not yet implemented"

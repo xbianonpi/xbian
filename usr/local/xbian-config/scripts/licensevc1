@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function xbian-licensevc1() {
+function licensevc1() {
 	SETTING=$(cat /boot/config.txt | grep 'decode_WVC1');
 	CLICENSE=$(cat /boot/config.txt | grep 'decode_WVC1' | cut -f 2 -d=);
 	if [ ! -z $SETTING ]; then
