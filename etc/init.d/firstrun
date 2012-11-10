@@ -38,12 +38,12 @@ function showdialog() {
         echo -e "\n\n$(echo -e "$3" | sed ':a;N;$!ba;s/\n/ /g' | sed 's/ *$//g' | sed 's/^ *//g')\n\n";
 }
 
-source /usr/local/xbian-config/scripts/xbian-resizesd;
+source /usr/local/xbian-config/scripts/resizesd;
 
 case "$1" in
   start)
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
-	xbian-resizesd;
+	resizesd;
 	update-rc.d firstrun remove
 	rm /etc/init.d/firstrun
 	reboot
