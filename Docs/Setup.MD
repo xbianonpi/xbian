@@ -69,12 +69,16 @@ rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 #Setting up xbian user and deleting pi user
 useradd -G sudo -G input -m -s /bin/bash xbian
 echo "xbian:raspberry" | chpasswd
-chmod +s /bin/su
+
+#Remove user pi from sudoers and add xbian user
+sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
+echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
 
 # Relogin with ssh; user:xbian pass:raspberry
 
 #Kill all processes started by user pi
 sudo su 
+chmod +s /bin/su
 for i in $(pgrep -u pi); do kill -9 $i; done;
 
 #Deleting user pi
@@ -141,10 +145,6 @@ export LANGUAGE=C
 
 #Make locale settings permanent
 sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUAGE=C/g' /etc/profile
-
-#Remove user pi from sudoers and add xbian user
-sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
-echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
 
 #Delete auto start of raspi-config
 rm /etc/profile.d/raspi-config.sh
