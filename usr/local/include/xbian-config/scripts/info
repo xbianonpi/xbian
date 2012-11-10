@@ -1,0 +1,4 @@
+#!/bin/bash
+function info() {
+    showdialog "$1" "Ok" "\n   This tool provides a straight-forward way of doing\n   initial configuration of XBian. Although it can be\n   run at any time, some of the options may have\n   difficulties if you have heavily customised your\n   installation." 11 60
+}

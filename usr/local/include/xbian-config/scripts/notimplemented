@@ -1,0 +1,7 @@
+#!/bin/bash
+
+function notimplemented() {
+        showdialog      "Config > Not implemented" \
+                        "Close" \
+                        "\n       This function is not yet implemented"
+}
