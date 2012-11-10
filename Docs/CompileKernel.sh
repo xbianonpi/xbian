@@ -51,7 +51,7 @@ cd /opt/linux3.6.1
 cd linux3.2.27
 #End 3.2.27
 
-Begin 3.2.27
+#Begin 3.2.27
 #Download the used config from the XBian github for 3.2.27
 sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config3_2_27
 mv .config3_2_27 .config
