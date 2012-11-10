@@ -73,7 +73,7 @@ echo "xbian:raspberry" | chpasswd
 # Relogin with ssh; user:xbian pass:raspberry
 
 #Fixes su to root when root password is set
-chmod +s /bin/su
+sudo chmod +s /bin/su
 
 #Kill all processes started by user pi
 sudo su
