@@ -1,0 +1,26 @@
+#!/bin/bash
+
+function localpackages() {
+	PACKAGELOCATION=2;
+	#LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > Package" --ok-label Open --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	filedirselect LOCATION "packages" "$1" "/home/xbian/" 1 1 ".tar.gz";
+	if [ ! -z $LOCATION ]; then
+		if [ -f $LOCATION ]; then
+			NAME=$(basename $LOCATION);
+			NAME=${NAME%.tar.gz}
+			INSTALLEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "$NAME.sh" | wc -l);
+			CACHEPATHEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "tmp/xbiancache" | wc -l);
+			PKGPATHEXISTS=$(tar -ztf $LOCATION 2>/dev/null | grep "tmp/xbianpackages" | wc -l);
+			if [[ $INSTALLEXISTS -eq 1 && $CACHEPATHEXISTS -ge 1 && $PKGPATHEXISTS -eq 1 ]]; then
+				tar -zxvf $LOCATION -C / >/dev/null;
+				installpackage "/tmp/xbianpackages/$NAME.sh" "Packages"
+			else
+				showdialog "$1" "Cancel" "\n  File is not a valid XBian script."
+				localpackages $1
+			fi
+		else
+			showdialog "$1" "Cancel" "No package found at this location."
+			localpackages $1
+		fi
+	fi
+}

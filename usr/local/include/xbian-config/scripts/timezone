@@ -1,0 +1,9 @@
+#!/bin/bash
+function timezone() {
+	showinfo	"$1" \
+			"\n   Please wait while 'tzdata' is loading..."
+	dpkg-reconfigure tzdata
+	showdialog 	"$1" \
+			"Close" \
+			"\n          Timezone succesfully changed"
+}
