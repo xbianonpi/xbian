@@ -28,6 +28,7 @@ function videoflags() {
 					set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Force HDMI hotplug successfully enabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 			*)
@@ -35,6 +36,7 @@ function videoflags() {
 					remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Force HDMI hotplug successfully disabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 		esac
@@ -44,6 +46,7 @@ function videoflags() {
 					set_config_var ignore_hdmi_hotplug 1 /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Ignore HDMI hotplug successfully enabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 			*)
@@ -51,6 +54,7 @@ function videoflags() {
 					remove_config_var "ignore_hdmi_hotplug" /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Ignore HDMI hotplug successfully disabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 		esac
@@ -60,6 +64,7 @@ function videoflags() {
 					set_config_var ignore_cec_init 1 /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Ignore CEC init successfully enabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 			*)
@@ -67,6 +72,7 @@ function videoflags() {
 					remove_config_var "ignore_cec_init" /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Ignore CEC init successfully disabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 		esac
@@ -76,6 +82,7 @@ function videoflags() {
 					set_config_var ignore_cec 1 /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      CEC is now disabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 			*)
@@ -83,6 +90,7 @@ function videoflags() {
 					remove_config_var "ignore_cec" /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      CEC is now enabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 		esac
@@ -92,6 +100,7 @@ function videoflags() {
 					set_config_var disable_overscan 1 /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Overscan is now disabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 			*)
@@ -99,10 +108,10 @@ function videoflags() {
 					remove_config_var "disable_overscan" /boot/config.txt >/dev/null
 					showdialog 	"$1" "Close" \
 							"\n      Overscan is now enabled"
+					ASKFORREBOOT=1
 				fi
 			;;
 		esac
 
 	fi
 }
-
