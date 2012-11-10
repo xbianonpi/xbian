@@ -34,14 +34,16 @@ mv linux linux3.2.27
 
 #Begin 3.6.1
 cp -R linux3.2.27 linux3.6.1
+cd linux3.6.1/
+git checkout rpi-3.6.y
+cd /opt/raspberry
 rm -r linux3.6.1/drivers/misc/vc04_services
 cp -R linux3.2.27/drivers/misc/vc04_services linux3.6.1/drivers/misc/
 rm -r linux3.6.1/sound/arm
 cp -R linux3.2.27/sound/arm linux3.6.1/sound
 rm -r linux3.6.1/drivers/staging/media/lirc
 cp -R linux3.2.27/drivers/staging/media/lirc linux3.6.1/drivers/staging/media/
-cd linux3.6.1/
-git checkout rpi-3.6.y
+cd /opt/linux3.6.1
 #End 3.6.1
 
 
