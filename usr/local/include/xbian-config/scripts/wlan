@@ -42,7 +42,7 @@ changewlanprotected() {
 		3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
-		changewlanprotected $1 $2 $3 $4 $5;
+		changewlanprotected "$1" "$2" "$3" "$4" "$5" "$6" "$7";
 		return 0
 	fi
 
@@ -50,7 +50,7 @@ changewlanprotected() {
 
 	if [ $(cat /tmp/xbian-config-args | wc -l) -lt 2 ]; then
 		showdialog "$1" "Close" "\n    Please enter your  network name and password"
-		changewlanprotected $1 $2 $3 $4 $5
+		changewlanprotected "$1" "$2" "$3" "$4" "$5" "$6" "$7"
 		return 0
 	fi
 
@@ -83,9 +83,10 @@ changewlandhcp() {
 		fi
 	fi
 
-	showmenu	$1 \
+	showmenu	"$1" \
 			1 "Unprotected" \
-			2 "WPA/WPA2 & WEP Security"
+			2 "WPA or WPA2" \
+			3 "WEP"
 
 	MODE=$RETURN
 	case "$MODE" in
@@ -93,7 +94,10 @@ changewlandhcp() {
 			changewlanunprotected $1 $2 SSID $CSSID;
 		;;
 		2)
-			changewlanprotected $1 SSID PASSWD $CSSID $CPASSWD;
+			changewlanprotected "$1" "SSID" "PASSWD" "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+		;;
+		3)
+			changewlanprotected "$1" "SSID" "PASSWD" "$CSSID" "$CPASSWD" "PMODE" "$MODE";
 		;;
 		*)
 			wlan $1
@@ -101,43 +105,51 @@ changewlandhcp() {
 		;;
 	esac
 
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
-		if [ $MODE -eq 1 ]; then
-			echo -e "\nnetwork={\nssid=\"$SSID\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
-		else
-			echo -e "\nnetwork={\nssid=\"$SSID\"\npsk=\"$PASSWD\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
-		fi
-	else
-		if [ $MODE -eq 1 ]; then
-			if [ $CMODE -eq 1 ]; then
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
-			else
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
-			fi
-		else
-			if [ $CMODE -eq 2 ]; then
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i 's/psk=\"$CPASSWD\"/psk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-			else
-				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"\npsk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-			fi
-		fi
-	fi
+	changewpaconf $SSID $CSSID $PASSWD $MODE
 
 	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 1 ]; then
 		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
 		mv /etc/network/interfaces.new /etc/network/interfaces
-		showdialog " $1 " "Close" "\n          WLAN settings set to DHCP." 
+		showdialog " $1 " "Close" "\n          WLAN settings set to DHCP."
 	else
 		showdialog " $1 " "Close" "\n      WLAN settings already set to DHCP."
 	fi
 }
 
+changewpaconf() {
+	# Check if wpa_supplicant configuration is present
+	WLOPTS=""
+	if [ $MODE -eq 1 ]; then
+		# Unprotected
+		WLOPTS+="ssid=\"$SSID\"\nkey_mgmt=NONE\npriority=5"
+	elif [ $MODE -eq 2 ]; then
+		# WPAx
+		WLOPTS+="ssid=\"$SSID\"\npsk=\"$PASSWD\""
+	else
+		# WEP
+		WLOPTS+="ssid=\"$SSID\"\nkey_mgmt=NONE\nwep_key0=\"$PASSWD\"\nwep_tx_keyidx=0\npriority=5"
+	fi
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
+		# Populate new file
+		echo -e "\nnetwork={\n$WLOPTS\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
+	else
+		# Clean up
+		sed -i '/psk/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/key_mgmt/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/wep_key0/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/wep_key1/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/wep_key2/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/wep_tx_keyidx/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/priority/d' /etc/wpa_supplicant/wpa_supplicant.conf
+		sed -i '/^$/d' /etc/wpa_supplicant/wpa_supplicant.conf
+
+		# Edit file
+		sed -i "s/ssid=\"$CSSID\"/$WLOPTS/g" /etc/wpa_supplicant/wpa_supplicant.conf
+	fi
+}
 
 changewlanstatic() {
+
 	OLDIFS=$IFS; IFS=$' \t\n';
 
 	# Read IP, netmask and gateway from /etc/network/interfaces
@@ -202,22 +214,30 @@ changewlanstatic() {
 		fi
 	fi
 
-	MODE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Select --cancel-label Return --menu '' 8 55 2 1 "Unprotected" 2 "WPA/WPA2 & WEP Security" 3>&1 1>&2 2>&3)
+	showmenu 	"$1" \
+			1 "Unprotected" \
+			2 "WPA or WPA2" \
+			3 "WEP"
+
+	MODE=$RETURN
 	case "$MODE" in
 		1)
 			changewlanunprotected "$1" SSID "$CSSID";
 		;;
 		2)
-			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD";
+			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+		;;
+		3)
+			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" "PMODE" "$MODE";
 		;;
 		*)
 			IFS=$OLDIFS;
-			wlan "$1"
+			wlan "$TITLE"
 			return 0;
 		;;
 	esac
 
-	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "$1" --form "\n  Press up/down to move between fields" 19 55 0 \
+	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title "$TITLE" --form "\n  Press up/down to move between fields" 19 55 0 \
 		"Address:" 1 1 "${CIP[0]}" 1 15 4 3 \
 			"." 1 19 "${CIP[1]}" 1 20 4 3 \
 			"." 1 24 "${CIP[2]}" 1 25 4 3 \
@@ -241,7 +261,7 @@ changewlanstatic() {
 	3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
-		wlan "$1"
+		wlan "$TITLE"
 		return 0;
 	fi
 
@@ -273,8 +293,8 @@ changewlanstatic() {
 		*.*.*.* ) true ;;
 		*) false ;;
 	esac; then
-		showdialog "$1" "Close" "\n        You didn't enter a valid ip address"
-		changewlanstatic "$1" "$VALUES";
+		showdialog "$TITLE" "Close" "\n        You didn't enter a valid ip address"
+		changewlanstatic "$TITLE" "$VALUES";
 		exit 0;
 	fi
 
@@ -402,7 +422,7 @@ changewlanstatic() {
 			fi
 			I=$(($I+1));
 		done;
-		echo -e "nameserver $NSLINE" >> /etc/resolv.conf		
+		echo -e "nameserver $NSLINE" >> /etc/resolv.conf
 		NNS=$(($NNS+1))
 	fi
 	if [ ${#ONS2[@]} -eq 4 ]; then
@@ -415,34 +435,12 @@ changewlanstatic() {
 			fi
 			I=$(($I+1));
 		done;
-		echo -e "nameserver $NSLINE" >> /etc/resolv.conf		
+		echo -e "nameserver $NSLINE" >> /etc/resolv.conf
 		NNS=$(($NNS+1))
 	fi
 
-	# Modify wpa_supplicant.conf
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
-		if [ $MODE -eq 1 ]; then
-			echo -e "\nnetwork={\nssid=\"$SSID\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
-		else
-			echo -e "\nnetwork={\nssid=\"$SSID\"\npsk=\"$PASSWD\"\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
-		fi
-	else
-		if [ $MODE -eq 1 ]; then
-			if [ $CMODE -eq 1 ]; then
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-			else
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i '/psk=\"$CPASSWD\"/d' /etc/wpa_supplicant/wpa_supplicant.conf"
-			fi
-		else
-			if [ $CMODE -eq 2 ]; then
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-				eval "sed -i 's/psk=\"$CPASSWD\"/psk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-			else
-				eval "sed -i 's/ssid=\"$CSSID\"/ssid=\"$SSID\"\npsk=\"$PASSWD\"/g' /etc/wpa_supplicant/wpa_supplicant.conf"
-			fi
-		fi
-	fi
+	changewpaconf $SSID $CSSID $PASSWD $MODE
+
 	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -gt 0 ]; then
 		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
 		mv /etc/network/interfaces.new /etc/network/interfaces
@@ -451,6 +449,7 @@ changewlanstatic() {
 		eval "sed -i 's/wpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/$CONFIG/g' /etc/network/interfaces"
 		showdialog "$1" "Close" "\n          WLAN static settings changed."
 	fi
+
 	IFS=$OLDIFS;
 }
 
@@ -458,10 +457,10 @@ function wlan() {
 	MODE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Select --cancel-label Return --menu '' 8 55 2 1 "DHCP" 2 "Static" 3>&1 1>&2 2>&3)
 	case "$MODE" in
 		1)
-			changewlandhcp $1;
+			changewlandhcp "$1";
 		;;
 		2)
-			changewlanstatic $1;
+			changewlanstatic "$1";
 		;;
 	esac
 }
