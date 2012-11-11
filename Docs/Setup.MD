@@ -67,7 +67,7 @@ sudo su
 rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #Setting up xbian user and deleting pi user
-useradd -G sudo -G input -m -s /bin/bash xbian
+useradd -G sudo,input -m -s /bin/bash xbian
 echo "xbian:raspberry" | chpasswd
 
 #Remove user pi from sudoers and add xbian user
