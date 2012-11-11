@@ -1,10 +1,10 @@
-[Preview] XBian 1.0 Alpha 2 Changelog
+#[Preview] XBian 1.0 Alpha 2 Changelog
 ==================================
 XBian 1.0 Alpha 2 mostly contains bugfixes that were
 apparent in Alpha 1.0. Besides these bugfixes it also
 contains some new features and improvements.
 
-Bugfixes
+##Bugfixes
 ==================================
 - Issues #8 and #36: The keyboard and remotes that weren't working
 - Issue #23: XBMC Library not updated.
@@ -13,7 +13,7 @@ Bugfixes
 - Issue #41: SSH not working
 - Issues #52, #49: USB devices not visible
 
-Improvements
+##Improvements
 ==================================
 - LIRC xbox module
 - Kernel 3.6.1
@@ -25,14 +25,18 @@ Improvements
 - Modular xbian-config
 - Enhanced USB automount system
 
-Xbian-config additions
+##Xbian-config additions
 ==================================
 - Ability to switch kernel version
 - Change various video hardware settings
 - Added Samba package
 - Fixes cross dependent packages
 
-XBian 1.0 Alpha 1 Changelog
+##Special thanks to
+==============================
+pbloem1 and n9ntje
+
+#XBian 1.0 Alpha 1 Changelog
 ==================================
 XBian 1.0 Alpha 1 is a fresh start. One of the biggest changes
 is that we are now using GitHub. GitHub allows us to make XBian
@@ -41,18 +45,18 @@ us with developing XBian.
 
 NOTE: If you are connecting via SSH use user:xbian pass:raspberry
 
-GPL 3.0 Licenses
+##GPL 3.0 Licenses
 =================================
 XBian has adopted the GPL 3.0 licenses on all it's code.
 So we're completely open source.
 
-New XBian basis
+##New XBian basis
 =================================
 XBian 1.0 is build from scratch from the latest Raspbian (28-10)
 version. This fixes a lot of issues that were present on the
 previous XBian versions.
 
-XBian Config
+##XBian Config
 =================================
 XBian config allows users to setup their XBian installation
 very easily. Currently it's allows you to set the following
@@ -89,7 +93,7 @@ hits final.
 
 You can easily access xbian-config by ssh'ing into your pi (user:xbian pass:raspberry). 
 
-Kernel
+##Kernel
 ==============================
 This XBian is build with a custom kernel. We've added
 some custom modules:
@@ -107,7 +111,7 @@ overclocking static without voiding you're warranty.
 The difference with force_turbo=1 is that kernel
 doesn't directly control the voltage level.
 
-Other improvements & features
+##Other improvements & features
 ==============================
 - Blocked the root ssh login for security reasons.
 - Improved USB mounting
@@ -119,12 +123,11 @@ Other improvements & features
 - Added a LOT of wireless drivers.
 - Improved performance of XBMC
 
-Special thanks to
+##Special thanks to
 ==============================
 Hexagon and deHakkelaar
 
-
-Final note by Koenkk
+##Final note by Koenkk
 ==============================
 As you might have already noticed a new main developper
 appeared in our team, his name is CurlyMo. I really
