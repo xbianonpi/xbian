@@ -21,17 +21,20 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
+source $BASEPATH/scripts/notimplemented
+
 changewlanunprotected() {
 	SSID=$(dialog --backtitle "$BACKTITLE" --title " $1 " --ok-label Change --inputbox "SSID:" 7 55 $3 3>&1 1>&2 2>&3)
 	if [ $? -eq 0 ]; then
 		if [ ! -z $SSID ]; then
 			eval "$2=\"$SSID\""
+			return 1;
 		else
 			showdialog "$1" "Close" "\n    Please enter your network name"
 			changewlanunprotected $1 $2 $3;
 		fi
 	else
-		changewlanunprotected $1 $2 $3
+		return 0;
 	fi
 }
 
@@ -42,7 +45,6 @@ changewlanprotected() {
 		3>&1 1>&2 2>&3);
 
 	if [ $? -ge 1 ]; then
-		changewlanprotected "$1" "$2" "$3" "$4" "$5" "$6" "$7";
 		return 0
 	fi
 
@@ -67,6 +69,8 @@ changewlanprotected() {
 
 	eval "$2=\"$SSID\"";
 	eval "$3=\"$PASSWD\"";
+	
+	return 1;
 }
 
 changewlandhcp() {
@@ -92,12 +96,19 @@ changewlandhcp() {
 	case "$MODE" in
 		1)
 			changewlanunprotected $1 $2 SSID $CSSID;
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		2)
 			changewlanprotected "$1" "SSID" "PASSWD" "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		3)
-			changewlanprotected "$1" "SSID" "PASSWD" "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			notimplemented;
+			return 0;
 		;;
 		*)
 			wlan $1
@@ -223,12 +234,19 @@ changewlanstatic() {
 	case "$MODE" in
 		1)
 			changewlanunprotected "$1" SSID "$CSSID";
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		2)
 			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		3)
-			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			notimplemented;
+			return 0;
 		;;
 		*)
 			IFS=$OLDIFS;
