@@ -1,0 +1,503 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+# Select a file or directory
+#  $1 Return value
+#  $2 Previous menu
+#  $3 Title
+#  $4 Path
+#  $5 Only files?
+#  $6 Specific files?
+#  $7 Specific file extension
+filedirselect() {
+	DELIMITER="%";
+	IFS=$'\n'
+	ITEMS=($(ls -AlQ $4 | grep ^d | grep -o "\(\".*\"\)"));
+	if [ $5 -eq 1 ]; then
+		if [ $6 -eq 1 ]; then
+			MESSAGE="\nPlease select a *$7 file";
+			ITEMS+=($(ls -AlQ $4 | grep -v ^d | awk '{print $9}' | grep -o "\(\".*\"\)" | grep $7));
+		else
+			MESSAGE="\nPlease select a file";
+			ITEMS+=($(ls -AlQ $4 | grep -v ^d | awk '{print $9}' | grep -o "\(\".*\"\)"));
+		fi
+	else
+		MESSAGE="\nPlease select a directory";
+	fi
+	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
+		DELIMITER='@';
+	fi
+	if [ $(echo ${ITEMS[@]} | grep "$DELIMITER" | wc -l) -gt 0 ]; then
+		DELIMITER='^';
+	fi
+
+	if [ $4 != "/" ]; then
+		LIST="0$DELIMITER[..]$DELIMITER";
+		N=1;
+	else
+		LIST="";
+		N=0;
+	fi
+
+	for ITEM in ${ITEMS[@]}
+	do
+		ITEM=$(echo $ITEM | sed -e 's/\ /\_/g' | sed -e 's/\"//g');
+		if [ -d $4$ITEM ]; then
+			LIST="$LIST$N$DELIMITER[$ITEM]$DELIMITER";
+		else
+			LIST="$LIST$N$DELIMITER$ITEM$DELIMITER";
+		fi
+
+		N=$(($N+1));
+	done
+	NRITEMS=${#ITEMS[@]};
+	if [ $NRITEMS -lt 8 ]; then
+		NRITEMS=8;
+	fi
+	LIST=$(echo \"$LIST\" | awk '{print substr($0,2,length-3)'} | sed -e 's/\_/\ /g');
+	IFS="$DELIMITER";
+	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title "Config > $3" --extra-button --extra-label Select --ok-label Open --cancel-label Return  --menu $MESSAGE 14 60 $NRITEMS $LIST  3>&1 1>&2 2>&3);
+	BUTTON=$?;
+	IFS=" ";
+	case $BUTTON in
+		1)
+			return 0;
+		;;
+		3)
+			if [ $4 == "/" ]; then
+				SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+			else
+				SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+			fi
+			if [[ $RETURN -gt 0 || $4 == "/" ]]; then
+				if [[ $5 -eq 1 && -f $SELECTED ]] || [[ $5 -eq 0 && -d $SELECTED ]]; then
+					eval "$1=\"$SELECTED\"";
+				else
+					if [ $4 == "/" ]; then
+						SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+					else
+						SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+					fi
+					if [ -f "$SELECTED" ]; then
+						eval "$1=\"$SELECTED\"";
+					else
+						filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
+					fi
+				fi
+			else
+				LASTDIR=$(echo $4 | sed -e 's/\ /\_/g' | rev | cut -f2 -d "/" | rev);
+				if [ -z $LASTDIR ]; then
+					SELECTED="/";
+				else
+					SELECTED=$(eval "echo \"$4\" | sed -e 's/\ /\_/g' | sed -e 's/$LASTDIR\///g' | sed -e 's/\_/\ /g'");
+				fi
+				filedirselect $1 $2 "$3" "$SELECTED" $5 $6 $7;
+			fi
+		;;
+		0)
+		if [[ $RETURN -eq 0 && $4 != "/" ]]; then
+			LASTDIR=$(echo $4 | sed -e 's/\ /\_/g' | rev | cut -f2 -d "/" | rev);
+			if [ -z $LASTDIR ]; then
+				SELECTED="/";
+			else
+				SELECTED=$(eval "echo \"$4\" | sed -e 's/\ /\_/g' | sed -e 's/$LASTDIR\///g' | sed -e 's/\_/\ /g'");
+			fi
+			filedirselect $1 $2 "$3" "$SELECTED" $5 $6 $7;
+		else
+			if [ $4 == "/" ]; then
+				SELECTED=$(echo $4${ITEMS[$((RETURN))]} | sed 's/"//g');
+			else
+				SELECTED=$(echo $4${ITEMS[$((RETURN-1))]} | sed 's/"//g');
+			fi
+			if [ -f "$SELECTED" ]; then
+				eval "$1=\"$SELECTED\"";
+			else
+				filedirselect $1 $2 "$3" "$SELECTED/" $5 $6 $7;
+			fi
+		fi
+		;;
+	esac;
+}
+
+# Set Raspberry PI config variable
+# ToDo: Save backup of $3 with history
+#  $1 key
+#  $2 value
+#  $3 file
+set_config_var() {
+  lua - "$1" "$2" "$3" <<EOF > "$3.bak"
+local key=assert(arg[1])
+local value=assert(arg[2])
+local fn=assert(arg[3])
+local file=assert(io.open(fn))
+local made_change=false
+for line in file:lines() do
+  if line:match("^#?%s*"..key.."=.*$") then
+    line=key.."="..value
+    made_change=true
+  end
+  print(line)
+end
+
+if not made_change then
+  print(key.."="..value)
+end
+EOF
+mv "$3.bak" "$3"
+
+	# Make sure config.txt is clean
+	sed -i '/^$/d' /boot/config.txt
+}
+
+# Remove Raspberry PI config variable
+# $1 key
+# $2 file
+remove_config_var() {
+	sed -i "/$1/d" /boot/config.txt
+}
+
+# Check if root is valid for SSH-login
+# return boolean
+check_rootssh_status() {
+	if [ -f "/etc/ssh/sshd_config" ]; then
+		STATUS=$(cat /etc/ssh/sshd_config | grep PermitRootLogin | grep "yes" | wc -l)
+		if [ $STATUS -eq 1 ]; then
+			DISABLE_ROOTSSH=1;
+		else
+			DISABLE_ROOTSSH=0;
+		fi
+	fi
+} 
+
+
+# Sets the RPi overclock
+#  $1 Preset name
+#  $2 arm_freq
+#  $3 core_freq
+#  $4 sdram_freq
+#  $5 over_voltage
+set_overclock() {
+	if [ $DEBUG -eq 0 ]; then
+		ASKFORREBOOT=1
+		set_config_var arm_freq $2 /boot/config.txt >/dev/null
+		set_config_var core_freq $3 /boot/config.txt >/dev/null
+		set_config_var sdram_freq $4 /boot/config.txt >/dev/null 
+		set_config_var over_voltage $5 /boot/config.txt >/dev/null
+	fi
+	showdialog 	"Config > Settings > Overclocking" \
+			"Ok" \
+			"\n         Overlock set to preset '$1'"
+}
+
+# Check if a package is installed on the system
+#  $1 package name
+function pkg_installed() {
+	return $(dpkg-query -W -f='${Status}\n' "$1" | grep ' installed' | wc -l);
+}
+
+# Save an XBian package on the local storage
+#  $1 Not used
+#  $2 Filename of the package being saved
+#  $3 Title of the dialogs
+function savepackage() {
+	PKGFILE=$2
+	PKGPATH=$1
+	TITLE=$3
+
+	NAME=$(basename $PKGFILE);
+	NAME=${NAME%.*}
+	#LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Save --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
+	filedirselect LOCATION "packages" "Settings > $TITLE > Save" "/home/xbian/" 0 0 " ";
+	if [ $LOCATION != "" ]; then
+		if [ -d $LOCATION ]; then
+			if [[  -d "/tmp/xbiancache" && $(ls -l "/tmp/xbiancache/" | grep -v "total" | wc -l) -gt 0 ]]; then
+				tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
+				tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
+			else
+				tar -cf "$LOCATION/$NAME.tar" $2 >/dev/null
+			fi
+			gzip "$LOCATION/$NAME.tar" >/dev/null
+			showdialog "Config > $TITLE > Save" "Ok" "\n       Package saved to:\n  $LOCATION/$NAME.tar.gz" 8 55
+			return 0;
+		else
+			showdialog "Config > $TITLE > Save" "Close" "\n         This location doesn't exist"
+			savepackage $1 $2 $3
+		fi
+		exit 0;
+	fi
+}
+
+# Get individual file sizes
+#  $1 Urls to check
+#  $2 Totalsize return value
+#  $3 Array with individual package sizes
+function getremotefilesizes() {
+
+	PKGSIZES=()
+	PKGSIZES=($(wget --spider $1 2>&1 | \
+	while read X; do \
+	SIZE=$(grep -i 'length' <<< "$X" | awk '{print $2}' | sed 's:^.*[^0-9]\([0-9]*\)$:\1:');\
+	BROKEN=$(grep -i 'broken link' <<< "$X" | wc -l);
+	if [ $BROKEN -eq 1 ]; then echo "Error"; fi;\
+	if [ ! -z $SIZE ]; then echo $SIZE; fi;\
+	done));
+	
+	BROKEN=$(echo ${PKGSIZES[@]} | grep -i "Error" | wc -l);
+
+	if [ $BROKEN -gt 0 ]; then
+		return 0;
+	fi;
+
+	#Calculate total download size
+	TOTALSIZE=0;
+	for SIZE in ${PKGSIZES[@]}; do
+		TOTALSIZE=$(($(($TOTALSIZE))+$(($SIZE))));
+	done	
+	eval "$2=$TOTALSIZE";
+	eval "$3=\"${PKGSIZES[@]}\"";
+	return 1;
+}
+
+function updateapt() {
+	if [ $PACKAGEDBUPDATED -eq 0 ]; then
+		showinfo " $1 > $(basename $2) " "\n\n         Updating package database..."
+		apt-get update > /dev/null 2>&1
+		PACKAGEDBUPDATED=1
+	fi
+}
+
+# Download packages and show progress bar
+#  $1 Title
+#  $2 Urls seperated by spaces
+#  $3 Array with package sizes
+#  $4 Total size of all files
+function downloadpackages() {
+
+PKGSIZES=($(echo "$3"));
+URLS=($(echo $2));
+
+TOTALFILES=${#URLS[@]};
+BYTESDOWNLOADED=0;
+NRFILE=0;
+TOTALPERCENT=0;
+LIST="";
+FIRSTFILE=0;
+TOTALSIZE=$4;
+
+wget -P /tmp/xbiancache/ --progress=bar:force $1 $2 2>&1 | \
+while read -d "%" X; do \
+FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}');\
+PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
+BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K' | grep -iv 'M');\
+PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K' | grep -iv 'M');\
+if [ -z $PERCENT ]; then PERCENT=0; fi;\
+if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTES=0; BYTESDOWNLOADED=$TOTALSIZE; fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
+if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\
+cat <<EOF
+XXX
+$TOTALPERCENT
+\n$LIST $PERCENT%\n\n\n  Total percentage done ($(($(($BYTESDOWNLOADED))+$(($BYTES))))/$TOTALSIZE):\n 
+XXX
+EOF
+done | dialog --title " $1 " --gauge "\n   Please wait..." 11 70 0;
+sleep 2;
+showinfo "$1" "\n\n   All packages downloaded."
+sleep 1;
+}
+
+# Installs a set of packages
+#  $1 = Installation file
+#  $2 = Title of dialogs
+function installpackage() {
+
+INSTALLS=$1;
+TITLE=$2;
+#Read package file
+CONTENT=$(cat $INSTALLS);
+CONTENT=$(echo -e "$CONTENT\n");
+PACKAGESAPT=()
+PACKAGESAPT=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}' | sed -e 's/\[//g' | sed -e 's/\]//g'));
+PACKAGESDIRECT=()
+PACKAGESDIRECT=($(echo -e "$CONTENT" | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
+IFS=$'\n';
+COMBINEDINSTALL=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}' | awk 'NR>1{print $1}' RS=[ FS=]));
+COMBINEDID=(${!COMBINEDINSTALL[*]});
+POSTINSTALL=()
+POSTINSTALL=($(echo -e "$CONTENT" 2>&1 | \
+while read X; do \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+done));
+
+PREINSTALL=()
+IFS=$'\n';
+PREINSTALL=($(echo -e "$CONTENT" 2>&1 | \
+while read X; do \
+if [[ "$X" == "#PostInstall" && $(($START)) -eq 1 ]]; then START=0; fi; \
+if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
+if [[ "$X" == "#PreInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
+done));
+
+#if PACKAGELOCATION
+if [ $PACKAGELOCATION -eq 1 ]; then
+
+showinfo "$TITLE > $(basename $1)" "\n\n          Generating packages list..."
+IFS=$ORIGINALIFS;
+DEPENDENCIES=()
+DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
+while read X; do \
+grep 'Inst ' <<< $X | awk '{print $2}';\
+done));
+
+#Get all dependencies of a apt package
+URLS=()
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+URLS+=("http://archive.raspbian.org/raspbian/$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")");
+done
+
+#Add all custom links
+for PACKAGE in "${PACKAGESDIRECT[@]}"
+do
+URLS+=("$PACKAGE");
+done
+
+getremotefilesizes "$(echo ${URLS[@]})" TOTALSIZE PKGSIZES;
+if [[ $? -eq 0 ]]; then
+	if [[ $PACKAGEDBUPDATED -eq 1 ]]; then
+		showinfo "$TITLE > $(basename $1)" "\n\n   Couldn't download all necessary packages. Aborting."
+		return 0;
+	else
+		showyesno  "$TITLE > $(basename $1)" "\n   Couldn't download all necessary packages.\n   Do you want to try updating apt?" 8
+		if [ $? -eq 1 ]; then
+			showinfo "$TITLE > $(basename $1)" "\n\n   Couldn't download all necessary packages.\n   Aborting." 8
+			sleep 5;
+			return 0;
+		else
+			updateapt $TITLE $1;
+			getremotefilesizes "${URLS[@]}" TOTALSIZE PKGSIZES;
+			if [ $? -eq 0 ]; then
+				showinfo "$TITLE > $(basename $1)" "\n\n   Still couldn't download all necessary packages.\n   Aborting." 8
+				sleep 5;
+				return 0;
+			fi
+		fi
+	fi
+fi
+PKGSIZES=($(echo "$PKGSIZES"));
+#Download package and create progress bar
+downloadpackages "$TITLE > $(basename $1)" "$(echo ${URLS[@]})" "$(echo ${PKGSIZES[@]})" $TOTALSIZE
+
+#else PACKAGELOCATION
+else
+
+#Save depency order
+DEPENDENCIES=($(ls -l /tmp/xbiancache/*.deb | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
+
+#fi PACKAGELOCATION
+fi
+
+#Install all apt packages
+NRPACKAGES=${#DEPENDENCIES[@]};
+CURRENTPACKAGE=1;
+
+#Pre installation
+NRSTEPS=${#PREINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${PREINSTALL[@]}"
+do
+showinfo "$TITLE > $(basename $1)" "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP"
+CURRENTSTEP=$(($CURRENTSTEP+1));
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
+done
+
+#Install apt packages
+for PACKAGE in "${DEPENDENCIES[@]}"
+do
+FILE=$(basename $PACKAGE);
+MATCH=$(echo "${DEPENDENCIES[@]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
+if [ ! -z "$MATCH" ]; then
+	MATCH=$(echo "${COMBINEDINSTALL[@]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
+	if [ ! -z $MATCH ]; then
+		for I in "${COMBINEDID[@]}"
+		do
+			MATCH=$(echo "${COMBINEDINSTALL[$I]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
+			if [ ! -z $MATCH ]; then
+				NRCOMBINED=(echo ${COMBINEDINSTALL[$I]});
+				NRCOMBINED=${#NRCOMBINED[@]};
+				DEPENDENCIES=($(eval "echo ${DEPENDENCIES[@]} | sed 's/\b${COMBINEDINSTALL[$I]}\b//g'"));
+				showinfo "$TITLE > $(basename $1)" "\n Installing packages ($CURRENTPACKAGE..$(($CURRENTPACKAGE+$(($NRCOMBINED-2))))/$NRPACKAGES):\n ${COMBINEDINSTALL[$I]}";
+				INSTALL="";
+				PACKAGES=(${COMBINEDINSTALL[$I]});
+				for PACKAGE in "${PACKAGES[@]}"
+				do
+					INSTALL+="/tmp/xbiancache/"$(basename "$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")")" ";
+				done;
+				if [ $DEBUG -eq 0 ]; then
+					dpkg -i $INSTALL >/dev/null;
+				else
+					sleep 1;
+				fi;
+				CURRENTPACKAGE=$(($CURRENTPACKAGE+$(($NRCOMBINED-1))));
+			fi
+		done;
+	else
+		showinfo "$TITLE > $(basename $1)" "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE"
+		if [ $DEBUG -eq 0 ]; then
+			dpkg -i "/tmp/xbiancache/"$(basename $(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")) >/dev/null;
+		else
+			sleep 1;
+		fi;
+	CURRENTPACKAGE=$(($CURRENTPACKAGE+1));		
+	fi
+fi
+done
+
+#Post installation
+NRSTEPS=${#POSTINSTALL[@]};
+CURRENTSTEP=1;
+for STEP in "${POSTINSTALL[@]}"
+do
+dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
+CURRENTSTEP=$(($CURRENTSTEP+1));
+if [ $DEBUG -eq 0 ]; then
+	eval "$STEP";
+else
+	sleep 1;
+fi;
+done
+
+sleep 1;
+IFS=$ORIGINALIFS;
+showdialog "$TITLE > $(basename $1)" "Ok" "\n   Installation complete."
+showyesno "$TITLE > $(basename $1)" "\n  Do you want to save package to your local storage\n  so you don't have to download them again?" 8
+case "$?" in
+	0) 
+		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
+	;;
+esac
+}
