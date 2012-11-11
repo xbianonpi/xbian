@@ -116,7 +116,7 @@ chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 chmod +x /usr/local/lib/xbmc/xbmc.bin
 chmod +x /opt/vc/bin/vcgencmd
-chown -hR xbian /home/xbian
+chown -R xbian:xbian /home/xbian/.xbmc
 
 #Update rc.d
 update-rc.d xbmc defaults
