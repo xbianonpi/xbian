@@ -23,7 +23,7 @@
 
 function timezone() {
 	showinfo	"$1" \
-			"\n   Please wait while 'tzdata' is loading..."
+			"\n\n   Please wait while 'tzdata' is loading..."
 	dpkg-reconfigure tzdata
 	showdialog 	"$1" \
 			"Close" \

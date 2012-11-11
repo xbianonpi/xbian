@@ -109,7 +109,7 @@ function videoflags() {
 			fi
 		fi
 		if [ $MESSAGE == "\n" ]; then
-			MESSAGE="\n            Didn't change any settings";
+			MESSAGE="\n          You didn't change any settings";
 		fi
 		if [ $MESSAGE != "\n" ]; then
 			showdialog 	" $1 " \
