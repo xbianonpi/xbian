@@ -167,3 +167,6 @@ echo "" > /home/xbian/.bash_history
 
 #Removing swap file
 rm /var/swap
+
+#Resize SD upon next boot
+update-rc.d firstrun defaults
