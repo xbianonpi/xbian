@@ -154,6 +154,7 @@ sed -i 's/1:2345:respawn:\/sbin\/getty --noclear 38400 tty1/\#1:2345:respawn:\/s
 reboot
 
 #After the reboot execute this command
+sudo su
 depmod -a
 
 #Clear logs
