@@ -34,4 +34,4 @@ contains some new features and improvements.
 
 ##Special thanks to
 ==============================
-pbloem1 and n9ntje
+pbloem1, n9ntje & K4N3
