@@ -47,7 +47,6 @@ source /usr/local/include/xbian-config/scripts/resizesd;
 case "$1" in
   start)
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
-	clear;
 echo '
 8888888b.  8888888888  .d8888b.  8888888 8888888888P 8888888 888b    888  .d8888b.
 888   Y88b 888        d88P  Y88b   888         d88P    888   8888b   888 d88P  Y88b
@@ -60,7 +59,6 @@ echo '
 	resizesd >/dev/null
 	update-rc.d firstrun remove >/dev/null
 	rm /etc/init.d/firstrun >/dev/null
-	clear;
 echo '
 8888888b.  8888888888 888888b.    .d88888b.   .d88888b.  88888888888
 888   Y88b 888        888  "88b  d88P" "Y88b d88P" "Y88b     888
