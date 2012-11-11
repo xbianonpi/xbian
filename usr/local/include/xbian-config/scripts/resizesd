@@ -144,11 +144,11 @@ cat <<\EOF > /etc/init.d/resize2fs_once
 case "$1" in
   start)
     log_daemon_msg "Starting resize2fs_once"
-    resize2fs /dev/mmcblk0p2
-    mkswap /dev/mmcblk0p3
-    swapon /dev/mmcblk0p3
-    rm /etc/init.d/resize2fs_once
-    update-rc.d resize2fs_once remove
+    resize2fs /dev/mmcblk0p2 >/dev/null
+    mkswap /dev/mmcblk0p3 >/dev/null
+    #swapon /dev/mmcblk0p3 >/dev/null
+    rm /etc/init.d/resize2fs_once >/dev/null
+    update-rc.d resize2fs_once remove >/dev/null
     log_end_msg $?
     ;;
   *)
