@@ -37,7 +37,7 @@ remotepackages() {
 		NRITEMS=$(($NRITEMS+1));
 		DESC=$(cat /tmp/xbianpackages/$ITEM | grep "Description" | awk '{print substr($0,15,length)}');
 		ITEM=$(sed 's/\<./\u&/g' <<< $ITEM | cut -f 1 -d. | sed 's/\ *$//g');
-		if [ ${#ITEM} -gt 5 ]; then
+		if [ ${#ITEM} -gt 4 ]; then
 			ITEM=$(echo -e "$ITEM\t- \"$DESC\"");
 		else
 			ITEM=$(echo -e "$ITEM\t\t- \"$DESC\"");
