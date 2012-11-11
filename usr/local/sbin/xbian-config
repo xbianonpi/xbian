@@ -47,7 +47,7 @@ source $BASEPATH/dialogs
 close() {
 	if [ $ASKFORREBOOT -eq 1 ]; then
 		showyesno	"Reboot?" \
-					"\n\n  A reboot is required. Do you want to reboot now?";
+					"\n  A reboot is required. Do you want to reboot now?";
 		case "$?" in
 			0)
 				if [ $DEBUG -eq 0 ]; then
