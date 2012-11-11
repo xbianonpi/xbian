@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #Copyright 2012 CurlyMo <development@xbian.org>
 #
@@ -33,12 +33,16 @@ DESC="Execute various commands on first boot"
 VERBOSE=no
 SCRIPTNAME=/etc/init.d/firstrun
 
-function showyesno() { return 0; }
+function showyesno() {
+	return 0;
+}
 function showdialog() {
         echo -e "\n\n$(echo -e "$3" | sed ':a;N;$!ba;s/\n/ /g' | sed 's/ *$//g' | sed 's/^ *//g')\n\n";
 }
 
-source /usr/local/xbian-config/scripts/resizesd;
+DEBUG=0;
+
+source /usr/local/include/xbian-config/scripts/resizesd;
 
 case "$1" in
   start)
@@ -47,7 +51,6 @@ case "$1" in
 	update-rc.d firstrun remove
 	rm /etc/init.d/firstrun
 	reboot
-         /etc/rc.local
 
         case "$?" in
                 0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
