@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+function switchkernel() {
+	KERNEL361=$(ls -Al /boot/kernel3_6_1.img | awk '{print $5}');
+	KERNEL3227=$(ls -Al /boot/kernel3_2_27.img | awk '{print $5}');
+	CKERNEL=$(ls -Al /boot/kernel.img | awk '{print $5}');
+	if [ $CKERNEL -eq $KERNEL3227 ]; then
+		showyesno " $1 " "\n      Do you want to switch to kernel 3.6.1?"
+		if [ $? -eq 0 ]; then
+			cp /boot/kernel3_6_1.img /boot/kernel.img
+			showdialog "$1" "Close" "\n             Now running kernel 3.6.1"
+			ASKFORREBOOT=1
+		fi
+	else
+		showyesno " $1 " "\n      Do you want to switch to kernel 3.2.27?"
+		if [ $? -eq 0 ]; then
+			cp /boot/kernel3_2_27.img /boot/kernel.img
+			showdialog "$1" "Close" "\n             Now running kernel 3.2.27"
+			ASKFORREBOOT=1
+		fi
+	fi
+}
