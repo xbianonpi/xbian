@@ -25,7 +25,7 @@ contains some new features and improvements.
 - Modular xbian-config
 - Enhanced USB automount system
 
-##Xbian-config additions
+##XBian-config additions
 ==================================
 - Ability to switch kernel version
 - Change various video hardware settings
