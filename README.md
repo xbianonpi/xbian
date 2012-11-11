@@ -7,7 +7,7 @@ contains some new features and improvements.
 ##Bugfixes
 ==================================
 - Issues #8 and #36: The keyboard and remotes that weren't working
-- Issue #23: XBMC Library not updated.
+- Issue #23: XBMC Library not updating
 - Issue #37: Airplay/zeroconf not working
 - Issue #2: Video forward/backward freezes
 - Issue #41: SSH not working
