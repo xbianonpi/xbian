@@ -23,6 +23,7 @@ Improvements
 - Resize SD card on first boot
 - Autologin as xbian instead of root user
 - Modular xbian-config
+- Enhanced USB automount system
 
 Xbian-config additions
 ==================================
