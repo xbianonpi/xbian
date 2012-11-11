@@ -1,6 +1,6 @@
 1:Information:Information about this tool:info
 2:Settings   :Change various system settings:
-2.1:System        :e.g. Resize SD, Overclocking, Hostname:
+2.1:System       :e.g. Resize SD, Overclocking, Hostname:
 2.1.1:Resize SD   :Expand root partition to fill SD card:resizesd
 2.1.2:Overclocking:Configure overclocking:overclocking
 2.1.3:Hostname    :Change the default hostname:xbhostname
