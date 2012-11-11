@@ -17,7 +17,7 @@
 #You should have received a copy of the GNU General Public License along 
 #with Xbian. If not, see <http://www.gnu.org/licenses/>
 #
-if [[ -z $SSH_CONNECTION && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 &&  "$TERM" != "screen"  && ! -n "$TMUX"  ]]; then
+if [[ -z $SSH_CONNECTION && $(who am i | grep -wo "[0-9]*\.[0-9]*\.[0-9]*\.[0-9]*" | wc -l) -eq 0 && "$(who am i | awk '{print $1}')" == "$(id -urn)" && "$TERM" != "screen" && ! -n "$TMUX" ]]; then
         clear
 	export PS1="\e[40;30m";
 	echo -e '\e[40;30m';
