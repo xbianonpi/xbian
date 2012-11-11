@@ -22,7 +22,7 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 function resizesd() {
-	showyesno	"$1 > Resize SD" \
+	showyesno	"$1 " \
 			"\n      Are you sure you want to resize you SD card?" 7 60;
 	case "$?" in
 		1)
@@ -56,7 +56,7 @@ function resizesd() {
 	SWAP_END=$(($SDEND));
 	
 	if [ $PART_END -gt $SWAP_START ]; then
-		showdialog "$1 > Resize SD" "Ok" "\n      There is not enough space to create a swap partition. Aborting." 7 60
+		showdialog "$1 " "Ok" "\n      There is not enough space to create a swap partition. Aborting." 7 60
 		return 0;
 	fi
 		
@@ -64,7 +64,7 @@ function resizesd() {
 		CSWAP_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^3" | cut -f 2 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
 		CSWAP_END=$(parted /dev/mmcblk0 -ms unit s p | grep "^3" | cut -f 3 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
 		if [[ $PART_START -eq $CPART_START && $PART_END -eq $CPART_END && $SWAP_START -eq $CSWAP_START && $SWAP_END -eq $CSWAP_END ]]; then
-			showdialog "$1 > Resize SD" "Ok" "\n      This SD card is already resized. Aborting." 7 60
+			showdialog "$1 " "Ok" "\n      This SD card is already resized. Aborting." 7 60
 			return 0;
 		fi
 	fi
@@ -161,5 +161,5 @@ EOF
 	update-rc.d resize2fs_once defaults >/dev/null;
 	fi
 
-	showdialog "$1 > Resize SD" "Ok" "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
+	showdialog "$1 " "Ok" "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
 }
