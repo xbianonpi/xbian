@@ -163,3 +163,6 @@ rm /var/log/*log.*
 for logs in `find /var/log -type f`; do echo '' > $logs; done
 echo "" > /root/.bash_history
 echo "" > /home/xbian/.bash_history
+
+#Removing swap file
+rm /var/swap
