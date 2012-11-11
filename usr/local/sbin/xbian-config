@@ -142,4 +142,4 @@ if [ $SCREEN -eq 0 ]; then
 	`screen $0`
 else
 	menu 0 "";
-cfi
+fi
