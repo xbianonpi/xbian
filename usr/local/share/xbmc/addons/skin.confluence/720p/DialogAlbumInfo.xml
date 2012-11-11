@@ -1,4 +1,4 @@
-<window>
+<window id="2001">
 	<defaultcontrol always="true">5</defaultcontrol>
 	<allowoverlay>no</allowoverlay>
 	<controls>
