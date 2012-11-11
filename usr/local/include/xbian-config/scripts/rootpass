@@ -37,7 +37,7 @@ function rootpass() {
 			if [ ${#VALUES[@]} -eq 2 ]; then
 				if [ ! -z ${VALUES[0]} ] && [ ! -z ${VALUES[1]} ] && [ "${VALUES[0]}" == "${VALUES[1]}" ]; then
 					echo "root:${VALUES[0]}" | chpasswd
-					showdialog "$1" "Close" "\n        root password succesfully changed" 7 60
+					showdialog "$1" "Close" "\n          root password succesfully changed" 7 60
 				else
 					showdialog "$1" "Retry" "\n                Passwords didn't match" 7 60
 					rootpass $1;
