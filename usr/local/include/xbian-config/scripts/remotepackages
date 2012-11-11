@@ -1,9 +1,30 @@
 #!/bin/bash
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
 
 remotepackages() {
 	PACKAGELOCATION=1;
 	if [ ! -d "/tmp/xbianpackages" ]; then
-		showinfo "$1" "\n        Downloading package list..."
+		showinfo "$1" "\n\n        Downloading package list..."
 		git clone -q --depth 5 https://github.com/Koenkk/packages.git /tmp/xbianpackages
 		chmod +x /tmp/xbianpackages/*.sh
 	fi
@@ -16,7 +37,7 @@ remotepackages() {
 		NRITEMS=$(($NRITEMS+1));
 		DESC=$(cat /tmp/xbianpackages/$ITEM | grep "Description" | awk '{print substr($0,15,length)}');
 		ITEM=$(sed 's/\<./\u&/g' <<< $ITEM | cut -f 1 -d.);
-		if [ ${#ITEM} -gt 6 ]; then
+		if [ ${#ITEM} -gt 4 ]; then
 			ITEM=$(echo -e "$ITEM\t- \"$DESC\"");
 		else
 			ITEM=$(echo -e "$ITEM\t\t- \"$DESC\"");
@@ -25,7 +46,7 @@ remotepackages() {
 	done
 	RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title " $1 " --no-collapse --ok-label Install --cancel-label Return --menu '' 11 80 ${NRITEMS} "${LIST[@]}" 3>&1 1>&2 2>&3);
 	if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
-		showyesno "$1" "\n    Are you sure you want to install this package?"
+		showyesno "$1" "\n   Are you sure you want to install this package?"
 		case "$?" in
 			0) 
 				RETURN=$(($RETURN-1));

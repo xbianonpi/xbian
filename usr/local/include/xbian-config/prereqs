@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo <development@xbian.org>
+#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
 #
 #Resize SD function is based on the corresponding function in raspi-config
 #The overclocking function is copied from raspi-config
@@ -21,18 +21,28 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-function xbhostname() {
-	CHOSTNAME=$(cat /etc/hostname);
-	HOSTNAME=$(dialog 	--backtitle "$BACKTITLE" \
-				--title "$1" \
-				--ok-label Change \
-				--inputbox "Hostname:" 7 55 $CHOSTNAME \
-				3>&1 1>&2 2>&3)
-	if [ ! -z $HOSTNAME ]; then
-		echo $HOSTNAME > /etc/hostname
-		hostname $HOSTNAME
-		eval "sed -i 's/$CHOSTNAME/$HOSTNAME/g' /etc/hosts";
-		showdialog "$1" "Close" "\n           Hostname successfully changed"
-		ASKFORREBOOT=1;
-	fi
-}
+#Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
+if [ $DEBUG -eq 0 ]; then
+	trap '' 2;
+fi
+
+# Check that required packages are already installed
+pkg_installed "dialog"; if [ $? -eq 0 ]; then
+	echo "This program requires the dialog package: apt-get install dialog";
+	exit 0;
+fi
+
+pkg_installed "screen"; if [ $? -eq 0 ]; then
+	echo "This program requires the screen package: apt-get install screen";
+	exit 0;
+fi
+
+pkg_installed "git"; if [ $? -eq 0 ]; then
+	echo "This program requires the git package: apt-get install git";
+	exit 0;
+fi
+
+pkg_installed "git"; if [ $? -eq 0 ]; then
+	echo "This program requires the wget package: apt-get install wget";
+	exit 0;
+fi

@@ -1,4 +1,25 @@
 #!/bin/bash
+#
+#Copyright 2012 Hexagon <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
 
 function videoflags() {
 
@@ -14,104 +35,86 @@ function videoflags() {
 	if [ -z $DCEC ]; then DCEC="off"; else DCEC="on"; fi
 	if [ -z $DOSC ]; then DOSC="off"; else DOSC="on"; fi
 
-	RESULT=$(dialog --title "$1" --checklist "\n Various Raspberry PI video output options" 13 80 10 \
-			"Force HDMI output when no tv is identified" 1 $FHDMI \
-			"Ignore HDMI output even if a tv is connected" 2 $IHDMI \
-			"Ignore CEC init, preventing wakeup of tv at reboot" 3 $ICECI \
-			"Disable CEC" 4 $DCEC \
-			"Disable overscan" 5 $DOSC 3>&1 1>&2 2>&3 )
-
+	RESULT=$(dialog --title "$1" --checklist "\n Various Raspberry Pi video output options" 13 80 10 \
+			1 "Force HDMI output when no tv is identified" $FHDMI \
+			2 "Ignore HDMI output even if a tv is connected" $IHDMI \
+			3 "Ignore CEC init, preventing wakeup of tv at reboot" $ICECI \
+			4 "Disable CEC" $DCEC \
+			5 "Disable overscan" $DOSC 3>&1 1>&2 2>&3 )
+	MESSAGE="\n";
 	if [ $? -eq 0 ]; then
-		case $RESULT in
-			*"Force HDMI"*) 
-				if [ $FHDMI == "off" ]; then
-					set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Force HDMI hotplug successfully enabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-			*)
-				if [ $FHDMI == "on" ]; then
-					remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Force HDMI hotplug successfully disabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-		esac
-		case $RESULT in
-			*"Ignore HDMI"*) 
-				if [ $IHDMI == "off" ]; then
-					set_config_var ignore_hdmi_hotplug 1 /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Ignore HDMI hotplug successfully enabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-			*)
-				if [ $IHDMI == "on" ]; then
-					remove_config_var "ignore_hdmi_hotplug" /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Ignore HDMI hotplug successfully disabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-		esac
-		case $RESULT in
-			*"Ignore CEC"*) 
-				if [ $ICECI == "off" ]; then
-					set_config_var ignore_cec_init 1 /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Ignore CEC init successfully enabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-			*)
-				if [ $ICECI == "on" ]; then
-					remove_config_var "ignore_cec_init" /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Ignore CEC init successfully disabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-		esac
-		case $RESULT in
-			*"Disable CEC"*) 
-				if [ $DCEC == "off" ]; then
-					set_config_var ignore_cec 1 /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      CEC is now disabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-			*)
-				if [ $DCEC == "on" ]; then
-					remove_config_var "ignore_cec" /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      CEC is now enabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-		esac
-		case $RESULT in
-			*"Disable overscan"*) 
-				if [ $DOSC == "off" ]; then
-					set_config_var disable_overscan 1 /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Overscan is now disabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-			*)
-				if [ $DOSC == "on" ]; then
-					remove_config_var "disable_overscan" /boot/config.txt >/dev/null
-					showdialog 	"$1" "Close" \
-							"\n      Overscan is now enabled"
-					ASKFORREBOOT=1
-				fi
-			;;
-		esac
-
+		if [[ $RESULT =~ "1" ]]; then
+			if [[ $FHDMI != "on" ]]; then
+				set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
+				MESSAGE+="  Force HDMI hotplug successfully:  enabled\n"
+				ASKFORREBOOT=1
+			fi
+		else
+			if [[ $FHDMI != "off" ]]; then
+				remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
+				MESSAGE+="  Force HDMI hotplug successfully:  disabled\n"
+				ASKFORREBOOT=1
+			fi;
+		fi			
+		if [[ $RESULT =~ "2" ]]; then
+			if [[ $IHDMI != "on" ]]; then
+				set_config_var ignore_hdmi_hotplug 1 /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore HDMI hotplug successfully: enabled\n"
+				ASKFORREBOOT=1
+			fi
+		else
+			if [[ $IHDMI != "off" ]]; then
+				remove_config_var "ignore_hdmi_hotplug" /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore HDMI hotplug successfully: disabled\n"
+				ASKFORREBOOT=1
+			fi
+		fi
+		if [[ $RESULT =~ "3" ]]; then
+			if [[ $ICECI != "on" ]]; then
+				set_config_var ignore_cec_init 1 /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore CEC init successfully:     enabled\n"
+				ASKFORREBOOT=1
+			fi
+		else
+			if [[ $ICECI != "off" ]]; then
+				remove_config_var "ignore_cec_init" /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore CEC init successfully:     disabled\n"
+				ASKFORREBOOT=1
+			fi
+		fi 
+		if [[ $RESULT =~ "4" ]]; then
+			if [[ $DCEC != "on" ]]; then
+				set_config_var ignore_cec 1 /boot/config.txt >/dev/null
+				MESSAGE+="  CEC is now:                       disabled\n"
+				ASKFORREBOOT=1
+			fi
+		else
+			if [[ $DCEC != "off" ]]; then
+				remove_config_var "ignore_cec" /boot/config.txt >/dev/null
+				MESSAGE+="  CEC is now:                       enabled\n"
+				ASKFORREBOOT=1
+			fi
+		fi
+		if [[ $RESULT =~ "5" ]]; then
+			if [[ $DOSC != "on" ]]; then
+				set_config_var disable_overscan 1 /boot/config.txt >/dev/null
+				MESSAGE+="  Overscan is now:                  disabled\n"
+				ASKFORREBOOT=1
+			fi
+		else
+			if [[ $DOSC != "off" ]]; then
+				remove_config_var "disable_overscan" /boot/config.txt >/dev/null
+				MESSAGE+="  Overscan is now:                  enabled\n"
+				ASKFORREBOOT=1
+			fi
+		fi
+		if [ $MESSAGE == "\n" ]; then
+			MESSAGE="\n            Didn't change any settings";
+		fi
+		if [ $MESSAGE != "\n" ]; then
+			showdialog 	" $1 " \
+						"Close" \
+						"$MESSAGE"
+		fi
 	fi
 }
