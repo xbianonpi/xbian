@@ -1,4 +1,4 @@
-#[Preview] XBian 1.0 Alpha 2 Changelog
+#XBian 1.0 Alpha 2 Changelog
 ==================================
 XBian 1.0 Alpha 2 mostly contains bugfixes that were
 apparent in Alpha 1.0. Besides these bugfixes it also
