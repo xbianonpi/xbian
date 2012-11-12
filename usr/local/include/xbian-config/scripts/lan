@@ -29,6 +29,8 @@ changelandhcp() {
 	else
 		showdialog "$1" "Close" "\n      LAN settings already set to DHCP."
 	fi
+
+	ASKFORREBOOT=1;
 }
 
 changelanstatic() {
@@ -295,6 +297,8 @@ changelanstatic() {
 		eval "sed -i 's/iface eth0 inet dhcp/$CONFIG/g' /etc/network/interfaces"
 		showdialog "$1" "Close" "\n          LAN static settings changed."
 	fi
+
+	ASKFORREBOOT=1;
 }
 
 lan() {

@@ -125,6 +125,9 @@ changewlandhcp() {
 	else
 		showdialog " $1 " "Close" "\n      WLAN settings already set to DHCP."
 	fi
+
+	ASKFORREBOOT=1;
+
 }
 
 changewpaconf() {
@@ -469,6 +472,8 @@ changewlanstatic() {
 	fi
 
 	IFS=$OLDIFS;
+
+	ASKFORREBOOT=1;
 }
 
 function wlan() {
