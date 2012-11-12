@@ -84,7 +84,12 @@ showinfo() {
 # $2 Text
 # $3 (optional) Height
 # $4 (optional) Width
+# $5 (optional) Yes label
+# $6 (optional) No Label
 showyesno() {
+	YESLABEL="Yes"
+	NOLABEL="No"
+
 	# Default width and height
 	HEIGHT=7
 	IMSGHGHT=$(echo -e "$3" | wc -l);
@@ -100,10 +105,18 @@ showyesno() {
 	if [ $# -gt 3 ]; then
 		WIDTH=$4
 	fi
+	if [ $# -gt 4 ]; then
+		YESLABEL=$5
+	fi
+	if [ $# -gt 5 ]; then
+		NOLABEL=$6
+	fi
 	# Show yes/no dialog
 	dialog \
 		--backtitle "$BACKTITLE" \
 		--title " $1 " \
+		--yes-label $YESLABEL \
+		--no-label $NOLABEL \
 		--yesno "$2" $HEIGHT $WIDTH
 }
 
