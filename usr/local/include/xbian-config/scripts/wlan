@@ -21,8 +21,6 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-source $BASEPATH/scripts/notimplemented
-
 changewlanunprotected() {
 	SSID=$(dialog --backtitle "$BACKTITLE" --title " $1 " --ok-label Change --inputbox "SSID:" 7 55 $3 3>&1 1>&2 2>&3)
 	if [ $? -eq 0 ]; then
@@ -75,11 +73,15 @@ changewlanprotected() {
 
 changewlandhcp() {
 
-	# Read settings from /etc/wpa_supplicant/wpa_supplicant.conf
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
-		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
-		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
-		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+	# Read settings from /etc/network/interfaces
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
+		CWSSID=$(cat /etc/network/interfaces | grep -A4 ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wpa-psk);
+		if [ -z $CWPASSWD ];then
+			CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wireless-key);
+		fi
+		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		if [ -z $CPASSWD ]; then
 			CMODE=1;
 		else
@@ -187,11 +189,15 @@ changewlanstatic() {
 	ONS1=();
 	ONS2=();
 
-	# Read SSID and PSK from wpa_supplicant.conf
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
-		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
-		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
-		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+	# Read settings from /etc/network/interfaces
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
+		CWSSID=$(cat /etc/network/interfaces | grep -A4 ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wpa-psk);
+		if [ -z $CWPASSWD ];then
+			CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wireless-key);
+		fi
+		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		if [ -z $CPASSWD ]; then
 			CMODE=1;
 		else
@@ -442,7 +448,7 @@ changewlanstatic() {
 	fi
 
 	sed -i '/wpa-roam/d' /etc/network/interfaces
-	sed -i '/iface wlan0 inet static/,+10d' /etc/network/interfaces
+	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
 	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet static\n$CONFIG/g" /etc/network/interfaces
 	showdialog "$1" "Close" "\n          WLAN static settings changed."
 
