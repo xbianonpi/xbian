@@ -38,7 +38,7 @@ changewlanunprotected() {
 
 changewlanprotected() {
 	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title " $1 " --form "\n  Press up/down to move between fields" 11 55 0 \
-		"SSID:" 1 1 "$4" 1 15 21 128 \
+		"SSID:" 1 1 "$4" 1 15 21 64 \
 		"Password:" 3 1 "$5" 3 15 21 128 \
 		3>&1 1>&2 2>&3);
 
@@ -75,10 +75,10 @@ changewlandhcp() {
 
 	# Read settings from /etc/network/interfaces
 	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
-		CWSSID=$(cat /etc/network/interfaces | grep -A4 ssid);
-		CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wpa-psk);
+		CWSSID=$(cat /etc/network/interfaces | grep ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep wpa-psk);
 		if [ -z $CWPASSWD ];then
-			CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wireless-key);
+			CWPASSWD=$(cat /etc/network/interfaces | grep wireless-key);
 		fi
 		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
@@ -109,7 +109,7 @@ changewlandhcp() {
 			fi
 		;;
 		3)
-			changewlanprotected "$1" "SSID" "PASSWD" "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" PMODE "$MODE";
 			if [ $? -eq 0 ]; then
 				return 0;
 			fi
@@ -121,9 +121,9 @@ changewlandhcp() {
 	esac
 
 	if [ $MODE -eq 1 ]; then
-		CONFIG+="\nwireless-essid $SSID"
+		CONFIG+="\nwireless-mode managed\nwireless-essid $SSID"
 	elif [ $MODE -eq 2 ];then
-		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\"\""
+		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\""
 	else
 		CONFIG+="\nwireless-essid $SSID\nwireless-key $PASSWD"
 	fi
@@ -164,7 +164,7 @@ changewlanstatic() {
 		done < /tmp/xbian-config-args;
 		rm /tmp/xbian-config-args;
 	else
-		CONTENT=$(cat /etc/network/interfaces | grep -A6 "^iface wlan0 inet static");
+		CONTENT=$(cat /etc/network/interfaces | grep -A6 "^iface wlan0 inet manual");
 		CIP=($(echo -e "$CONTENT" | grep address | cut -f 2 -d " " | sed 's/\./\ /g'));
 		CSM=($(echo -e "$CONTENT" | grep netmask | cut -f 2 -d " " | sed 's/\./\ /g'));
 		CGW=($(echo -e "$CONTENT" | grep gateway | cut -f 2 -d " " | sed 's/\./\ /g'));
@@ -191,10 +191,10 @@ changewlanstatic() {
 
 	# Read settings from /etc/network/interfaces
 	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
-		CWSSID=$(cat /etc/network/interfaces | grep -A4 ssid);
-		CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wpa-psk);
+		CWSSID=$(cat /etc/network/interfaces | grep ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep wpa-psk);
 		if [ -z $CWPASSWD ];then
-			CWPASSWD=$(cat /etc/network/interfaces | grep -A4 wireless-key);
+			CWPASSWD=$(cat /etc/network/interfaces | grep wireless-key);
 		fi
 		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
@@ -410,9 +410,9 @@ changewlanstatic() {
 	done;
 
 	if [ $MODE -eq 1 ]; then
-		CONFIG+="\nwireless-essid $SSID"
+		CONFIG+="\nwireless-mode managed\nwireless-essid $SSID"
 	elif [ $MODE -eq 2 ];then
-		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\"\""
+		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\""
 	else
 		CONFIG+="\nwireless-essid $SSID\nwireless-key $PASSWD"
 	fi
@@ -449,7 +449,7 @@ changewlanstatic() {
 
 	sed -i '/wpa-roam/d' /etc/network/interfaces
 	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
-	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet static\n$CONFIG/g" /etc/network/interfaces
+	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\naddress $CONFIG/g" /etc/network/interfaces
 	showdialog "$1" "Close" "\n          WLAN static settings changed."
 
 	IFS=$OLDIFS;
