@@ -21,8 +21,6 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-source $BASEPATH/scripts/notimplemented
-
 changewlanunprotected() {
 	SSID=$(dialog --backtitle "$BACKTITLE" --title " $1 " --ok-label Change --inputbox "SSID:" 7 55 $3 3>&1 1>&2 2>&3)
 	if [ $? -eq 0 ]; then
@@ -40,7 +38,7 @@ changewlanunprotected() {
 
 changewlanprotected() {
 	VALUES=$(dialog --ok-label "Change" --backtitle "$BACKTITLE" --title " $1 " --form "\n  Press up/down to move between fields" 11 55 0 \
-		"SSID:" 1 1 "$4" 1 15 21 128 \
+		"SSID:" 1 1 "$4" 1 15 21 64 \
 		"Password:" 3 1 "$5" 3 15 21 128 \
 		3>&1 1>&2 2>&3);
 
@@ -75,11 +73,15 @@ changewlanprotected() {
 
 changewlandhcp() {
 
-	# Read settings from /etc/wpa_supplicant/wpa_supplicant.conf
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
-		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
-		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
-		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+	# Read settings from /etc/network/interfaces
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
+		CWSSID=$(cat /etc/network/interfaces | grep ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep wpa-psk);
+		if [ -z $CWPASSWD ];then
+			CWPASSWD=$(cat /etc/network/interfaces | grep wireless-key);
+		fi
+		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		if [ -z $CPASSWD ]; then
 			CMODE=1;
 		else
@@ -107,8 +109,10 @@ changewlandhcp() {
 			fi
 		;;
 		3)
-			notimplemented;
-			return 0;
+			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" PMODE "$MODE";
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		*)
 			wlan $1
@@ -116,50 +120,19 @@ changewlandhcp() {
 		;;
 	esac
 
-	changewpaconf $SSID $CSSID $PASSWD $MODE
-
-	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 1 ]; then
-		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
-		mv /etc/network/interfaces.new /etc/network/interfaces
-		showdialog " $1 " "Close" "\n          WLAN settings set to DHCP."
+	if [ $MODE -eq 1 ]; then
+		CONFIG+="\nwireless-mode managed\nwireless-essid $SSID"
+	elif [ $MODE -eq 2 ];then
+		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\""
 	else
-		showdialog " $1 " "Close" "\n      WLAN settings already set to DHCP."
+		CONFIG+="\nwireless-essid $SSID\nwireless-key $PASSWD"
 	fi
 
+	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
+	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet dhcp\n$CONFIG/g" /etc/network/interfaces
+	showdialog " $1 " "Close" "\n      WLAN settings updated."
 	ASKFORREBOOT=1;
 
-}
-
-changewpaconf() {
-	# Check if wpa_supplicant configuration is present
-	WLOPTS=""
-	if [ $MODE -eq 1 ]; then
-		# Unprotected
-		WLOPTS+="ssid=\"$SSID\"\nkey_mgmt=NONE\npriority=5"
-	elif [ $MODE -eq 2 ]; then
-		# WPAx
-		WLOPTS+="ssid=\"$SSID\"\npsk=\"$PASSWD\""
-	else
-		# WEP
-		WLOPTS+="ssid=\"$SSID\"\nkey_mgmt=NONE\nwep_key0=\"$PASSWD\"\nwep_tx_keyidx=0\npriority=5"
-	fi
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -eq 0 ]; then
-		# Populate new file
-		echo -e "\nnetwork={\n$WLOPTS\n}" >> /etc/wpa_supplicant/wpa_supplicant.conf
-	else
-		# Clean up
-		sed -i '/psk/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/key_mgmt/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/wep_key0/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/wep_key1/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/wep_key2/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/wep_tx_keyidx/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/priority/d' /etc/wpa_supplicant/wpa_supplicant.conf
-		sed -i '/^$/d' /etc/wpa_supplicant/wpa_supplicant.conf
-
-		# Edit file
-		sed -i "s/ssid=\"$CSSID\"/$WLOPTS/g" /etc/wpa_supplicant/wpa_supplicant.conf
-	fi
 }
 
 changewlanstatic() {
@@ -216,11 +189,15 @@ changewlanstatic() {
 	ONS1=();
 	ONS2=();
 
-	# Read SSID and PSK from wpa_supplicant.conf
-	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network | wc -l) -gt 0 ]; then
-		CWLAN=$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep -A4 network);
-		CSSID=$(echo -e "$CWLAN" | grep ssid | cut -f 2 -d= | sed -e 's/"//g');
-		CPASSWD=$(echo -e "$CWLAN" | grep psk | cut -f 2 -d= | sed -e 's/"//g');
+	# Read settings from /etc/network/interfaces
+	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
+		CWSSID=$(cat /etc/network/interfaces | grep ssid);
+		CWPASSWD=$(cat /etc/network/interfaces | grep wpa-psk);
+		if [ -z $CWPASSWD ];then
+			CWPASSWD=$(cat /etc/network/interfaces | grep wireless-key);
+		fi
+		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
+		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		if [ -z $CPASSWD ]; then
 			CMODE=1;
 		else
@@ -248,8 +225,10 @@ changewlanstatic() {
 			fi
 		;;
 		3)
-			notimplemented;
-			return 0;
+			changewlanprotected "$1" SSID PASSWD "$CSSID" "$CPASSWD" "PMODE" "$MODE";
+			if [ $? -eq 0 ]; then
+				return 0;
+			fi
 		;;
 		*)
 			IFS=$OLDIFS;
@@ -372,7 +351,7 @@ changewlanstatic() {
 		fi
 	fi
 
-	CONFIG="wpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf\naddress ";
+	CONFIG="";
 	I=0;
 	for VALUE in ${IP[@]}; do
 		CONFIG+="$VALUE";
@@ -430,6 +409,14 @@ changewlanstatic() {
 		I=$(($I+1));
 	done;
 
+	if [ $MODE -eq 1 ]; then
+		CONFIG+="\nwireless-mode managed\nwireless-essid $SSID"
+	elif [ $MODE -eq 2 ];then
+		CONFIG+="\nwpa-ssid \"$SSID\"\nwpa-psk \"$PASSWD\""
+	else
+		CONFIG+="\nwireless-essid $SSID\nwireless-key $PASSWD"
+	fi
+
 	# Modify /etc/resolv.conf
 	eval "sed -i '/nameserver/d' /etc/resolv.conf"
 	NNS=0;
@@ -460,16 +447,10 @@ changewlanstatic() {
 		NNS=$(($NNS+1))
 	fi
 
-	changewpaconf $SSID $CSSID $PASSWD $MODE
-
-	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -gt 0 ]; then
-		cat /etc/network/interfaces | sed '/iface wlan0 inet manual/,+6d' | sed 's/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\nwpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/g' > /etc/network/interfaces.new
-		mv /etc/network/interfaces.new /etc/network/interfaces
-	fi
-	if [ $(cat /etc/network/interfaces | grep -A2 'wlan0 inet manual' | grep address | wc -l) -eq 0 ]; then
-		eval "sed -i 's/wpa-roam \/etc\/wpa_supplicant\/wpa_supplicant.conf/$CONFIG/g' /etc/network/interfaces"
-		showdialog "$1" "Close" "\n          WLAN static settings changed."
-	fi
+	sed -i '/wpa-roam/d' /etc/network/interfaces
+	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
+	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\naddress $CONFIG/g" /etc/network/interfaces
+	showdialog "$1" "Close" "\n          WLAN static settings changed."
 
 	IFS=$OLDIFS;
 
