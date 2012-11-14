@@ -128,13 +128,9 @@ function videoflags() {
 				MESSAGE+="  Overscan is still:                enabled\n"
 			fi
 		fi
-		if [ $MESSAGE == "\n" ]; then
-			MESSAGE="\n          You didn't change any settings";
-		fi
-		if [ $MESSAGE != "\n" ]; then
-			showdialog 	" $1 " \
-						"Close" \
-						"$MESSAGE"
+		showdialog 	" $1 " \
+				"Close" \
+				"$MESSAGE"
 		fi
 	fi
 }
