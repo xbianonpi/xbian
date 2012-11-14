@@ -21,4 +21,7 @@ if [[ $(who am i | awk '{print $2}') == "tty1" ]]; then
         clear
 	export PS1="\e[40;30m";
 	echo -e '\e[40;30m';
+else
+        export PS1="\e[40;0m\u@\h:\w# "
+        echo -e '\e[40;0m';
 fi
