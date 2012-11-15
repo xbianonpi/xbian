@@ -1,56 +1,55 @@
---- a/configure.ac	2012-10-30 14:41:51.117197923 +0100
-+++ b/configure.ac	2012-10-30 14:42:35.436753755 +0100
-@@ -173,7 +173,6 @@
- 	(lirc_dev lirc_serial) \
- 	(lirc_dev lirc_rpi) \
- 	(lirc_dev lirc_sir) \
--	(lirc_dev lirc_wpc8769l) \
- 	(lirc_dev lirc_xbox)"
+
+--- configure.ac1       2012-11-15 14:31:24.448087379 +0100
++++ configure.ac        2012-11-15 14:32:02.977755311 +0100
+@@ -171,8 +171,7 @@
+        (lirc_dev lirc_parallel) \
+        (lirc_dev lirc_sasem) \
+        (lirc_dev lirc_serial) \
+-       (lirc_dev lirc_sir) \
+-       (lirc_dev lirc_wpc8769l)"
++       (lirc_dev lirc_sir)"
  fi
- 
-@@ -447,7 +446,7 @@
-                           srm7500libusb, tekram,
-                           tekram_bt829, tira, tira_raw, ttusbir,
-                           tuxbox, tvbox, udp, uirt2, uirt2_raw,
--                          usb_uirt_raw, usbx, wpc8769l, xbox],
-+                          usb_uirt_raw, usbx, xbox],
- driver=${withval},
- driver="unset"
- )
-@@ -612,8 +611,6 @@
- 		;;
- 	lirc_dev-lirc_sir)
- 		;;
--	lirc_dev-lirc_wpc8769l)
--		;;
- 	lirc_dev-lirc_xbox)
-   		;;
- 	lirc_flyvideo)
-@@ -1412,11 +1409,6 @@
+
+ AH_TEMPLATE([DAEMONIZE],
+@@ -608,8 +607,6 @@
+                ;;
+        lirc_dev-lirc_sir)
+                ;;
+-       lirc_dev-lirc_wpc8769l)
+-               ;;
+        lirc_flyvideo)
+                ;;
+        livedrive_midi)
+@@ -1402,12 +1399,6 @@
    lircd_conf="adstech/lircd.conf.usbx-707"
  fi
- 
+
 -if test "$driver" = "wpc8769l"; then
 -  lirc_driver="lirc_dev lirc_wpc8769l"
 -  lircd_conf="acer/lircd.conf.Aspire_6530G"
 -fi
 -
- if test "$driver" = "xbox"; then
-   lirc_driver="lirc_dev lirc_xbox"
-   lircd_conf="xbox/lircd.conf.xbox"
-@@ -1528,7 +1520,6 @@
- 	lirc_rpi \
- 	lirc_sir \
- 	lirc_ttusbir \
--	lirc_wpc8769l \
- 	lirc_xbox"
+-
+ #END HARDWARE HEURISTIC
+
+ AC_DEFINE_UNQUOTED(HW_DEFAULT, ${HW_DEFAULT})
+@@ -1512,9 +1503,9 @@
+        lirc_sasem \
+        lirc_serial \
+        lirc_sir \
+-       lirc_ttusbir \
+-       lirc_wpc8769l"
++       lirc_ttusbir"
  fi
++
  if kernel_module=$(expr "$lirc_driver" : 'lirc_dev \(.*\)'); then
-@@ -1796,7 +1787,6 @@
+   :
+ elif test "$lirc_driver" != ""; then
+@@ -1779,7 +1770,6 @@
+   drivers/lirc_sasem/Makefile
    drivers/lirc_serial/Makefile
-   drivers/lirc_rpi/Makefile
    drivers/lirc_sir/Makefile
 -  drivers/lirc_wpc8769l/Makefile
-   drivers/lirc_xbox/Makefile
    daemons/Makefile
    tools/Makefile
+   doc/Makefile
