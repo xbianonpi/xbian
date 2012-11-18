@@ -72,11 +72,16 @@ case "$1" in
                 2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
         esac
         ;;
+  restart)
+        $0 stop
+        sleep 1
+        $0 start
+        ;;
   status)
         status_of_proc "$DAEMON" "$NAME" && exit 0 || exit 0
         ;;
   *)
-        echo "Usage: $SCRIPTNAME {start|stop}" >&2
+        echo "Usage: $SCRIPTNAME {start|stop|restart|status}" >&2
         exit 3
         ;;
 esac
