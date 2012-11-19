@@ -140,6 +140,30 @@ showmenu () {
 			"$@" 3>&1 1>&2 2>&3)
 }
 
+#Show menu with description text
+# $1 Title
+# $2 Descriptive text
+# $3-n Menu items
+showmenudesc () {
+        TITLE=" $1 "
+        TEXT="$2"
+        shift;shift;
+        ROWS=$(($#/2))
+        HEIGHT=$(($ROWS+10))
+        RETURN=$( \
+                dialog \
+                        --no-kill \
+                        --colors \
+                        --backtitle "$BACKTITLE" \
+                        --title "$TITLE" \
+                        --ok-label Select \
+                        --cancel-label Return \
+                        --menu "$TEXT" \
+                        $HEIGHT 80 $ROWS \
+                        "$@" 3>&1 1>&2 2>&3)
+}
+
+# Catch-all for not implemented functions
 notimplementedyet() {
 	showdialog 	"Config > *" \
 			"Close" \
