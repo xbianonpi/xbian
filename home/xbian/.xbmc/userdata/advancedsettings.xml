@@ -2,8 +2,8 @@
    <network>
         <cachemembuffersize>5282880</cachemembuffersize>
    </network>
-   <fanartheight>540</fanartheight>
-   <thumbsize>256</thumbsize>
+   <fanartres>540</fanartres>
+   <thumbres>256</thumbres>
    <gui>
        <algorithmdirtyregions>3</algorithmdirtyregions>      
        <nofliptimeout>0</nofliptimeout>
