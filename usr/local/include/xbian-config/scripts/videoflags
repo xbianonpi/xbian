@@ -131,6 +131,5 @@ function videoflags() {
 		showdialog 	" $1 " \
 				"Close" \
 				"$MESSAGE"
-		fi
 	fi
 }
