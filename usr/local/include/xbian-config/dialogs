@@ -134,6 +134,7 @@ showmenu () {
 			--backtitle "$BACKTITLE" \
 			--title "$TITLE" \
 			--ok-label Select \
+			--colors \
 			--cancel-label Return \
 			--menu '' $HEIGHT 80 $ROWS \
 			"$@" 3>&1 1>&2 2>&3)
