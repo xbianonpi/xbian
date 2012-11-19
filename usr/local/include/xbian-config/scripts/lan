@@ -23,7 +23,7 @@
 
 changelandhcp() {
 	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
-		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
+		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+3d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
 		mv /etc/network/interfaces.new /etc/network/interfaces
 		showdialog "$1" "Close" "\n          LAN settings set to DHCP."
 	else
@@ -201,55 +201,30 @@ changelanstatic() {
 		fi
 	fi
 
+	# Configure address
 	CONFIG="iface eth0 inet static\naddress ";
 	I=0;
 	for VALUE in ${IP[@]}; do
 		CONFIG+="$VALUE";
 		if [ $I -lt 3 ]; then
 			CONFIG+=".";
-		else
-			CONFIG+="\nnetwork ";
 		fi
 		I=$(($I+1));
 	done;
+
+	# Configure netmask
 	I=0;
-	for VALUE in ${IP[@]}; do
-		if [ $I -eq 3 ]; then
-			CONFIG+=0;
-		else
-			CONFIG+=$VALUE;
-		fi
-		if [ $I -lt 3 ]; then
-			CONFIG+=".";
-		else
-			CONFIG+="\nnetmask ";
-		fi
-		I=$(($I+1));
-	done;
-	I=0;
+	CONFIG+="\nnetmask ";
 	for VALUE in ${SM[@]}; do
 		CONFIG+=$VALUE;
 		if [ $I -lt 3 ]; then
 			CONFIG+=".";
-		else
-			CONFIG+="\nbroadcast ";
 		fi
 		I=$(($I+1));
 	done;
-	I=0;
-	for VALUE in ${IP[@]}; do
-		if [ $I -eq 3 ]; then
-			CONFIG+=255;
-		else
-			CONFIG+=$VALUE;
-		fi
-		if [ $I -lt 3 ]; then
-			CONFIG+=".";
-		else
-			CONFIG+="\ngateway ";
-		fi
-		I=$(($I+1));
-	done;
+
+	# Configuring gateway
+	CONFIG+="\ngateway ";
 	I=0;
 	for VALUE in ${GW[@]}; do
 		CONFIG+=$VALUE;
@@ -291,7 +266,7 @@ changelanstatic() {
 
 	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -eq 0 ]; then
 		cat /etc/network/interfaces | sed '/iface eth0 inet static/,+6d' | sed 's/iface lo inet loopback/iface lo inet loopback\niface eth0 inet dhcp\n/g' > /etc/network/interfaces.new
-		mv /etc/network/interfaces.new /etc/network/interfaces	
+		mv /etc/network/interfaces.new /etc/network/interfaces
 	fi
 	if [ $(cat /etc/network/interfaces | grep 'eth0 inet dhcp' | wc -l) -gt 0 ]; then
 		eval "sed -i 's/iface eth0 inet dhcp/$CONFIG/g' /etc/network/interfaces"

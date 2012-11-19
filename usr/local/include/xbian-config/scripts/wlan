@@ -67,7 +67,7 @@ changewlanprotected() {
 
 	eval "$2=\"$SSID\"";
 	eval "$3=\"$PASSWD\"";
-	
+
 	return 1;
 }
 
@@ -128,16 +128,16 @@ changewlandhcp() {
 		CONFIG+="\nwireless-essid $SSID\nwireless-key $PASSWD"
 	fi
 
-	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
-	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet dhcp\n$CONFIG/g" /etc/network/interfaces
+	sed -i '/allow-hotplug wlan0/,+10d' /etc/network/interfaces
+	echo -e "allow-hotplug wlan0\niface wlan0 inet dhcp\n$CONFIG" >> /etc/network/interfaces
 
 	# Restart interface
-	showinfo "$1" "\n\n     Restarting interface wlan0"
+	showinfo "$1" "\n\n            Restarting interface wlan0"
 	ifdown wlan0
 	sleep 1
 	ifup wlan0
 
-	showdialog " $1 " "Close" "\n      WLAN settings updated."
+	showdialog " $1 " "Close" "\n               WLAN settings updated."
 
 }
 
@@ -170,7 +170,7 @@ changewlanstatic() {
 		done < /tmp/xbian-config-args;
 		rm /tmp/xbian-config-args;
 	else
-		CONTENT=$(cat /etc/network/interfaces | grep -A6 "^iface wlan0 inet manual");
+		CONTENT=$(cat /etc/network/interfaces | grep -A6 "^iface wlan0 inet static");
 		CIP=($(echo -e "$CONTENT" | grep address | cut -f 2 -d " " | sed 's/\./\ /g'));
 		CSM=($(echo -e "$CONTENT" | grep netmask | cut -f 2 -d " " | sed 's/\./\ /g'));
 		CGW=($(echo -e "$CONTENT" | grep gateway | cut -f 2 -d " " | sed 's/\./\ /g'));
@@ -357,55 +357,30 @@ changewlanstatic() {
 		fi
 	fi
 
-	CONFIG="";
+	# Add IP
+	CONFIG="address ";
 	I=0;
 	for VALUE in ${IP[@]}; do
-		CONFIG+="$VALUE";
+		CONFIG+=$VALUE;
 		if [ $I -lt 3 ]; then
 			CONFIG+=".";
-		else
-			CONFIG+="\nnetwork ";
 		fi
 		I=$(($I+1));
 	done;
-	I=0;
-	for VALUE in ${IP[@]}; do
-		if [ $I -eq 3 ]; then
-			CONFIG+=0;
-		else
-			CONFIG+=$VALUE;
-		fi
-		if [ $I -lt 3 ]; then
-			CONFIG+=".";
-		else
-			CONFIG+="\nnetmask ";
-		fi
-		I=$(($I+1));
-	done;
+
+	# Add netmask
+	CONFIG+="\nnetmask ";
 	I=0;
 	for VALUE in ${SM[@]}; do
 		CONFIG+=$VALUE;
 		if [ $I -lt 3 ]; then
 			CONFIG+=".";
-		else
-			CONFIG+="\nbroadcast ";
 		fi
 		I=$(($I+1));
 	done;
-	I=0;
-	for VALUE in ${IP[@]}; do
-		if [ $I -eq 3 ]; then
-			CONFIG+=255;
-		else
-			CONFIG+=$VALUE;
-		fi
-		if [ $I -lt 3 ]; then
-			CONFIG+=".";
-		else
-			CONFIG+="\ngateway ";
-		fi
-		I=$(($I+1));
-	done;
+
+	# Add gateway
+	CONFIG+="\ngateway ";
 	I=0;
 	for VALUE in ${GW[@]}; do
 		CONFIG+=$VALUE;
@@ -454,14 +429,11 @@ changewlanstatic() {
 	fi
 
 	sed -i '/wpa-roam/d' /etc/network/interfaces
-	sed -i '/iface wlan0/,+10d' /etc/network/interfaces
-	sed -i "s/allow-hotplug wlan0/allow-hotplug wlan0\niface wlan0 inet manual\naddress $CONFIG/g" /etc/network/interfaces
+	sed -i '/allow-hotplug wlan0/,+10d' /etc/network/interfaces
+	echo -e "allow-hotplug wlan0\niface wlan0 inet static\n$CONFIG" >> /etc/network/interfaces
 
-	# Restart interface
-	showinfo "$1" "\n\n     Restarting interface wlan0"
-	ifdown wlan0
-	sleep 1
-	ifup wlan0
+	# Reboot is required to make sure everything is properly setup with static settings
+	ASKFORREBOOT=1
 
 	showdialog "$1" "Close" "\n          WLAN static settings changed."
 
