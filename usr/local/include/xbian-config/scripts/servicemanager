@@ -23,9 +23,6 @@
 
 function getservices() {
 
-	# Fetch which is installed
-	# INSTALLED=($(ls --format=single-column /etc/init.d/ | awk '{print $1 , " IOK" ; }'))
-
 	# Fetch which is autostarted
 	STARTUP=($(ls --format=single-column /etc/rc5.d/ | awk '{print substr($1,4) , " SOK" ; }'))
 
@@ -39,35 +36,15 @@ function getservices() {
 	   RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
 	done
 
-	# Join everything
+	# Join everything to a single "table"
 	join -a 1 -o "0,2.2" <( printf "%s\n" "${SERVICES[@]}" | sort) <(printf "%s\n" "${RUNNING[@]}" | sort) | \
 		join -a 1 -o "0,1.2,2.2" - <(printf "%s\n" "${STARTUP[@]})" | sort) | sort | uniq
 
-	# ToDo: Restore IFS
-}
-
-# Temporary custom menu function
-# ToDo: Implement in dialog script
-showmenucustom () {
-        TITLE=" $1 "
-	TEXT="$2"
-        shift;shift;
-        ROWS=$(($#/2))
-        HEIGHT=$(($ROWS+10))
-        RETURN=$( \
-                dialog \
-                        --no-kill \
-                        --colors \
-                        --backtitle "$BACKTITLE" \
-                        --title "$TITLE" \
-                        --ok-label Select \
-                        --cancel-label Return \
-                        --menu "$TEXT" \
-			$HEIGHT 80 $ROWS \
-                        "$@" 3>&1 1>&2 2>&3)
 }
 
 function servicemenu() {
+
+	# Prepare service menu
 	SERVICE_DATA=$(echo "$3" | grep "$2")
 	MENU=()
 	if [[ $SERVICE_DATA =~ "SOK" ]]; then
@@ -81,7 +58,9 @@ function servicemenu() {
 	else
 		MENU+="2!Start service!"
 	fi
-	showmenucustom "$1> $2 " "\n  Available actions for $2\n " $MENU
+
+	# Show service menu
+	showmenudesc "$1> $2 " "\n  Available actions for $2\n " $MENU
 	if [ $? -eq 0 ]; then
 		if [ $RETURN -eq 1 ]; then
 			if [[ $SERVICE_DATA =~ "SOK" ]]; then
@@ -133,7 +112,7 @@ function servicemanager() {
 
 	# Display menu
 	IFS="!";
-	showmenucustom 	"$1" \
+	showmenudesc 	"$1" \
 			"\n Select a service to manage\n " \
 			$SERVICES
 
