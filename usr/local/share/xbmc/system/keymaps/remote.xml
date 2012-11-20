@@ -150,7 +150,7 @@
       <back>SmallStepBack</back>
       <menu>OSD</menu>
       <start>OSD</start>
-      <select>AspectRatio</select>
+      <select>OSD</select>
       <title>CodecInfo</title>
       <info>Info</info>
       <guide>XBMC.ActivateWindow(PVROSDGuide)</guide>
@@ -191,8 +191,8 @@
       <back>LockPreset</back>
       <title>CodecInfo</title>
       <select>XBMC.ActivateWindow(VisualisationPresetList)</select>
-      <menu>XBMC.ActivateWindow(MusicOSD)</menu>
-      <start>XBMC.ActivateWindow(MusicOSD)</start>
+      <menu>OSD</menu>
+      <start>OSD</start>
       <info>Info</info>
       <guide>XBMC.ActivateWindow(PVROSDGuide)</guide>
       <playlist>XBMC.ActivateWindow(PVROSDChannels)</playlist>
@@ -508,6 +508,14 @@
       <back>Close</back>
     </remote>
   </Favourites>
+  <FullscreenLiveTV>
+    <remote>
+      <left>PreviousChannelGroup</left>
+      <right>NextChannelGroup</right>
+      <up>ChannelUp</up>
+      <down>ChannelDown</down>
+    </remote>
+  </FullscreenLiveTV>
   <PVROSDChannels>
     <remote>
       <back>Close</back>
