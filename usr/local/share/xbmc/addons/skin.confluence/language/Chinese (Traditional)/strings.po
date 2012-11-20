@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
 "POT-Creation-Date: 2012-05-04 12:52+0000\n"
-"PO-Revision-Date: 2012-06-12 03:42+0000\n"
+"PO-Revision-Date: 2012-11-06 02:43+0000\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
@@ -75,7 +75,7 @@ msgstr "海報捲動"
 
 msgctxt "#31029"
 msgid "Fanart"
-msgstr "劇照"
+msgstr "Fanart"
 
 msgctxt "#31031"
 msgid "Pic Thumbs"
@@ -99,7 +99,7 @@ msgstr "正在播放"
 
 msgctxt "#31043"
 msgid "PAUSED"
-msgstr "暫停"
+msgstr "已暫停"
 
 msgctxt "#31044"
 msgid "FAST FORWARD"
@@ -155,7 +155,7 @@ msgstr "目前的選擇"
 
 msgctxt "#31101"
 msgid "Home screen options"
-msgstr "主介面選項"
+msgstr "首頁介面選項"
 
 msgctxt "#31102"
 msgid "Background"
@@ -167,7 +167,7 @@ msgstr "在圖片幻燈片秀中顯示\"已暫停\"狀態"
 
 msgctxt "#31104"
 msgid "Play Trailers in a window [COLOR=grey3](Video Information Dialog Only)[/COLOR]"
-msgstr "在視窗中播放預告片[COLOR=grey3](只在視訊資訊對話框中)[/COLOR]"
+msgstr "在視窗中播放預告片[COLOR=grey3](只在影片資訊對話框中)[/COLOR]"
 
 msgctxt "#31106"
 msgid "Miscellaneous options"
@@ -175,7 +175,7 @@ msgstr "其他選項"
 
 msgctxt "#31107"
 msgid "Hide Flagging read from video filenames [COLOR=grey3](Blu-ray, HD-DVD)[/COLOR]"
-msgstr "隱藏視訊檔案名稱的媒體標示 [COLOR=grey3](Blu-ray, HD-DVD)[/COLOR]"
+msgstr "隱藏影片檔案名稱的媒體標示 [COLOR=grey3](Blu-ray, HD-DVD)[/COLOR]"
 
 msgctxt "#31108"
 msgid "Hide Main Menu Buttons"
@@ -183,11 +183,11 @@ msgstr "隱藏主選單按鈕"
 
 msgctxt "#31109"
 msgid "Enable Custom Background"
-msgstr ""
+msgstr "啟用自訂背景圖片"
 
 msgctxt "#31110"
 msgid "Background path:"
-msgstr ""
+msgstr "背景圖片路徑："
 
 msgctxt "#31111"
 msgid "Hide"
@@ -203,7 +203,7 @@ msgstr "顯示最近加入的專輯"
 
 msgctxt "#31117"
 msgid "Show Recently added Videos"
-msgstr "顯示最近新增的視訊"
+msgstr "顯示最近新增的影片"
 
 msgctxt "#31118"
 msgid "Home Page Programs Submenu"
@@ -211,19 +211,15 @@ msgstr "首頁程式子選單"
 
 msgctxt "#31119"
 msgid "Hide Background Fanart"
-msgstr "隱藏背景劇照"
+msgstr "隱藏背景 Fanart"
 
 msgctxt "#31122"
 msgid "Weather Page"
 msgstr "天氣頁面"
 
-msgctxt "#31123"
-msgid "Use \"Posters\" instead of \"Banners\" for TV Shows"
-msgstr "以電視節目的海報取代橫幅圖片"
-
 msgctxt "#31124"
 msgid "Show Background \"Now Playing\" Video"
-msgstr "在背景顯示正在播放的視訊"
+msgstr "在背景顯示正在播放的影片"
 
 msgctxt "#31125"
 msgid "Show Background \"Now Playing\" Visualization"
@@ -231,7 +227,7 @@ msgstr "在背景顯示正在播放的視覺效果"
 
 msgctxt "#31126"
 msgid "Play TV theme songs in video library (TvTunes add-on)"
-msgstr "在視訊資料庫中播放電視主題曲（TvTunes 附加元件）"
+msgstr "在影片資料庫中播放電視主題曲（TvTunes 附加元件）"
 
 msgctxt "#31127"
 msgid "TvTunes"
@@ -243,7 +239,7 @@ msgstr "歌詞"
 
 msgctxt "#31129"
 msgid "Hide Fanart in full screen visualization"
-msgstr ""
+msgstr "在全螢幕視覺效果中隱藏 Fanart"
 
 msgctxt "#31132"
 msgid "Lyrics Add-on"
@@ -271,7 +267,7 @@ msgstr "音樂播放工具列"
 
 msgctxt "#31141"
 msgid "Video OSD"
-msgstr "視訊播放工具列"
+msgstr "影片播放工具列"
 
 msgctxt "#31200"
 msgid "Shortcuts"
@@ -311,7 +307,7 @@ msgstr "資料提供者"
 
 msgctxt "#31307"
 msgid "Hide Fanart"
-msgstr "隱藏劇照"
+msgstr "隱藏 Fanart"
 
 msgctxt "#31308"
 msgid "Movie Details"
@@ -327,7 +323,7 @@ msgstr "音軌編號"
 
 msgctxt "#31311"
 msgid "Fanart image[CR][CR]Unavailable[CR][CR] Click button to set"
-msgstr "無法取得[CR][CR]劇情照片[CR][CR] 請點擊按鈕來設定"
+msgstr "無法取得[CR][CR]Fanart 圖片[CR][CR] 請點擊按鈕來設定"
 
 msgctxt "#31312"
 msgid "Current Scraper"
@@ -343,7 +339,7 @@ msgstr "內容掃描選項"
 
 msgctxt "#31317"
 msgid "Set Fanart Path"
-msgstr "設定劇照路徑"
+msgstr "設定 Fanart 路徑"
 
 msgctxt "#31319"
 msgid "Selected Profile"
@@ -431,7 +427,7 @@ msgstr "[B]配置介面外觀[/B][CR][CR]修改佈景主題 · 選擇語言和�
 
 msgctxt "#31401"
 msgid "[B]CONFIGURE VIDEO SETTINGS[/B][CR][CR]Manage your video library · Set video playback options · Change video listing options[CR]Set subtitle fonts"
-msgstr "[B]配置視訊設定[/B][CR][CR]管理你的音樂資料庫 · 設定視訊播放選項 · 修改視訊清單選項[CR]設定字幕字型"
+msgstr "[B]配置視訊設定[/B][CR][CR]管理你的音樂資料庫 · 設定影片播放選項 · 修改影片清單選項[CR]設定字幕字型"
 
 msgctxt "#31402"
 msgid "[B]CONFIGURE MUSIC SETTINGS[/B][CR][CR]Manage your music library · Set music playback options · Change music listing options[CR]Setup song submission · Set karaoke options"
@@ -449,21 +445,25 @@ msgctxt "#31406"
 msgid "[B]CONFIGURE SYSTEM SETTINGS[/B][CR][CR]Setup and calibrate displays · Configure audio output · Setup remote controls[CR]Set power saving options · Enable debugging · Setup master lock"
 msgstr "[B]配置系統設定[/B][CR][CR]設定和校正顯示輸出 · 設定音效輸出 · 設定遙控器[CR]設定節能選項 · 啟用除錯 · 設定鎖定密碼"
 
-msgctxt "#31407"
-msgid "[B]CONFIGURE SKIN SETTINGS[/B][CR][CR]Setup the Confluence skin · Add and remove home menu items[CR]Change skin backgrounds"
-msgstr "[B]配置佈景主題[/B][CR][CR]設定 Confluence 佈景主題 · 新增或移除首頁選單項目[CR]修改佈景主題背景"
-
 msgctxt "#31408"
 msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
 msgstr "[B]配置附加元件[/B][CR][CR]管理已安裝的附加元件 · 從 xbmc.org 瀏覽並安裝附加元件[CR]修改附加元件設定"
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change fullscreen info · Manage EPG data settings"
-msgstr ""
+msgstr "[B]CONFIGURE TV SETTINGS[/B][CR][CR]修改全螢幕資訊 · 管理電子節目表資料設定"
 
 msgctxt "#31410"
 msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
-msgstr ""
+msgstr "[B]配置服務設定[/B][CR][CR]設定透過 UPnP 和 HTTP 控製 XBMC · 配置檔案分享[CR]啟用 Zeroconf · 配置 AirPlay"
+
+msgctxt "#31411"
+msgid "First run help...."
+msgstr "第一次使用說明..."
+
+msgctxt "#31412"
+msgid "This tab signifies that there is a menu off to the side of this window that contains extra options for this section.  To access the menu, navigate to the left with your remote control or keyboard or place your mouse pointer over the tab. [CR][CR]Click \"Ok\" to close this dialog. It will not appear again."
+msgstr "這個標籤表示這個功能模組在這個視窗的側邊有提供額外選項的選單。你可以使用遙控器或鍵盤的左鍵或者是將滑鼠指標移動到這個標籤的範圍來存取這個選單。[CR][CR]按一下\"Ok\" 可以關閉這個對話框。它將不會再次出現。"
 
 msgctxt "#31421"
 msgid "Select your XBMC user Profile[CR]to login and continue"
@@ -471,11 +471,11 @@ msgstr "選擇您的 XBMC 使用者設定檔[CR]登入並繼續"
 
 msgctxt "#31500"
 msgid "Recording Timers"
-msgstr ""
+msgstr "錄影計時器"
 
 msgctxt "#31501"
 msgid "Scheduled Time"
-msgstr ""
+msgstr "已排程的時間"
 
 msgctxt "#31502"
 msgid "Live TV"
@@ -483,31 +483,31 @@ msgstr ""
 
 msgctxt "#31503"
 msgid "Add Group"
-msgstr ""
+msgstr "新增群組"
 
 msgctxt "#31504"
 msgid "Rename Group"
-msgstr ""
+msgstr "重新命名群組"
 
 msgctxt "#31505"
 msgid "Delete Group"
-msgstr ""
+msgstr "刪除群組"
 
 msgctxt "#31506"
 msgid "Available[CR]Groups"
-msgstr ""
+msgstr "可用的[CR]群組"
 
 msgctxt "#31509"
 msgid "Channel Group"
-msgstr ""
+msgstr "頻道群組"
 
 msgctxt "#31510"
 msgid "Timer Set"
-msgstr ""
+msgstr "計時器設定"
 
 msgctxt "#31511"
 msgid "Channel Options"
-msgstr ""
+msgstr "頻道選項"
 
 msgctxt "#31901"
 msgid "36 Hour Forecast"
