@@ -115,7 +115,8 @@ chmod +x /etc/init.d/*
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 chmod +x /usr/local/lib/xbmc/xbmc.bin
-chmod +x /opt/vc/bin/vcgencmd
+chmod +x /opt/vc/bin/*
+chmod +x /opt/vc/sbin/*
 chown -R xbian:xbian /home/xbian/.xbmc
 
 #Update rc.d
