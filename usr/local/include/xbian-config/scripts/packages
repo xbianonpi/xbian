@@ -1,0 +1,135 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+check_version() {
+	pkg_installed $1
+	if [ $? -eq 1 ]; then
+		INSTALLED_VERSION=$(pkg_version $1)
+		if [ $2 == $INSTALLED_VERSION ]; then
+			return 1;
+		fi
+	fi
+	return 0;
+}
+
+install_pkg() {
+
+	# Find package (access array element by index does not seem to work with viriables)
+	N=0; for I in ${LINES[@]}; do
+		N=$(($N+1))
+		if [ "$N" = "$2" ]; then
+			PACKAGE=$(echo $I | cut -f 1 -d:)
+			PACKAGE_VERSION=$(echo $I | cut -f 2 -d:)
+		fi
+	done
+
+	# Sanity check
+	if [ ! -z $PACKAGE ]; then
+		check_version $PACKAGE $PACKAGE_VERSION
+		if [ $? -eq 0 ]; then
+			showyesno " $1 " "\n   Are you sure you want to install this package?"
+			case "$?" in
+			0)
+				RETURN=$(($RETURN-1));
+				clear;
+				#echo "Please wait while installing $PACKAGE ..."
+				showinfo "$1" "\n\n Please wait while installing $PACKAGE ..."
+				apt-get install -y $PACKAGE=$PACKAGE_VERSION > /home/xbian/update.log
+				sleep 1;
+				showdialog "$1" "Close" "\n            Package succesfully installed.";
+				if [ -f /home/xbian/update.log ]; then
+					dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+					ASKFORREBOOT=1;
+				fi
+			;;
+			*)
+				return 0;
+			;;
+			esac
+		else
+			showdialog "$1" "Ok" "\n         This package is already installed"
+		fi
+	fi
+}
+
+packages() {
+
+	IFS=$'\n';
+	download_pkg_list "$1";
+	if [ -f /tmp/xbiancache/Packages ]; then
+
+		# Prepare package list
+		APTPACKAGES=$(cat /tmp/xbiancache/Packages | sed -n 's/\(Package: \)\(.*$\)\|\(Version: \)\(.*$\)\|\(Filename: \)\(.*$\)\|\(Description: \)\(.*$\)/\2\4\6\8/p');
+		LINES=();
+		I=0;
+		NRITEMS=0;
+		LIST=();
+		for PACKAGE in ${APTPACKAGES[@]}; do
+			I=$(($I+1));
+			LINE=$LINE$PACKAGE":";
+			if [ $I == 4 ]; then
+				I=0;
+				if [[ $(echo $LINE | cut -f 1 -d:) =~ "xbian-package" ]]; then
+
+					NRITEMS=$(($NRITEMS+1))
+
+					PACKAGE=$(echo $LINE | cut -f 1 -d:)
+					LINES+=("$LINE")
+					VERSION=$(echo $LINE | cut -f 2 -d:)
+					NAME=$(echo $PACKAGE | sed -e 's/xbian-package-//g' | sed 's/\([a-z]\)\([a-zA-Z0-9]*\)/\u\1\2/g')
+
+					# Check if package is installed
+					pkg_installed $PACKAGE
+					if [ $? -eq 1 ]; then
+						INSTALLED_VERSION=$(pkg_version $PACKAGE)
+						LIST+=($NRITEMS "$NAME | YES | $INSTALLED_VERSION | $VERSION")
+					else
+						LIST+=($NRITEMS "$NAME | NO | | $VERSION")
+					fi
+
+					LINE=""
+				fi
+			LINE="";
+			fi;
+		done
+
+		# Display package menu
+		if [ $NRITEMS -gt 0 ]; then
+			RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title " $1 " --no-collapse --ok-label Install --cancel-label Return --column-separator "|" --menu '' 15 80 $NRITEMS ${LIST[@]} 3>&1 1>&2 2>&3);
+			if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
+				install_pkg "$1" $RETURN
+				packages "$1"
+			fi
+		else
+			showdialog "$1" "Close" "\n          There are no packages available";
+			return 0;
+		fi
+		return 0;
+
+	else
+		showdialog "$1" "Close" "\n          An unexpected error occurred while\n        downloading the package list." 55 8
+	fi
+	return 0;
+}
+
+
