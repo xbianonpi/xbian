@@ -21,7 +21,11 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-getservices() {
+function getservices() {
+
+	# Get which services to manage by listing all files in /usr/local/include/xbian-config/services/
+	# And placing the results in an array
+	SERVICES=($(ls --format=single-column /usr/local/include/xbian-config/services/))
 
 	# Fetch which is services are autostarted from /etc/rc5.d/
 	# Services only in other runlevels won't show as autostart for now
@@ -56,7 +60,7 @@ getservices() {
 
 }
 
-servicemenu() {
+function servicemenu() {
 
 	# Prepare service menu
 	SERVICE_DATA=$3
@@ -79,21 +83,21 @@ servicemenu() {
 		if [ $RETURN -eq 1 ]; then
 			if [[ $SERVICE_DATA =~ "SOK" ]]; then
 				showinfo "$1" "\n\n             Disabling autostart of $2"
-				update-rc.d -f $2 remove
+				update-rc.d -f $2 remove > /dev/null
 				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/SOK//g' )
 			else
 				showinfo "$1" "\n\n              Enabling autostart of $2"
-				update-rc.d $2 defaults
+				update-rc.d $2 defaults > /dev/null
 				SERVICE_DATA+=" SOK"
 			fi
 		elif [ $RETURN -eq 2 ]; then
 			if [[ $SERVICE_DATA =~ "ROK" ]]; then
 				showinfo "$1" "\n\n               Stopping $2"
-				service $2 stop
+				service $2 stop > /dev/null
 				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/ROK//g' )
 			else
 				showinfo "$1" "\n\n                Starting $2"
-				service $2 start
+				service $2 start > /dev/null
 				SERVICE_DATA+="ROK"
 			fi
 		elif [ $RETURN -eq 3 ]; then
@@ -109,7 +113,7 @@ servicemenu() {
 function servicemanager() {
 
 	# Select which services to monitor
-	IFS=$'\n'; SERVICES=(xbmc lirc ssh cron dbus ifplugd)
+	IFS=$'\n';
 
 	# Show "Loading" screen
 	showinfo "$1" "\n\n          Reading service statuses...\n "
