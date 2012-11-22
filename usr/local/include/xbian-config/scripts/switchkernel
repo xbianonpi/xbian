@@ -22,22 +22,55 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 function switchkernel() {
-	KERNEL361=$(ls -Al /boot/kernel3_6_1.img | awk '{print $5}');
-	KERNEL3227=$(ls -Al /boot/kernel3_2_27.img | awk '{print $5}');
-	CKERNEL=$(ls -Al /boot/kernel.img | awk '{print $5}');
-	if [ $CKERNEL -eq $KERNEL3227 ]; then
-		showyesno " $1 " "\n      Do you want to switch to kernel 3.6.1?"
-		if [ $? -eq 0 ]; then
-			cp /boot/kernel3_6_1.img /boot/kernel.img
-			showdialog "$1" "Close" "\n             Now running kernel 3.6.1"
-			ASKFORREBOOT=1
-		fi
+	KERNELS=($(ls -Al /boot/*.img | awk '{print $9}' | grep -iv kernel.img));
+	if [ ${#KERNELS[@]} -eq 1 ]; then
+			showdialog "$1" "Close" "\n       You can't switch kernel because there\n           is only one version installed.\n" 8
+			return 0;
 	else
-		showyesno " $1 " "\n      Do you want to switch to kernel 3.2.27?"
-		if [ $? -eq 0 ]; then
-			cp /boot/kernel3_2_27.img /boot/kernel.img
-			showdialog "$1" "Close" "\n             Now running kernel 3.2.27"
-			ASKFORREBOOT=1
-		fi
+		LIST=();
+		I=0;
+		for KERNEL in ${KERNELS[@]}; do
+			I=$(($I+1));
+
+			CKERNEL=$(ls -Al /boot/kernel.img | awk '{print $5}');
+			NKERNEL=$(ls -Al $KERNEL | awk '{print $5}');
+			
+			KERNEL=${KERNEL##*/};
+			KERNEL=${KERNEL%.*};
+			
+			KERNEL=$(echo $KERNEL | sed -e 's/kernel//g' | sed -e 's/\_/./g');
+			if [[ $NKERNEL -eq $CKERNEL ]]; then
+				LIST+=("$I $KERNEL on ");
+			else
+				LIST+=("$I $KERNEL off ");
+			fi
+		done;
+		IFS=" ";
+		RETURN=$(dialog --backtitle "$BACKTITLE" --radiolist " Press [space] to select a different kernel version:" 10 60 $I ${LIST[@]} 3>&1 1>&2 2>&3);
+		
+		case $? in
+			0 )
+				KERNEL=${KERNELS[$(($RETURN-1))]};
+				NKERNEL=$(ls -Al $KERNEL | awk '{print $5}');
+				CKERNEL=$(ls -Al /boot/kernel.img | awk '{print $5}');
+				if [[ $NKERNEL -eq $CKERNEL ]]; then
+					showdialog "$1" "Close" "\n       You're already running kernel v3.2.27\n"
+					return 0;
+				else
+					cp $KERNEL /boot/kernel.img
+					KERNEL=${KERNEL##*/};
+					KERNEL=${KERNEL%.*};
+					KERNEL=$(echo $KERNEL | sed -e 's/kernel//g' | sed -e 's/\_/./g');
+					showdialog "$1" "Close" "\n      Succesfully switched to kernel v$KERNEL\n A reboot is needed to make this change permanent.\n" 8
+					ASKFORREBOOT=1
+					return 0;
+				fi
+			;;
+			* )
+				return 0;
+			;;
+		esac
+		return 0;
 	fi
+	return 0;
 }
