@@ -25,7 +25,7 @@ function getservices() {
 
 	# Get which services to manage by listing all files in /usr/local/include/xbian-config/services/
 	# And placing the results in an array
-	SERVICES=($(ls --format=single-column /usr/local/include/xbian-config/services/))
+	SERVICES=($(cat $BASEPATH/services))
 
 	# Fetch which is services are autostarted from /etc/rc5.d/
 	# Services only in other runlevels won't show as autostart for now
