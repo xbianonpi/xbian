@@ -21,19 +21,33 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-function getservices() {
+getservices() {
 
-	# Fetch which is autostarted
+	# Fetch which is services are autostarted from /etc/rc5.d/
+	# Services only in other runlevels won't show as autostart for now
 	STARTUP=($(ls --format=single-column /etc/rc5.d/ | awk '{print substr($1,4) , " SOK" ; }'))
 
-	# Fetch pids
+	# Get a list of actually running pids, and concatenate them to a single
+	# whitespace separated list
+	RUNNING_PIDS=$(ps -eo pid | sed 's/\n/ /g' )
+
+	# Find pidfiles recursively from /var/run, and save the results in a variable
 	PIDS=($(find /var/run/ -type f 2>/dev/null | grep 'pid' ))
 	RUNNING=( )
 	for PIDFILE in ${PIDS[@]}
 	do
-	   # Extract info from concatenated pidfile
-	   SERVICE=$(echo $PIDFILE | sed 's/dbus\/pid/dbus.pid/g' | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
-	   RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+		# Try to figure out which service the current file belong to
+		PID=$(cat $PIDFILE)
+		SERVICE=$(echo $PIDFILE | sed 's/dbus\/pid/dbus.pid/g' | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
+
+		# Check if the pid contained in this pidfile is actually running
+        	IS_RUNNING=$(echo $RUNNING_PIDS | grep $PID)
+		if [ ! -z $IS_RUNNING ]; then
+			# It's running!
+			RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+		else
+			RUNNING+=($(echo -e "$SERVICE RNOK\n${SERVICE%?} RNOK"))
+		fi
 	done
 
 	# Join everything to a single "table"
@@ -42,21 +56,21 @@ function getservices() {
 
 }
 
-function servicemenu() {
+servicemenu() {
 
 	# Prepare service menu
-	SERVICE_DATA=$(echo "$3" | grep "$2")
+	SERVICE_DATA=$3
 	MENU=()
 	if [[ $SERVICE_DATA =~ "SOK" ]]; then
-		MENU+="1!Disable autostart!"
+		MENU+="1#Disable autostart#"
 	else
-		MENU+="1!Enable autostart!"
+		MENU+="1#Enable autostart#"
 	fi
 	if [[ $SERVICE_DATA =~ "ROK" ]]; then
-		MENU+="2!Stop service!"
-		MENU+="3!Restart service!"
+		MENU+="2#Stop service#"
+		MENU+="3#Restart service#"
 	else
-		MENU+="2!Start service!"
+		MENU+="2#Start service#"
 	fi
 
 	# Show service menu
@@ -98,29 +112,29 @@ function servicemanager() {
 	IFS=$'\n'; SERVICES=(xbmc lirc ssh cron dbus ifplugd)
 
 	# Show "Loading" screen
-	showinfo "$1" "\n\n          Reading service statuses..."
+	showinfo "$1" "\n\n          Reading service statuses...\n "
 
 	# List all available services
 	SERVICES_DATA=$(getservices)
-	SERVICES=$( echo "$SERVICES_DATA" | sed 's/ROK/Running/g' | sed 's/SOK/Autostart/g' \
+	SERVICES_ARR=($SERVICES_DATA)
+	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK/Stopped/g' | sed 's/ROK/Running/g' | sed 's/SOK/Yes/g' \
 		    | awk '{ if ($2=="") \
-					printf "  %-14s > !   %-50s!" , $1, "Disabled";  \
+					printf "%s#%-14s!%-17s#" , NR , $1, "Stopped";  \
 				else if ($3=="") \
-					printf "  %-14s > !   %-50s!", $1, $2;  \
+					printf "%s#%-14s!%-17s#" , NR , $1, $2;  \
 				else \
-					printf "  %-14s > !   %-50s!", $1, $2 ", " $3; }' )
-
+					printf "%s#%-14s!%-17s!%-32s#", NR , $1, $2, $3; }' )
 	# Display menu
-	IFS="!";
+	IFS="#";
 	showmenudesc 	"$1" \
-			"\n Select a service to manage\n " \
+			"\n Select a service to manage\n \n\Zb    #  Service        Status         Autostart\Zn" \
 			$SERVICES
 
 	# Edit service prefs
 	if [ $? -eq 0 ]; then
-		SERVICE=$( echo $RETURN | sed 's/>//g' | sed 's/ //g' )
+		SERVICE=$( echo ${SERVICES_ARR[$(($RETURN-1))]} | cut -f 1 -d" " )
 		if [ ! -z $SERVICE ]; then
-			servicemenu "$1" $SERVICE $SERVICES_DATA
+			servicemenu "$1" $SERVICE "${SERVICES_ARR[$(($RETURN-1))]}"
 		fi
 	fi
 
