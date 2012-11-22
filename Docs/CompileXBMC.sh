@@ -96,9 +96,14 @@
 	
 	
 # 3. Compiling libcec
-	cd ~/opt/xbmc
-	make -C lib/libcec
-   	sudo make -C lib/libcec install
+	cd ~/opt
+	git clone --depth 5 https://github.com/Pulse-Eight/libcec.git
+	cd libcec
+	./bootstrap 
+	./configure --prefix=/usr/local
+	make
+	sudo make install
+
 	
 
 # 4. Compiling libshairport
