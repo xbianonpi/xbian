@@ -152,7 +152,7 @@
 	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
 	cd xbmc-pvr-addons/
 	./bootstrap 
-	./configure --prefix=/usr/local/lib/xbmc --enable-addons-with-dependencies
+	./configure --prefix=/usr/local--enable-addons-with-dependencies
 	sudo make install
 
 	# Compiling the XVDR addon
@@ -160,7 +160,7 @@
 	git clone git://github.com/pipelka/xbmc-addon-xvdr.git
 	cd xbmc-addon-xvdr
 	sh autogen.sh
-	./configure --prefix=/usr/local/share/xbmc 
+	./configure --prefix=/usr/local
 	make install
 
 # Many thanks to http://www.raspbian.org/RaspbianXBMC !
