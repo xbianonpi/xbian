@@ -4,3 +4,5 @@ ssh
 ifplugd
 cron
 dbus
+apache2
+samba
