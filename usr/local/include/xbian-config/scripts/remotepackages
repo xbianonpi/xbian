@@ -50,7 +50,7 @@ remotepackages() {
 		case "$?" in
 			0) 
 				RETURN=$(($RETURN-1));
-				showdialog "$1" "Close" "The installation can take a while depending on the number of packagesn being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 55
+				showdialog "$1" "Close" "The installation can take a while depending on the number of packages being downloaded, the installation steps, you're internet connection speed, and any other programs that are running (e.g. XBMC). So please wait patiently..." 9 55
 				installpackage "/tmp/xbianpackages/${PKGLIST[$RETURN]}" "Packages"
 				return 0;
 			;;
