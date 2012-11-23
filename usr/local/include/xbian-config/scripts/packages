@@ -21,35 +21,72 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-check_version() {
-	pkg_installed $1
-	if [ $? -eq 1 ]; then
-		INSTALLED_VERSION=$(pkg_version $1)
-		if [ $2 == $INSTALLED_VERSION ]; then
+
+# Check if a package of a specific version is available in apt cache
+#  $1		Package name
+#  $2		Package version
+#  @return	0 for not available, 1 for available
+function check_version_cache() {
+	RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+	if [ -z $RES_APT_CACHE ]; then
+		# Not available, try apt-get update and check again
+		apt-get update > /dev/null
+		RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+		if [ -z $RES_APT_CACHE ]; then
+			# Still not available, this package doesnt exist
+			return 0;
+		else
+			# Now it's available, apt-get update did the trick!
 			return 1;
 		fi
+	else
+		# Was available without updateing apt repos, great!
+		return 1;
+	fi
+	# We should never get here
+}
+
+
+# Check if a package of a specific version is installed
+#  $1		Package name
+#  $2		Package version
+#  @return	0 for not installed, 1 for installed
+function check_version() {
+	# pkg_version return
+	INSTALLED_VERSION=$(pkg_version $1)
+	if [ ! -z $INSTALLED_VERSION ] && [ $2 == $INSTALLED_VERSION ]; then
+		return 1;
 	fi
 	return 0;
 }
 
-install_pkg() {
-	PACKAGE=$(echo ${PACKAGES_FILTERED[$2]} | cut -f 1 -d:)
+
+# Install a specific package, this expects an array named PACKAGES_FILTERED to be predefined
+#  $1		Dialog title
+#  $2		Index of package, in array
+#  @return	Nothing of interest
+function install_pkg() {
+	PACKAGE_NAME=$(echo ${PACKAGES_FILTERED[$2]} | cut -f 1 -d:)
 	PACKAGE_VERSION=$(echo ${PACKAGES_FILTERED[$2]} | cut -f 2 -d:)
 	# Sanity check
-	if [ ! -z $PACKAGE ]; then
-		check_version $PACKAGE $PACKAGE_VERSION
+	if [ ! -z $PACKAGE_NAME ]; then
+		check_version $PACKAGE_NAME $PACKAGE_VERSION
 		if [ $? -eq 0 ]; then
 			showyesno " $1 " "\n   Are you sure you want to install this package?"
 			case "$?" in
 			0)
-				RETURN=$(($RETURN-1));
-				clear;
-				apt-get install -y $PACKAGE=$PACKAGE_VERSION
-				showdialog "$1" "Close" "\n            Package succesfully installed.";
-				if [ -f /home/xbian/update.log ]; then
-					dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
-					ASKFORREBOOT=1;
+				# Install the selected version of the selected package
+				check_version_cache $PACKAGE_NAME $PACKAGE_VERSION
+				if [ $? -eq 1 ]; then
+					apt-get install -y $PACKAGE_NAME=$PACKAGE_VERSION
+					showdialog "$1" "Close" "\n            Package succesfully installed.";
+				else
+					showdialog "$1" "Close" "\n         This package is currently unavailable.";
 				fi
+				#if [ -f /home/xbian/update.log ]; then
+				#	dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+				#	ASKFORREBOOT=1;
+				#fi
 			;;
 			*)
 				return 0;
@@ -69,21 +106,24 @@ packages() {
 
 		# Prepare package array
 		APTPACKAGES=$(cat /tmp/xbiancache/Packages | sed -n 's/\(Package: \)\(.*$\)\|\(Version: \)\(.*$\)\|\(Filename: \)\(.*$\)\|\(Description: \)\(.*$\)/\2\4\6\8/p')
-		PACKAGES=()
+		PACKAGES_UNSORTED=()
 		L=0
+		LINE=""
 		for PACKAGE_DATA in ${APTPACKAGES[@]}; do
 			L=$(($L+1))
 			LINE=$LINE$PACKAGE_DATA":"
 			if [[ $L == 4 ]]; then
 				L=0
 				if [[ $(echo $LINE | cut -f 1 -d:) =~ "xbian-package" ]]; then
-					PACKAGES+=($LINE)
+					PACKAGES_UNSORTED+=($LINE)
 				fi
 				LINE="";
 			fi
 		done
 
-		# Something else
+		# Sort the packages by name and order, ascending
+		PACKAGES=($(echo  "${PACKAGES_UNSORTED[*]}" | sort -t: -u +0 -2 -))
+
 		NUMPACKAGES=${#PACKAGES[@]}
 		I=0
 		NRITEMS=0
@@ -109,9 +149,9 @@ packages() {
 					pkg_installed $PACKAGE
 					if [ $? -eq 1 ]; then
 						INSTALLED_VERSION=$(pkg_version $PACKAGE)
-						LIST+=($NRITEMS "$NAME | YES | $INSTALLED_VERSION | $VERSION")
+						LIST+=($NRITEMS "$NAME !      YES      ! $INSTALLED_VERSION ! $VERSION")
 					else
-					LIST+=($NRITEMS "$NAME | NO | | $VERSION")
+					LIST+=($NRITEMS "$NAME !       NO       !              ! $VERSION")
 					fi
 				fi
 			fi
@@ -120,7 +160,7 @@ packages() {
 
 		# Display package menu
 		if [ $NRITEMS -gt 0 ]; then
-			RETURN=$(dialog --no-kill --backtitle "$BACKTITLE" --title " $1 " --no-collapse --ok-label Install --cancel-label Return --column-separator "|" --menu '' 15 80 $NRITEMS ${LIST[@]} 3>&1 1>&2 2>&3);
+			showmenudesc "$1" "\n   Select which package to update or install.\n\n           # \Zb Package          Installed    Current       Available\Zn" ${LIST[@]}
 			if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
 				install_pkg "$1" $(($RETURN-1))
 				packages "$1"
@@ -135,6 +175,5 @@ packages() {
 		showdialog "$1" "Close" "\n          An unexpected error occurred while\n        downloading the package list." 55 8
 	fi
 	return 0;
+
 }
-
-
