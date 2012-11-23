@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+#Copyright 2012 Hexagon <development@xbian.org>
+#
+#Resize SD function is based on the corresponding function in raspi-config
+#The overclocking function is copied from raspi-config
+#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+function getservices() {
+
+	# Fetch which is autostarted
+	STARTUP=($(ls --format=single-column /etc/rc5.d/ | awk '{print substr($1,4) , " SOK" ; }'))
+
+	# Fetch pids
+	PIDS=($(find /var/run/ -type f 2>/dev/null | grep 'pid' ))
+	RUNNING=( )
+	for PIDFILE in ${PIDS[@]}
+	do
+	   # Extract info from concatenated pidfile
+	   SERVICE=$(echo $PIDFILE | sed 's/dbus\/pid/dbus.pid/g' | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
+	   RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+	done
+
+	# Join everything to a single "table"
+	join -a 1 -o "0,2.2" <( printf "%s\n" "${SERVICES[@]}" | sort) <(printf "%s\n" "${RUNNING[@]}" | sort) | \
+		join -a 1 -o "0,1.2,2.2" - <(printf "%s\n" "${STARTUP[@]})" | sort) | sort | uniq
+
+}
+
+function servicemenu() {
+
+	# Prepare service menu
+	SERVICE_DATA=$(echo "$3" | grep "$2")
+	MENU=()
+	if [[ $SERVICE_DATA =~ "SOK" ]]; then
+		MENU+="1!Disable autostart!"
+	else
+		MENU+="1!Enable autostart!"
+	fi
+	if [[ $SERVICE_DATA =~ "ROK" ]]; then
+		MENU+="2!Stop service!"
+		MENU+="3!Restart service!"
+	else
+		MENU+="2!Start service!"
+	fi
+
+	# Show service menu
+	showmenudesc "$1> $2 " "\n  Available actions for $2\n " $MENU
+	if [ $? -eq 0 ]; then
+		if [ $RETURN -eq 1 ]; then
+			if [[ $SERVICE_DATA =~ "SOK" ]]; then
+				showinfo "$1" "\n\n             Disabling autostart of $2"
+				update-rc.d -f $2 remove
+				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/SOK//g' )
+			else
+				showinfo "$1" "\n\n              Enabling autostart of $2"
+				update-rc.d $2 defaults
+				SERVICE_DATA+=" SOK"
+			fi
+		elif [ $RETURN -eq 2 ]; then
+			if [[ $SERVICE_DATA =~ "ROK" ]]; then
+				showinfo "$1" "\n\n               Stopping $2"
+				service $2 stop
+				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/ROK//g' )
+			else
+				showinfo "$1" "\n\n                Starting $2"
+				service $2 start
+				SERVICE_DATA+="ROK"
+			fi
+		elif [ $RETURN -eq 3 ]; then
+			showinfo "$1" "\n\n               Restarting $2"
+			service $2 stop && sleep 1 && service $2 start
+		fi
+		servicemenu "$1" "$2" "$SERVICE_DATA";
+	else
+		servicemanager $1;
+	fi
+}
+
+function servicemanager() {
+
+	# Select which services to monitor
+	IFS=$'\n'; SERVICES=(xbmc lirc ssh cron dbus ifplugd)
+
+	# Show "Loading" screen
+	showinfo "$1" "\n\n          Reading service statuses..."
+
+	# List all available services
+	SERVICES_DATA=$(getservices)
+	SERVICES=$( echo "$SERVICES_DATA" | sed 's/ROK/Running/g' | sed 's/SOK/Autostart/g' \
+		    | awk '{ if ($2=="") \
+					printf "  %-14s > !   %-50s!" , $1, "Disabled";  \
+				else if ($3=="") \
+					printf "  %-14s > !   %-50s!", $1, $2;  \
+				else \
+					printf "  %-14s > !   %-50s!", $1, $2 ", " $3; }' )
+
+	# Display menu
+	IFS="!";
+	showmenudesc 	"$1" \
+			"\n Select a service to manage\n " \
+			$SERVICES
+
+	# Edit service prefs
+	if [ $? -eq 0 ]; then
+		SERVICE=$( echo $RETURN | sed 's/>//g' | sed 's/ //g' )
+		if [ ! -z $SERVICE ]; then
+			servicemenu "$1" $SERVICE $SERVICES_DATA
+		fi
+	fi
+
+}

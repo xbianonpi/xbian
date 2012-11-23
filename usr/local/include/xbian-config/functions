@@ -145,28 +145,9 @@ filedirselect() {
 #  $2 value
 #  $3 file
 set_config_var() {
-  lua - "$1" "$2" "$3" <<EOF > "$3.bak"
-local key=assert(arg[1])
-local value=assert(arg[2])
-local fn=assert(arg[3])
-local file=assert(io.open(fn))
-local made_change=false
-for line in file:lines() do
-  if line:match("^#?%s*"..key.."=.*$") then
-    line=key.."="..value
-    made_change=true
-  end
-  print(line)
-end
-
-if not made_change then
-  print(key.."="..value)
-end
-EOF
-mv "$3.bak" "$3"
-
-	# Make sure config.txt is clean
-	sed -i '/^$/d' /boot/config.txt
+	sed -i "/$1/d" $3
+	echo "$1=$2" >> $3
+	sed -i '/^$/d' $3
 }
 
 # Remove Raspberry PI config variable
@@ -212,7 +193,7 @@ set_overclock() {
 # Check if a package is installed on the system
 #  $1 package name
 function pkg_installed() {
-	return $(dpkg-query -W -f='${Status}\n' "$1" | grep ' installed' | wc -l);
+	return $(dpkg-query -W -f='${Status}\n' "$1" 2>/dev/null | grep ' installed' | wc -l);
 }
 
 # Save an XBian package on the local storage

@@ -52,7 +52,7 @@ libxdmcp6 make libx11-6 libraspberrypi-doc
 sudo apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
-udisks usbmount git-core ntfs-3g --fix-missing
+udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev  libass-dev --fix-missing
 
 sudo apt-get autoremove -y
 
@@ -115,7 +115,8 @@ chmod +x /etc/init.d/*
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 chmod +x /usr/local/lib/xbmc/xbmc.bin
-chmod +x /opt/vc/bin/vcgencmd
+chmod +x /opt/vc/bin/*
+chmod +x /opt/vc/sbin/*
 chown -R xbian:xbian /home/xbian/.xbmc
 
 #Update rc.d
@@ -131,6 +132,8 @@ rm /usr/local/lib/libshairport.so.0
 ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0
 rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so.0
+ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
 ldconfig
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling

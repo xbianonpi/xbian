@@ -84,7 +84,12 @@ showinfo() {
 # $2 Text
 # $3 (optional) Height
 # $4 (optional) Width
+# $5 (optional) Yes label
+# $6 (optional) No Label
 showyesno() {
+	YESLABEL="Yes"
+	NOLABEL="No"
+
 	# Default width and height
 	HEIGHT=7
 	IMSGHGHT=$(echo -e "$3" | wc -l);
@@ -100,10 +105,18 @@ showyesno() {
 	if [ $# -gt 3 ]; then
 		WIDTH=$4
 	fi
+	if [ $# -gt 4 ]; then
+		YESLABEL=$5
+	fi
+	if [ $# -gt 5 ]; then
+		NOLABEL=$6
+	fi
 	# Show yes/no dialog
 	dialog \
 		--backtitle "$BACKTITLE" \
 		--title " $1 " \
+		--yes-label $YESLABEL \
+		--no-label $NOLABEL \
 		--yesno "$2" $HEIGHT $WIDTH
 }
 
@@ -121,11 +134,36 @@ showmenu () {
 			--backtitle "$BACKTITLE" \
 			--title "$TITLE" \
 			--ok-label Select \
+			--colors \
 			--cancel-label Return \
 			--menu '' $HEIGHT 80 $ROWS \
 			"$@" 3>&1 1>&2 2>&3)
 }
 
+#Show menu with description text
+# $1 Title
+# $2 Descriptive text
+# $3-n Menu items
+showmenudesc () {
+        TITLE=" $1 "
+        TEXT="$2"
+        shift;shift;
+        ROWS=$(($#/2))
+        HEIGHT=$(($ROWS+10))
+        RETURN=$( \
+                dialog \
+                        --no-kill \
+                        --colors \
+                        --backtitle "$BACKTITLE" \
+                        --title "$TITLE" \
+                        --ok-label Select \
+                        --cancel-label Return \
+                        --menu "$TEXT" \
+                        $HEIGHT 80 $ROWS \
+                        "$@" 3>&1 1>&2 2>&3)
+}
+
+# Catch-all for not implemented functions
 notimplementedyet() {
 	showdialog 	"Config > *" \
 			"Close" \

@@ -40,7 +40,6 @@ sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/lirc/05-lirc_xbian.
 sudo patch -p1 < 02-lirc_xbian.patch
 sudo patch -p1 < 03-lirc_xbian.patch
 sudo patch -p1 < 04-lirc_xbian.patch
-sudo patch -p1 < 05-lirc_xbian.patch
 sudo ./configure --with-driver=all CROSS_COMPILE=/usr/bin/
 sudo make CROSS_COMPILE=/usr/bin/ LC_CTYPE=en_US.UTF-8
 sudo make install CROSS_COMPILE=/usr/bin/ LC_CTYPE=en_US.UTF-8

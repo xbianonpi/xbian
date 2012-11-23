@@ -2,12 +2,8 @@
    <network>
         <cachemembuffersize>5282880</cachemembuffersize>
    </network>
-   <fanartheight>540</fanartheight>
-   <thumbsize>256</thumbsize>
-   <gui>
-       <algorithmdirtyregions>3</algorithmdirtyregions>      
-       <nofliptimeout>0</nofliptimeout>
-   </gui>
+   <fanartres>540</fanartres>
+   <thumbres>256</thumbres>
    <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</cputempcommand>
    <lookandfeel>
         <webserver>true</webserver>
