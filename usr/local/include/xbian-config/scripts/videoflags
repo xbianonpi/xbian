@@ -23,10 +23,10 @@
 
 function videoflags() {
 
-	FHDMI=$(grep force_hdmi_hotplug=1 /boot/config.txt);
-	IHDMI=$(grep ignore_hdmi_hotplug=1 /boot/config.txt);
-	ICECI=$(grep ignore_cec_init=1 /boot/config.txt);
-	DCEC=$(grep ignore_cec=1 /boot/config.txt);
+	FHDMI=$(grep hdmi_force_hotplug=1 /boot/config.txt);
+	IHDMI=$(grep hdmi_ignore_hotplug=1 /boot/config.txt);
+	ICECI=$(grep hdmi_ignore_cec_init=1 /boot/config.txt);
+	DCEC=$(grep hdmi_ignore_cec=1 /boot/config.txt);
 	DOSC=$(grep disable_overscan=1 /boot/config.txt);
 
 	if [ -z $FHDMI ]; then FHDMI="off"; else FHDMI="on"; fi
@@ -45,53 +45,53 @@ function videoflags() {
 	if [ $? -eq 0 ]; then
 		if [[ $RESULT =~ "1" ]]; then
 			if [[ $FHDMI != "on" ]]; then
-				set_config_var force_hdmi_hotplug 1 /boot/config.txt >/dev/null
+				set_config_var hdmi_foce_hotplug 1 /boot/config.txt >/dev/null
 				MESSAGE+="  Force HDMI hotplug successfully:  enabled\n"
 				ASKFORREBOOT=1
 			fi
 		else
 			if [[ $FHDMI != "off" ]]; then
-				remove_config_var "force_hdmi_hotplug" /boot/config.txt >/dev/null
+				remove_config_var "hdmi_force_hotplug" /boot/config.txt >/dev/null
 				MESSAGE+="  Force HDMI hotplug successfully:  disabled\n"
 				ASKFORREBOOT=1
 			fi;
 		fi			
 		if [[ $RESULT =~ "2" ]]; then
 			if [[ $IHDMI != "on" ]]; then
-				set_config_var ignore_hdmi_hotplug 1 /boot/config.txt >/dev/null
+				set_config_var hdmi_ignore_hotplug 1 /boot/config.txt >/dev/null
 				MESSAGE+="  Ignore HDMI hotplug successfully: enabled\n"
 				ASKFORREBOOT=1
 			fi
 		else
 			if [[ $IHDMI != "off" ]]; then
-				remove_config_var "ignore_hdmi_hotplug" /boot/config.txt >/dev/null
+				remove_config_var "hdmi_ignore_hotplug" /boot/config.txt >/dev/null
 				MESSAGE+="  Ignore HDMI hotplug successfully: disabled\n"
 				ASKFORREBOOT=1
 			fi
 		fi
 		if [[ $RESULT =~ "3" ]]; then
 			if [[ $ICECI != "on" ]]; then
-				set_config_var ignore_cec_init 1 /boot/config.txt >/dev/null
-				MESSAGE+="  Ignore CEC init successfully:     enabled\n"
+				set_config_var hdmi_ignore_cec_init 1 /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore HDMI CEC init successfully:     enabled\n"
 				ASKFORREBOOT=1
 			fi
 		else
 			if [[ $ICECI != "off" ]]; then
-				remove_config_var "ignore_cec_init" /boot/config.txt >/dev/null
-				MESSAGE+="  Ignore CEC init successfully:     disabled\n"
+				remove_config_var "hdmi_ignore_cec_init" /boot/config.txt >/dev/null
+				MESSAGE+="  Ignore HDMI CEC init successfully:     disabled\n"
 				ASKFORREBOOT=1
 			fi
 		fi 
 		if [[ $RESULT =~ "4" ]]; then
 			if [[ $DCEC != "on" ]]; then
-				set_config_var ignore_cec 1 /boot/config.txt >/dev/null
-				MESSAGE+="  CEC is now:                       disabled\n"
+				set_config_var hdmi_ignore_cec 1 /boot/config.txt >/dev/null
+				MESSAGE+="  HDMI CEC is now:                       disabled\n"
 				ASKFORREBOOT=1
 			fi
 		else
 			if [[ $DCEC != "off" ]]; then
-				remove_config_var "ignore_cec" /boot/config.txt >/dev/null
-				MESSAGE+="  CEC is now:                       enabled\n"
+				remove_config_var "hdmi_ignore_cec" /boot/config.txt >/dev/null
+				MESSAGE+="  HDMI CEC is now:                       enabled\n"
 				ASKFORREBOOT=1
 			fi
 		fi
