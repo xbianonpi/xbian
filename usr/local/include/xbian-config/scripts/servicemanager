@@ -100,21 +100,21 @@ function servicemenu() {
 	fi
 
 	# Show service menu
-	showmenudesc "$1> $2 " "\n  Available actions for $2\n " $MENU
+	showmenu "$1 > $2" " \n" "$MENU" 3 11 40
 	if [ $? -eq 0 ]; then
 		if [ $RETURN -eq 1 ]; then
 			if [[ $SERVICE_DATA =~ "SOK" ]]; then
-				showinfo "$1" "\n\n             Disabling autostart of $2"
+				showinfo "$1" "\n\n           Disabling autostart of $2"
 				update-rc.d -f $2 remove > /dev/null
 				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/SOK//g' )
 			else
-				showinfo "$1" "\n\n              Enabling autostart of $2"
+				showinfo "$1" "\n\n            Enabling autostart of $2"
 				update-rc.d $2 defaults > /dev/null
 				SERVICE_DATA+=" SOK"
 			fi
 		elif [ $RETURN -eq 2 ]; then
 			if [[ $SERVICE_DATA =~ "ROK" ]]; then
-				showinfo "$1" "\n\n               Stopping $2"
+				showinfo "$1" "\n\n                Stopping $2"
 				service $2 stop > /dev/null
 				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/ROK//g' )
 			else
@@ -143,18 +143,18 @@ function servicemanager() {
 	# List all available services
 	SERVICES_DATA=$(getservices)
 	SERVICES_ARR=($SERVICES_DATA)
-	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK ROK/ROK/g' | sed 's/RNOK/\\Z1No\\Zn/g' | sed 's/ROK/\\Z2Yes\\Zn/g' | sed 's/SOK/\\Z2Yes\\Zn/g' \
+	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK ROK/ROK/g' | sed 's/RNOK/\\Z1\No\\Zn/g' | sed 's/ROK/\\Z2Yes\\Zn/g' | sed 's/SOK/\\Z2Yes\\Zn/g' \
 		    | awk '{ if ($2=="") \
-					printf "%s#%-20s![      %-15s]!#" , NR , $1, "No";  \
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, "No";  \
 				else if ($3=="") \
-					printf "%s#%-20s![      %-15s]!#" , NR , $1, $2;  \
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, $2, "\\Z1No\\Zn";  \
 				else \
-					printf "%s#%-20s![      %-15s]![      %-15s]!#", NR , $1, $2, $3; }' )
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, $2, $3; }' )
 	# Display menu
 	IFS="#";
-	showmenudesc 	"$1" \
-			"\n Select a service to manage\n \n\Zb  #  Service                   Running          Autostart\Zn" \
-			$SERVICES
+	showmenu 	"$1" \
+			"\n\Zb    #  Service              Running    Autostart\Zn" \
+			"$SERVICES" 8 16 70
 
 	# Edit service prefs
 	if [ $? -eq 0 ]; then
