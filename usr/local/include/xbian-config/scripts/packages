@@ -2,10 +2,6 @@
 #
 #Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
 #
-#Resize SD function is based on the corresponding function in raspi-config
-#The overclocking function is copied from raspi-config
-#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
-#
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
 #XBian is free software: you can redistribute it and/or modify it under the
@@ -20,32 +16,6 @@
 #
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
-
-
-# Check if a package of a specific version is available in apt cache
-#  $1		Package name
-#  $2		Package version
-#  @return	0 for not available, 1 for available
-function check_version_cache() {
-	RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
-	if [ -z $RES_APT_CACHE ]; then
-		# Not available, try apt-get update and check again
-		showinfo "$1" "\n\n     Updating package database, please wait ..."
-		apt-get update > /dev/null
-		RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
-		if [ -z $RES_APT_CACHE ]; then
-			# Still not available, this package doesnt exist
-			return 0;
-		else
-			# Now it's available, apt-get update did the trick!
-			return 1;
-		fi
-	else
-		# Was available without updateing apt repos, great!
-		return 1;
-	fi
-	# We should never get here
-}
 
 
 # Check if a package of a specific version is installed

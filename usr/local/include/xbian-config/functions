@@ -260,8 +260,33 @@ function download_pkg_list() {
                         mkdir /tmp/xbiancache;
                 fi
 		showinfo "$1" "\n\n            Updating package list..."
-                wget -P /tmp/xbiancache ${APTBASE}Packages.gz 2>/dev/null >/dev/null;
+                wget -P /tmp/xbiancache/ ${APTBASE}Packages.gz 2>/dev/null >/dev/null;
                 gunzip -c /tmp/xbiancache/Packages.gz > /tmp/xbiancache/Packages;
         fi
+}
+
+# Check if a package of a specific version is available in apt cache
+#  $1           Package name
+#  $2           Package version
+#  @return      0 for not available, 1 for available
+function check_version_cache() {
+        RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+        if [ -z $RES_APT_CACHE ]; then
+                # Not available, try apt-get update and check again
+                showinfo "$1" "\n\n     Updating package database, please wait ..."
+                apt-get update > /dev/null
+                RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+                if [ -z $RES_APT_CACHE ]; then
+                        # Still not available, this package doesnt exist
+                        return 0;
+                else
+                        # Now it's available, apt-get update did the trick!
+                        return 1;
+                fi
+        else
+                # Was available without updateing apt repos, great!
+                return 1;
+        fi
+        # We should never get here
 }
 
