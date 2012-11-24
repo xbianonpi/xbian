@@ -122,9 +122,9 @@ packages() {
 					pkg_installed $PACKAGE
 					if [ $? -eq 1 ]; then
 						INSTALLED_VERSION=$(pkg_version $PACKAGE)
-						LIST+=($NRITEMS "$NAME !      YES      ! $INSTALLED_VERSION ! $VERSION")
+						LIST+=($NRITEMS "$NAME !    [   \Z2Yes\Zn   ] ! [   $INSTALLED_VERSION   ] ! [   $VERSION   ]")
 					else
-					LIST+=($NRITEMS "$NAME !       NO       !              ! $VERSION")
+						LIST+=($NRITEMS "$NAME !    [   \Z1No\Zn    ] ! [         ] ! [   $VERSION   ]")
 					fi
 				fi
 			fi
@@ -133,7 +133,7 @@ packages() {
 
 		# Display package menu
 		if [ $NRITEMS -gt 0 ]; then
-			showmenudesc "$1" "\n   Select which package to update or install.\n\n           # \Zb Package          Installed    Current       Available\Zn" ${LIST[@]}
+			showmenu "$1" "\n # \Zb Package            Installed      Current      Available\Zn" "${LIST[*]}" 9 17 70 "Install/Upgrade"
 			if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
 				install_pkg "$1" $(($RETURN-1))
 				packages "$1"

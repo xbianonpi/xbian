@@ -122,46 +122,50 @@ showyesno() {
 
 #Show menu
 # $1 Title
-# $2-n Menu items
+# $2 Descriptive text
+# $3 Menu items
+# $4 Rows
+# $5 (optional) Height
+# $6 (optional) Width
+# $7 (optional) Yes label
+# $8 (optional) No Label
 showmenu () {
+	YESLABEL="Select"
+	NOLABEL="Return"
+	
 	TITLE=" $1 "
-	shift
-	ROWS=$(($#/2))
-	HEIGHT=$(($ROWS+6))
+	if [ $# -gt 3 ]; then
+		ROWS=$4;
+	else
+		ROWS=5;
+	fi
+	HEIGHT=$(($ROWS+5))
+	WIDTH=80;
+
+	if [ $# -gt 4 ]; then
+		HEIGHT=$5
+	fi
+	if [ $# -gt 5 ]; then
+		WIDTH=$6
+	fi
+	if [ $# -gt 6 ]; then
+		YESLABEL=$7
+	fi
+	if [ $# -gt 7 ]; then
+		NOLABEL=$8
+	fi
+	
 	RETURN=$( \
 		dialog \
 			--no-kill \
 			--backtitle "$BACKTITLE" \
 			--title "$TITLE" \
-			--ok-label Select \
+			--ok-label $YESLABEL \
 			--colors \
-			--cancel-label Return \
-			--menu '' $HEIGHT 80 $ROWS \
-			"$@" 3>&1 1>&2 2>&3)
-}
-
-#Show menu with description text
-# $1 Title
-# $2 Descriptive text
-# $3-n Menu items
-showmenudesc () {
-        TITLE=" $1 "
-        TEXT="$2"
-        shift;shift;
-        ROWS=$(($#/2))
-        HEIGHT=$(($ROWS+10))
-        RETURN=$( \
-                dialog \
-                        --no-kill \
-                        --colors \
-                        --backtitle "$BACKTITLE" \
-                        --title "$TITLE" \
-                        --ok-label Select \
+			--cancel-label $NOLABEL \
 			--column-separator "!" \
-                        --cancel-label Return \
-                        --menu "$TEXT" \
-                        $HEIGHT 80 $ROWS \
-                        "$@" 3>&1 1>&2 2>&3)
+			--menu "$2" $HEIGHT $WIDTH $ROWS \
+			$3 3>&1 1>&2 2>&3)
 }
 
 # Catch-all for not implemented functions
