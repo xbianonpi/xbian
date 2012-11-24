@@ -30,6 +30,7 @@ function check_version_cache() {
 	RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
 	if [ -z $RES_APT_CACHE ]; then
 		# Not available, try apt-get update and check again
+		showinfo "$1" "\n\n     Updating package database, please wait ..."
 		apt-get update > /dev/null
 		RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
 		if [ -z $RES_APT_CACHE ]; then
@@ -78,7 +79,9 @@ function install_pkg() {
 				# Install the selected version of the selected package
 				check_version_cache $PACKAGE_NAME $PACKAGE_VERSION
 				if [ $? -eq 1 ]; then
-					apt-get install -y $PACKAGE_NAME=$PACKAGE_VERSION
+					showinfo "$1" "\n\n         Installing package, please wait ..."
+					apt-get install -y $PACKAGE_NAME=$PACKAGE_VERSION > /dev/null
+					sleep 0;
 					showdialog "$1" "Close" "\n            Package succesfully installed.";
 				else
 					showdialog "$1" "Close" "\n         This package is currently unavailable.";
