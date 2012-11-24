@@ -193,13 +193,24 @@ set_overclock() {
 # Check if a package is installed on the system
 #  $1 package name
 function pkg_installed() {
-	return $(dpkg-query -W -f='${Status}\n' "$1" 2>/dev/null | grep 'install ok' | wc -l)
+	RES=$(dpkg-query -W -f='${Status}\n' "$1" 2>/dev/null)
+	DEINST=$(echo $RES | grep 'deinstall ok' | wc -l)
+	if [ -z "$RES" ]; then
+		return 0;
+	fi
+	if [ $DEINST -eq 1 ]; then
+		return 0;
+	fi
+	return 1;
 }
 
 # Check which version of a package that is installed
 #  $1 package name
 function pkg_version() {
-	dpkg-query -W -f='${Version}\n' "$1" 2>/dev/null
+	pkg_installed $1
+	if [ $? -eq 1 ]; then
+		dpkg-query -W -f='${Version}\n' "$1" 2>/dev/null
+	fi
 }
 
 # Get individual file sizes
@@ -243,13 +254,13 @@ function updateapt() {
 
 # Download updated package-lists if needed
 #   $1 Window title for status screen
-download_pkg_list() {
+function download_pkg_list() {
         if [ ! -f /tmp/xbiancache/Packages ]; then
                 if [ ! -d /tmp/xbiancache ]; then
                         mkdir /tmp/xbiancache;
                 fi
-		showinfo "$1" "\n\n        Updating package list..."
-                wget -P /tmp/xbiancache ${APTBASE}Packages.gz #2>/dev/null >/dev/null;
+		showinfo "$1" "\n\n            Updating package list..."
+                wget -P /tmp/xbiancache ${APTBASE}Packages.gz 2>/dev/null >/dev/null;
                 gunzip -c /tmp/xbiancache/Packages.gz > /tmp/xbiancache/Packages;
         fi
 }
