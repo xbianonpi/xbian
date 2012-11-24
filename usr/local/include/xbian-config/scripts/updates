@@ -27,13 +27,13 @@ function install_update() {
 	# Always run apt-get update before an update, to make sure 
 	# we don't use a faulty cached version
 	showinfo "$1" "\n\n   Updating package database, please wait ..."	
-	apt-get update > /dev/null
+	apt-get update 2>/dev/null >/dev/null
 
 	# Double chack that version is valid
 	check_version_cache xbian-update $2
 	if [ $? -eq 1 ]; then
 		showinfo "$1" "\n\n         Installing update, please wait ..."
-		apt-get install -y xbian-update=$2 > /dev/null
+		apt-get install -y xbian-update=$2 2>/dev/null >/dev/null
 		sleep 0;
 		# Double check that the correct version is installed
 		CURRENT_VERSION=$(pkg_version xbian-update)
