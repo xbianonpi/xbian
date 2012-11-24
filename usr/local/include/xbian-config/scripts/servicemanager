@@ -27,13 +27,34 @@ function getservices() {
 	# And placing the results in an array
 	SERVICES_UNFILTERED=($(cat $BASEPATH/services))
 
+	# Placeholder for running services
+	RUNNING=( )
+
+	# Get a list of actually running pids, and concatenate them to a single
+	# whitespace separated list
+	RUNNING_PIDS=$(ps -eo pid | sed 's/\n/ /g' )
+
 	# Check that all services are installed, else remove them from servicemanager
 	SERVICES=()
-	for SERVICE in ${SERVICES_UNFILTERED[@]}
+	for SERVICE_RAW in ${SERVICES_UNFILTERED[@]}
 	do
+		# Split the service row by : , field 1 = service name, field 2 = properties
+		SERVICE=$(echo $SERVICE_RAW | cut -f 1 -d:)
+		SERVICE_PIDFILE=$(echo $SERVICE_RAW | cut -f 2 -d: | sed 's/pidfile\=//g')
+
+		# Check if service is installed
 		if [ -f /etc/init.d/$SERVICE ]; then
 			# Add service, with the default status RNOK (Not running)
 			SERVICES+=("$SERVICE RNOK")
+
+			# If the service has daemons named other than default, check the pidfile directly
+			if [ ! -z $SERVICE_PIDFILE ] && [ -f $SERVICE_PIDFILE ]; then
+				SERVICE_PID=$(cat $SERVICE_PIDFILE)
+				IS_RUNNING=$(echo $RUNNING_PIDS | grep $SERVICE_PID)
+				if [ ! -z $IS_RUNNING ]; then
+					RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+				fi
+			fi
 		fi
 	done
 
@@ -41,18 +62,15 @@ function getservices() {
 	# Services only in other runlevels won't show as autostart for now
 	STARTUP=($(ls --format=single-column /etc/rc5.d/ | awk '{print substr($1,4) , " SOK" ; }'))
 
-	# Get a list of actually running pids, and concatenate them to a single
-	# whitespace separated list
-	RUNNING_PIDS=$(ps -eo pid | sed 's/\n/ /g' )
-
-	# Find pidfiles recursively from /var/run, and save the results in a variable
+	# Find pidfiles recursively from /var/run, and save the running status in an array
 	PIDS=($(find /var/run/ -type f 2>/dev/null | grep 'pid' ))
-	RUNNING=( )
+
+	# Find out if services that is uniformly named (init script name == daemon name == pidfile name) is running
 	for PIDFILE in ${PIDS[@]}
 	do
 		# Try to figure out which service the current file belong to
 		PID=$(cat $PIDFILE)
-		SERVICE=$(echo $PIDFILE | sed 's/dbus\/pid/dbus.pid/g' | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
+		SERVICE=$(echo $PIDFILE | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
 
 		# Check if the pid contained in this pidfile is actually running
         	IS_RUNNING=$(echo $RUNNING_PIDS | grep $PID)
