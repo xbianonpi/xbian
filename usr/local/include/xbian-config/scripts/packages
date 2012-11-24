@@ -1,0 +1,152 @@
+#!/bin/bash
+#
+#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+
+# Check if a package of a specific version is installed
+#  $1		Package name
+#  $2		Package version
+#  @return	0 for not installed, 1 for installed
+function check_version() {
+	# pkg_version return
+	INSTALLED_VERSION=$(pkg_version $1)
+	if [ ! -z $INSTALLED_VERSION ] && [ $2 == $INSTALLED_VERSION ]; then
+		return 1;
+	fi
+	return 0;
+}
+
+
+# Install a specific package, this expects an array named PACKAGES_FILTERED to be predefined
+#  $1		Dialog title
+#  $2		Index of package, in array
+#  @return	Nothing of interest
+function install_pkg() {
+	PACKAGE_NAME=$(echo ${PACKAGES_FILTERED[$2]} | cut -f 1 -d:)
+	PACKAGE_VERSION=$(echo ${PACKAGES_FILTERED[$2]} | cut -f 2 -d:)
+	# Sanity check
+	if [ ! -z $PACKAGE_NAME ]; then
+		check_version $PACKAGE_NAME $PACKAGE_VERSION
+		if [ $? -eq 0 ]; then
+			showyesno " $1 " "\n   Are you sure you want to install this package?"
+			case "$?" in
+			0)
+				# Install the selected version of the selected package
+				check_version_cache $PACKAGE_NAME $PACKAGE_VERSION
+				if [ $? -eq 1 ]; then
+					showinfo "$1" "\n\n         Installing package, please wait ..."
+					apt-get install -y $PACKAGE_NAME=$PACKAGE_VERSION > /dev/null
+					sleep 0;
+					showdialog "$1" "Close" "\n            Package succesfully installed.";
+				else
+					showdialog "$1" "Close" "\n         This package is currently unavailable.";
+				fi
+				#if [ -f /home/xbian/update.log ]; then
+				#	dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+				#	ASKFORREBOOT=1;
+				#fi
+			;;
+			*)
+				return 0;
+			;;
+			esac
+		else
+			showdialog "$1" "Ok" "\n         This package is already installed"
+		fi
+	fi
+}
+
+packages() {
+
+	IFS=$'\n';
+	download_pkg_list "$1";
+	if [ -f /tmp/xbiancache/Packages ]; then
+
+		# Prepare package array
+		APTPACKAGES=$(cat /tmp/xbiancache/Packages | sed -n 's/\(Package: \)\(.*$\)\|\(Version: \)\(.*$\)\|\(Filename: \)\(.*$\)\|\(Description: \)\(.*$\)/\2\4\6\8/p')
+		PACKAGES_UNSORTED=()
+		L=0
+		LINE=""
+		for PACKAGE_DATA in ${APTPACKAGES[@]}; do
+			L=$(($L+1))
+			LINE=$LINE$PACKAGE_DATA":"
+			if [[ $L == 4 ]]; then
+				L=0
+				if [[ $(echo $LINE | cut -f 1 -d:) =~ "xbian-package" ]]; then
+					PACKAGES_UNSORTED+=($LINE)
+				fi
+				LINE="";
+			fi
+		done
+
+		# Sort the packages by name and order, ascending
+		PACKAGES=($(echo  "${PACKAGES_UNSORTED[*]}" | sort -t: -u +0 -2 -))
+
+		NUMPACKAGES=${#PACKAGES[@]}
+		I=0
+		NRITEMS=0
+		PACKAGES_FILTERED=()
+		LIST=()
+		for LINE in ${PACKAGES[@]}; do
+			PACKAGE=$(echo $LINE | cut -f 1 -d:)
+			# Check for a newer version of this package
+			if [ $I -lt $NUMPACKAGES ]; then
+				NEXTPACKAGE="";
+				if [ $I -ne $(($NUMPACKAGES-1)) ]; then
+					NEXTPACKAGE=$( echo ${PACKAGES[$(($I+1))]} | cut -f 1 -d: )
+					N=$(($I+1))
+				fi
+				if [ -z $NEXTPACKAGE ] || [ $PACKAGE != $NEXTPACKAGE ]; then
+					# No newer version exist, show this package
+					NRITEMS=$(($NRITEMS+1))
+					PACKAGES_FILTERED+=($LINE)
+					LINES+=("$LINE")
+					VERSION=$(echo $LINE | cut -f 2 -d:)
+					NAME=$(echo $PACKAGE | sed -e 's/xbian-package-//g' | sed 's/\([a-z]\)\([a-zA-Z0-9]*\)/\u\1\2/g')
+					# Check if package is installed
+					pkg_installed $PACKAGE
+					if [ $? -eq 1 ]; then
+						INSTALLED_VERSION=$(pkg_version $PACKAGE)
+						LIST+=($NRITEMS "$NAME !      YES      ! $INSTALLED_VERSION ! $VERSION")
+					else
+					LIST+=($NRITEMS "$NAME !       NO       !              ! $VERSION")
+					fi
+				fi
+			fi
+			I=$(($I+1))
+		done
+
+		# Display package menu
+		if [ $NRITEMS -gt 0 ]; then
+			showmenudesc "$1" "\n   Select which package to update or install.\n\n           # \Zb Package          Installed    Current       Available\Zn" ${LIST[@]}
+			if [[ ! -z $RETURN && $RETURN -gt 0 ]]; then
+				install_pkg "$1" $(($RETURN-1))
+				packages "$1"
+			fi
+		else
+			showdialog "$1" "Close" "\n          There are no packages available";
+			return 0;
+		fi
+		return 0;
+
+	else
+		showdialog "$1" "Close" "\n          An unexpected error occurred while\n        downloading the package list." 55 8
+	fi
+	return 0;
+
+}

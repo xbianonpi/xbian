@@ -37,6 +37,7 @@ ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 PACKAGEDBUPDATED=0;
 ORIGINALIFS=$IFS;
+APTBASE="http://apt.xbian.org/dists/wheezy/main/binary-armhf/"
 BASEPATH="/usr/local/include/xbian-config"
 
 # Source sub scripts
