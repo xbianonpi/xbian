@@ -2,10 +2,6 @@
 #
 #Copyright 2012 Hexagon <development@xbian.org>
 #
-#Resize SD function is based on the corresponding function in raspi-config
-#The overclocking function is copied from raspi-config
-#raspi-config is created by Alex Bradbury <asb@asbradbury.org>
-#
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
 #XBian is free software: you can redistribute it and/or modify it under the
@@ -142,22 +138,22 @@ function servicemanager() {
 	IFS=$'\n';
 
 	# Show "Loading" screen
-	showinfo "$1" "\n\n          Reading service statuses...\n "
+	showinfo "$1" "\n\n            Reading service statuses...\n "
 
 	# List all available services
 	SERVICES_DATA=$(getservices)
 	SERVICES_ARR=($SERVICES_DATA)
-	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK ROK/ROK/g' | sed 's/RNOK/Stopped/g' | sed 's/ROK/Running/g' | sed 's/SOK/Yes/g' \
+	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK ROK/ROK/g' | sed 's/RNOK/\\Z1No\\Zn/g' | sed 's/ROK/\\Z2Yes\\Zn/g' | sed 's/SOK/\\Z2Yes\\Zn/g' \
 		    | awk '{ if ($2=="") \
-					printf "%s#%-14s!%-17s#" , NR , $1, "Stopped";  \
+					printf "%s#%-20s![      %-15s]!#" , NR , $1, "No";  \
 				else if ($3=="") \
-					printf "%s#%-14s!%-17s#" , NR , $1, $2;  \
+					printf "%s#%-20s![      %-15s]!#" , NR , $1, $2;  \
 				else \
-					printf "%s#%-14s!%-17s!%-32s#", NR , $1, $2, $3; }' )
+					printf "%s#%-20s![      %-15s]![      %-15s]!#", NR , $1, $2, $3; }' )
 	# Display menu
 	IFS="#";
 	showmenudesc 	"$1" \
-			"\n Select a service to manage\n \n\Zb    #  Service        Status         Autostart\Zn" \
+			"\n Select a service to manage\n \n\Zb  #  Service                   Running          Autostart\Zn" \
 			$SERVICES
 
 	# Edit service prefs
