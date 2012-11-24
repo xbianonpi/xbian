@@ -48,7 +48,7 @@ updates() {
 	if [ -f /tmp/xbiancache/Packages ]; then
 
 		# Check if any updates at all are installed
-		INSTALLED_UPDATE_VERSION=$(pkg_version xbian-update)
+		INSTALLED_VERSION=$(pkg_version xbian-update)
 
 		# Prepare package array
 		APTPACKAGES=$(cat /tmp/xbiancache/Packages | sed -n 's/\(Package: \)\(.*$\)\|\(Version: \)\(.*$\)\|\(Filename: \)\(.*$\)\|\(Description: \)\(.*$\)/\2\4\6\8/p')
