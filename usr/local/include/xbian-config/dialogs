@@ -34,7 +34,7 @@ showdialog() {
 	if [ $HEIGHT -eq $IMSGHGHT ]; then
 		HEIGHT=$(($IMSGHGHT+4));
 	fi
-	
+
 	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 3 ]; then

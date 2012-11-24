@@ -20,3 +20,4 @@
 2.5.2:MPG2 :Enter/remove your MPG2 license:licensempg2
 3:Services   :Start/stop and manage services:servicemanager
 4:Packages   :Install or remove additional packages:packages
+5:Updates    :Check for system updates:updates
