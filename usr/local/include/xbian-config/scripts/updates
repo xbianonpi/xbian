@@ -18,12 +18,18 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 
-
 # Install a specific update
 #  $1		Dialog title
 #  $2		Update version
 #  @return	Nothing of interest
 function install_update() {
+	
+	# Always run apt-get update before an update, to make sure 
+	# we don't use a faulty cached version
+	showinfo "$1" "\n\n   Updating package database, please wait ..."	
+	apt-get update > /dev/null
+
+	# Double chack that version is valid
 	check_version_cache xbian-update $2
 	if [ $? -eq 1 ]; then
 		showinfo "$1" "\n\n         Installing update, please wait ..."
@@ -33,8 +39,15 @@ function install_update() {
 		CURRENT_VERSION=$(pkg_version xbian-update)
 		if [ "$CURRENT_VERSION" = "$2" ]; then
 			showdialog "$1" "Close" "\n           Update  succesfully installed.";
+			if [ -f /home/xbian/update.log ]; then
+				dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+				ASKFORREBOOT=1;
+			fi
 		else
 			showdialog "$1" "Close" "\n An error prevented update, please try again later.";
+			if [ -f /home/xbian/update.log ]; then
+				dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+			fi
 		fi
 	else
 		showdialog "$1" "Close" "\n         This package is currently unavailable.";
@@ -79,8 +92,8 @@ updates() {
 				if [ $I -lt $NUMPACKAGES ]; then
 					NEXTVERSION="";
 					if [ $I -ne $(($NUMPACKAGES-1)) ]; then
-						NEXTVERSION=$( echo ${PACKAGES[$(($I+1))]} | cut -f 2 -d: )
 						N=$(($I+1))
+						NEXTVERSION=$( echo ${PACKAGES[$N]} | cut -f 2 -d: )
 					fi
 					VERSION=$(echo $LINE | cut -f 2 -d:)
 					if [ "$VERSION" = "$INSTALLED_VERSION" ]; then
@@ -97,13 +110,13 @@ updates() {
 
 		# Check if there is a new version available
 		if [ ! -z "$TO_INSTALL" ]; then
-			showyesno "$1" "\n  Update available ($VERSION) \n\n  Do you want to install this?" 9 55
+			showyesno "$1" "\n  Update available ($TO_INSTALL) \n\n  Do you want to install this?" 9 55
 			if [ $? -eq 0 ]; then
-				install_update "$1" "$VERSION"
+				install_update "$1" "$TO_INSTALL"
 				updates "$1";
 			fi
 		else
-			showdialog "$1" "Ok" "\n             No updates available"
+			showdialog "$1" "Ok" "\n             System is up to date"
 		fi
 	else
 		showdialog "$1" "Close" "\n          An unexpected error occurred while\n        downloading the package list." 55 8
