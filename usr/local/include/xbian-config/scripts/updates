@@ -38,7 +38,7 @@ function install_update() {
 		# Double check that the correct version is installed
 		CURRENT_VERSION=$(pkg_version xbian-update)
 		if [ "$CURRENT_VERSION" = "$2" ]; then
-			showdialog "$1" "Close" "\n           Update  succesfully installed.";
+			showdialog "$1" "Close" "\n           Update succesfully installed.";
 			if [ -f /home/xbian/update.log ]; then
 				dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
 				ASKFORREBOOT=1;
