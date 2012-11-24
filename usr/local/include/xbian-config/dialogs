@@ -34,7 +34,7 @@ showdialog() {
 	if [ $HEIGHT -eq $IMSGHGHT ]; then
 		HEIGHT=$(($IMSGHGHT+4));
 	fi
-	
+
 	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 3 ]; then
@@ -63,7 +63,7 @@ showinfo() {
 	if [ $HEIGHT -eq $IMSGHGHT ]; then
 		HEIGHT=$(($IMSGHGHT+4));
 	fi
-	
+
 	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 2 ]; then
@@ -96,7 +96,7 @@ showyesno() {
 	if [ $HEIGHT -eq $IMSGHGHT ]; then
 		HEIGHT=$(($IMSGHGHT+4));
 	fi
-	
+
 	WIDTH=55
 	# Overridden width and height
 	if [ $# -gt 2 ]; then
@@ -157,6 +157,7 @@ showmenudesc () {
                         --backtitle "$BACKTITLE" \
                         --title "$TITLE" \
                         --ok-label Select \
+			--column-separator "!" \
                         --cancel-label Return \
                         --menu "$TEXT" \
                         $HEIGHT 80 $ROWS \

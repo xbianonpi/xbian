@@ -193,38 +193,23 @@ set_overclock() {
 # Check if a package is installed on the system
 #  $1 package name
 function pkg_installed() {
-	return $(dpkg-query -W -f='${Status}\n' "$1" 2>/dev/null | grep ' installed' | wc -l);
+	RES=$(dpkg-query -W -f='${Status}\n' "$1" 2>/dev/null)
+	DEINST=$(echo $RES | grep 'deinstall ok' | wc -l)
+	if [ -z "$RES" ]; then
+		return 0;
+	fi
+	if [ $DEINST -eq 1 ]; then
+		return 0;
+	fi
+	return 1;
 }
 
-# Save an XBian package on the local storage
-#  $1 Not used
-#  $2 Filename of the package being saved
-#  $3 Title of the dialogs
-function savepackage() {
-	PKGFILE=$2
-	PKGPATH=$1
-	TITLE=$3
-
-	NAME=$(basename $PKGFILE);
-	NAME=${NAME%.*}
-	#LOCATION=$(dialog --backtitle "$BACKTITLE" --title "Config > $TITLE > Save" --ok-label Save --inputbox "Location:" 10 80 3>&1 1>&2 2>&3)
-	filedirselect LOCATION "packages" "Settings > $TITLE > Save" "/home/xbian/" 0 0 " ";
-	if [ $LOCATION != "" ]; then
-		if [ -d $LOCATION ]; then
-			if [[  -d "/tmp/xbiancache" && $(ls -l "/tmp/xbiancache/" | grep -v "total" | wc -l) -gt 0 ]]; then
-				tar -cf "$LOCATION/$NAME.tar" /tmp/xbiancache/* >/dev/null
-				tar -rf "$LOCATION/$NAME.tar" $2 >/dev/null
-			else
-				tar -cf "$LOCATION/$NAME.tar" $2 >/dev/null
-			fi
-			gzip "$LOCATION/$NAME.tar" >/dev/null
-			showdialog "Config > $TITLE > Save" "Ok" "\n       Package saved to:\n  $LOCATION/$NAME.tar.gz" 8 55
-			return 0;
-		else
-			showdialog "Config > $TITLE > Save" "Close" "\n         This location doesn't exist"
-			savepackage $1 $2 $3
-		fi
-		exit 0;
+# Check which version of a package that is installed
+#  $1 package name
+function pkg_version() {
+	pkg_installed $1
+	if [ $? -eq 1 ]; then
+		dpkg-query -W -f='${Version}\n' "$1" 2>/dev/null
 	fi
 }
 
@@ -242,7 +227,7 @@ function getremotefilesizes() {
 	if [ $BROKEN -eq 1 ]; then echo "Error"; fi;\
 	if [ ! -z $SIZE ]; then echo $SIZE; fi;\
 	done));
-	
+
 	BROKEN=$(echo ${PKGSIZES[@]} | grep -i "Error" | wc -l);
 
 	if [ $BROKEN -gt 0 ]; then
@@ -253,7 +238,7 @@ function getremotefilesizes() {
 	TOTALSIZE=0;
 	for SIZE in ${PKGSIZES[@]}; do
 		TOTALSIZE=$(($(($TOTALSIZE))+$(($SIZE))));
-	done	
+	done
 	eval "$2=$TOTALSIZE";
 	eval "$3=\"${PKGSIZES[@]}\"";
 	return 1;
@@ -267,218 +252,41 @@ function updateapt() {
 	fi
 }
 
-# Download packages and show progress bar
-#  $1 Title
-#  $2 Urls seperated by spaces
-#  $3 Array with package sizes
-#  $4 Total size of all files
-function downloadpackages() {
-
-PKGSIZES=($(echo "$3"));
-URLS=($(echo $2));
-
-TOTALFILES=${#URLS[@]};
-BYTESDOWNLOADED=0;
-NRFILE=0;
-TOTALPERCENT=0;
-LIST="";
-FIRSTFILE=0;
-TOTALSIZE=$4;
-
-wget -P /tmp/xbiancache/ --progress=bar:force $1 $2 2>&1 | \
-while read -d "%" X; do \
-FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}');\
-PROGRESSBAR=$(grep -vi 'http' <<< "$X" | grep -vi 'length');\
-BYTES=$(grep '\]' <<< $PROGRESSBAR | awk '{print $3}' | sed 's/,//g' | grep -iv 'K' | grep -iv 'M');\
-PERCENT=$(grep -iv 'http' <<< $X | sed 's:^.*[^0-9]\([0-9]*\)$:\1:' | grep -iv 'K' | grep -iv 'M');\
-if [ -z $PERCENT ]; then PERCENT=0; fi;\
-if [ $(($PERCENT)) -eq 100 ]; then if [ $(($NRFILE+1)) -lt $TOTALFILES ]; then BYTESDOWNLOADED=$(($(($BYTESDOWNLOADED))+$((${PKGSIZES[$NRFILE]})))); TOTALPERCENT=$((($(($BYTESDOWNLOADED))*100)/$TOTALSIZE)); BYTES=0; NRFILE=$(($NRFILE+1)); FILE=$(echo "${URLS[$NRFILE]}" | awk -F/ '{print $NF}'); LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; PERCENT=0; else TOTALPERCENT=100; BYTES=0; BYTESDOWNLOADED=$TOTALSIZE; fi; else TOTALPERCENT=$(((($(($BYTESDOWNLOADED))+$(($BYTES)))*100)/$TOTALSIZE)); fi;\
-if [[ $FIRSTFILE -eq 0 && $(($PERCENT)) -eq 0 ]]; then LIST="  Currently downloading:\n  $FILE ($(($NRFILE+1))/$TOTALFILES)"; FIRSTFILE=1; fi;\
-cat <<EOF
-XXX
-$TOTALPERCENT
-\n$LIST $PERCENT%\n\n\n  Total percentage done ($(($(($BYTESDOWNLOADED))+$(($BYTES))))/$TOTALSIZE):\n 
-XXX
-EOF
-done | dialog --title " $1 " --gauge "\n   Please wait..." 11 70 0;
-sleep 2;
-showinfo "$1" "\n\n   All packages downloaded."
-sleep 1;
+# Download updated package-lists if needed
+#   $1 Window title for status screen
+function download_pkg_list() {
+        if [ ! -f /tmp/xbiancache/Packages ]; then
+                if [ ! -d /tmp/xbiancache ]; then
+                        mkdir /tmp/xbiancache;
+                fi
+		showinfo "$1" "\n\n            Updating package list..."
+                wget -P /tmp/xbiancache/ ${APTBASE}Packages.gz 2>/dev/null >/dev/null;
+                gunzip -c /tmp/xbiancache/Packages.gz > /tmp/xbiancache/Packages;
+        fi
 }
 
-# Installs a set of packages
-#  $1 = Installation file
-#  $2 = Title of dialogs
-function installpackage() {
-
-INSTALLS=$1;
-TITLE=$2;
-#Read package file
-CONTENT=$(cat $INSTALLS);
-CONTENT=$(echo -e "$CONTENT\n");
-PACKAGESAPT=()
-PACKAGESAPT=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}' | sed -e 's/\[//g' | sed -e 's/\]//g'));
-PACKAGESDIRECT=()
-PACKAGESDIRECT=($(echo -e "$CONTENT" | grep 'PackagesDirect' | awk '{print substr($0,17,length+1)}'));
-IFS=$'\n';
-COMBINEDINSTALL=($(echo -e "$CONTENT" | grep 'PackagesApt' | awk '{print substr($0,14,length+1)}' | awk 'NR>1{print $1}' RS=[ FS=]));
-COMBINEDID=(${!COMBINEDINSTALL[*]});
-POSTINSTALL=()
-POSTINSTALL=($(echo -e "$CONTENT" 2>&1 | \
-while read X; do \
-if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
-if [[ "$X" == "#PostInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
-done));
-
-PREINSTALL=()
-IFS=$'\n';
-PREINSTALL=($(echo -e "$CONTENT" 2>&1 | \
-while read X; do \
-if [[ "$X" == "#PostInstall" && $(($START)) -eq 1 ]]; then START=0; fi; \
-if [ $(($START)) -eq 1 ]; then awk '{print substr($0,2,length+1)}' <<< $X | sed 's/%PREFIX%/\/tmp\/xbiancache/g'; fi; \
-if [[ "$X" == "#PreInstall" && $(($START)) -eq 0 ]]; then START=1; fi; \
-done));
-
-#if PACKAGELOCATION
-if [ $PACKAGELOCATION -eq 1 ]; then
-
-showinfo "$TITLE > $(basename $1)" "\n\n          Generating packages list..."
-IFS=$ORIGINALIFS;
-DEPENDENCIES=()
-DEPENDENCIES+=($(apt-get -s install ${PACKAGESAPT[@]} 2>&1 | \
-while read X; do \
-grep 'Inst ' <<< $X | awk '{print $2}';\
-done));
-
-#Get all dependencies of a apt package
-URLS=()
-for PACKAGE in "${DEPENDENCIES[@]}"
-do
-URLS+=("http://archive.raspbian.org/raspbian/$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")");
-done
-
-#Add all custom links
-for PACKAGE in "${PACKAGESDIRECT[@]}"
-do
-URLS+=("$PACKAGE");
-done
-
-getremotefilesizes "$(echo ${URLS[@]})" TOTALSIZE PKGSIZES;
-if [[ $? -eq 0 ]]; then
-	if [[ $PACKAGEDBUPDATED -eq 1 ]]; then
-		showinfo "$TITLE > $(basename $1)" "\n\n   Couldn't download all necessary packages. Aborting."
-		return 0;
-	else
-		showyesno  "$TITLE > $(basename $1)" "\n   Couldn't download all necessary packages.\n   Do you want to try updating apt?" 8
-		if [ $? -eq 1 ]; then
-			showinfo "$TITLE > $(basename $1)" "\n\n   Couldn't download all necessary packages.\n   Aborting." 8
-			sleep 5;
-			return 0;
-		else
-			updateapt $TITLE $1;
-			getremotefilesizes "${URLS[@]}" TOTALSIZE PKGSIZES;
-			if [ $? -eq 0 ]; then
-				showinfo "$TITLE > $(basename $1)" "\n\n   Still couldn't download all necessary packages.\n   Aborting." 8
-				sleep 5;
-				return 0;
-			fi
-		fi
-	fi
-fi
-PKGSIZES=($(echo "$PKGSIZES"));
-#Download package and create progress bar
-downloadpackages "$TITLE > $(basename $1)" "$(echo ${URLS[@]})" "$(echo ${PKGSIZES[@]})" $TOTALSIZE
-
-#else PACKAGELOCATION
-else
-
-#Save depency order
-DEPENDENCIES=($(ls -l /tmp/xbiancache/*.deb | awk '{print $9}' | awk '!/^[[:space:]]*$/'));
-
-#fi PACKAGELOCATION
-fi
-
-#Install all apt packages
-NRPACKAGES=${#DEPENDENCIES[@]};
-CURRENTPACKAGE=1;
-
-#Pre installation
-NRSTEPS=${#PREINSTALL[@]};
-CURRENTSTEP=1;
-for STEP in "${PREINSTALL[@]}"
-do
-showinfo "$TITLE > $(basename $1)" "\n Pre installation ($CURRENTSTEP/$NRSTEPS):\n $STEP"
-CURRENTSTEP=$(($CURRENTSTEP+1));
-if [ $DEBUG -eq 0 ]; then
-	eval "$STEP";
-else
-	sleep 1;
-fi;
-done
-
-#Install apt packages
-for PACKAGE in "${DEPENDENCIES[@]}"
-do
-FILE=$(basename $PACKAGE);
-MATCH=$(echo "${DEPENDENCIES[@]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
-if [ ! -z "$MATCH" ]; then
-	MATCH=$(echo "${COMBINEDINSTALL[@]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
-	if [ ! -z $MATCH ]; then
-		for I in "${COMBINEDID[@]}"
-		do
-			MATCH=$(echo "${COMBINEDINSTALL[$I]}" | sed -e 's/\ /\n/g' | grep -Fx "$FILE");
-			if [ ! -z $MATCH ]; then
-				NRCOMBINED=(echo ${COMBINEDINSTALL[$I]});
-				NRCOMBINED=${#NRCOMBINED[@]};
-				DEPENDENCIES=($(eval "echo ${DEPENDENCIES[@]} | sed 's/\b${COMBINEDINSTALL[$I]}\b//g'"));
-				showinfo "$TITLE > $(basename $1)" "\n Installing packages ($CURRENTPACKAGE..$(($CURRENTPACKAGE+$(($NRCOMBINED-2))))/$NRPACKAGES):\n ${COMBINEDINSTALL[$I]}";
-				INSTALL="";
-				PACKAGES=(${COMBINEDINSTALL[$I]});
-				for PACKAGE in "${PACKAGES[@]}"
-				do
-					INSTALL+="/tmp/xbiancache/"$(basename "$(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")")" ";
-				done;
-				if [ $DEBUG -eq 0 ]; then
-					dpkg -i $INSTALL >/dev/null;
-				else
-					sleep 1;
-				fi;
-				CURRENTPACKAGE=$(($CURRENTPACKAGE+$(($NRCOMBINED-1))));
-			fi
-		done;
-	else
-		showinfo "$TITLE > $(basename $1)" "\n Installing package ($CURRENTPACKAGE/$NRPACKAGES):\n $FILE"
-		if [ $DEBUG -eq 0 ]; then
-			dpkg -i "/tmp/xbiancache/"$(basename $(apt-cache show $PACKAGE | grep "Filename:" | cut -f 2 -d " ")) >/dev/null;
-		else
-			sleep 1;
-		fi;
-	CURRENTPACKAGE=$(($CURRENTPACKAGE+1));		
-	fi
-fi
-done
-
-#Post installation
-NRSTEPS=${#POSTINSTALL[@]};
-CURRENTSTEP=1;
-for STEP in "${POSTINSTALL[@]}"
-do
-dialog --backtitle "$BACKTITLE" --title "Config > $TITLE" --infobox "\n Post installation ($CURRENTSTEP/$NRSTEPS):\n $STEP" 7 60
-CURRENTSTEP=$(($CURRENTSTEP+1));
-if [ $DEBUG -eq 0 ]; then
-	eval "$STEP";
-else
-	sleep 1;
-fi;
-done
-
-sleep 1;
-IFS=$ORIGINALIFS;
-showdialog "$TITLE > $(basename $1)" "Ok" "\n   Installation complete."
-showyesno "$TITLE > $(basename $1)" "\n  Do you want to save package to your local storage\n  so you don't have to download them again?" 8
-case "$?" in
-	0) 
-		savepackage "/tmp/xbiancache/" "$INSTALLS" "$TITLE"
-	;;
-esac
+# Check if a package of a specific version is available in apt cache
+#  $1           Package name
+#  $2           Package version
+#  @return      0 for not available, 1 for available
+function check_version_cache() {
+        RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+        if [ -z $RES_APT_CACHE ]; then
+                # Not available, try apt-get update and check again
+                showinfo "$1" "\n\n     Updating package database, please wait ..."
+                apt-get update > /dev/null
+                RES_APT_CACHE=$(apt-cache showpkg $1 | grep "$2 (")
+                if [ -z $RES_APT_CACHE ]; then
+                        # Still not available, this package doesnt exist
+                        return 0;
+                else
+                        # Now it's available, apt-get update did the trick!
+                        return 1;
+                fi
+        else
+                # Was available without updateing apt repos, great!
+                return 1;
+        fi
+        # We should never get here
 }
+

@@ -18,8 +18,6 @@
 2.5:Licenses     :Add/Remove hardware decoding licenses:
 2.5.1:VC1  :Enter/remove your VC1 license:licensevc1
 2.5.2:MPG2 :Enter/remove your MPG2 license:licensempg2
-2.6:Programs     :Start/Stop services etc.:servicemanager
-3:Packages   :Install or remove additional packages:
-3.1:Remote:Install packages from internet:remotepackages
-3.2:Local :Install packages from *.tar.gz:localpackages
-4:Updates    :Check for XBian updates:notimplemented
+3:Services   :Start/stop and manage services:servicemanager
+4:Packages   :Install or remove additional packages:packages
+5:Updates    :Check for system updates:updates
