@@ -134,7 +134,6 @@ showmenu () {
 	NOLABEL="Return"
 	
 	TITLE=" $1 "
-	IFS="%";
 	
 	if [ $# -gt 3 ]; then
 		ROWS=$4;
