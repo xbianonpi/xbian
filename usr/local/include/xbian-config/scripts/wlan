@@ -29,7 +29,7 @@ changewlanunprotected() {
 			return 1;
 		else
 			showdialog "$1" "Close" "\n    Please enter your network name"
-			changewlanunprotected $1 $2 $3;
+			changewlanunprotected "$1" "$2" "$3";
 		fi
 	else
 		return 0;
@@ -77,12 +77,12 @@ changewlandhcp() {
 	if [ $(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep ssid | wc -l) -gt 0 ]; then
 		CWSSID=$(cat /etc/network/interfaces | grep ssid);
 		CWPASSWD=$(cat /etc/network/interfaces | grep wpa-psk);
-		if [ -z $CWPASSWD ];then
+		if [ -z "$CWPASSWD" ];then
 			CWPASSWD=$(cat /etc/network/interfaces | grep wireless-key);
 		fi
 		CSSID=$(echo -e "$CWSSID" | cut -f 2 -d ' ' | sed -e 's/"//g');
 		CPASSWD=$(echo -e "$CWPASSWD" | cut -f 2 -d ' ' | sed -e 's/"//g');
-		if [ -z $CPASSWD ]; then
+		if [ -z "$CPASSWD" ]; then
 			CMODE=1;
 		else
 			CMODE=2;
@@ -94,7 +94,7 @@ changewlandhcp() {
 	MODE=$RETURN
 	case "$MODE" in
 		1)
-			changewlanunprotected $1 $2 SSID $CSSID;
+			changewlanunprotected "$1" SSID "$CSSID";
 			if [ $? -eq 0 ]; then
 				return 0;
 			fi
@@ -126,7 +126,7 @@ changewlandhcp() {
 	fi
 
 	sed -i '/allow-hotplug wlan0/,+10d' /etc/network/interfaces
-	echo -e "allow-hotplug wlan0\niface wlan0 inet dhcp\n$CONFIG" >> /etc/network/interfaces
+	echo -e "allow-hotplug wlan0\niface wlan0 inet dhcp\n$CONFIG\nwireless-power off" >> /etc/network/interfaces
 
 	# Restart interface
 	showinfo "$1" "\n\n            Restarting interface wlan0"
@@ -425,7 +425,7 @@ changewlanstatic() {
 
 	sed -i '/wpa-roam/d' /etc/network/interfaces
 	sed -i '/allow-hotplug wlan0/,+10d' /etc/network/interfaces
-	echo -e "allow-hotplug wlan0\niface wlan0 inet static\n$CONFIG" >> /etc/network/interfaces
+	echo -e "allow-hotplug wlan0\niface wlan0 inet static\n$CONFIG\nwireless-power off" >> /etc/network/interfaces
 
 	# Reboot is required to make sure everything is properly setup with static settings
 	ASKFORREBOOT=1
