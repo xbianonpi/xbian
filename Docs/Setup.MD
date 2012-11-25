@@ -172,5 +172,11 @@ echo "" > /home/xbian/.bash_history
 #Removing swap file
 rm /var/swap
 
+#Add apt sources in /etc/apt/sources.list
+wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
+apt-get update 
+apt-get install -y xbian-update
+apt-get autoremove -y
+
 #Resize SD upon next boot
 update-rc.d firstrun defaults
