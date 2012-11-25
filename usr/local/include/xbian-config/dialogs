@@ -124,7 +124,7 @@ showyesno() {
 # $1 Title
 # $2 Descriptive text
 # $3 Menu items
-# $4 Rows
+# $4 (optional) Rows
 # $5 (optional) Height
 # $6 (optional) Width
 # $7 (optional) Yes label
@@ -134,6 +134,8 @@ showmenu () {
 	NOLABEL="Return"
 	
 	TITLE=" $1 "
+	IFS="%";
+	
 	if [ $# -gt 3 ]; then
 		ROWS=$4;
 	else
