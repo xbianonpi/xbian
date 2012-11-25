@@ -175,3 +175,42 @@ notimplementedyet() {
 			"\n\n             Not implemented yet"
 	mainmenu;
 }
+
+#Show radio list
+# $1 Title
+# $2 Descriptive text
+# $3 Items
+# $4 Rows
+# $5 (optional) Height
+# $6 (optional) Width
+showradiolist () {
+	TITLE=" $1 "
+	if [ $# -gt 3 ]; then
+		ROWS=$4;
+	else
+		ROWS=5;
+	fi
+	HEIGHT=$(($ROWS+5))
+	WIDTH=80;
+
+	if [ $# -gt 4 ]; then
+		HEIGHT=$5
+	fi
+	if [ $# -gt 5 ]; then
+		WIDTH=$6
+	fi
+	if [ $# -gt 6 ]; then
+		YESLABEL=$7
+	fi
+	if [ $# -gt 7 ]; then
+		NOLABEL=$8
+	fi
+
+	RETURN=$( \
+		dialog \
+			--title " $1 " \
+			--backtitle "$BACKTITLE" \
+			--radiolist " Press [space] to select a different kernel version:" $HEIGHT $WIDTH $ROWS $3 3>&1 1>&2 2>&3);
+
+}
+
