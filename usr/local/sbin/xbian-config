@@ -109,7 +109,6 @@ function menu() {
 	echo 1 | sudo tee /proc/sys/vm/drop_caches >/dev/null
 	#Execute script
 	if [ -z "$ITEMS" ]; then
-		#CLEVEL=$(echo $LEVEL | rev | cut -f2 -d. | rev);
 		ITEMS=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL$ADD[0-9])*:);
 		FILE=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL | awk '{print substr($0,0,length)}'): | rev | cut -f1 -d: | rev);
 		CLEVEL=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL | awk '{print substr($0,0,length)}'): | rev | cut -f3 -d: | rev | sed 's/\ *$//g');
