@@ -53,6 +53,7 @@ do_start()
 do_stop()
 {
        start-stop-daemon --stop --signal 9 --retry 5 --quiet --pidfile $PIDFILE
+       chvt 2;
 }
 
 case "$1" in
