@@ -23,9 +23,11 @@
 #Now SSH into your Pi with the following credentials Username: pi Password: raspbian
 
 #Removing unnecessary packages and installing required packages
-sudo apt-get update
+sudo su
 
-sudo apt-get purge -y libice6 libxt6 xserver-common xserver-xorg xserver-xorg-core xserver-xorg-input-all \
+apt-get update
+
+apt-get purge -y libice6 libxt6 xserver-common xserver-xorg xserver-xorg-core xserver-xorg-input-all \
 xserver-xorg-video-fbdev xserver-xorg-input-synaptics xserver-xorg-input-evdev x11-utils x11-xkb-utils aspell \
 lxappearance lxde lxde-common lxde-core lxde-icon-theme lxinput lxmenu-data lxpanel lxpolkit lxrandr lxsession \
 lxsession-edit lxshortcut lxtask lxterminal gnome-icon-theme gnome-themes-standard libgnome-keyring-common \
@@ -49,21 +51,20 @@ gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 libsamplerate0 trigg
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
 libxdmcp6 make libx11-6 libraspberrypi-doc
 
-sudo apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
+apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev  libass-dev --fix-missing
 
-sudo apt-get autoremove -y
+apt-get autoremove -y
 
-sudo apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
+apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
 
-sudo rm -rf /var/cache/apt/archives/*
+rm -rf /var/cache/apt/archives/*
 
-sudo apt-get clean
+apt-get clean
 
 #Regenerating SSH unique SSH keys:
-sudo su
 rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #Setting up xbian user and deleting pi user
