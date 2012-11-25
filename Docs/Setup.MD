@@ -169,8 +169,9 @@ for logs in `find /var/log -type f`; do echo '' > $logs; done
 echo "" > /root/.bash_history
 echo "" > /home/xbian/.bash_history
 
-#Removing swap file
+#Removing swap file & XBian repo clone
 rm /var/swap
+rm -rf /home/xbian/source
 
 #Add apt sources in /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
