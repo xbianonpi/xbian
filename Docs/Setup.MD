@@ -78,8 +78,8 @@ echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/
 # Relogin with ssh; user:xbian pass:raspberry
 
 #Kill all processes started by user pi
-sudo chmod +s /bin/su
-sudo su
+echo raspberry | sudo -S chmod +s /bin/su
+echo raspberry | sudo -S su
 for i in $(pgrep -u pi); do kill -9 $i; done;
 
 #Deleting user pi
