@@ -24,8 +24,8 @@
 function switchkernel() {
 	KERNELS=($(ls -Al /boot/*.img | awk '{print $9}' | grep -iv kernel.img));
 	if [ ${#KERNELS[@]} -eq 1 ]; then
-			showdialog "$1" "Close" "\n       You can't switch kernel because there\n           is only one version installed.\n" 8
-			return 0;
+		showdialog "$1" "Close" "\n       You can't switch kernel because there\n           is only one version installed.\n" 8
+		return 0;
 	else
 		LIST=();
 		I=0;
@@ -34,10 +34,10 @@ function switchkernel() {
 
 			CKERNEL=$(ls -Al /boot/kernel.img | awk '{print $5}');
 			NKERNEL=$(ls -Al $KERNEL | awk '{print $5}');
-			
+
 			KERNEL=${KERNEL##*/};
 			KERNEL=${KERNEL%.*};
-			
+
 			KERNEL=$(echo $KERNEL | sed -e 's/kernel//g' | sed -e 's/\_/./g');
 			if [[ $NKERNEL -eq $CKERNEL ]]; then
 				LIST+=("$I $KERNEL on ");
@@ -46,8 +46,7 @@ function switchkernel() {
 			fi
 		done;
 		IFS=" ";
-		RETURN=$(dialog --backtitle "$BACKTITLE" --radiolist " Press [space] to select a different kernel version:" 10 60 $I ${LIST[@]} 3>&1 1>&2 2>&3);
-		
+		showradiolist "$1" " Press [space] to select a different kernel version:" "${LIST[*]}" $I 10 60
 		case $? in
 			0 )
 				KERNEL=${KERNELS[$(($RETURN-1))]};
