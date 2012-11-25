@@ -1,23 +1,23 @@
 1:Information:Information about this tool:info
-2:Settings   :Change various system settings:
-2.1:System       :e.g. Resize SD, Overclocking, Hostname:
-2.1.1:Resize SD   :Expand root partition to fill SD card:resizesd
+2:Settings:Change various system settings:
+2.1:System:e.g. Resize SD, Overclocking, Hostname:
+2.1.1:Resize SD:Expand root partition to fill SD card:resizesd
 2.1.2:Overclocking:Configure overclocking:overclocking
-2.1.3:Hostname    :Change the default hostname:xbhostname
-2.1.4:Timezone    :Set the default timezone:timezone
-2.1.5:Kernel      :Switches the kernel:switchkernel
+2.1.3:Hostname:Change the default hostname:xbhostname
+2.1.4:Timezone:Set the default timezone:timezone
+2.1.5:Kernel:Switches the kernel:switchkernel
 2.2:User Accounts:e.g. Change passwords:
 2.2.1:XBian Password:Change password for xbian user:xbianpass
 2.2.2:Root Password :Change password for root user:rootpass
-2.3:Networking   :e.g. LAN/WLAN Settings, SSH:
-2.3.1:WLAN          :Configure wireless network connection:wlan
-2.3.2:LAN           :Configure wired network connection:lan
+2.3:Networking:e.g. LAN/WLAN Settings, SSH:
+2.3.1:WLAN:Configure wireless network connection:wlan
+2.3.2:LAN:Configure wired network connection:lan
 2.3.3:SSH root login:Enable/Disable SSH root login:sshroot
 2.4:Connectivity :e.g. Video-output:
 2.4.1:Video Output:Change HDMI, CEC and overscan behavior:videoflags
-2.5:Licenses     :Add/Remove hardware decoding licenses:
-2.5.1:VC1  :Enter/remove your VC1 license:licensevc1
-2.5.2:MPG2 :Enter/remove your MPG2 license:licensempg2
-3:Services   :Start/stop and manage services:servicemanager
-4:Packages   :Install or remove additional packages:packages
-5:Updates    :Check for system updates:updates
+2.5:Licenses:Add/Remove hardware decoding licenses:
+2.5.1:VC1:Enter/remove your VC1 license:licensevc1
+2.5.2:MPG2:Enter/remove your MPG2 license:licensempg2
+3:Services:Start/stop and manage services:servicemanager
+4:Packages:Install or remove additional packages:packages
+5:Updates:Check for system updates:updates
