@@ -38,7 +38,7 @@ PACKAGELOCATION=0;
 PACKAGEDBUPDATED=0;
 ORIGINALIFS=$IFS;
 APTBASE="http://apt.xbian.org/dists/wheezy/main/binary-armhf/"
-BASEPATH="/usr/local/include/xbian-config"
+BASEPATH="/usr/local/include/xbian-config1"
 
 # Source sub scripts
 source $BASEPATH/functions
@@ -137,9 +137,9 @@ function menu() {
 }
 
 #Run script inside screen, so it's doesn't fill the whole terminal history
-SCREEN=$(screen -r | grep "Attached" | wc -l);
-if [ $SCREEN -eq 0 ]; then
-	`screen $0`
-else
+#SCREEN=$(screen -r | grep "Attached" | wc -l);
+#if [ $SCREEN -eq 0 ]; then
+#	`screen $0`
+#else
 	menu 0 "";
-fi
+#fi

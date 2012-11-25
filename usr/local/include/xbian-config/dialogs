@@ -132,8 +132,8 @@ showyesno() {
 showmenu () {
 	YESLABEL="Select"
 	NOLABEL="Return"
-	
-	TITLE=" $1 "
+
+	TITLE=" $1 "	
 	
 	if [ $# -gt 3 ]; then
 		ROWS=$4;

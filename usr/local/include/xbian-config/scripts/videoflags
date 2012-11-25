@@ -128,7 +128,7 @@ function videoflags() {
 				MESSAGE+="  Overscan is still:                enabled\n"
 			fi
 		fi
-		showdialog 	" $1 " \
+		showdialog 	"$1" \
 				"Close" \
 				"$MESSAGE"
 	fi
