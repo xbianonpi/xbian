@@ -88,12 +88,9 @@ changewlandhcp() {
 			CMODE=2;
 		fi
 	fi
-
-	showmenu	"$1" \
-			1 "Unprotected" \
-			2 "WPA or WPA2" \
-			3 "WEP"
-
+	IFS="%";
+	showmenu "$1" "" "1%Unprotected%2%WPA or WPA2%3%WEP" 4
+	IFS=$ORIGINALIFS;
 	MODE=$RETURN
 	case "$MODE" in
 		1)
@@ -211,11 +208,9 @@ changewlanstatic() {
 		fi
 	fi
 
-	showmenu 	"$1" \
-			1 "Unprotected" \
-			2 "WPA or WPA2" \
-			3 "WEP"
-
+	IFS="%";
+	showmenu "$1" "" "1%Unprotected%2%WPA or WPA2%3%WEP" 4;
+	IFS=$ORIGINALIFS;
 	MODE=$RETURN
 	case "$MODE" in
 		1)
@@ -444,14 +439,17 @@ changewlanstatic() {
 function wlan() {
 
 	# Show for wlan0 existance
-	DEVICE=$(ip link show wlan0 | grep "state ")
+	DEVICE=$(ip link show wlan0 2>/dev/null | grep "state ")
 	if [ -z $DEVICE ]; then
-		showdialog "$1" "Ok" "\n No wlan interface detected, please make sure\n it is connected and working prior to\n running this guide." 9 55
+		showdialog "$1" "Ok" "\n   No wlan interface detected, please make sure\n       it is connected and working prior to\n               running this guide." 9 55
+		return 0;
 	fi 
 
 	# Show menu
-	MODE=$(dialog --backtitle "$BACKTITLE" --title "$1" --ok-label Select --cancel-label Return --menu '' 8 55 2 1 "DHCP" 2 "Static" 3>&1 1>&2 2>&3)
-	case "$MODE" in
+	IFS="%";
+	showmenu "$1" "" "1%DHCP%2%Static" 3
+	IFS=$ORIGINALIFS;
+	case "$RETURN" in
 		1)
 			changewlandhcp "$1";
 		;;
