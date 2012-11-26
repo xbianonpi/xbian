@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+#Copyright 2012 Hexagon <development@xbian.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+
+# Install a specific update
+#  $1		Dialog title
+#  $2		Update version
+#  @return	Nothing of interest
+function install_update() {
+
+	# Always run apt-get update before an update, to make sure
+	# we don't use a faulty cached version
+	showinfo "$1" "\n\n   Updating package database, please wait ..."
+	apt-get clean 2>/dev/null >/dev/null
+	apt-get update 2>/dev/null >/dev/null
+
+	# Double chack that version is valid
+	check_version_cache xbian-update $2
+	if [ $? -eq 1 ]; then
+		showinfo "$1" "\n\n         Installing update, please wait ..."
+		apt-get install -y xbian-update=$2 2>/dev/null >/dev/null
+		sleep 0;
+		# Double check that the correct version is installed
+		CURRENT_VERSION=$(pkg_version xbian-update)
+		if [ "$CURRENT_VERSION" = "$2" ]; then
+			showdialog "$1" "Close" "\n           Update succesfully installed.";
+			if [ -f /home/xbian/update.log ]; then
+				dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+				ASKFORREBOOT=1;
+			fi
+		else
+			showdialog "$1" "Close" "\n An error prevented update, please try again later.";
+			if [ -f /home/xbian/update.log ]; then
+				dialog --backtitle " $1 " --title " $TITLE > Updates > Log" --exit-label Close --textbox /home/xbian/update.log 15 60
+			fi
+		fi
+	else
+		showdialog "$1" "Close" "\n         This package is currently unavailable.";
+	fi
+}
+
+updates() {
+
+	IFS=$'\n';
+	download_pkg_list "$1";
+	if [ -f /tmp/xbiancache/Packages ]; then
+
+		# Check if any updates at all are installed
+		INSTALLED_VERSION=$(pkg_version xbian-update)
+
+		# Prepare package array
+		APTPACKAGES=$(cat /tmp/xbiancache/Packages | sed -n 's/\(Package: \)\(.*$\)\|\(Version: \)\(.*$\)\|\(Filename: \)\(.*$\)\|\(Description: \)\(.*$\)/\2\4\6\8/p')
+		PACKAGES_UNSORTED=()
+		L=0
+		LINE=""
+		for PACKAGE_DATA in ${APTPACKAGES[@]}; do
+			L=$(($L+1))
+			LINE=$LINE$PACKAGE_DATA":"
+			if [[ $L == 4 ]]; then
+				L=0
+				if [[ $(echo $LINE | cut -f 1 -d:) =~ "xbian-update" ]]; then
+					PACKAGES_UNSORTED+=($LINE)
+				fi
+				LINE="";
+			fi
+		done
+
+		# Sort the packages by name and order, ascending
+		PACKAGES=($(echo  "${PACKAGES_UNSORTED[*]}" | sort -t: -u +0 -2 -))
+		NUMPACKAGES=${#PACKAGES[@]}
+		TO_INSTALL="";
+		I=0
+		for LINE in ${PACKAGES[@]}; do
+			if [ -z $TO_INSTALL ]; then
+				PACKAGE=$(echo $LINE | cut -f 1 -d:)
+				# Check for a newer version of this package
+				if [ $I -lt $NUMPACKAGES ]; then
+					NEXTVERSION="";
+					if [ $I -ne $(($NUMPACKAGES-1)) ]; then
+						N=$(($I+1))
+						NEXTVERSION=$( echo ${PACKAGES[$N]} | cut -f 2 -d: )
+					fi
+					VERSION=$(echo $LINE | cut -f 2 -d:)
+					if [ "$VERSION" = "$INSTALLED_VERSION" ]; then
+						TO_INSTALL=$NEXTVERSION
+					else
+						if [ -z "$INSTALLED_VERSION" ]; then
+							TO_INSTALL=$VERSION
+						fi
+					fi
+				fi
+			fi
+			I=$(($I+1))
+		done
+
+		# Check if there is a new version available
+		if [ ! -z "$TO_INSTALL" ]; then
+			showyesno "$1" "\n  Update available ($TO_INSTALL) \n\n  Do you want to install this?" 9 55
+			if [ $? -eq 0 ]; then
+				install_update "$1" "$TO_INSTALL"
+				updates "$1";
+			fi
+		else
+			showdialog "$1" "Ok" "\n             System is up to date"
+		fi
+	else
+		showdialog "$1" "Close" "\n          An unexpected error occurred while\n        downloading the package list." 55 8
+	fi
+	return 0;
+
+}

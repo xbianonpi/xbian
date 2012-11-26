@@ -22,14 +22,11 @@
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
 function overclocking() {
-	showdialog "$1" "Close" "\nBe aware that overclocking may reduce the lifetime of your Raspberry Pi. If overclocking at a certain level causes system instability, try a more modest overclock. See http://elinux.org/RPi_Overclocking for more information." 10 65
-	showmenu	"$1" \
-			1 "None     700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt" \
-			2 "Modest   800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt" \
-			3 "XBian    840MHz ARM, 375MHz core, 400MHz SDRAM, 0 overvolt" \
-			4 "Medium   900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt" \
-			5 "High     950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt" \
-			6 "Turbo    1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt"
+	showdialog "$1" "Close" "\n Be aware that overclocking may reduce the lifetime of your\n  Raspberry Pi. If overclocking at a certain level causes\n      system instability, try a more modest overclock.\nSee http://elinux.org/RPi_Overclocking for more information." 10 65
+	IFS="%"
+		showmenu        "$1" "" \
+                        "1%None! - !\"700MHz ARM, 250MHz core, 400MHz SDRAM, 0 overvolt\"%2%Modest! - !\"800MHz ARM, 300MHz core, 400MHz SDRAM, 0 overvolt\"%3%XBian! - !\"840MHz ARM, 375MHz core, 400MHz SDRAM, 0 overvolt\"%4%Medium! - !\"900MHz ARM, 333MHz core, 450MHz SDRAM, 2 overvolt\"%5%High! - !\"950MHz ARM, 450MHz core, 450MHz SDRAM, 6 overvolt\"%6%Turbo! - !\"1000MHz ARM, 500MHz core, 500MHz SDRAM, 6 overvolt\"" 7
+	IFS=$ORIGINALIFS;
 	case "$RETURN" in
 		1)
 			set_overclock None 700 250 400 0

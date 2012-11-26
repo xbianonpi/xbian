@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<settings>
+  <setting id="host" type="text" label="30000" default="127.0.0.1" />
+  <setting id="port" type="number" label="30001" default="6543" />
+  <setting id="db_user" type="text" label="30002" default="mythtv" />
+  <setting id="db_password" type="text" label="30003" default="mythtv" />
+  <setting id="db_name" type="text" label="30004" default="mythconverg" />
+  <setting id="extradebug" type="bool" label="30005" default="false" />
+  <setting id="livetv" type="bool" label="30006" default="true" />
+  <setting id="livetv_priority" type="bool" label="30007" default="false" />
+</settings>

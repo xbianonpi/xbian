@@ -34,8 +34,7 @@
   	sudo apt-get update 
    	sudo apt-get upgrade
 
-        sudo apt-get install autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev:armhf \
-	libass-dev:armhf libatk1.0-dev libavahi-client-dev libavahi-common-dev libavcodec-dev libavformat-dev libavutil-dev libbison-dev:armhf libbluray-dev:armhf libboost1.49-dev \
+        sudo apt-get install autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev libass-dev:armhf libatk1.0-dev libavahi-client-dev libavahi-common-dev libavcodec-dev libavformat-dev libavutil-dev libbison-dev:armhf libbluray-dev:armhf libboost1.49-dev \
         libbz2-dev:armhf libc-dev-bin libc6-dev:armhf libcaca-dev libcairo2-dev libcdio-dev libclalsadrv-dev libcrypto++-dev libcups2-dev libcurl3-gnutls-dev \
         libdbus-1-dev libdbus-glib-1-dev libdirectfb-dev libdrm-dev libegl1-mesa-dev libelf-dev libenca-dev libept-dev libevent-dev libexpat1-dev libflac-dev:armhf \
         libfontconfig1-dev libfreetype6-dev libfribidi-dev libgconf2-dev libgcrypt11-dev libgdk-pixbuf2.0-dev libgl1-mesa-dev libgles2-mesa-dev \
@@ -97,9 +96,14 @@
 	
 	
 # 3. Compiling libcec
-	cd ~/opt/xbmc
-	make -C lib/libcec
-   	sudo make -C lib/libcec install
+	cd ~/opt
+	git clone --depth 5 https://github.com/Pulse-Eight/libcec.git
+	cd libcec
+	./bootstrap 
+	./configure --prefix=/usr/local
+	make
+	sudo make install
+
 	
 
 # 4. Compiling libshairport
@@ -148,7 +152,7 @@
 	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
 	cd xbmc-pvr-addons/
 	./bootstrap 
-	./configure --prefix=/usr/local/lib/xbmc
+	./configure --prefix=/usr/local--enable-addons-with-dependencies
 	sudo make install
 
 	# Compiling the XVDR addon
@@ -156,7 +160,7 @@
 	git clone git://github.com/pipelka/xbmc-addon-xvdr.git
 	cd xbmc-addon-xvdr
 	sh autogen.sh
-	./configure --prefix=/usr/local/share/xbmc
+	./configure --prefix=/usr/local
 	make install
 
 # Many thanks to http://www.raspbian.org/RaspbianXBMC !

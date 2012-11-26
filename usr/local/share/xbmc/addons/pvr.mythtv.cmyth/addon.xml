@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="pvr.mythtv.cmyth"
+  version="0.5.0"
+  name="MythTV cmyth PVR Client"
+  provider-name="Christian Fetzer, Jean-Luc Barrière, Tonny Petersen">
+  <requires>
+    <c-pluff version="0.1"/>
+  </requires>
+  <extension
+    point="xbmc.pvrclient"
+    library_linux="XBMC_MythTV_cmyth.pvr"
+    library_osx="XBMC_MythTV_cmyth.pvr"
+    library_wingl="XBMC_MythTV_cmyth_win32.pvr"
+    library_windx="XBMC_MythTV_cmyth_win32.pvr"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="be">XBMC frontend for MythTV (using libcmyth)</summary>
+    <summary lang="cs">Rozhraní XBMC pro MythTV (používající libcmyth)</summary>
+    <summary lang="da">XBMC frontend til MythTV (bruger libcmyth)</summary>
+    <summary lang="de">XBMC's Zugang zu MythTV (benutzt libcmyth)</summary>
+    <summary lang="el">Frontend του XBMC για το MythTV (με χρήση του libcmyth)</summary>
+    <summary lang="en">XBMC frontend for MythTV (using libcmyth)</summary>
+    <summary lang="es">Front-end de XBMC para MythTV (usando libcmyth)</summary>
+    <summary lang="es_AR">Front-end de XBMC para MythTV (usando libcmyth)</summary>
+    <summary lang="fr">Applicatif XBMC pour MythTV (utilise libcmyth)</summary>
+    <summary lang="he">ממשק משתמש XBMC לMythTV (משתמש בlibcmyth)</summary>
+    <summary lang="hu">XBMC frontend MythTV-hez (libcmyth használatával)</summary>
+    <summary lang="it">Frontend di XBMC per MythTV (utilizzando libcmyth)</summary>
+    <summary lang="ko">MythTV XBMC 프론트엔드 (libcmyth 사용)</summary>
+    <summary lang="lt">XBMC sąsaja į MythTV (naudojant libcmyth)</summary>
+    <summary lang="mk">XBMC интерфејс за MythTV (со користење libcmyth)</summary>
+    <summary lang="pl">Interfejs XBMC dla MythTV (przy użyciu libcmyth)</summary>
+    <summary lang="pt">XBMC frontend para MythTV (usando libcmyth)</summary>
+    <summary lang="pt_BR">XBMC frontend para MythTV (usando libcmyth)</summary>
+    <summary lang="ru">Фронтэнд XBMC для MythTV (с использованием libcmyth)</summary>
+    <summary lang="sk">XBMC frontend pre MythTV (využívajúc 'libcmyth')</summary>
+    <summary lang="sv">XBMC gränssnitt till MythTV (via libcmyth)</summary>
+    <summary lang="zh">XBMC的MythTV前端（使用libcmyth）</summary>
+    <description lang="en">MythTV frontend (up to MythTV 0.26). Supports streaming of Live TV &amp; Recordings, listening to Radio channels, EPG and Timers.</description>
+    <disclaimer lang="be">This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects.</disclaimer>
+    <disclaimer lang="cs">Tento software není stabilní. Autoři nejsou žádným způsobem zodpovědní za selhání při nahrávání, neplatné časovače, ztracený čas, či jakékoliv jiné nežádoucí události...</disclaimer>
+    <disclaimer lang="da">Denne software er ustabil. Udviklerne er på ingen måde ansvarlige for mislykkede optagelser, fejlagtige tidsindstillinger, spildte timer eller andre uhensigtsmæssigheder.</disclaimer>
+    <disclaimer lang="de">Dies ist instabile Software! Die Autoren sind in keiner Weise verantwortlich für fehlgeschlagene Aufnahmen, falsche Timer, verschwendete Zeit oder andere ungewünschte Effekte.</disclaimer>
+    <disclaimer lang="el">Ασταθές πρόγραμμα! Οι δημιουργοί δεν είναι σε καμία περίπτωση υπεύθυνοι για αποτυχημένες εγγραφές, λανθασμένους χρονοδιακόπτες, χαμένες ώρες, ή κάθε είδους ανεπιθύμητα αποτελέσματα.</disclaimer>
+    <disclaimer lang="en">This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects.</disclaimer>
+    <disclaimer lang="es">¡Este software es inestable! Los autores no son en ningún caso responsables por grabaciones fallidas, temporizadores incorrectos, horas desperdiciadas o cualquier otro efecto indeseable.</disclaimer>
+    <disclaimer lang="es_AR">¡Este software es inestable! Los autores no se responsabilizan por grabaciones fallidas, temporizadores incorrectos, horas perdidas, o cualquier otro efecto no deseado..</disclaimer>
+    <disclaimer lang="fr">Ce logiciel est en cours de développement. Les auteurs ne sont en aucun cas responsables de l'échec des enregistrements, minuteries erronées, temps perdu et autres effets indésirables.</disclaimer>
+    <disclaimer lang="he">זוהי תוכנה בלתי יציבה!מחברי התכנה אינם אחראים להקלטות כושלות,מתזמני הקלטות שגויים,שעות מבוזבזות,או כל תוצאה בלתי רצויה...</disclaimer>
+    <disclaimer lang="hu">Ez nem stabil szoftver! A készítők nem vállalnak felelősséget, a hibás felvételért, rossz időzítésért, elvesztegetett időért...</disclaimer>
+    <disclaimer lang="it">Questo software è instabile! Gli autori non sono in alcun modo responsabili per registrazioni fallite, timers incorretti, ore perse, o qualsiasi altro effetto indesiderato.</disclaimer>
+    <disclaimer lang="ko">완성되지 않은 소프트웨어입니다. 개발자는 녹화와 예약의 실패, 시간 허비나 다른 의도하지 않은 결과에 대한 책임을 지지 않습니다. </disclaimer>
+    <disclaimer lang="lt">Tai yra nestabili programinė įranga! Autorius jokiu būdu neatsako už nepavykusius įrašus, neteisingus laikmačius, iššvaistytas valandas, ar nutikus kitiems nepageidaujamiems poveikiams ...[COLOR=red](xbmc.lt rekomenduoja/siūlo testuojant šį priedą persijungti į Anglų [orinali] kalbą)[/COLOR]</disclaimer>
+    <disclaimer lang="mk">Ова е нестабилен софтвер! Авторите на ниту еден начин не одговараат за неуспешни снимки, неточни тајмери, потрошени часови, или било кои други несакани ефекти.</disclaimer>
+    <disclaimer lang="pl">To oprogramowanie jest niestabilne! Autorzy w żaden sposób nie odpowiadają za nieudane nagrania, źle działające wyłączniki czasowe, stracone godziny czy też jakiekolwiek inne niepożądane efekty.</disclaimer>
+    <disclaimer lang="pt">Este é um software instável! Os autores não se responsabilizam por falhas nas gravações, temporizadores incorrectos, horas perdidas ou outro qualquer efeito não desejado...</disclaimer>
+    <disclaimer lang="pt_BR">Este é um software instável! Os autores não são responsáveis por falhas nas gravações, agendamentos incorretos, horas dispendidas, ou quaisquer outro efeito indesejado.</disclaimer>
+    <disclaimer lang="ru">Это тестовая программа! Авторы не несут никакой ответственности за испорченные записи, неверные таймеры, потраченное время и за прочие нежелательные эффекты.</disclaimer>
+    <disclaimer lang="sk">Toto nie je stabilný software! Autori nie sú zodpovední za zlýhané nahrávky, nesprávne časovače, premrhané hodiny a iné nežiadúce efekty.</disclaimer>
+    <disclaimer lang="sv">Denna mjukvara är instabil! Utvecklarna är inte ansvariga för misslyckade inspelingar, felaktiga timers, bortkastade timmar eller några andra olyckliga effekter.</disclaimer>
+    <disclaimer lang="zh">这是不稳定版的软件！作者不对录制失败、错误定时造成时间浪费或其它不良影响负责。</disclaimer>
+    <platform>all</platform>
+  </extension>
+</addon>
+
