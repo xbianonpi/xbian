@@ -23,9 +23,11 @@
 #Now SSH into your Pi with the following credentials Username: pi Password: raspbian
 
 #Removing unnecessary packages and installing required packages
-sudo apt-get update
+sudo su
 
-sudo apt-get purge -y libice6 libxt6 xserver-common xserver-xorg xserver-xorg-core xserver-xorg-input-all \
+apt-get update
+
+apt-get purge -y libice6 libxt6 xserver-common xserver-xorg xserver-xorg-core xserver-xorg-input-all \
 xserver-xorg-video-fbdev xserver-xorg-input-synaptics xserver-xorg-input-evdev x11-utils x11-xkb-utils aspell \
 lxappearance lxde lxde-common lxde-core lxde-icon-theme lxinput lxmenu-data lxpanel lxpolkit lxrandr lxsession \
 lxsession-edit lxshortcut lxtask lxterminal gnome-icon-theme gnome-themes-standard libgnome-keyring-common \
@@ -49,21 +51,20 @@ gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 libsamplerate0 trigg
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
 libxdmcp6 make libx11-6 libraspberrypi-doc
 
-sudo apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
+apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
-udisks usbmount git-core ntfs-3g --fix-missing
+udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev  libass-dev --fix-missing
 
-sudo apt-get autoremove -y
+apt-get autoremove -y
 
-sudo apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
+apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
 
-sudo rm -rf /var/cache/apt/archives/*
+rm -rf /var/cache/apt/archives/*
 
-sudo apt-get clean
+apt-get clean
 
 #Regenerating SSH unique SSH keys:
-sudo su
 rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #Setting up xbian user and deleting pi user
@@ -77,7 +78,7 @@ echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/
 # Relogin with ssh; user:xbian pass:raspberry
 
 #Kill all processes started by user pi
-sudo chmod +s /bin/su
+echo raspberry | sudo -S chmod +s /bin/su
 sudo su
 for i in $(pgrep -u pi); do kill -9 $i; done;
 
@@ -95,7 +96,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #Clone xbian git
 cd /home/xbian/
-git clone --depth 5 https://github.com/Koenkk/xbian.git source
+git clone --depth 5 -b xbian-alpha3 https://github.com/Koenkk/xbian.git source
 cd source
 
 #Installation
@@ -115,7 +116,8 @@ chmod +x /etc/init.d/*
 chmod +x /usr/local/sbin/*
 chmod +x /usr/local/bin/*
 chmod +x /usr/local/lib/xbmc/xbmc.bin
-chmod +x /opt/vc/bin/vcgencmd
+chmod +x /opt/vc/bin/*
+chmod +x /opt/vc/sbin/*
 chown -R xbian:xbian /home/xbian/.xbmc
 
 #Update rc.d
@@ -131,6 +133,8 @@ rm /usr/local/lib/libshairport.so.0
 ln -s /usr/local/lib/libshairport.so.0.0.0 /usr/local/lib/libshairport.so.0
 rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
+ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so.0
+ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
 ldconfig
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
@@ -165,8 +169,15 @@ for logs in `find /var/log -type f`; do echo '' > $logs; done
 echo "" > /root/.bash_history
 echo "" > /home/xbian/.bash_history
 
-#Removing swap file
+#Removing swap file & XBian repo clone
 rm /var/swap
+rm -rf /home/xbian/source
+
+#Add apt sources in /etc/apt/sources.list
+wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
+apt-get update 
+apt-get install -y xbian-update
+apt-get autoremove -y
 
 #Resize SD upon next boot
 update-rc.d firstrun defaults

@@ -1,0 +1,167 @@
+#!/bin/bash
+#
+#Copyright 2012 Hexagon <development@xbian.org>
+#
+#This file is part of XBian - XBMC on the Raspberry Pi.
+#
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with XBian. If not, see <http://www.gnu.org/licenses/>
+
+function getservices() {
+
+	# Get which services to manage by listing all files in /usr/local/include/xbian-config/services/
+	# And placing the results in an array
+	SERVICES_UNFILTERED=($(cat $BASEPATH/services))
+
+	# Placeholder for running services
+	RUNNING=( )
+
+	# Get a list of actually running pids, and concatenate them to a single
+	# whitespace separated list
+	RUNNING_PIDS=$(ps -eo pid | sed 's/\n/ /g' )
+
+	# Check that all services are installed, else remove them from servicemanager
+	SERVICES=()
+	for SERVICE_RAW in ${SERVICES_UNFILTERED[@]}
+	do
+		# Split the service row by : , field 1 = service name, field 2 = properties
+		SERVICE=$(echo $SERVICE_RAW | cut -f 1 -d:)
+		SERVICE_PIDFILE=$(echo $SERVICE_RAW | cut -f 2 -d: | sed 's/pidfile\=//g')
+
+		# Check if service is installed
+		if [ -f /etc/init.d/$SERVICE ]; then
+			# Add service, with the default status RNOK (Not running)
+			SERVICES+=("$SERVICE RNOK")
+
+			# If the service has daemons named other than default, check the pidfile directly
+			if [ ! -z $SERVICE_PIDFILE ] && [ -f $SERVICE_PIDFILE ]; then
+				SERVICE_PID=$(cat $SERVICE_PIDFILE)
+				IS_RUNNING=$(echo $RUNNING_PIDS | grep $SERVICE_PID)
+				if [ ! -z $IS_RUNNING ]; then
+					RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+				fi
+			fi
+		fi
+	done
+
+	# Fetch which is services are autostarted from /etc/rc5.d/
+	# Services only in other runlevels won't show as autostart for now
+	STARTUP=($(ls --format=single-column /etc/rc5.d/ | awk '{print substr($1,4) , " SOK" ; }'))
+
+	# Find pidfiles recursively from /var/run, and save the running status in an array
+	PIDS=($(find /var/run/ -type f 2>/dev/null | grep 'pid' ))
+
+	# Find out if services that is uniformly named (init script name == daemon name == pidfile name) is running
+	for PIDFILE in ${PIDS[@]}
+	do
+		# Try to figure out which service the current file belong to
+		PID=$(cat $PIDFILE)
+		SERVICE=$(echo $PIDFILE | rev | cut -d'/' -f1 | rev | cut -d'.' -f1)
+
+		# Check if the pid contained in this pidfile is actually running
+        	IS_RUNNING=$(echo $RUNNING_PIDS | grep $PID)
+		if [ ! -z $IS_RUNNING ]; then
+			# It's running, join ROK (Running)
+			RUNNING+=($(echo -e "$SERVICE ROK\n${SERVICE%?} ROK"))
+		fi
+	done
+
+	# Join everything to a single "table"
+	join -a 1 -o "0,1.2,2.2" <( printf "%s\n" "${SERVICES[@]}" | sort) <(printf "%s\n" "${RUNNING[@]}" | sort) | \
+		join -a 1 -o "0,1.2,1.3,2.2" - <(printf "%s\n" "${STARTUP[@]})" | sort) | sort | uniq
+
+}
+
+function servicemenu() {
+
+	# Prepare service menu
+	SERVICE_DATA=$3
+	MENU=()
+	if [[ $SERVICE_DATA =~ "SOK" ]]; then
+		MENU+="1#Disable autostart#"
+	else
+		MENU+="1#Enable autostart#"
+	fi
+	if [[ $SERVICE_DATA =~ "ROK" ]]; then
+		MENU+="2#Stop service#"
+		MENU+="3#Restart service#"
+	else
+		MENU+="2#Start service#"
+	fi
+
+	# Show service menu
+	showmenu "$1 > $2" " \n" "$MENU" 3 11 40
+	if [ $? -eq 0 ]; then
+		if [ $RETURN -eq 1 ]; then
+			if [[ $SERVICE_DATA =~ "SOK" ]]; then
+				showinfo "$1" "\n\n           Disabling autostart of $2"
+				update-rc.d -f $2 remove > /dev/null
+				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/SOK//g' )
+			else
+				showinfo "$1" "\n\n            Enabling autostart of $2"
+				update-rc.d $2 defaults > /dev/null
+				SERVICE_DATA+=" SOK"
+			fi
+		elif [ $RETURN -eq 2 ]; then
+			if [[ $SERVICE_DATA =~ "ROK" ]]; then
+				showinfo "$1" "\n\n                Stopping $2"
+				service $2 stop > /dev/null
+				SERVICE_DATA=$( echo "$SERVICE_DATA" | sed 's/ROK//g' )
+			else
+				showinfo "$1" "\n\n                Starting $2"
+				service $2 start > /dev/null
+				SERVICE_DATA+="ROK"
+			fi
+		elif [ $RETURN -eq 3 ]; then
+			showinfo "$1" "\n\n               Restarting $2"
+			service $2 stop && sleep 1 && service $2 start
+		fi
+		servicemenu "$1" "$2" "$SERVICE_DATA";
+	else
+		servicemanager $1;
+	fi
+}
+
+function servicemanager() {
+
+	# Select which services to monitor
+	IFS=$'\n';
+
+	# Show "Loading" screen
+	showinfo "$1" "\n\n            Reading service statuses...\n "
+
+	# List all available services
+	SERVICES_DATA=$(getservices)
+	SERVICES_ARR=($SERVICES_DATA)
+	SERVICES=$( echo "${SERVICES_DATA[@]}" | sed 's/RNOK ROK/ROK/g' | sed 's/RNOK/\\Z1\No\\Zn/g' | sed 's/ROK/\\Z2Yes\\Zn/g' | sed 's/SOK/\\Z2Yes\\Zn/g' \
+		    | awk '{ if ($2=="") \
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, "No";  \
+				else if ($3=="") \
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, $2, "\\Z1No\\Zn";  \
+				else \
+					printf "%s#%-18s![   %-12s]![   %-12s]#", NR , $1, $2, $3; }' )
+	# Display menu
+	IFS="#";
+	showmenu 	"$1" \
+			"\n\Zb    #  Service              Running    Autostart\Zn" \
+			"$SERVICES" 8 16 70
+
+	# Edit service prefs
+	if [ $? -eq 0 ]; then
+		SERVICE=$( echo ${SERVICES_ARR[$(($RETURN-1))]} | cut -f 1 -d" " )
+		if [ ! -z $SERVICE ]; then
+			servicemenu "$1" $SERVICE "${SERVICES_ARR[$(($RETURN-1))]}"
+		fi
+	fi
+
+}

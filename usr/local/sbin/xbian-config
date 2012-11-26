@@ -37,6 +37,7 @@ ASKFORREBOOT=0;
 PACKAGELOCATION=0;
 PACKAGEDBUPDATED=0;
 ORIGINALIFS=$IFS;
+APTBASE="http://apt.xbian.org/dists/wheezy/main/binary-armhf/"
 BASEPATH="/usr/local/include/xbian-config"
 
 # Source sub scripts
@@ -103,12 +104,11 @@ function menu() {
 
 	# Draw menu
 	IFS=$'\n';
-	ITEMS=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL$ADD[0-9])*: | sed 's/\(.*\)\.\(\.*[0-9].\)\{1,\}/\2/' | sed 's/\([0-9]\)\(:\)\([a-zA-Z0-9\ \ %,-\"\*]\{1,\}\)\(:\)\([a-zA-Z0-9\ %,-\"\*]\{1,\}\)\(:\)/\1%\3 - "\5"%:/' | cut -f1 -d: | sed ':a;N;$!ba;s/\n//g' | awk '{print substr($0,0,length)}');
-
+	ITEMS=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL$ADD[0-9])*: | sed 's/\(.*\)\.\(\.*[0-9].\)\{1,\}/\2/' | sed 's/\([0-9]\)\(:\)\([a-zA-Z0-9\ \ %,-\"\*]\{1,\}\)\(:\)\([a-zA-Z0-9\ %,-\"\*]\{1,\}\)\(:\)/\1%\3!-!"\5"%:/' | cut -f1 -d: | sed ':a;N;$!ba;s/\n//g' | awk '{print substr($0,0,length)}');
+	
 	echo 1 | sudo tee /proc/sys/vm/drop_caches >/dev/null
 	#Execute script
 	if [ -z "$ITEMS" ]; then
-		#CLEVEL=$(echo $LEVEL | rev | cut -f2 -d. | rev);
 		ITEMS=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL$ADD[0-9])*:);
 		FILE=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL | awk '{print substr($0,0,length)}'): | rev | cut -f1 -d: | rev);
 		CLEVEL=$(cat $BASEPATH/struct | grep ^$(echo $LEVEL | awk '{print substr($0,0,length)}'): | rev | cut -f3 -d: | rev | sed 's/\ *$//g');
@@ -120,7 +120,7 @@ function menu() {
 		menu $(($1-1)) $(echo $LEVEL | awk '{print substr($0,0,length-1)}') ${CPATH% > *};
 	else
 		IFS="%";
-		showmenu $CPATH $ITEMS;
+		showmenu $CPATH "" "$ITEMS" 6;
 		if [ $? -eq 1 ]; then
 			if [ $1 -eq 0 ]; then
 				close;
