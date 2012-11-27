@@ -130,7 +130,8 @@
 	cd ~/opt/xbmc/
 
     	# Applying patches
-   	patch -p0 < ~/opt/source/Patches/xbmc/TPNno.patch
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/TPNno.patch 
+   	patch -p0 < TPNno.patch
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
