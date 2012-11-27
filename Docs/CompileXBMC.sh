@@ -129,8 +129,8 @@
 	# Preparing the XBMC code for compilation
 	cd ~/opt/xbmc/
 
-    # Applying patches
-    patch -p0 < ~/opt/source/Patches/xbmc/TPNno.patch
+    	# Applying patches
+   	patch -p0 < ~/opt/source/Patches/xbmc/TPNno.patch
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
