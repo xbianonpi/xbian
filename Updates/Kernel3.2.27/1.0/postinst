@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ $1 == "configure" ]; then
+
+	cp /boot/kernel3_2_27.img /boot/kernel.img
+	
+fi 
