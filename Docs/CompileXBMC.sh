@@ -128,7 +128,9 @@
 
 	# Preparing the XBMC code for compilation
 	cd ~/opt/xbmc/
-	nano configure.in # set use_texturepacker_native=yes to use_texturepacker_native=no @ line 668
+
+    # Applying patches
+    patch -p0 < ~/opt/source/Patches/xbmc/TPNno.patch
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
