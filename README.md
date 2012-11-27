@@ -1,4 +1,4 @@
-You can download a fresh XBian 1.0 Alpha 3 image from here: http://jb.xenserver.sk/xbian/XBian1.0Alpha3.7z
+### You can download a fresh XBian 1.0 Alpha 3 image from here: http://jb.xenserver.sk/xbian/XBian1.0Alpha3.7z
 
 #XBian 1.0 Alpha 3 Changelog
 ==================================
