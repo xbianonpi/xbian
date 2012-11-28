@@ -5717,3 +5717,5 @@ alias bt-proto-4 bnep
 alias bt-proto-6 hidp
 alias net-pf-16-proto-16-family-nfc nfc
 alias net-pf-39 nfc
+alias devname:mapper/control dm_mod
+alias char-major-10-236 dm_mod
