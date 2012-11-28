@@ -157,7 +157,7 @@
 	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
 	cd xbmc-pvr-addons/
 	./bootstrap 
-	./configure --prefix=/usr/local--enable-addons-with-dependencies
+	./configure --prefix=/usr/local --enable-addons-with-dependencies
 	sudo make install
 
 	# Compiling the XVDR addon
