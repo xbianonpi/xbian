@@ -1083,9 +1083,7 @@ kernel/net/nfc/nfc.ko
 kernel/net/openvswitch/openvswitch.ko
 kernel/lib/crc-ccitt.ko
 kernel/lib/crc7.ko
-kernel/lib/zlib_inflate/zlib_inflate.ko
 kernel/lib/zlib_deflate/zlib_deflate.ko
-kernel/lib/xz/xz_dec.ko
 kernel/lib/ts_kmp.ko
 kernel/lib/ts_bm.ko
 kernel/lib/ts_fsm.ko

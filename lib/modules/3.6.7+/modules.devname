@@ -4,3 +4,4 @@ btrfs btrfs-control c10:234
 tun net/tun c10:200
 ppp_generic ppp c108:0
 uinput uinput c10:223
+dm_mod mapper/control c10:236
