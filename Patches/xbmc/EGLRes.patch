@@ -70,26 +70,26 @@
 +  if (xbmcres1080.good())
 +  {
 +      CLog::Log(LOGDEBUG, "I found the .xbmcres1080 file, using 1080p");
-+      m_width = 1920;
-+      m_height = 1080;
++      max_width = 1920;
++      max_height = 1080;
 +  }
 +  else if (xbmcres720.good())
 +  {
 +      CLog::Log(LOGDEBUG, "I found the .xbmcres720 file, using 720p");
-+      m_width = 1280;
-+      m_height = 720;
++      max_width = 1280;
++      max_height = 720;
 +  }
 +  else if (xbmcres540.good())
 +  {
 +      CLog::Log(LOGDEBUG, "I found the .xbmcres540 file, using 540p");
-+      m_width = 960;
-+      m_height = 540;
++      max_width = 960;
++      max_height = 540;
 +  }
 +  else if (xbmcres480.good())
 +  {
 +      CLog::Log(LOGDEBUG, "I found the .xbmcres480 file, using 480p");
-+      m_width = 853;
-+      m_height = 480;
++      max_width = 853;
++      max_height = 480;
 +  }
 +  else
 +  {
