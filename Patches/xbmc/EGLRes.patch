@@ -1,0 +1,102 @@
+--- xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	2012-11-27 09:08:01.000000000 +0100
++++ xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	2012-11-27 18:10:42.000000000 +0100
+@@ -24,6 +24,7 @@
+ #include "utils/log.h"
+ #include "guilib/gui3d.h"
+ #include "linux/DllBCM.h"
++#include <fstream>
+ 
+ #ifndef __VIDEOCORE4__
+ #define __VIDEOCORE4__
+@@ -97,8 +98,43 @@
+   m_dispman_element2        = DISPMANX_NO_HANDLE;
+   m_dispman_display         = DISPMANX_NO_HANDLE;
+ 
+-  m_width                   = 1280;
+-  m_height                  = 720;
++  m_width = 1280;
++  m_height = 720;
++    
++  std::ifstream xbmcres1080("/usr/local/share/xbmc/system/.xbmcres1080");
++  std::ifstream xbmcres720("/usr/local/share/xbmc/system/.xbmcres720");
++  std::ifstream xbmcres540("/usr/local/share/xbmc/system/.xbmcres540");
++  std::ifstream xbmcres480("/usr/local/share/xbmc/system/.xbmcres480");
++    
++  if (xbmcres1080.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres1080 file, using 1080p");
++      m_width = 1920;
++      m_height = 1080;
++  }  
++  else if (xbmcres720.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres720 file, using 720p");
++      m_width = 1280;
++      m_height = 720;
++  }
++  else if (xbmcres540.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres540 file, using 540p");
++      m_width = 960;
++      m_height = 540;
++  }
++  else if (xbmcres480.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres480 file, using 480p");
++      m_width = 853;
++      m_height = 480;
++  }
++  else
++  {
++      CLog::Log(LOGDEBUG, "No .xbmcXXX file found, using 720p");
++  }
++    
+   m_initDesktopRes          = true;
+ 
+   m_DllBcmHost = new DllBcmHost;
+@@ -554,8 +590,43 @@
+ 
+ bool CEGLNativeTypeRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
+ {
+-  const int max_width = 1280, max_height = 720;
+-  float ar = (float)width/(float)height;
++  int max_width = 1280, max_height = 720;
++    
++  std::ifstream xbmcres1080("/usr/local/share/xbmc/system/.xbmcres1080");
++  std::ifstream xbmcres720("/usr/local/share/xbmc/system/.xbmcres720");
++  std::ifstream xbmcres540("/usr/local/share/xbmc/system/.xbmcres540");
++  std::ifstream xbmcres480("/usr/local/share/xbmc/system/.xbmcres480");
++    
++  if (xbmcres1080.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres1080 file, using 1080p");
++      m_width = 1920;
++      m_height = 1080;
++  }
++  else if (xbmcres720.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres720 file, using 720p");
++      m_width = 1280;
++      m_height = 720;
++  }
++  else if (xbmcres540.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres540 file, using 540p");
++      m_width = 960;
++      m_height = 540;
++  }
++  else if (xbmcres480.good())
++  {
++      CLog::Log(LOGDEBUG, "I found the .xbmcres480 file, using 480p");
++      m_width = 853;
++      m_height = 480;
++  }
++  else
++  {
++      CLog::Log(LOGDEBUG, "No .xbmcXXX file found, using 720p");
++  }
++    
++ float ar = (float)width/(float)height;
+   // bigger than maximum, so need to clamp
+   if (width > max_width || height > max_height) {
+     // wider than max, so clamp width first
