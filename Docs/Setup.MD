@@ -179,5 +179,7 @@ apt-get update
 apt-get install -y xbian-update
 apt-get autoremove -y
 
+echo "evdev" >> /etc/modules
+
 #Resize SD upon next boot
 update-rc.d firstrun defaults
