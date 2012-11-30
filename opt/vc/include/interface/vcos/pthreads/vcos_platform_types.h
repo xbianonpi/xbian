@@ -25,10 +25,6 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-/*=============================================================================
-VideoCore OS Abstraction Layer - platform-specific types and defines
-=============================================================================*/
-
 #ifndef VCOS_PLATFORM_TYPES_H
 #define VCOS_PLATFORM_TYPES_H
 

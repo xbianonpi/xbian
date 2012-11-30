@@ -23,7 +23,7 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
 ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 
 /*=============================================================================
 VideoCore OS Abstraction Layer - Assertion and error-handling macros.
@@ -149,27 +149,13 @@ extern "C" {
 #include "interface/vcos/vcos_types.h"
 
 #ifdef __COVERITY__
-/*
- * This tells coverity not to expand the assert macro, so it still sees the
- * asserts in the code, even in release builds (we currently run coverity on
- * our release builds). Unfortunately MetaWare won't compile it, even though
- * __COVERITY__ isn't defined.
- */
-// #nodef assert
-
-/*
- * So we need to declare the function. It's already built into coverity that
- * assert is a "killpath"
- */
-extern void assert(int cond);
-
 extern void __coverity_panic__(void);
 #undef VCOS_ASSERT_BKPT
 #define VCOS_ASSERT_BKPT __coverity_panic__()
 #endif
 
 /*
- * ANDROID should NOT be defined for files built for Videocore, but currently it
+ * ANDROID should NOT be defined for files built for Videcore, but currently it
  * is. FIXME When that's fixed, remove the __VIDEOCORE__ band-aid.
  */
 #if (defined(ANDROID) && !defined(__VIDEOCORE__))
