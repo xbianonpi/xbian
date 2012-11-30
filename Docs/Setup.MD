@@ -54,7 +54,7 @@ libxdmcp6 make libx11-6 libraspberrypi-doc
 apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
-udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev  libass-dev --fix-missing
+udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev  libass-dev fbset --fix-missing
 
 apt-get autoremove -y
 
@@ -73,7 +73,7 @@ echo "xbian:raspberry" | chpasswd
 
 #Remove user pi from sudoers and add xbian user
 sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
-echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot" >> /etc/sudoers
+echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot, /bin/fbset" >> /etc/sudoers
 
 # Relogin with ssh; user:xbian pass:raspberry
 
