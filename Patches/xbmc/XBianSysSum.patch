@@ -21,7 +21,7 @@
 -  return strVal;
 +  CStdString verVal;
 +  std::ifstream verFile;
-+  verFile.open("/Users/Koenkk/Desktop/xbian_version");
++  verFile.open("/etc/xbian_version");
 +  if (verFile.is_open()) {
 +      while (!verFile.eof()) {
 +          verFile >> verVal;
