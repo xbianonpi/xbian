@@ -1,43 +1,132 @@
---- xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 21:28:32.000000000 +0100
-+++ xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 21:36:49.000000000 +0100
-@@ -18,6 +18,8 @@
-  *
-  */
- 
-+#include <iostream>
+--- xbmc/utils/SystemInfo.cpp	2012-12-01 21:28:31.000000000 +0100
++++ xbmc/utils/SystemInfo.cpp	2012-12-01 22:48:12.000000000 +0100
+@@ -25,6 +25,8 @@
+ #include <conio.h>
+ #else
+ #include <sys/utsname.h>
 +#include <fstream>
- #include "system.h"
- #include "GUIWindowSystemInfo.h"
++#include <iostream>
+ #endif
  #include "GUIInfoManager.h"
-@@ -85,6 +87,22 @@ bool CGUIWindowSystemInfo::OnMessage(CGU
-   return CGUIWindow::OnMessage(message);
+ #include "filesystem/CurlFile.h"
+@@ -61,7 +63,7 @@ bool CSysInfoJob::DoWork()
+   m_info.cpuFrequency      = GetCPUFreqInfo();
+   m_info.kernelVersion     = CSysInfo::GetKernelVersion();
+   m_info.macAddress        = GetMACAddress();
+-  m_info.batteryLevel      = GetBatteryLevel();
++  m_info.xbianver          = GetXBianVer();
+   return true;
  }
  
-+std::string getXBianVer()
-+{
-+    std::ifstream verFile;
-+    std::string ver;
-+    verFile.open("/etc/xbian_version");
-+    
-+    if (verFile.is_open()) {
-+        while (!verFile.eof()) {            
-+            verFile >> ver;            
-+        }
-+    }
-+    
-+    verFile.close();
-+    return ver;
-+}
-+
- void CGUIWindowSystemInfo::FrameMove()
+@@ -104,11 +106,19 @@ CStdString CSysInfoJob::GetVideoEncoder(
+   return "GPU: " + g_Windowing.GetRenderRenderer();
+ }
+ 
+-CStdString CSysInfoJob::GetBatteryLevel()
++CStdString CSysInfoJob::GetXBianVer()
  {
-   ResetLabels();
-@@ -100,7 +118,7 @@ void CGUIWindowSystemInfo::FrameMove()
+-  CStdString strVal;
+-  strVal.Format("%d%%", g_powerManager.BatteryLevel());
+-  return strVal;
++  CStdString verVal;
++  std::ifstream verFile;
++  verFile.open("/etc/xbian_version");
++  if (verFile.is_open()) {
++      while (!verFile.eof()) {
++          verFile >> verVal;
++      }
++  }
++  verFile.close();
++    
++  return verVal;
+ }
+ 
+ double CSysInfoJob::GetCPUFrequency()
+@@ -198,8 +208,8 @@ CStdString CSysInfo::TranslateInfo(int i
+       return g_localizeStrings.Get(13274);
+     else
+       return g_localizeStrings.Get(13297);
+-  case SYSTEM_BATTERY_LEVEL:
+-    return m_info.batteryLevel;
++  case SYSTEM_XBIAN_VER:
++    return m_info.xbianver;
+   default:
+     return "";
+   }
+
+--- xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 21:28:32.000000000 +0100
++++ xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 22:48:46.000000000 +0100
+@@ -100,7 +100,7 @@ void CGUIWindowSystemInfo::FrameMove()
  #endif
      SetControlLabel(i++, "%s: %s", 12390, SYSTEM_UPTIME);
      SetControlLabel(i++, "%s: %s", 12394, SYSTEM_TOTALUPTIME);
 -    SetControlLabel(i++, "%s: %s", 12395, SYSTEM_BATTERY_LEVEL);
-+    SetControlLabel(i++, "XBian version: %s", getXBianVer());
++    SetControlLabel(i++, "XBian version:%s %s", -1, SYSTEM_XBIAN_VER);
    }
    else if (m_section == CONTROL_BT_STORAGE)
    {
+
+--- xbmc/GUIInfoManager.h	2012-12-01 21:28:30.000000000 +0100
++++ xbmc/GUIInfoManager.h	2012-12-01 22:50:49.000000000 +0100
+@@ -398,7 +398,7 @@ namespace INFO
+ #define SYSTEM_HAS_ADDON            711
+ #define SYSTEM_ADDON_TITLE          712
+ #define SYSTEM_ADDON_ICON           713
+-#define SYSTEM_BATTERY_LEVEL        714
++#define SYSTEM_XBIAN_VER            714
+ #define SYSTEM_IDLE_TIME            715
+ #define SYSTEM_FRIENDLY_NAME        716
+ #define SYSTEM_SCREENSAVER_ACTIVE   717
+
+--- xbmc/GUIInfoManager.cpp	2012-12-01 21:28:30.000000000 +0100
++++ xbmc/GUIInfoManager.cpp	2012-12-01 22:59:42.000000000 +0100
+@@ -269,7 +269,7 @@ const infomap system_labels[] =  {{ "has
+                                   { "profilethumb",     SYSTEM_PROFILETHUMB },
+                                   { "profilecount",     SYSTEM_PROFILECOUNT },
+                                   { "progressbar",      SYSTEM_PROGRESS_BAR },
+-                                  { "batterylevel",     SYSTEM_BATTERY_LEVEL },
++                                  { "xbianver",         SYSTEM_XBIAN_VER },
+                                   { "friendlyname",     SYSTEM_FRIENDLY_NAME },
+                                   { "alarmpos",         SYSTEM_ALARM_POS },
+                                   { "isinhibit",        SYSTEM_ISINHIBIT },
+@@ -1518,7 +1518,7 @@ CStdString CGUIInfoManager::GetLabel(int
+   case SYSTEM_INTERNET_STATE:
+   case SYSTEM_UPTIME:
+   case SYSTEM_TOTALUPTIME:
+-  case SYSTEM_BATTERY_LEVEL:
++  case SYSTEM_XBIAN_VER:
+     return g_sysinfo.GetInfo(info);
+     break;
+ 
+@@ -1971,9 +1971,6 @@ bool CGUIInfoManager::GetInt(int &value,
+     case PVR_ACTUAL_STREAM_SNR_PROGR:
+       value = g_PVRManager.TranslateIntInfo(info);
+       return true;
+-    case SYSTEM_BATTERY_LEVEL:
+-      value = g_powerManager.BatteryLevel();
+-      return true;
+   }
+   return false;
+ }
+
+--- xbmc/utils/SystemInfo.h	2012-12-01 21:28:31.000000000 +0100
++++ xbmc/utils/SystemInfo.h	2012-12-01 22:48:46.000000000 +0100
+@@ -52,7 +52,7 @@ public:
+   CStdString cpuFrequency;
+   CStdString kernelVersion;
+   CStdString macAddress;
+-  CStdString batteryLevel;
++  CStdString xbianver;
+ };
+ 
+ class CSysInfoJob : public CJob
+@@ -71,7 +71,7 @@ private:
+   CStdString GetCPUFreqInfo();
+   CStdString GetMACAddress();
+   CStdString GetVideoEncoder();
+-  CStdString GetBatteryLevel();
++  CStdString GetXBianVer();
+ 
+   CSysData m_info;
+ };
+
