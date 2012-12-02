@@ -133,9 +133,9 @@
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/TPNno.patch
     	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/EGLRes.patch
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/XBianSysSum.patch
-   	patch -p1 < TPNno.patch
-    	patch -p1 < EGLRes.patch
-	patch -p1 < XBianSysSum.patch
+   	patch -p0 < TPNno.patch
+    	patch -p0 < EGLRes.patch
+	patch -p0 < XBianSysSum.patch
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
