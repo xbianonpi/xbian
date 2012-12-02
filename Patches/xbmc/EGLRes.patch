@@ -1,5 +1,5 @@
---- xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	2012-11-27 09:08:01.000000000 +0100
-+++ xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	2012-11-27 18:10:42.000000000 +0100
+--- a/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	
++++ b/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	
 @@ -24,6 +24,7 @@
  #include "utils/log.h"
  #include "guilib/gui3d.h"

@@ -1,5 +1,5 @@
---- configure.in	2012-11-27 09:07:57.000000000 +0100
-+++ configure.in	2012-11-27 09:09:38.000000000 +0100
+--- a/configure.in	
++++ b/configure.in	
 @@ -665,7 +665,7 @@
       target_platform=target_raspberry_pi
       use_neon=no
