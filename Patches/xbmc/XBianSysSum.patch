@@ -1,5 +1,5 @@
---- xbmc/utils/SystemInfo.cpp	2012-12-01 21:28:31.000000000 +0100
-+++ xbmc/utils/SystemInfo.cpp	2012-12-01 22:48:12.000000000 +0100
+--- a/xbmc/utils/SystemInfo.cpp	
++++ b/xbmc/utils/SystemInfo.cpp	
 @@ -25,6 +25,8 @@
  #include <conio.h>
  #else
@@ -54,8 +54,8 @@
      return "";
    }
 
---- xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 21:28:32.000000000 +0100
-+++ xbmc/windows/GUIWindowSystemInfo.cpp	2012-12-01 22:48:46.000000000 +0100
+--- a/xbmc/windows/GUIWindowSystemInfo.cpp	
++++ b/xbmc/windows/GUIWindowSystemInfo.cpp	
 @@ -100,7 +100,7 @@ void CGUIWindowSystemInfo::FrameMove()
  #endif
      SetControlLabel(i++, "%s: %s", 12390, SYSTEM_UPTIME);
@@ -66,8 +66,8 @@
    else if (m_section == CONTROL_BT_STORAGE)
    {
 
---- xbmc/GUIInfoManager.h	2012-12-01 21:28:30.000000000 +0100
-+++ xbmc/GUIInfoManager.h	2012-12-01 22:50:49.000000000 +0100
+--- a/xbmc/GUIInfoManager.h	
++++ b/xbmc/GUIInfoManager.h	
 @@ -398,7 +398,7 @@ namespace INFO
  #define SYSTEM_HAS_ADDON            711
  #define SYSTEM_ADDON_TITLE          712
@@ -78,8 +78,8 @@
  #define SYSTEM_FRIENDLY_NAME        716
  #define SYSTEM_SCREENSAVER_ACTIVE   717
 
---- xbmc/GUIInfoManager.cpp	2012-12-01 21:28:30.000000000 +0100
-+++ xbmc/GUIInfoManager.cpp	2012-12-01 22:59:42.000000000 +0100
+--- a/xbmc/GUIInfoManager.cpp	
++++ b/xbmc/GUIInfoManager.cpp	
 @@ -269,7 +269,7 @@ const infomap system_labels[] =  {{ "has
                                    { "profilethumb",     SYSTEM_PROFILETHUMB },
                                    { "profilecount",     SYSTEM_PROFILECOUNT },
@@ -109,8 +109,8 @@
    return false;
  }
 
---- xbmc/utils/SystemInfo.h	2012-12-01 21:28:31.000000000 +0100
-+++ xbmc/utils/SystemInfo.h	2012-12-01 22:48:46.000000000 +0100
+--- a/xbmc/utils/SystemInfo.h	
++++ b/xbmc/utils/SystemInfo.h	
 @@ -52,7 +52,7 @@ public:
    CStdString cpuFrequency;
    CStdString kernelVersion;
