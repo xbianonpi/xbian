@@ -90,20 +90,20 @@
 +        
 +    switch (res) {
 +        case 1080: CLog::Log(LOGDEBUG, "I found <guires>1080</guires>, using 1080p");
-+            m_width = 1920;
-+            m_height = 1080;
++            max_width = 1920;
++            max_height = 1080;
 +            break;
 +        case 540: CLog::Log(LOGDEBUG, "I found <guires>540</guires>, using 540p");
-+            m_width = 960;
-+            m_height = 540;
++            max_width = 960;
++            max_height = 540;
 +            break;
 +        case 480: CLog::Log(LOGDEBUG, "I found <guires>480</guires>, using 480p");
-+            m_width = 853;
-+            m_height = 480;
++            max_width = 853;
++            max_height = 480;
 +            break;
 +        default: CLog::Log(LOGDEBUG, "I found <guires>720</guires> or no <guires></guires>, using 720p");
-+            m_width = 1280;
-+            m_height = 720;
++            max_width = 1280;
++            max_height = 720;
 +            break;
 +     }
 +  }
