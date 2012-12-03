@@ -1,5 +1,5 @@
---- a/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	
-+++ b/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp	
+--- a/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp
++++ b/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp
 @@ -24,6 +24,7 @@
  #include "utils/log.h"
  #include "guilib/gui3d.h"
@@ -8,7 +8,7 @@
  
  #ifndef __VIDEOCORE4__
  #define __VIDEOCORE4__
-@@ -97,8 +98,43 @@
+@@ -97,8 +98,42 @@ void CEGLNativeTypeRaspberryPI::Initiali
    m_dispman_element2        = DISPMANX_NO_HANDLE;
    m_dispman_display         = DISPMANX_NO_HANDLE;
  
@@ -17,44 +17,43 @@
 +  m_width = 1280;
 +  m_height = 720;
 +    
-+  std::ifstream xbmcres1080("/usr/local/share/xbmc/system/.xbmcres1080");
-+  std::ifstream xbmcres720("/usr/local/share/xbmc/system/.xbmcres720");
-+  std::ifstream xbmcres540("/usr/local/share/xbmc/system/.xbmcres540");
-+  std::ifstream xbmcres480("/usr/local/share/xbmc/system/.xbmcres480");
++  std::ifstream file( "/home/xbian/.xbmc/userdata/advancedsettings.xml" ) ;
++  if (file.good()) {
++    std::string line, res;
++    int line_number = 0 ;
++    while( std::getline( file, line ) )
++    {
++        ++line_number ;
++        if( line.find("guires") != std::string::npos ) {
++            res = line;
++            res.erase(remove_if(res.begin(), res.end(), isspace), res.end());
++            break;
++        }
++    }
 +    
-+  if (xbmcres1080.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres1080 file, using 1080p");
-+      m_width = 1920;
-+      m_height = 1080;
-+  }  
-+  else if (xbmcres720.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres720 file, using 720p");
-+      m_width = 1280;
-+      m_height = 720;
-+  }
-+  else if (xbmcres540.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres540 file, using 540p");
-+      m_width = 960;
-+      m_height = 540;
-+  }
-+  else if (xbmcres480.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres480 file, using 480p");
-+      m_width = 853;
-+      m_height = 480;
-+  }
-+  else
-+  {
-+      CLog::Log(LOGDEBUG, "No .xbmcXXX file found, using 720p");
++    if (res.compare("<guires>1080</guires>") == 0) {
++        CLog::Log(LOGDEBUG, "I found <guires>1080</guires>, using 1080p");
++        m_width = 1920;
++        m_height = 1080;
++    } else if (res.compare("<guires>540</guires>") == 0) {
++        CLog::Log(LOGDEBUG, "I found <guires>540</guires>, using 540p");
++        m_width = 960;
++        m_height = 540;
++    } else if (res.compare("<guires>480</guires>") == 0) {
++        CLog::Log(LOGDEBUG, "I found <guires>480</guires>, using 480p");
++        m_width = 853;
++        m_height = 480;
++    } else {
++        CLog::Log(LOGDEBUG, "I found <guires>720</guires> or no <guires></guires>, using 720p");
++        m_width = 1280;
++        m_height = 720;
++    }
 +  }
 +    
    m_initDesktopRes          = true;
  
    m_DllBcmHost = new DllBcmHost;
-@@ -554,8 +590,43 @@
+@@ -554,8 +589,42 @@ void CEGLNativeTypeRaspberryPI::Callback
  
  bool CEGLNativeTypeRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
  {
@@ -62,39 +61,38 @@
 -  float ar = (float)width/(float)height;
 +  int max_width = 1280, max_height = 720;
 +    
-+  std::ifstream xbmcres1080("/usr/local/share/xbmc/system/.xbmcres1080");
-+  std::ifstream xbmcres720("/usr/local/share/xbmc/system/.xbmcres720");
-+  std::ifstream xbmcres540("/usr/local/share/xbmc/system/.xbmcres540");
-+  std::ifstream xbmcres480("/usr/local/share/xbmc/system/.xbmcres480");
-+    
-+  if (xbmcres1080.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres1080 file, using 1080p");
-+      max_width = 1920;
-+      max_height = 1080;
-+  }
-+  else if (xbmcres720.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres720 file, using 720p");
-+      max_width = 1280;
-+      max_height = 720;
-+  }
-+  else if (xbmcres540.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres540 file, using 540p");
-+      max_width = 960;
-+      max_height = 540;
-+  }
-+  else if (xbmcres480.good())
-+  {
-+      CLog::Log(LOGDEBUG, "I found the .xbmcres480 file, using 480p");
-+      max_width = 853;
-+      max_height = 480;
-+  }
-+  else
-+  {
-+      CLog::Log(LOGDEBUG, "No .xbmcXXX file found, using 720p");
-+  }
++    std::ifstream file( "/home/xbian/.xbmc/userdata/advancedsettings.xml" ) ;
++    if (file.good()) {
++        std::string line, res;
++        int line_number = 0 ;
++        while( std::getline( file, line ) )
++        {
++            ++line_number ;
++            if( line.find("guires") != std::string::npos ) {
++                res = line;
++                res.erase(remove_if(res.begin(), res.end(), isspace), res.end());
++                break;
++            }
++        }
++        
++        if (res.compare("<guires>1080</guires>") == 0) {
++            CLog::Log(LOGDEBUG, "I found <guires>1080</guires>, using 1080p");
++            max_width = 1920;
++            max_height = 1080;
++        } else if (res.compare("<guires>540</guires>") == 0) {
++            CLog::Log(LOGDEBUG, "I found <guires>540</guires>, using 540p");
++            max_width = 960;
++            max_height = 540;
++        } else if (res.compare("<guires>480</guires>") == 0) {
++            CLog::Log(LOGDEBUG, "I found <guires>480</guires>, using 480p");
++            max_width = 853;
++            max_height = 480;
++        } else {
++            CLog::Log(LOGDEBUG, "I found <guires>720</guires> or no <guires></guires>, using 720p");
++            max_width = 1280;
++            max_height = 720;
++        }
++    }
 +    
 + float ar = (float)width/(float)height;
    // bigger than maximum, so need to clamp
