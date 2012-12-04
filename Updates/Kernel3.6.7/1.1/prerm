@@ -1,0 +1,25 @@
+#!/bin/bash
+
+if [ $1 == "remove" ]; then
+
+	if [ -f /boot/kernel3_6_7.img ]; then
+		rm /boot/kernel3_6_7.img
+	fi
+	
+	if [ -d /lib/modules/3.6.7+ ]; then
+		rm -r /lib/modules/3.6.7+
+	fi
+	
+fi
+
+if [ $1 == "upgrade" -o $1 == "install" ]; then
+
+	if [ -f /boot/kernel3_6_7.img ]; then
+		rm /boot/kernel3_6_7.img
+	fi
+	
+	if [ -d /lib/modules/3.6.7+ ]; then
+		rm -r /lib/modules/3.6.7+
+	fi
+
+fi
