@@ -308,7 +308,7 @@
 				<control type="label">
 					<description>Memory Text</description>
 					<posx>420</posx>
-					<posy>480</posy>
+					<posy>465</posy>
 					<width>350</width>
 					<height>25</height>
 					<label>$LOCALIZE[31309] $INFO[system.memory(used.percent)]</label>
@@ -321,7 +321,7 @@
 				<control type="progress">
 					<description>Memory BAR</description>
 					<posx>430</posx>
-					<posy>485</posy>
+					<posy>470</posy>
 					<width>320</width>
 					<height>16</height>
 					<info>system.memory(used)</info>
