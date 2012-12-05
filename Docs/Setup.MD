@@ -49,9 +49,7 @@ libwnck-common libxkbfile1 python-support tcl8.5 tsconf zenity-common tasksel ta
 libxau6 libxcb1 libxdmcp6:armhf raspi-config ed kbd krb5-locales alsa-base alsa-utils gcc-4.4-base:armhf \
 gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 libsamplerate0 triggerhappy libtagcoll2-dev libgmp10 \
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
-libxdmcp6 make libx11-6 libraspberrypi-doc
-
-#Remove all raspberrypi packages (not sure what they're called) in other to prevent future conflicts
+libxdmcp6 make libx11-6 libraspberrypi-doc raspberrypi-bootloader libraspberrypi0 libraspberrypi-bin
 
 apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
