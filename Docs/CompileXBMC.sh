@@ -136,8 +136,8 @@
     	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/EGLRes.patch
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/XBianSysSum.patch
         wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/NetworkCachingRedux.patch
-    wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/ConfluenceSettingsSystemInfo.patch
-        patch -p1 < ConfluenceSettingsSystemInfo.patch
+    wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/XBianConfluence.patch
+        patch -p1 < XBianConfluence.patch
    	patch -p1 < TPNno.patch
     	patch -p1 < EGLRes.patch
 	patch -p1 < XBianSysSum.patch
