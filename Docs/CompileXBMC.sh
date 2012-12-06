@@ -84,19 +84,19 @@
 	sudo ln -fs /opt/vc/lib/libvcos.so /usr/lib/arm-linux-gnueabihf/libvcos.so
 
    	# Cloning xbmc
-	mkdir ~/opt
-   	cd ~/opt/
+	mkdir /opt
+   	cd /opt/
    	git clone --depth 5  git://github.com/xbmc/xbmc.git
 
 
 # 2. Compiling taglib (XBMC dependency)
-	cd ~/opt/xbmc
+	cd /opt/xbmc
 	make -C lib/taglib
    	sudo make -C lib/taglib install
 	
 	
 # 3. Compiling libcec
-	cd ~/opt
+	cd /opt
 	git clone --depth 5 https://github.com/Pulse-Eight/libcec.git
 	cd libcec
 	./bootstrap 
@@ -107,7 +107,7 @@
 	
 
 # 4. Compiling libshairport
-	cd ~/opt/xbmc
+	cd /opt/xbmc
 	make -C lib/libshairport
    	sudo make -C lib/libshairport install
 
@@ -127,7 +127,7 @@
 	export LDFLAGS="-march=$TARGET_SUBARCH -mtune=$TARGET_CPU $TARGET_LOPT"
 
 	# Preparing the XBMC code for compilation
-	cd ~/opt/xbmc/
+	cd /opt/xbmc/
 
     	# Applying patches
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/TPNno.patch
@@ -163,7 +163,7 @@
 
 
 # 6. Compiling PVR Addons
-	cd ~/opt/
+	cd /opt/
 	git clone --depth 5 git://github.com/opdenkamp/xbmc-pvr-addons.git
 	cd xbmc-pvr-addons/
 	./bootstrap 
@@ -171,7 +171,7 @@
 	sudo make install
 
 	# Compiling the XVDR addon
-	cd ~/opt/
+	cd /opt/
 	git clone git://github.com/pipelka/xbmc-addon-xvdr.git
 	cd xbmc-addon-xvdr
 	sh autogen.sh
