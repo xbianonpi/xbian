@@ -139,6 +139,10 @@
 	patch -p1 < XBianSysSum.patch
         patch -p1 < NetworkCachingRedux.patch
 
+	# Replacing the default splash screen
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/usr/local/share/xbmc/media/Splash.png
+	mv Splash.png media/
+
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
     	sudo sh tools/rbp/setup-sdk.sh
