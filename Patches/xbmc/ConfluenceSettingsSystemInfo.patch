@@ -1,0 +1,65 @@
+--- a/addons/skin.confluence/720p/SettingsSystemInfo.xml
++++ b/addons/skin.confluence/720p/SettingsSystemInfo.xml
+@@ -284,31 +284,31 @@
+ 					<shadowcolor>black</shadowcolor>
+ 					<font>font13_title</font>
+ 				</control>
+-				<control type="label">
+-					<description>CPU Text</description>
+-					<posx>420</posx>
+-					<posy>450</posy>
+-					<width>350</width>
+-					<height>25</height>
+-					<label>$LOCALIZE[13271] $INFO[System.CPUUsage]</label>
+-					<align>right</align>
+-					<aligny>center</aligny>
+-					<textcolor>white</textcolor>
+-					<shadowcolor>black</shadowcolor>
+-					<font>font12_title</font>
+-				</control>
+-				<control type="progress">
+-					<description>CPU BAR</description>
+-					<posx>430</posx>
+-					<posy>455</posy>
+-					<width>320</width>
+-					<height>16</height>
+-					<info>System.CPUUsage</info>
+-				</control>
++				<!--control type="label">
++                 <description>CPU Text</description>
++                 <posx>420</posx>
++                 <posy>450</posy>
++                 <width>350</width>
++                 <height>25</height>
++                 <label>$LOCALIZE[13271] $INFO[System.CPUUsage]</label>
++                 <align>right</align>
++                 <aligny>center</aligny>
++                 <textcolor>white</textcolor>
++                 <shadowcolor>black</shadowcolor>
++                 <font>font12_title</font>
++                 </control>
++                 <control type="progress">
++                 <description>CPU BAR</description>
++                 <posx>430</posx>
++                 <posy>455</posy>
++                 <width>320</width>
++                 <height>16</height>
++                 <info>System.CPUUsage</info>
++                 </control-->
+ 				<control type="label">
+ 					<description>Memory Text</description>
+ 					<posx>420</posx>
+-					<posy>480</posy>
++					<posy>465</posy>
+ 					<width>350</width>
+ 					<height>25</height>
+ 					<label>$LOCALIZE[31309] $INFO[system.memory(used.percent)]</label>
+@@ -321,7 +321,7 @@
+ 				<control type="progress">
+ 					<description>Memory BAR</description>
+ 					<posx>430</posx>
+-					<posy>485</posy>
++					<posy>470</posy>
+ 					<width>320</width>
+ 					<height>16</height>
+ 					<info>system.memory(used)</info>
