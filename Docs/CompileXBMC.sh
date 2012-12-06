@@ -30,11 +30,13 @@
 # Make sure you run the resize sd in xbian-config. 8GB+ SD Card recommended.
 
 # 1. Cloning XBMC repo & installing needed packages
-   	# Updating all packages & installing the ones who are needed          
-  	sudo apt-get update 
-   	sudo apt-get upgrade
+   	# Updating all packages & installing the ones who are needed    
+	sudo su
 
-        sudo apt-get install autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev libass-dev:armhf libatk1.0-dev libavahi-client-dev libavahi-common-dev libavcodec-dev libavformat-dev libavutil-dev libbison-dev:armhf libbluray-dev:armhf libboost1.49-dev \
+  	apt-get update 
+   	apt-get upgrade
+
+        apt-get install autotools-dev comerr-dev dpkg-dev libalsaplayer-dev libapt-pkg-dev:armhf libasound2-dev libass-dev:armhf libatk1.0-dev libavahi-client-dev libavahi-common-dev libavcodec-dev libavformat-dev libavutil-dev libbison-dev:armhf libbluray-dev:armhf libboost1.49-dev \
         libbz2-dev:armhf libc-dev-bin libc6-dev:armhf libcaca-dev libcairo2-dev libcdio-dev libclalsadrv-dev libcrypto++-dev libcups2-dev libcurl3-gnutls-dev \
         libdbus-1-dev libdbus-glib-1-dev libdirectfb-dev libdrm-dev libegl1-mesa-dev libelf-dev libenca-dev libept-dev libevent-dev libexpat1-dev libflac-dev:armhf \
         libfontconfig1-dev libfreetype6-dev libfribidi-dev libgconf2-dev libgcrypt11-dev libgdk-pixbuf2.0-dev libgl1-mesa-dev libgles2-mesa-dev \
@@ -55,33 +57,33 @@
         libnfs-dev libplist-dev avahi-daemon zlib1g-dev:armhf swig java-package libafpclient-dev liblockdev1-dev autoconf automake libtool gcc udev openjdk-6-jre \
         cmake g++ libudev-dev build-essential autoconf ccache gawk gperf mesa-utils zip unzip curl 
 
-   	sudo apt-get clean
+   	apt-get clean
 	
 	# Copying libraries
-	sudo cp -R /opt/vc/include/* /usr/include
-	sudo cp /opt/vc/include/interface/vcos/pthreads/* /usr/include/interface/vcos
+	cp -R /opt/vc/include/* /usr/include
+	cp /opt/vc/include/interface/vcos/pthreads/* /usr/include/interface/vcos
 
 	# Creating symbolic links
-	sudo ln -fs /opt/vc/lib/libEGL.so /usr/lib/libEGL.so
-	sudo ln -fs /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so
-	sudo ln -fs /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so.1
-	sudo ln -fs /opt/vc/lib/libEGL_static.a /usr/lib/libEGL_static.a
-	sudo ln -fs /opt/vc/lib/libEGL_static.a /usr/lib/arm-linux-gnueabihf/libEGL_static.a
-	sudo ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/libGLESv2.so
-	sudo ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so
-	sudo ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2
-	sudo ln -fs /opt/vc/lib/libGLESv2_static.a /usr/lib/libGLESv2_static.a
-	sudo ln -fs /opt/vc/lib/libGLESv2_static.a /usr/lib/arm-linux-gnueabihf/libGLESv2_static.a
-	sudo ln -fs /opt/vc/lib/libbcm_host.so /usr/lib/libbcm_host.so
-	sudo ln -fs /opt/vc/lib/libbcm_host.so /usr/lib/arm-linux-gnueabihf/libbcm_host.so
-	sudo ln -fs /opt/vc/lib/libvchiq_arm.a /usr/lib/libvchiq_arm.a
-	sudo ln -fs /opt/vc/lib/libvchiq_arm.a /usr/lib/arm-linux-gnueabihf/libvchiq_arm.a
-	sudo ln -fs /opt/vc/lib/libvchiq_arm.so /usr/lib/libvchiq_arm.so
-	sudo ln -fs /opt/vc/lib/libvchiq_arm.so /usr/lib/arm-linux-gnueabihf/libvchiq_arm.so
-	sudo ln -fs /opt/vc/lib/libvcos.a /usr/lib/libvcos.a
-	sudo ln -fs /opt/vc/lib/libvcos.a /usr/lib/arm-linux-gnueabihf/libvcos.a
-	sudo ln -fs /opt/vc/lib/libvcos.so /usr/lib/libvcos.so
-	sudo ln -fs /opt/vc/lib/libvcos.so /usr/lib/arm-linux-gnueabihf/libvcos.so
+	ln -fs /opt/vc/lib/libEGL.so /usr/lib/libEGL.so
+	ln -fs /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so
+	ln -fs /opt/vc/lib/libEGL.so /usr/lib/arm-linux-gnueabihf/libEGL.so.1
+	ln -fs /opt/vc/lib/libEGL_static.a /usr/lib/libEGL_static.a
+	ln -fs /opt/vc/lib/libEGL_static.a /usr/lib/arm-linux-gnueabihf/libEGL_static.a
+	ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/libGLESv2.so
+	ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so
+	ln -fs /opt/vc/lib/libGLESv2.so /usr/lib/arm-linux-gnueabihf/libGLESv2.so.2
+	ln -fs /opt/vc/lib/libGLESv2_static.a /usr/lib/libGLESv2_static.a
+	ln -fs /opt/vc/lib/libGLESv2_static.a /usr/lib/arm-linux-gnueabihf/libGLESv2_static.a
+	ln -fs /opt/vc/lib/libbcm_host.so /usr/lib/libbcm_host.so
+	ln -fs /opt/vc/lib/libbcm_host.so /usr/lib/arm-linux-gnueabihf/libbcm_host.so
+	ln -fs /opt/vc/lib/libvchiq_arm.a /usr/lib/libvchiq_arm.a
+	ln -fs /opt/vc/lib/libvchiq_arm.a /usr/lib/arm-linux-gnueabihf/libvchiq_arm.a
+	ln -fs /opt/vc/lib/libvchiq_arm.so /usr/lib/libvchiq_arm.so
+	ln -fs /opt/vc/lib/libvchiq_arm.so /usr/lib/arm-linux-gnueabihf/libvchiq_arm.so
+	ln -fs /opt/vc/lib/libvcos.a /usr/lib/libvcos.a
+	ln -fs /opt/vc/lib/libvcos.a /usr/lib/arm-linux-gnueabihf/libvcos.a
+	ln -fs /opt/vc/lib/libvcos.so /usr/lib/libvcos.so
+	ln -fs /opt/vc/lib/libvcos.so /usr/lib/arm-linux-gnueabihf/libvcos.so
 
    	# Cloning xbmc
 	mkdir /opt
@@ -92,7 +94,7 @@
 # 2. Compiling taglib (XBMC dependency)
 	cd /opt/xbmc
 	make -C lib/taglib
-   	sudo make -C lib/taglib install
+   	make -C lib/taglib install
 	
 	
 # 3. Compiling libcec
@@ -102,14 +104,14 @@
 	./bootstrap 
 	./configure --prefix=/usr/local
 	make
-	sudo make install
+	make install
 
 	
 
 # 4. Compiling libshairport
 	cd /opt/xbmc
 	make -C lib/libshairport
-   	sudo make -C lib/libshairport install
+   	make -C lib/libshairport install
 
 
 # 5. Compiling XBMC	
@@ -147,7 +149,7 @@
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh
     	sed -i 's/TOOLCHAIN=\/usr\/local\/bcm-gcc/TOOLCHAIN=\/usr/' tools/rbp/setup-sdk.sh
-    	sudo sh tools/rbp/setup-sdk.sh
+    	sh tools/rbp/setup-sdk.sh
     	sed -i 's/cd $(SOURCE); $(CONFIGURE)/#cd $(SOURCE); $(CONFIGURE)/' tools/rbp/depends/xbmc/Makefile
 	make -C tools/rbp/depends/xbmc/
 	
@@ -159,7 +161,7 @@
               --disable-vdadecoder --disable-external-ffmpeg --enable-optical-drive --enable-player=omxplayer
 
   	make # (THIS WILL TAKE LOOOONG! +- 14 hours)
-  	sudo make install
+  	make install
 
 
 # 6. Compiling PVR Addons
@@ -168,7 +170,7 @@
 	cd xbmc-pvr-addons/
 	./bootstrap 
 	./configure --prefix=/usr/local --enable-addons-with-dependencies
-	sudo make install
+	make install
 
 	# Compiling the XVDR addon
 	cd /opt/
