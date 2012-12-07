@@ -135,6 +135,12 @@ rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so.0
 ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
+ln -s /opt/vc/bin/vchiq_test /usr/bin/
+ln -s /opt/vc/bin/edidparser /usr/bin/
+ln -s /opt/vc/bin/tvservice /usr/bin/
+ln -s /opt/vc/bin/vcdbg /usr/bin/
+ln -s /opt/vc/bin/vcgencmd /usr/bin/
+
 ldconfig
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
