@@ -1,0 +1,208 @@
+# XBMC Media Center language file
+# Addon Name: VDR VNSI Client
+# Addon id: pvr.vdr.vnsi
+# Addon version: 1.0.0
+# Addon Provider: Alwin Esch, Team XBMC
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/en/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#settings labels
+
+msgctxt "#30000"
+msgid "VDR Hostname or IP"
+msgstr ""
+
+msgctxt "#30001"
+msgid "VNSI Port"
+msgstr ""
+
+msgctxt "#30002"
+msgid "Priority"
+msgstr ""
+
+msgctxt "#30003"
+msgid "Character Set Conversion"
+msgstr ""
+
+msgctxt "#30004"
+msgid "Connect timeout (s)"
+msgstr ""
+
+msgctxt "#30005"
+msgid "Allow VDR Messages"
+msgstr ""
+
+msgctxt "#30006"
+msgid "Read recordings from directory"
+msgstr ""
+
+msgctxt "#30007"
+msgid "VDR recordings directory"
+msgstr ""
+
+msgctxt "#30008"
+msgid "Channel search"
+msgstr ""
+
+msgctxt "#30009"
+msgid "Channel search - Settings"
+msgstr ""
+
+msgctxt "#30010"
+msgid "Start Channel search"
+msgstr ""
+
+msgctxt "#30011"
+msgid "Source Type"
+msgstr ""
+
+msgctxt "#30012"
+msgid "TV channels"
+msgstr ""
+
+msgctxt "#30013"
+msgid "Radio channels"
+msgstr ""
+
+msgctxt "#30014"
+msgid "FTA channels"
+msgstr ""
+
+msgctxt "#30015"
+msgid "Scrambled channels"
+msgstr ""
+
+msgctxt "#30016"
+msgid "HD channels"
+msgstr ""
+
+msgctxt "#30017"
+msgid "Country"
+msgstr ""
+
+msgctxt "#30018"
+msgid "Cable Inversion"
+msgstr ""
+
+msgctxt "#30019"
+msgid "Cable Symbolrate"
+msgstr ""
+
+msgctxt "#30020"
+msgid "Cable modulation"
+msgstr ""
+
+msgctxt "#30021"
+msgid "Terr Inversion"
+msgstr ""
+
+msgctxt "#30022"
+msgid "Satellite"
+msgstr ""
+
+msgctxt "#30023"
+msgid "ATSC Type"
+msgstr ""
+
+msgctxt "#30024"
+msgid "Back"
+msgstr ""
+
+msgctxt "#30025"
+msgid "Channel search - running... %i %%"
+msgstr ""
+
+msgctxt "#30026"
+msgid "Type:"
+msgstr ""
+
+msgctxt "#30027"
+msgid "Device:"
+msgstr ""
+
+msgctxt "#30028"
+msgid "Scan: %i"
+msgstr ""
+
+msgctxt "#30029"
+msgid "Signal: %i %%"
+msgstr ""
+
+msgctxt "#30030"
+msgid "New channels: %i"
+msgstr ""
+
+msgctxt "#30031"
+msgid "All channels: %i"
+msgstr ""
+
+msgctxt "#30032"
+msgid "Analog TV"
+msgstr ""
+
+msgctxt "#30033"
+msgid "Analog Radio"
+msgstr ""
+
+msgctxt "#30034"
+msgid "Transponder:"
+msgstr ""
+
+msgctxt "#30035"
+msgid "New channels"
+msgstr ""
+
+msgctxt "#30036"
+msgid "Channel search - Finished"
+msgstr ""
+
+msgctxt "#30037"
+msgid "No device available - exiting"
+msgstr ""
+
+msgctxt "#30038"
+msgid "No DVB-S2 device available - trying fallback to DVB-S"
+msgstr ""
+
+msgctxt "#30039"
+msgid "Running"
+msgstr ""
+
+msgctxt "#30040"
+msgid "Stopped"
+msgstr ""
+
+msgctxt "#30041"
+msgid "Finished"
+msgstr ""
+
+msgctxt "#30042"
+msgid "Channel search - Canceled"
+msgstr ""
+
+msgctxt "#30043"
+msgid "Channel search - Error"
+msgstr ""
+
+msgctxt "#30044"
+msgid "Lost connection to VDR Server"
+msgstr ""
+
+msgctxt "#30045"
+msgid "Connection to VDR Server restored"
+msgstr ""
+
+msgctxt "#30046"
+msgid "Create channel groups automatically on the server"
+msgstr ""

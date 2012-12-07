@@ -11,11 +11,11 @@
 	<include file="IncludesHomeRecentlyAdded.xml" />
 	<include file="IncludesHomeMenuItems.xml" />
 	<include file="IncludesBackgroundBuilding.xml" />
-	<include file="weather+\10DayForecast.xml" />
-	<include file="weather+\36HourForecast.xml" />
-	<include file="weather+\WeekendForecast.xml" />
-	<include file="weather+\HourlyForecast.xml" />
-	<include file="weather+\MapsVideo.xml" />
+	<include file="weather\10DayForecast.xml" />
+	<include file="weather\36HourForecast.xml" />
+	<include file="weather\WeekendForecast.xml" />
+	<include file="weather\HourlyForecast.xml" />
+	<include file="weather\MapAlerts.xml" />
 
 	<constant name="FanartCrossfadeTime">500</constant>
 	<constant name="IconCrossfadeTime">400</constant>
@@ -1055,7 +1055,7 @@
 				<width>270</width>
 				<height>55</height>
 				<aspectratio>keep</aspectratio>
-				<texture background="true">$INFO[ListItem.Thumb]</texture>
+				<texture background="true">$INFO[ListItem.Property(Art(poster))]</texture>
 				<visible>StringCompare(Window(Home).Property(TVGuide.ThumbType),0)</visible>
 			</control>
 			<control type="image">
@@ -1065,7 +1065,7 @@
 				<width>270</width>
 				<height>55</height>
 				<aspectratio>keep</aspectratio>
-				<texture background="true">$INFO[ListItem.Property(Path),,banner.jpg]</texture>
+				<texture background="true">$INFO[ListItem.Property(Art(banner))]</texture>
 				<visible>StringCompare(Window(Home).Property(TVGuide.ThumbType),1)</visible>
 			</control>
 			<control type="image">
@@ -1138,7 +1138,7 @@
 				<width>270</width>
 				<height>55</height>
 				<aspectratio>keep</aspectratio>
-				<texture background="true">$INFO[ListItem.Thumb]</texture>
+				<texture background="true">$INFO[ListItem.Property(Art(poster))]</texture>
 				<visible>StringCompare(Window(Home).Property(TVGuide.ThumbType),0)</visible>
 			</control>
 			<control type="image">
@@ -1148,7 +1148,7 @@
 				<width>270</width>
 				<height>55</height>
 				<aspectratio>keep</aspectratio>
-				<texture background="true">$INFO[ListItem.Property(Path),,banner.jpg]</texture>
+				<texture background="true">$INFO[ListItem.Property(Art(banner))]</texture>
 				<visible>StringCompare(Window(Home).Property(TVGuide.ThumbType),1)</visible>
 			</control>
 			<control type="image">
