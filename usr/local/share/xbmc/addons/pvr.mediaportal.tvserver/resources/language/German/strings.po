@@ -1,37 +1,22 @@
 # XBMC Media Center language file
-# Addon Name: MediaPortal PVR addon
-# Addon id: pvr.team-mediaportal.tvserver
-# Addon version: 1.2.3.114
+# Addon Name: MediaPortal PVR Client
+# Addon id: pvr.mediaportal.tvserver
+# Addon version: 1.2.3.117
 # Addon Provider: Marcel Groothuis
-# Translators:
-#   <margro.xbmc@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC MediaPortal pvr addon\n"
-"Report-Msgid-Bugs-To: margro.xbmc@gmail.com\n"
-"POT-Creation-Date: 2012-06-03 16:35+0000\n"
-"PO-Revision-Date: 2012-06-03 15:50+0000\n"
-"Last-Translator: margro <margro.xbmc@gmail.com>\n"
-"Language-Team: LANGUAGE\n"
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: German (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: de\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "Addon Summary"
-msgid "XBMC frontend for the MediaPortal TV Server (ffmpeg + tsreader version)"
-msgstr ""
-
-msgctxt "Addon Description"
-msgid "MediaPortal TV Server frontend. Supports streaming of Live TV &amp; Recordings, listening to Radio channels, EPG and Timers. This addon combines the former ffmpeg and tsreader addons."
-msgstr ""
-
-msgctxt "Addon Disclaimer"
-msgid "This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects."
-msgstr ""
-
-# Settings labels
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
 msgstr "Mediaportal Hostname oder IP"
@@ -50,7 +35,7 @@ msgstr "Zeige Radiokanäle"
 
 msgctxt "#30004"
 msgid "Fast channel switching (don't stop timeshift)"
-msgstr ""
+msgstr "Schneller Kanalwechsel (ohne Unterbrechung von Timeshift)"
 
 msgctxt "#30005"
 msgid "Connect timeout (s)"
@@ -78,7 +63,7 @@ msgstr "Wartezeit, nachdem ein Kanal abgestimmt worden ist (ms)"
 
 msgctxt "#30015"
 msgid "Streaming method"
-msgstr ""
+msgstr "Streaming-Methode"
 
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
@@ -92,7 +77,6 @@ msgctxt "#30018"
 msgid "Use RTSP streaming"
 msgstr "RTSP Stream verwenden"
 
-# Category labels
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Verbindung"
@@ -105,82 +89,78 @@ msgctxt "#30042"
 msgid "Playback"
 msgstr "Wiedergabe"
 
-# on-screen error messages
 msgctxt "#30050"
-msgid ""
-"Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
 msgstr "Ihre TVServerXBMC plugin '%s' ist zu alt. Sie brauchen mindestens Version '%s'!"
 
 msgctxt "#30051"
-msgid ""
-"Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
 msgstr "Ihre TVServerXBMC plugin Version ist zu alt. Sie brauchen mindestens Version '%s'!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
-msgstr ""
+msgstr "Aufnahme fehlgeschlagen. Leere URL oder Dateiname."
 
-# Status message strings corresponding to the MediaPortal TvResult enum
 msgctxt "#30060"
 msgid "All cards are busy"
-msgstr ""
+msgstr "Alle TV-Adapter in Benutzung"
 
 msgctxt "#30061"
 msgid "Channel is scrambled"
-msgstr ""
+msgstr "Verschlüsselter Kanal"
 
 msgctxt "#30062"
 msgid "No video or audio detected"
-msgstr ""
+msgstr "Kein Bild oder Ton erkannt"
 
 msgctxt "#30063"
 msgid "No signal detected"
-msgstr ""
+msgstr "Kein Signal"
 
 msgctxt "#30064"
 msgid "Unknown error"
-msgstr ""
+msgstr "Unbekannter Fehler"
 
 msgctxt "#30065"
 msgid "Unable to start graph"
-msgstr ""
+msgstr "Kurve kann nicht gestartet werden"
 
 msgctxt "#30066"
 msgid "Unknown channel"
-msgstr ""
+msgstr "Unbekannter Kanal"
 
 msgctxt "#30067"
 msgid "No tuning details"
-msgstr ""
+msgstr "Keine Tuning-Details"
 
 msgctxt "#30068"
 msgid "Channel is not mapped to any card"
-msgstr ""
+msgstr "Kanal ist keiner Karte zugeordnet"
 
 msgctxt "#30069"
 msgid "Card is disabled"
-msgstr ""
+msgstr "Karte deaktiviert"
 
 msgctxt "#30070"
 msgid "Connection to slave failed"
-msgstr ""
+msgstr "Verbindung zum Slave fehlgeschlagen"
 
 msgctxt "#30071"
 msgid "Not the owner"
-msgstr ""
+msgstr "Kein Besitzer"
 
 msgctxt "#30072"
 msgid "Graph building failed"
-msgstr ""
+msgstr "Kurvenerstellung fehlgeschlagen"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"
-msgstr ""
+msgstr "Software-Encoder fehlt"
 
 msgctxt "#30074"
 msgid "No free disk space"
-msgstr ""
+msgstr "Kein Speicherplatz frei"
 
 msgctxt "#30075"
 msgid "No PMT found"
-msgstr ""
+msgstr "Keine PMT gefunden"

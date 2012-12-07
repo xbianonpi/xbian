@@ -1,44 +1,22 @@
 # XBMC Media Center language file
-# Addon Name: MediaPortal PVR addon
-# Addon id: pvr.team-mediaportal.tvserver
-# Addon version: 1.2.3.114
+# Addon Name: MediaPortal PVR Client
+# Addon id: pvr.mediaportal.tvserver
+# Addon version: 1.2.3.117
 # Addon Provider: Marcel Groothuis
-# Translators:
-# Attila Zsigus <>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC MediaPortal pvr addon\n"
-"Report-Msgid-Bugs-To: margro.xbmc@gmail.com\n"
-"POT-Creation-Date: 2012-06-03 16:35+0000\n"
-"PO-Revision-Date: 2012-06-25 16:39+0000\n"
-"Last-Translator: Attila Zsigus <>\n"
-"Language-Team: Hungarian (http://www.transifex.com/projects/p/mepopvraddon/language/hu/)\n"
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Hungarian (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: hu\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "Addon Summary"
-msgid ""
-"XBMC frontend for the MediaPortal TV Server (ffmpeg + tsreader version)"
-msgstr "XBMC felület, MediaPortal TV szerverrel (ffmpeg + tsreader verzió)"
-
-msgctxt "Addon Description"
-msgid ""
-"MediaPortal TV Server frontend. Supports streaming of Live TV &amp; "
-"Recordings, listening to Radio channels, EPG and Timers. This addon combines"
-" the former ffmpeg and tsreader addons."
-msgstr "MediaPortal TV Szerver felület. Támogatja a stream-elt élő TV adást, a felvett műsorok visszanézését, a rádiócsatornák meghallgatását, a műsorújságot (EPG) és az időzítőket. Ez a kiegészítő egyesíti a korábbi tsreader és ffmpeg kiegészítőket."
-
-msgctxt "Addon Disclaimer"
-msgid ""
-"This is unstable software! The authors are in no way responsible for failed "
-"recordings, incorrect timers, wasted hours, or any other undesirable "
-"effects."
-msgstr "Ez egy nem végleges szoftver! A készítők semmilyen felelősséget nem vállalnak az esetlegesen nem jól működő időzítőért, vagy egyéb nem kívánatos esetek miatt."
-
-# Settings labels
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
 msgstr "MediaPortal Kiszolgálónév"
@@ -57,11 +35,11 @@ msgstr "Tartalmaz Rádiót"
 
 msgctxt "#30004"
 msgid "Fast channel switching (don't stop timeshift)"
-msgstr "Gyors csatornaváltás (ne hagyja abba az időeltolás (Timeshift) funkció használatát)"
+msgstr "Gyors csatornaváltás (nem szakítja meg az időeltolás 'Timeshift' funkció használatát)"
 
 msgctxt "#30005"
 msgid "Connect timeout (s)"
-msgstr "A kapcsolat időtúllépési értéke (mp.)"
+msgstr "A kapcsolat időtúllépése (mp.)"
 
 msgctxt "#30006"
 msgid "Import only TV Channels from group"
@@ -77,15 +55,15 @@ msgstr "Kiszolgálónév konvertálása IP címre"
 
 msgctxt "#30009"
 msgid "EPG: Read genre strings (slow)"
-msgstr "EPG: Olvassa ki a műfaj sztingeket (lassú)"
+msgstr "EPG: Olvassa a műfaj sztringeket (lassú)"
 
 msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
-msgstr "Ennyi várakozási idő után hangolja a csatornákat (milliszekundum)"
+msgstr "Csastornahangolás utáni várakozási idő (milliszekundum)"
 
 msgctxt "#30015"
 msgid "Streaming method"
-msgstr "Streaming módszer"
+msgstr "Sugárzási módszer"
 
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
@@ -99,7 +77,6 @@ msgctxt "#30018"
 msgid "Use RTSP streaming"
 msgstr "Használja az RTSP streaming-et"
 
-# Category labels
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Kapcsolat"
@@ -112,25 +89,21 @@ msgctxt "#30042"
 msgid "Playback"
 msgstr "Lejátszás"
 
-# on-screen error messages
 msgctxt "#30050"
-msgid ""
-"Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
-msgstr "A TVServerXBMC verzió '%s' túl régi. Kérem frissítse a '%s' vagy magasabbra!"
+msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
+msgstr "A TVServerXBMC verzió '%s' túl régi. Kérem frissítse a '%s' vagy újabbra!"
 
 msgctxt "#30051"
-msgid ""
-"Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
-msgstr "A TVServerXBMC verziója túl régi. Kérem frissítse a '%s' vagy magasabbra!"
+msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
+msgstr "A TVServerXBMC verziója túl régi. Kérem frissítse a '%s' vagy újabbra!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
-msgstr "Felvétel lejátszása nem sikerült. Üres URL fájlnév."
+msgstr "Felvétel lejátszása nem sikerült. Üres URL, vagy fájlnév."
 
-# Status message strings corresponding to the MediaPortal TvResult enum
 msgctxt "#30060"
 msgid "All cards are busy"
-msgstr "Minden kártya foglalt"
+msgstr "Minden kártyahely foglalt"
 
 msgctxt "#30061"
 msgid "Channel is scrambled"
@@ -138,7 +111,7 @@ msgstr "A csatorna kódolva van"
 
 msgctxt "#30062"
 msgid "No video or audio detected"
-msgstr "Nincs észlelt kép és/vagy hang"
+msgstr "Nincs észlelhető kép vagy hang"
 
 msgctxt "#30063"
 msgid "No signal detected"
@@ -150,7 +123,7 @@ msgstr "Ismeretlen hiba"
 
 msgctxt "#30065"
 msgid "Unable to start graph"
-msgstr "Nem lehet elindítani graph-t"
+msgstr "Nem lehet elindítani a grafikákat"
 
 msgctxt "#30066"
 msgid "Unknown channel"
@@ -178,7 +151,7 @@ msgstr "Nem tulajdonos"
 
 msgctxt "#30072"
 msgid "Graph building failed"
-msgstr "Graph építése nem sikerült"
+msgstr "Grafikák felépítése nem sikerült"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"
