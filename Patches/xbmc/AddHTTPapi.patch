@@ -110,7 +110,7 @@
                            mouseaction.GetName()));
  }
  
-+-void  CApplication::CheckForTitleChange()
++void  CApplication::CheckForTitleChange()
 +{
 +#ifdef HAS_HTTPAPI
 +  if (g_settings.m_HttpApiBroadcastLevel>=1)
