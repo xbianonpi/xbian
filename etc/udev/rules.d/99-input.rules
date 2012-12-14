@@ -1,2 +1,1 @@
 SUBSYSTEM=="input", GROUP="input", MODE="0660"
-KERNEL=="tty0", GROUP="xbian", OWNER="xbian"
