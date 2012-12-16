@@ -97,7 +97,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #Clone xbian git
 cd /home/xbian/
-git clone --depth 5 -b xbian-alpha3 https://github.com/xbianonpi/xbian.git source
+git clone --depth 5 -b xbian-alpha4 https://github.com/xbianonpi/xbian.git source
 cd source
 
 #Installation
