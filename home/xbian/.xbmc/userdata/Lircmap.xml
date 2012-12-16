@@ -52,9 +52,9 @@
 		<title>KEY_CONTEXT_MENU</title>
 		<subtitle>KEY_SUBTITLE</subtitle>
 		<mute>KEY_MUTE</mute>
-		<power>KEY_POWER</power>
 		<myvideo>KEY_VIDEO</myvideo>
 		<mymusic>KEY_AUDIO</mymusic>
+		<mypictures>KEY_PICTURES</mypictures>
 		<one>KEY_1</one>
 		<two>KEY_2</two>
 		<three>KEY_3</three>
@@ -69,8 +69,8 @@
 		<green>KEY_GREEN</green>
 		<yellow>KEY_YELLOW</yellow>
 		<blue>KEY_BLUE</blue>
-		<menu>KEY_DVD</menu>
-		<clear>KEY_CLEAR</clear>
+		<menu>KEY_HOME</menu>
+		<clear>KEY_DELETE</clear>
 		<enter>KEY_ENTER</enter>
 		<display>KEY_TEXT</display>
 	</remote>    
