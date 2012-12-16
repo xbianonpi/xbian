@@ -30,14 +30,10 @@
 	</remote>
 
 	<remote device="mceusb">
-	    	<left>KEY_LEFT</left>
-		<right>KEY_RIGHT</right>
-		<up>KEY_UP</up>
-		<down>KEY_DOWN</down>
 		<select>KEY_OK</select>
 		<start>KEY_HOME</start>
 		<back>KEY_BACK</back>
-		<zero>KEY_RECORD</zero>
+		<record>KEY_RECORD</record>
 		<play>KEY_PLAY</play>
 		<pause>KEY_PAUSE</pause>
 		<stop>KEY_STOP</stop> 
@@ -65,10 +61,10 @@
 		<eight>KEY_8</eight>
 		<nine>KEY_9</nine>
 		<zero>KEY_0</zero>
-		<red>KEY_RED</red>
-		<green>KEY_GREEN</green>
-		<yellow>KEY_YELLOW</yellow>
-		<blue>KEY_BLUE</blue>
+		<myvideo>KEY_RED</myvideo>
+		<mymusic>KEY_GREEN</mymusic>
+		<mytv>KEY_YELLOW</mytv>
+		<mypictures>KEY_BLUE</mypictures>
 		<menu>KEY_HOME</menu>
 		<clear>KEY_DELETE</clear>
 		<enter>KEY_ENTER</enter>
