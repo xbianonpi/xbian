@@ -1,0 +1,16 @@
+--- a/usr/local/share/xbmc/system/keymaps/remote.xml
++++ b/usr/local/share/xbmc/system/keymaps/remote.xml
+@@ -63,10 +63,11 @@
+       <volumeminus>VolumeDown</volumeminus>
+       <mute>Mute</mute>
+       <power>XBMC.ShutDown()</power>
+-      <myvideo>XBMC.ActivateWindow(MyVideos)</myvideo>
++      <myvideo>XBMC.ActivateWindow(Videos,MovieTitles)</myvideo>
+       <mymusic>XBMC.ActivateWindow(MyMusic)</mymusic>
+       <mypictures>XBMC.ActivateWindow(MyPictures)</mypictures>
+-      <mytv>XBMC.ActivateWindow(MyPVR)</mytv>
++      <mytv>XBMC.ActivateWindow(Videos,TvShowTitles)</mytv>
++      <mypvr>XBMC.ActivateWindow(MyPVR)</mypvr>
+       <guide>XBMC.ActivateWindowAndFocus(MyPVR, 31,0, 10,0)</guide>
+       <livetv>XBMC.ActivateWindowAndFocus(MyPVR, 32,0, 11,0)</livetv>
+       <liveradio>XBMC.ActivateWindowAndFocus(MyPVR, 33,0, 12,0)</liveradio>
