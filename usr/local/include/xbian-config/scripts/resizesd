@@ -30,52 +30,23 @@ function resizesd() {
 		;;
 	esac
 
-	SWAPSIZE=0;
-	SWAPEXISTS=$(fdisk /dev/mmcblk0 -l | grep "swap" | awk '{print $1}' | awk '{print substr($0,length,length+1)}' | wc -l);
-	PART_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 2 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
+	PART_START=$(fdisk -l | grep mmcblk0p2 | awk '{print $2}');
 	CPART_START=$PART_START;
-	CPART_END=$(parted /dev/mmcblk0 -ms unit s p | grep "^2" | cut -f 3 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
-	SDEND=$(parted /dev/mmcblk0 -ms unit s p | grep "/dev/" | cut -f 2 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
+	CPART_END=$(fdisk -l | grep mmcblk0p2 | awk '{print $3}');
+	SDEND=$(fdisk -l | sed -n '/mmcblk0/{n;p;}' | head -1 | awk '{print $8}');
 	SDEND=$(($SDEND-1));
-	SDSIZE=$((($SDEND*512)/1024/1024));
 
-	if [ $SWAPEXISTS -eq 1 ]; then
-		swapoff -a
-	fi
+	PART_END=$SDEND;
 	
-	if [ $SDSIZE -gt 4000 ]; then
-		SWAPSIZE=$(((1000*1024*1024)/512));
-	elif [ $SDSIZE -gt 2000 ]; then
-		SWAPSIZE=$(((750*1024*1024)/512));
-	else
-		SWAPSIZE=$(((500*1024*1024)/512));
-	fi
-
-	PART_END=$(($SDEND-$SWAPSIZE));
-	SWAP_START=$(($PART_END+1));
-	SWAP_END=$(($SDEND));
-	
-	if [ $PART_END -gt $SWAP_START ]; then
-		showdialog "$1 " "Ok" "\n      There is not enough space to create a swap partition. Aborting." 7 60
+	if [[ $PART_START -eq $CPART_START && $PART_END -eq $CPART_END ]]; then
+		showdialog "$1 " "Ok" "\n      This SD card is already resized. Aborting." 7 60
 		return 0;
-	fi
-		
-	if [ $SWAPEXISTS -eq 1 ]; then
-		CSWAP_START=$(parted /dev/mmcblk0 -ms unit s p | grep "^3" | cut -f 2 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
-		CSWAP_END=$(parted /dev/mmcblk0 -ms unit s p | grep "^3" | cut -f 3 -d: | awk '{print substr($0,0,length)}' | grep -o "[0-9]*");
-		if [[ $PART_START -eq $CPART_START && $PART_END -eq $CPART_END && $SWAP_START -eq $CSWAP_START && $SWAP_END -eq $CSWAP_END ]]; then
-			showdialog "$1 " "Ok" "\n      This SD card is already resized. Aborting." 7 60
-			return 0;
-		fi
 	fi
 	
 	if [ $DEBUG -eq 0 ]; then
-		if [ $SWAPEXISTS -eq 1 ]; then
-fdisk /dev/mmcblk0 <<EOF
-p
+fdisk /dev/mmcblk0 2>/dev/null >/dev/null <<EOF
 d
 2
-p
 d
 3
 n
@@ -83,47 +54,11 @@ p
 2
 $PART_START
 $PART_END
-n
-p
-3
-$SWAP_START
-$SWAP_END
-t
-3
-82
-p
 w
 EOF
-		else
-fdisk /dev/mmcblk0 <<EOF
-p
-d
-2
-n
-p
-2
-$PART_START
-$PART_END
-n
-p
-3
-$SWAP_START
-$SWAP_END
-t
-3
-82
-p
-w
-EOF
-		fi
-	
+
 	fi
 	ASKFORREBOOT=1;
-	FSEDIT=$(cat /etc/fstab | grep /dev/mmcblk0p3 | grep swap | wc -l);
-	
-	if [[ $FSEDIT -eq 0 && $DEBUG -eq 0 ]]; then
-		echo "/dev/mmcblk0p3	swap	swap	defaults	0	0" >> /etc/fstab
-	fi
 
 # now set up an init.d script
 	if [ $DEBUG -eq 0 ]; then
@@ -145,8 +80,6 @@ case "$1" in
   start)
     log_daemon_msg "Starting resize2fs_once"
     resize2fs /dev/mmcblk0p2 >/dev/null
-    mkswap /dev/mmcblk0p3 >/dev/null
-    swapon /dev/mmcblk0p3 2>/dev/null
     rm /etc/init.d/resize2fs_once >/dev/null
     update-rc.d resize2fs_once remove >/dev/null
     log_end_msg $?
@@ -158,7 +91,7 @@ case "$1" in
 esac
 EOF
 	chmod +x /etc/init.d/resize2fs_once >/dev/null;
-	update-rc.d resize2fs_once defaults >/dev/null;
+	update-rc.d resize2fs_once defaults >/dev/null 2>/dev/null;
 	fi
 
 	showdialog "$1 " "Ok" "\n\n  Root partition has been resized. The\n  filesystem will be enlarged upon the\n  next reboot." 11 44
