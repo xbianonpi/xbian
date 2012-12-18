@@ -35,6 +35,7 @@ function resizesd() {
 	CPART_END=$(fdisk -l | grep mmcblk0p2 | awk '{print $3}');
 	SDEND=$(fdisk -l | sed -n '/mmcblk0/{n;p;}' | head -1 | awk '{print $8}');
 	SDEND=$(($SDEND-1));
+	SWAP=$(fdisk -l | grep 'mmcblk0p3' | awk '{print $5}');
 
 	PART_END=$SDEND;
 	
@@ -44,6 +45,9 @@ function resizesd() {
 	fi
 	
 	if [ $DEBUG -eq 0 ]; then
+		if [ ! -z $SWAP ] && [ $SWAP -eq 82 ]; then
+			swapoff -a
+		
 fdisk /dev/mmcblk0 2>/dev/null >/dev/null <<EOF
 d
 2
@@ -57,7 +61,23 @@ $PART_END
 w
 EOF
 
+			sed -i '/swap/d' /etc/fstab
+		else
+		
+fdisk /dev/mmcblk0 2>/dev/null >/dev/null <<EOF
+d
+2
+n
+p
+2
+$PART_START
+$PART_END
+w
+EOF
+
+		fi
 	fi
+
 	ASKFORREBOOT=1;
 
 # now set up an init.d script
