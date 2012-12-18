@@ -8,4 +8,4 @@ Codename: wheezy
 Architecture: armhf
 Installed-Size: 35110
 Maintainer: CurlyMo <development@xbian.org>
-Description: Kernel 3.6.9 for the Raspberry Pi.
+Description: Kernel 3.6.10 for the Raspberry Pi.
