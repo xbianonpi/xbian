@@ -190,3 +190,5 @@ echo "evdev" >> /etc/modules
 
 #Resize SD upon next boot
 update-rc.d firstrun defaults
+
+history -c
