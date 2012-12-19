@@ -49,7 +49,7 @@ libwnck-common libxkbfile1 python-support tcl8.5 tsconf zenity-common tasksel ta
 libxau6 libxcb1 libxdmcp6:armhf raspi-config ed kbd krb5-locales alsa-base alsa-utils gcc-4.4-base:armhf \
 gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 libsamplerate0 triggerhappy libtagcoll2-dev libgmp10 \
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
-libxdmcp6 make libx11-6 libraspberrypi-doc raspberrypi-bootloader libraspberrypi0 libraspberrypi-bin
+libxdmcp6 make libx11-6
 
 apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
@@ -60,6 +60,26 @@ python-dbus usbutils --fix-missing
 apt-get autoremove -y
 
 apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
+
+dpkg -L libraspberrypi0 > /home/xbian/list
+dpkg -L libraspberrypi-bin >> /home/xbian/list
+dpkg -L raspberrypi-bootloader >> /home/xbian/list
+
+for LINE in $(cat /home/xbian/list); do 
+    if [ -f $LINE ]; then 
+        if [ -f /home/xbian/raspberry.tar ]; then
+            tar rvf /home/xbian/raspberry.tar $LINE
+        else
+            tar cvf /home/xbian/raspberry.tar $LINE
+        fi
+    fi 
+done;
+
+apt-get purge libraspberrypi0 libraspberrypi-bin libraspberrypi-dev raspberrypi-bootloader -y
+tar -xvf /home/xbian/raspberry.tar -C /
+rm /home/xbian/raspberry.tar
+rm /home/xbian/list
+ldconfig
 
 rm -rf /var/cache/apt/archives/*
 
