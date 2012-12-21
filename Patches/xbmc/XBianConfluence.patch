@@ -1,65 +1,29 @@
---- a/addons/skin.confluence/720p/SettingsSystemInfo.xml
-+++ b/addons/skin.confluence/720p/SettingsSystemInfo.xml
-@@ -284,31 +284,31 @@
+--- a/usr/local/share/xbmc/addons/skin.confluence/720p/SettingsSystemInfo.xml
++++ b/usr/local/share/xbmc/addons/skin.confluence/720p/SettingsSystemInfo.xml
+@@ -276,7 +276,7 @@
+  			<control type="label" id="52">
+ 					<description>XBMC BUILD Version</description>
+ 					<posx>750</posx>
+-					<posy>400</posy>
++					<posy>450</posy>
+ 					<width>730</width>
+ 					<label>144</label>
+ 					<align>right</align>
+@@ -284,7 +284,7 @@
  					<shadowcolor>black</shadowcolor>
  					<font>font13_title</font>
  				</control>
 -				<control type="label">
--					<description>CPU Text</description>
--					<posx>420</posx>
--					<posy>450</posy>
--					<width>350</width>
--					<height>25</height>
--					<label>$LOCALIZE[13271] $INFO[System.CPUUsage]</label>
--					<align>right</align>
--					<aligny>center</aligny>
--					<textcolor>white</textcolor>
--					<shadowcolor>black</shadowcolor>
--					<font>font12_title</font>
++				<!--<control type="label">
+ 					<description>CPU Text</description>
+ 					<posx>420</posx>
+ 					<posy>450</posy>
+@@ -304,7 +304,7 @@
+ 					<width>320</width>
+ 					<height>16</height>
+ 					<info>System.CPUUsage</info>
 -				</control>
--				<control type="progress">
--					<description>CPU BAR</description>
--					<posx>430</posx>
--					<posy>455</posy>
--					<width>320</width>
--					<height>16</height>
--					<info>System.CPUUsage</info>
--				</control>
-+				<!--control type="label">
-+                 <description>CPU Text</description>
-+                 <posx>420</posx>
-+                 <posy>450</posy>
-+                 <width>350</width>
-+                 <height>25</height>
-+                 <label>$LOCALIZE[13271] $INFO[System.CPUUsage]</label>
-+                 <align>right</align>
-+                 <aligny>center</aligny>
-+                 <textcolor>white</textcolor>
-+                 <shadowcolor>black</shadowcolor>
-+                 <font>font12_title</font>
-+                 </control>
-+                 <control type="progress">
-+                 <description>CPU BAR</description>
-+                 <posx>430</posx>
-+                 <posy>455</posy>
-+                 <width>320</width>
-+                 <height>16</height>
-+                 <info>System.CPUUsage</info>
-+                 </control-->
++				</control>-->
  				<control type="label">
  					<description>Memory Text</description>
  					<posx>420</posx>
--					<posy>480</posy>
-+					<posy>465</posy>
- 					<width>350</width>
- 					<height>25</height>
- 					<label>$LOCALIZE[31309] $INFO[system.memory(used.percent)]</label>
-@@ -321,7 +321,7 @@
- 				<control type="progress">
- 					<description>Memory BAR</description>
- 					<posx>430</posx>
--					<posy>485</posy>
-+					<posy>470</posy>
- 					<width>320</width>
- 					<height>16</height>
- 					<info>system.memory(used)</info>
