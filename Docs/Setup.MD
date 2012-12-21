@@ -208,6 +208,8 @@ apt-get autoremove -y
 
 echo "evdev" >> /etc/modules
 
+echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
+
 #Resize SD upon next boot
 update-rc.d firstrun defaults
 
