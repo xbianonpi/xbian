@@ -154,7 +154,7 @@
 	# Configure  
 	./configure --prefix=/usr/local --build=arm-linux-gnueabihf --host=arm-linux-gnueabihf --localstatedir=/var/lib --with-platform=raspberry-pi --disable-gl --enable-gles --disable-x11 --disable-sdl \
               --enable-ccache --enable-optimizations --disable-external-libraries --disable-goom --disable-hal --disable-pulse --disable-vaapi \
-              --disable-vdpau --disable-xrandr --enable-airplay --disable-alsa --enable-avahi --disable-libbluray --enable-dvdcss --disable-debug \
+              --disable-vdpau --disable-xrandr --enable-airplay --disable-alsa --enable-avahi --enable-libbluray --enable-dvdcss --disable-debug \
               --disable-joystick --disable-mid --enable-nfs --disable-profiling --disable-projectm --enable-rsxs --enable-rtmp --disable-vaapi \
               --disable-vdadecoder --disable-external-ffmpeg --enable-optical-drive --enable-player=omxplayer
 
