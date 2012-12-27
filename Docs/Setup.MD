@@ -159,10 +159,6 @@ ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
 
 ldconfig
 
-#set keyboard layout (may not be needed)
-apt-get install keyboard-configuration
-#select layout then select ok
-
 # Set locale to c to prevent weird characters in xbian-config and c compiling
 dpkg-reconfigure locales
 #First window select ok
@@ -197,7 +193,6 @@ rm /var/swap
 rm -rf /home/xbian/source
 
 #Add apt sources
-#Example [aptsource] is apt.xbian.org
 echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
 apt-get update 
