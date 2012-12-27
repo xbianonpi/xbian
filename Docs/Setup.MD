@@ -20,7 +20,7 @@
 # Restore the official Raspbian image from: http://www.raspberrypi.org/downloads to your 
 #SD card (28-10-2012). First boot: Select 'Finish' to dimiss initial tutorial (raspi-config). 
 #SSH will be running (on bootup, IP is printed in logs). 
-#Now SSH into your Pi with the following credentials Username: pi Password: raspbian
+#Now SSH into your Pi with the following credentials Username: pi Password: raspberry
 
 #Removing unnecessary packages and installing required packages
 sudo su
@@ -61,6 +61,10 @@ apt-get autoremove -y
 
 apt-get purge -y $(dpkg --get-selections | grep deinstall | awk '{print $1}')
 
+#Setting up xbian user and deleting pi user
+useradd -G sudo,input -m -s /bin/bash xbian
+echo "xbian:raspberry" | chpasswd
+
 dpkg -L libraspberrypi0 > /home/xbian/list
 dpkg -L libraspberrypi-bin >> /home/xbian/list
 dpkg -L raspberrypi-bootloader >> /home/xbian/list
@@ -87,10 +91,6 @@ apt-get clean
 
 #Regenerating SSH unique SSH keys:
 rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
-
-#Setting up xbian user and deleting pi user
-useradd -G sudo,input -m -s /bin/bash xbian
-echo "xbian:raspberry" | chpasswd
 
 #Remove user pi from sudoers and add xbian user
 sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
@@ -142,8 +142,8 @@ chmod +x /opt/vc/sbin/*
 chown -R xbian:xbian /home/xbian/.xbmc
 
 #Update rc.d
-update-rc.d xbmc defaults
 update-rc.d bootlocal defaults
+update-rc.d xbmc defaults
 update-rc.d lirc defaults
 update-rc.d rpcbind defaults
 
@@ -156,13 +156,12 @@ rm /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/libtag.so.1.12.0 /usr/local/lib/libtag.so.1
 ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so.0
 ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
-ln -s /opt/vc/bin/vchiq_test /usr/bin/
-ln -s /opt/vc/bin/edidparser /usr/bin/
-ln -s /opt/vc/bin/tvservice /usr/bin/
-ln -s /opt/vc/bin/vcdbg /usr/bin/
-ln -s /opt/vc/bin/vcgencmd /usr/bin/
 
 ldconfig
+
+#set keyboard layout (may not be needed)
+apt-get install keyboard-configuration
+#select layout then select ok
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
 dpkg-reconfigure locales
@@ -176,9 +175,6 @@ export LANGUAGE=C
 
 #Make locale settings permanent
 sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUAGE=C/g' /etc/profile
-
-#Delete auto start of raspi-config
-rm /etc/profile.d/raspi-config.sh
 
 #Enable xbian autologin
 sed -i 's/1:2345:respawn:\/sbin\/getty --noclear 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f xbian tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
@@ -200,7 +196,9 @@ echo "" > /home/xbian/.bash_history
 rm /var/swap
 rm -rf /home/xbian/source
 
-#Add apt sources in /etc/apt/sources.list
+#Add apt sources
+#Example [aptsource] is apt.xbian.org
+echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
 apt-get update 
 apt-get install -y xbian-update
