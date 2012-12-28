@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon version: 2.1.0
+# Addon version: 2.1.2
 # Addon Provider: Jezz_X, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-04 12:52+0000\n"
-"PO-Revision-Date: 2012-11-09 19:51+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Norwegian (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/no/)\n"
 "MIME-Version: 1.0\n"
@@ -179,15 +179,11 @@ msgstr "Gjem 'sett'-flagg fra videofilnavn [COLOR=grey3](Blu-ray, HD-DVD)[/COLOR
 
 msgctxt "#31108"
 msgid "Hide Main Menu Buttons"
-msgstr "Inaktive hovedmenyknapper"
+msgstr "Gjem hovedmenyknapper"
 
 msgctxt "#31109"
 msgid "Enable Custom Background"
-msgstr ""
-
-msgctxt "#31110"
-msgid "Background path:"
-msgstr ""
+msgstr "Skru på egendefinert bakgrunn"
 
 msgctxt "#31111"
 msgid "Hide"
@@ -239,11 +235,11 @@ msgstr "Sangtekster"
 
 msgctxt "#31129"
 msgid "Hide Fanart in full screen visualization"
-msgstr ""
+msgstr "Gjem Fanart i full skjerm visulasjon"
 
 msgctxt "#31132"
 msgid "Lyrics Add-on"
-msgstr "Tekst tillegg"
+msgstr "Sangtekst tillegg"
 
 msgctxt "#31133"
 msgid "Subtitle Add-on"
@@ -271,7 +267,7 @@ msgstr "Video OSD"
 
 msgctxt "#31200"
 msgid "Shortcuts"
-msgstr "Hurtigsti"
+msgstr "Snarveier"
 
 msgctxt "#31203"
 msgid "Choose Your Song"
@@ -411,7 +407,7 @@ msgstr "Hent undertekster"
 
 msgctxt "#31390"
 msgid "Skin default"
-msgstr "Standard for skinnet"
+msgstr "Standard for skallet"
 
 msgctxt "#31391"
 msgid "Skin default with no Caps"
@@ -423,7 +419,7 @@ msgstr "Arial-basert"
 
 msgctxt "#31400"
 msgid "[B]CONFIGURE APPEARANCE SETTINGS[/B][CR][CR]Change the skin · Set language and region · Change file listing options[CR]Set up a screensaver"
-msgstr "[B]ENDRE DINE UTSEENDEINNSTILLINGER:[/B][CR][CR]Kalibrer GUI · Endre skinnet · Oppgi skjermsparer · Endre dine regionale innstillinger · Oppgi globale visningsalternativer"
+msgstr "[B]ENDRE DINE UTSEENDEINNSTILLINGER:[/B][CR][CR]Kalibrer GUI · Endre skallet · Oppgi skjermsparer · Endre dine regionale innstillinger · Oppgi globale visningsalternativer"
 
 msgctxt "#31401"
 msgid "[B]CONFIGURE VIDEO SETTINGS[/B][CR][CR]Manage your video library · Set video playback options · Change video listing options[CR]Set subtitle fonts"
@@ -449,65 +445,45 @@ msgctxt "#31408"
 msgid "[B]CONFIGURE ADD-ONS[/B][CR][CR]Manage your installed Add-ons · Browse for and install Add-ons from xbmc.org[CR]Modify Add-on settings"
 msgstr "[B]KONFIGURER TILLEGG[/B][CR][CR]Håndter installerte tillegg · Let etter og installer tillegg fra xbmc.org[CR]Endre tilleggsinnstillinger"
 
-msgctxt "#31409"
-msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change fullscreen info · Manage EPG data settings"
-msgstr ""
-
 msgctxt "#31410"
 msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
 msgstr "[B]KONFIGURER TJENESTEINNSTILLINGER[/B][CR][CR]Konfigurer kontroll av XBMC via UPnP og HTTP · Konfigurer deling[CR]Slå på zeroconf · Konfigurer AirPlay"
 
 msgctxt "#31411"
 msgid "First run help...."
-msgstr ""
-
-msgctxt "#31412"
-msgid "This tab signifies that there is a menu off to the side of this window that contains extra options for this section.  To access the menu, navigate to the left with your remote control or keyboard or place your mouse pointer over the tab. [CR][CR]Click \"Ok\" to close this dialog. It will not appear again."
-msgstr ""
+msgstr "Først kjør hjelp"
 
 msgctxt "#31421"
 msgid "Select your XBMC user Profile[CR]to login and continue"
 msgstr "Velg din XBMC brukerprofil[CR]for å logge inn og fortsette"
 
-msgctxt "#31500"
-msgid "Recording Timers"
-msgstr ""
-
-msgctxt "#31501"
-msgid "Scheduled Time"
-msgstr ""
-
 msgctxt "#31502"
 msgid "Live TV"
-msgstr ""
+msgstr "Live TV"
 
 msgctxt "#31503"
 msgid "Add Group"
-msgstr ""
+msgstr "Legg til gruppe"
 
 msgctxt "#31504"
 msgid "Rename Group"
-msgstr ""
+msgstr "Gi nytt navn på gruppe"
 
 msgctxt "#31505"
 msgid "Delete Group"
-msgstr ""
+msgstr "Slett gruppe"
 
 msgctxt "#31506"
 msgid "Available[CR]Groups"
-msgstr ""
-
-msgctxt "#31509"
-msgid "Channel Group"
-msgstr ""
+msgstr "Ledige[CR]Grupper"
 
 msgctxt "#31510"
 msgid "Timer Set"
-msgstr ""
+msgstr "Tidtaker stilt"
 
 msgctxt "#31511"
 msgid "Channel Options"
-msgstr ""
+msgstr "Kanal instillinger"
 
 msgctxt "#31901"
 msgid "36 Hour Forecast"
@@ -529,10 +505,6 @@ msgctxt "#31905"
 msgid "Forecast"
 msgstr "Værvarsel"
 
-msgctxt "#31906"
-msgid "Maps & Video"
-msgstr "Kart og video"
-
 msgctxt "#31908"
 msgid "Chance of Precipitation"
 msgstr "Mulighet for nedbør"
@@ -540,3 +512,7 @@ msgstr "Mulighet for nedbør"
 msgctxt "#31909"
 msgid "Fetching forecast info..."
 msgstr "Henter værvarsel..."
+
+msgctxt "#31910"
+msgid "Map & Alerts"
+msgstr "Kart og varsler"

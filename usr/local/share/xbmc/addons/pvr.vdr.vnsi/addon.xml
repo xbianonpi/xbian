@@ -15,10 +15,71 @@
     library_windx="XBMC_VDR_vnsi_WIN32.pvr"
     library_android="libXBMC_VDR_vnsi.so"/>
   <extension point="xbmc.addon.metadata">
-    <summary>PVR client to connect VDR to XBMC over the VNSI interface</summary>
-    <description>VDR frontend; supporting streaming of Live TV &amp; Recordings, EPG, Timers over the VNSI plugin</description>
+    <summary lang="be">PVR client to connect VDR to XBMC over the VNSI interface</summary>
+    <summary lang="cs">Klient PVR pro spojení VDR do XBMC skrze rozhraní VNSI</summary>
+    <summary lang="da">PVR klient til at forbinde VDR til XBMC over VNSI grænsefladen</summary>
+    <summary lang="de">Programm um XBMC mit VDR über die VNSI-Schnittstelle zu verbinden</summary>
+    <summary lang="el">Πελάτης PVR για σύνδεση του VDR στο XBMC διαμέσου του VNSI</summary>
+    <summary lang="en">PVR client to connect VDR to XBMC over the VNSI interface</summary>
+    <summary lang="es">Cliente PVR para conectar VDR a XBMC sobre la interfaz VNSI</summary>
+    <summary lang="es_AR">Cliente PVR para conectar VDR a XBMC sobre la interfaz VNSI</summary>
+    <summary lang="fr">Client d'enregistrement connectant l'Enregistreur de Disque Vidéo à XBMC via l'interface d'enregistrement de flux réseau vidéo</summary>
+    <summary lang="hu">PVR kliens a VDR és az XBMC VNSI interfészen keresztüli csatlakoztatásához </summary>
+    <summary lang="ko">PVR client to connect VDR to XBMC over the VNSI interface</summary>
+    <summary lang="lt">PVR kliento prisijungimas VDR prie XBMC per VNSI sąsaja</summary>
+    <summary lang="mk">PVR клиент за поврзување со XBMC преку VNSI интерфејс</summary>
+    <summary lang="pl">Klient PVR do podłączenia VDR do XBMC przez interfejs VNSI</summary>
+    <summary lang="pt">Cliente PVR para ligar VDR ao XBMC através da interface VNSI</summary>
+    <summary lang="pt_BR">Cliente PVR para conectar VDR ao XBMC sobre interface VNSI</summary>
+    <summary lang="ru">PVR клиент для подключения VDR к XBMC через интерфейс VNSI</summary>
+    <summary lang="sk">PVR klientská aplikácia na pripojenie VDR servera do XBMC prostredníctvom rozhrania VNSI</summary>
+    <summary lang="sl">Odjemalec PVR za povezavo VDR in XBMC preko vmesnika VNSI</summary>
+    <summary lang="sv">PVR-klient för att ansluta VDR till XBMC över VNSI-gränsnittet</summary>
+    <summary lang="zh">让XBMC通过VNSI界面与VDR连接的PVR客户端</summary>
+    <description lang="be">VDR frontend; supporting streaming of Live TV &amp; Recordings, EPG, Timers over the VNSI plugin</description>
+    <description lang="cs">Rozhraní VDR. Podporuje proudové vysílání živého vysílání a nahrávek, poslech kanálů rádia, EPG, a časovače skrze modul VNSI</description>
+    <description lang="da">VDR frontend; understøtter streaming af TV &amp; optagelser, EPG, timere over VNSI add-on</description>
     <description lang="de">Erlaubt das wiedergeben von Live TV und Aufnahmen mittels VDR auf XBMC. Des weiteren werden EPG, Kanalsuche und Timer unterstützt.</description>
-    <disclaimer>This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects..</disclaimer>
+    <description lang="el">Frontend για το VDR. Υποστηρίζει ροές Live TV &amp; Εγγραφές, Χρονοδιακόπτες διαμέσου του plugin VNSI</description>
+    <description lang="en">VDR frontend; supporting streaming of Live TV &amp; Recordings, EPG, Timers over the VNSI plugin</description>
+    <description lang="es">Front-end VDR, soporte de streaming de televisión en vivo y grabaciones, EPG, temporizador con el plugin VNSI</description>
+    <description lang="es_AR">Front-end VDR, soporte de streaming de televisión en vivo y grabaciones, EPG, temporizador con el plugin VNSI</description>
+    <description lang="fr">Applicatif d'Enregistreur de Disque Vidéo. Il Supporte la lecture en continu de flux direct télévision et l'enregistrement, les guides de programmes, les minuteries via les routines d'enregistrement de flux réseau vidéo</description>
+    <description lang="hu">VDR frontend. Élő adások és felvételek sugárzásának támogatása EPG-vel és időzítéssel a VNSI pluginen keresztül</description>
+    <description lang="ko">VDR 프론트엔드; TV 시청 &amp; 녹화, EPG, VNSI 플러그인을 통한 타이머 지원</description>
+    <description lang="lt">VDR sąsaja, remti transliacijos Live TV &amp; įrašai, EPG, Laikmačiai ir VNSI įskiepiai</description>
+    <description lang="mk">VDR интерфејс; подржува стриминг на Live TV и снимки, EPG тајмери преку VNSI додаток</description>
+    <description lang="pl">Interfejs VDR; wspiera strumieniowanie TV na żywo i nagrywanie, EPG, wyłączniki czasowe przez plugin VNSI</description>
+    <description lang="pt">VDR frontend; suporta streaming deLive TV &amp; Gravação, EPG, Temporizadores através do plugin VNSI</description>
+    <description lang="pt_BR">VDR Frontend; suporta streaming de TV ao vivo e gravações, EPG, agendamentos sobre o plugin VNSI</description>
+    <description lang="ru">VDR фронтэнд; поддерживает потоковое TV, запись, ЕПГ, таймеры через VNSI плагин</description>
+    <description lang="sk">VDR rozhranie; je podporované streamovanie živého televízneho vysielania a nahrávok, EPG, časovačov prostredníctvom modulu VNSI</description>
+    <description lang="sl">Vmesnik za VDR; podpira pretakanje televizije v živo &amp; posnetkov, EPG, časovnike preko vtičnika VNSI</description>
+    <description lang="sv">VDR frontend; stödjer strömning av direktsänd TV &amp; inspelningar, EPG, timers över VNSI-tillägget</description>
+    <description lang="zh">VDR前端，通过VNSI插件支持直播电视播放和录制、电子节目单、定时器</description>
+    <disclaimer lang="be">This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects..</disclaimer>
+    <disclaimer lang="cs">Tento software není stabilní. Autoři nejsou žádným způsobem zodpovědní za selhání při nahrávání, neplatné časovače, ztracený čas, či jakékoliv jiné nežádoucí události...</disclaimer>
+    <disclaimer lang="da">Dette er ustabilt software! Ophavsmændene er på ingen måde ansvarlige for fejlede optagelser, fejlagtige timere, spildte timer, eller andre uønskede konsekvenser..</disclaimer>
+    <disclaimer lang="de">Diese Software ist noch in der Entwicklung! Die Autoren sind nicht für fehlgeschlagene Aufnahmen, falsche Timer, verschwendete Zeit oder andere ungewollte Effekte verantwortlich.</disclaimer>
+    <disclaimer lang="el">Ασταθές πρόγραμμα! Οι δημιουργοί δεν είναι σε καμία περίπτωση υπεύθυνοι για αποτυχημένες εγγραφές, λανθασμένους χρονοδιακόπτες, χαμένες ώρες, ή κάθε είδους ανεπιθύμητα αποτελέσματα..</disclaimer>
+    <disclaimer lang="en">This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects..</disclaimer>
+    <disclaimer lang="es">¡Este software es aún inestable! Los autores no son responsables en forma alguna por grabaciones fallidas, temporizaciones incorrectas, tiempo perdido o ningún otro efecto no deseado.</disclaimer>
+    <disclaimer lang="es_AR">¡Este software es inestable! Los autores no se responsabilizan por grabaciones fallidas, temporizadores incorrectos, horas perdidas, o cualquier otro efecto no deseado..</disclaimer>
+    <disclaimer lang="fr">Applicatif en cours de réalisation ! Les auteurs ne sont en aucun cas responsables d'enregistrements défaillants, de minuteries erronées, de temps perdu ou tout autre effet indésirable..</disclaimer>
+    <disclaimer lang="hu">Ez nem stabil szoftver! A készítők nem vállalnak felelősséget, a hibás felvételért, rossz időzítésért, elvesztegetett időért...</disclaimer>
+    <disclaimer lang="it">Questo programma non è stabile! Gli autori non sono in alcun modo responsabili per registrazioni fallite, timer non corretti, ore perse, o altri effetti indesiderati..</disclaimer>
+    <disclaimer lang="ko">이 소프트웨어는 불안정합니다! 제작자는 녹화 실패, 부정확한 타이머, 시간 낭비 및 기타 예상하지 못한 결과에 대해 책임지지 않습니다..</disclaimer>
+    <disclaimer lang="lt">Tai yra nestabili programinė įranga! Autorius jokiu būdu neatsakingas už nepavykusius įrašus, neteisingus laikmačius, iššvaistytas valandas, ar nutikus kitiems nepageidaujamiems poveikiams ...[COLOR=red](xbmc.lt siūlo/rekomenduoja testuojant šį priedą persijungti į Anglų [orinali] kalbą)[/COLOR]</disclaimer>
+    <disclaimer lang="mk">Ова е нестабилен софтвер! Ауторите не се во никој случај одговорни за неуспешни снимања, грешни тајмери, други непосакувани ефекти...</disclaimer>
+    <disclaimer lang="pl">To oprogramowanie jest niestabilne! Autorzy w żaden sposób nie odpowiadają za nieudane nagrania, źle działające wyłączniki czasowe, stracone godziny czy też jakiekolwiek inne niepożądane efekty.</disclaimer>
+    <disclaimer lang="pt">Isto é software instável! Os autores não são responsáveis por falhas na gravação, temporizadores incorretos, horas perdidas ou outro qualquer efeito não desejado... </disclaimer>
+    <disclaimer lang="pt_BR">Este é um software instável! Os autores não são responsábeis por gravações com falhas, agendamentos incorretos, tempo dispendido, ou quaisquer outros efeitos indesejáveis...</disclaimer>
+    <disclaimer lang="ru">Это тестовая программа! Авторы не несут никакой ответственности за испорченные записи, неверные таймеры, потраченное время и прочие нежелательные эффекты..</disclaimer>
+    <disclaimer lang="sk">Tento softvér nie je stabilný! Autori nenesú žiadnu zodpovednosť za chybné nahrávky vysielania, nesprávne časovače alebo iné neželané udalosti spôsobené týmto softvérom..</disclaimer>
+    <disclaimer lang="sl">To je nestabilna programska oprema! Avtorji niso odgovorni za neuspela snemanja, nepravilne časovnike, zapravljen čas in katerikoli drug neželen učinek...</disclaimer>
+    <disclaimer lang="sv">Detta är ostabil mjukvara! Upphovsmännen är inte ansvariga för misslyckade inspelningar, inkorrekta timers, bortslösade timmar, eller någon annan oönskad effekt..</disclaimer>
+    <disclaimer lang="zh">这是不稳定版的软件！作者不对录制失败、错误定时造成时间浪费或其它不良影响负责。</disclaimer>
     <platform>all</platform>
   </extension>
 </addon>
+

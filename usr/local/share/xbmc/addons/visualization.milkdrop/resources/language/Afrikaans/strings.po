@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: MilkDrop
 # Addon id: visualization.milkdrop
-# Addon version: 1.0.0
+# Addon version: 1.0.1
 # Addon Provider: Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-28 15:15+0000\n"
-"PO-Revision-Date: 2012-10-18 12:05+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Afrikaans (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/af/)\n"
 "MIME-Version: 1.0\n"
@@ -23,31 +23,31 @@ msgstr "Outomatiese Meng Tyd"
 
 msgctxt "#30001"
 msgid "Time Between Presets"
-msgstr ""
+msgstr "Tyd Tussen Voorafinstellings"
 
 msgctxt "#30002"
 msgid "Additional Random Time"
-msgstr ""
+msgstr "Addisionele Lukraak Tyd"
 
 msgctxt "#30003"
 msgid "Enable Anisotropic Filtering"
-msgstr ""
+msgstr "Stel Anisotrope Filter in staat"
 
 msgctxt "#30004"
 msgid "Enable Hard Cuts"
-msgstr ""
+msgstr "Stel Harde Snye in Staat"
 
 msgctxt "#30005"
 msgid "Loudness Threshold For Hard Cuts"
-msgstr ""
+msgstr "Luidheid Drumpel vir Harde Snye"
 
 msgctxt "#30006"
 msgid "Average Time Between Hard Cuts"
-msgstr ""
+msgstr "Gemiddelde Tyd Tussen Harde Snye"
 
 msgctxt "#30007"
 msgid "Maximum Refresh Rate"
-msgstr ""
+msgstr "Maksimum Verfris Tempo"
 
 msgctxt "#30008"
 msgid "Enable Stereo 3D"
@@ -55,36 +55,36 @@ msgstr "Aktiveer Stereo 3D"
 
 msgctxt "#30009"
 msgid "Preset Pack"
-msgstr ""
+msgstr "Voorafinstellings Pak"
 
 msgctxt "#30010"
 msgid "User Preset Folder        "
-msgstr ""
+msgstr "Gebruiker Voorafinstellings Vouer "
 
 msgctxt "#30011"
 msgid "Preset Shuffle Mode"
-msgstr ""
+msgstr "Voorafinstellings Skommel Modus"
 
 msgctxt "#30020"
 msgid "WA51 Presets"
-msgstr ""
+msgstr "WA51 Voorafinstellings"
 
 msgctxt "#30021"
 msgid "Winamp Presets"
-msgstr ""
+msgstr "Winamp Voorafinstellings"
 
 msgctxt "#30022"
 msgid "User Defined Preset Folder"
-msgstr ""
+msgstr "Gebruiker Gedefinieerde Voorafinstellings Vouer"
 
 msgctxt "#30050"
 msgid "%2.0f secs"
-msgstr ""
+msgstr "%2.0f sek."
 
 msgctxt "#30051"
 msgid "%2.0f %%"
-msgstr ""
+msgstr "%2.0f %%"
 
 msgctxt "#30052"
 msgid "%2.0f fps"
-msgstr ""
+msgstr "%2.0f rps"

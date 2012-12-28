@@ -1,0 +1,3 @@
+# of module          name                 type                 compatible
+bmp085-i2c           *                    *                    bosch,bmp085
+bmp085-spi           *                    *                    bosch,bmp085

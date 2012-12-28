@@ -1,0 +1,29 @@
+#!/bin/bash
+
+if [ -f /boot/kernel3_2_27.img ]; then
+	rm /boot/kernel3_2_27.img
+fi
+
+if [ $1 == "remove" ]; then
+
+	if [ $(ls -Al /boot/kernel.img | awk '{print $5}') -eq 5284324 ]; then
+		rm /boot/kernel.img
+	fi
+	
+	if [ -f /boot/kernel3_2_27.img ]; then
+		rm /boot/kernel3_2_27.img
+	fi
+	
+	if [ -d /lib/modules/3.2.27 ]; then
+		rm -r /lib/modules/3.2.27
+	fi
+
+fi
+
+if [ $1 == "upgrade" ]; then
+
+	if [ -f /boot/kernel3_2_27.img ]; then
+		rm /boot/kernel3_2_27.img
+	fi
+
+fi

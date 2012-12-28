@@ -1,44 +1,22 @@
 # XBMC Media Center language file
-# Addon Name: MediaPortal PVR addon
-# Addon id: pvr.team-mediaportal.tvserver
-# Addon version: 1.2.3.114
+# Addon Name: MediaPortal PVR Client
+# Addon id: pvr.mediaportal.tvserver
+# Addon version: 1.2.3.117
 # Addon Provider: Marcel Groothuis
-# Translators:
-#   <piodio@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC MediaPortal pvr addon\n"
-"Report-Msgid-Bugs-To: margro.xbmc@gmail.com\n"
-"POT-Creation-Date: 2012-06-03 16:35+0000\n"
-"PO-Revision-Date: 2012-06-13 07:03+0000\n"
-"Last-Translator: piodio <piodio@gmail.com>\n"
-"Language-Team: Korean (http://www.transifex.net/projects/p/mepopvraddon/language/ko/)\n"
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Korean (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ko\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-msgctxt "Addon Summary"
-msgid ""
-"XBMC frontend for the MediaPortal TV Server (ffmpeg + tsreader version)"
-msgstr "MediaPortal TV Server의 XBMC 프론트엔드 (ffmpeg + tsreader 버전)"
-
-msgctxt "Addon Description"
-msgid ""
-"MediaPortal TV Server frontend. Supports streaming of Live TV &amp; "
-"Recordings, listening to Radio channels, EPG and Timers. This addon combines"
-" the former ffmpeg and tsreader addons."
-msgstr "MediaPortal TV Server 프론트엔드. 라이브 TV 스트리밍 &amp; 녹화, 라디오 채널 청취, EPG 및 타이머를 지원합니다. 이 추가기능은 이전 ffmpeg 및 tsreader 추가기능이 결합된 것입니다."
-
-msgctxt "Addon Disclaimer"
-msgid ""
-"This is unstable software! The authors are in no way responsible for failed "
-"recordings, incorrect timers, wasted hours, or any other undesirable "
-"effects."
-msgstr "이것은 불안정한 소프트웨어입니다! 제작자는 녹화 실패, 타이머 오동작, 시간의 낭비 또는 기타 의도하지 않은 현상에 대해 책임이 없습니다."
-
-# Settings labels
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
 msgstr "Mediaportal 호스트네임"
@@ -99,7 +77,6 @@ msgctxt "#30018"
 msgid "Use RTSP streaming"
 msgstr "RTSP 스트리밍 사용"
 
-# Category labels
 msgctxt "#30040"
 msgid "Connection"
 msgstr "연결"
@@ -112,22 +89,18 @@ msgctxt "#30042"
 msgid "Playback"
 msgstr "재생"
 
-# on-screen error messages
 msgctxt "#30050"
-msgid ""
-"Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
 msgstr "TVServerXBMC '%s' 의 버전이 너무 낮습니다. '%s' 이상의 버전으로 업그레이드 하십시오!"
 
 msgctxt "#30051"
-msgid ""
-"Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
 msgstr "TVServerXBMC의 버전이 너무 낮습니다. '%s' 이상의 버전으로 업그레이드 하십시오!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
 msgstr "재생 녹화 실패. 파일이름에서 URL을 삭제하십시오."
 
-# Status message strings corresponding to the MediaPortal TvResult enum
 msgctxt "#30060"
 msgid "All cards are busy"
 msgstr "모든 카드가 사용중입니다"

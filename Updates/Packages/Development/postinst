@@ -1,0 +1,13 @@
+#!/bin/bash
+
+if [ $1 == "configure" ]; then
+	
+	if [ -f /etc/modprobe.d/raspi-blacklist.conf ]; then
+		if [ $(cat /etc/modprobe.d/raspi-blacklist.conf | grep spi-bcm2708 | grep blacklist | wc -l) -eq 1 ]; then
+			sed -i '/blacklist spi-bcm2708/d' /etc/modprobe.d/raspi-blacklist.conf
+		fi
+		if [ $(cat /etc/modprobe.d/raspi-blacklist.conf | grep i2c-bcm2708 | grep blacklist | wc -l) -eq 1 ]; then
+			sed -i '/blacklist i2c-bcm2708/d' /etc/modprobe.d/raspi-blacklist.conf
+		fi
+	fi
+fi

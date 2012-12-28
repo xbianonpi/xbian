@@ -167,7 +167,8 @@ def clear():
 
 def parse_data(json):
     try:
-        reply = json.replace('"-999%"','""').replace('"-9999.00"','""').replace('"-9998"','""').replace('"NA"','""').replace(' <? END CHANCE OF PRECIP\n\n?>','') # wu api bug
+        raw = json.replace('<br>',' ').replace('&auml;','ä') # wu api bugs
+        reply = raw.replace('"-999%"','""').replace('"-9999.00"','""').replace('"-9998"','""').replace('"NA"','""') # wu will change these to null responses in the future
         data = simplejson.loads(reply)
     except:
         log('failed to parse weather data')
@@ -336,11 +337,11 @@ def properties(data,loc):
 # weekend properties
     set_property('Weekend.IsFetched', 'true')
     if __addon__.getSetting('Weekend') == '2':
-        weekend = (3,4,5)
+        weekend = [4,5]
     elif __addon__.getSetting('Weekend') == '1':
-        weekend = (4,5,6)
+        weekend = [5,6]
     else:
-        weekend = (5,6,7)
+        weekend = [6,7]
     count = 0
     for item in data['forecast']['simpleforecast']['forecastday']:
         if date(item['date']['year'], item['date']['month'], item['date']['day']).isoweekday() in weekend:
@@ -411,7 +412,7 @@ def properties(data,loc):
                     set_property('Weekend.%i.LongOutlookDay'   % (count+1), data['forecast']['txt_forecast']['forecastday'][2*count]['fcttext_metric'])
                     set_property('Weekend.%i.LongOutlookNight' % (count+1), data['forecast']['txt_forecast']['forecastday'][2*count+1]['fcttext_metric'])
             count += 1
-            if count == 3:
+            if count == 2:
                 break
 # 36 hour properties
     set_property('36Hour.IsFetched', 'true')
@@ -556,16 +557,24 @@ def properties(data,loc):
         zoom = '10.0'
     url = data['satellite']['image_url_ir4'].replace('width=300&height=300','width=640&height=360').replace('radius=75','radius=%i' % int(1000/int(zoom.rstrip('0').rstrip('.,'))))
     log('map url: %s' % url)
-    req = urllib2.urlopen(url)
-    response = req.read()
-    req.close()
-    timestamp = time.strftime('%Y%m%d%H%M%S')
-    mapfile = xbmc.translatePath('special://profile/addon_data/%s/map/%s-%s.png' % (__addonid__,locid,timestamp))
-    tmpmap = open(mapfile, 'wb')
-    tmpmap.write(response)
-    tmpmap.close()
-    log('satellite image downloaded')
-    set_property('MapPath', mapdir)
+    try:
+        req = urllib2.urlopen(url)
+        response = req.read()
+        req.close()
+        log('satellite image downloaded')
+    except:
+        response = ''
+        log('satellite image downloaded failed')
+    if response != '':
+        timestamp = time.strftime('%Y%m%d%H%M%S')
+        mapfile = xbmc.translatePath('special://profile/addon_data/%s/map/%s-%s.png' % (__addonid__,locid,timestamp))
+        try:
+            tmpmap = open(mapfile, 'wb')
+            tmpmap.write(response)
+            tmpmap.close()
+            set_property('MapPath', mapdir)
+        except:
+            log('failed to save satellite image')
 
 log('version %s started: %s' % (__version__, sys.argv))
 log('lang: %s'    % LANGUAGE)

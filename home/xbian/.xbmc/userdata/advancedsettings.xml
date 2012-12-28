@@ -1,11 +1,13 @@
-<advancedsettings>
+<advancedsettings>   
    <network>
         <cachemembuffersize>5282880</cachemembuffersize>
    </network>
    <fanartres>540</fanartres>
    <thumbres>256</thumbres>
    <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</cputempcommand>
-   <lookandfeel>
+   <gputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</gputempcommand>
+   <lookandfeel>  
+        <guires>720</guires>
         <webserver>true</webserver>
    </lookandfeel>
    <bginfoloadermaxthreads>2</bginfoloadermaxthreads>

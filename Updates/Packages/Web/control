@@ -1,0 +1,12 @@
+Origin: XBian
+Package: xbian-package-web
+Version: 1.0
+Section: web
+Priority: optional
+Codename: wheezy
+Architecture: armhf
+Depends: apache2, php5
+Installed-Size: 1
+Maintainer: CurlyMo <development@xbian.org>
+Description: PHP + Apache webserver.
+

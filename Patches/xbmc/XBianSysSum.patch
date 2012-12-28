@@ -1,0 +1,132 @@
+--- a/xbmc/utils/SystemInfo.cpp	
++++ b/xbmc/utils/SystemInfo.cpp	
+@@ -25,6 +25,8 @@
+ #include <conio.h>
+ #else
+ #include <sys/utsname.h>
++#include <fstream>
++#include <iostream>
+ #endif
+ #include "GUIInfoManager.h"
+ #include "filesystem/CurlFile.h"
+@@ -61,7 +63,7 @@ bool CSysInfoJob::DoWork()
+   m_info.cpuFrequency      = GetCPUFreqInfo();
+   m_info.kernelVersion     = CSysInfo::GetKernelVersion();
+   m_info.macAddress        = GetMACAddress();
+-  m_info.batteryLevel      = GetBatteryLevel();
++  m_info.xbianver          = GetXBianVer();
+   return true;
+ }
+ 
+@@ -104,11 +106,19 @@ CStdString CSysInfoJob::GetVideoEncoder(
+   return "GPU: " + g_Windowing.GetRenderRenderer();
+ }
+ 
+-CStdString CSysInfoJob::GetBatteryLevel()
++CStdString CSysInfoJob::GetXBianVer()
+ {
+-  CStdString strVal;
+-  strVal.Format("%d%%", g_powerManager.BatteryLevel());
+-  return strVal;
++  CStdString verVal;
++  std::ifstream verFile;
++  verFile.open("/etc/xbian_version");
++  if (verFile.is_open()) {
++      while (!verFile.eof()) {
++          verFile >> verVal;
++      }
++  }
++  verFile.close();
++    
++  return verVal;
+ }
+ 
+ double CSysInfoJob::GetCPUFrequency()
+@@ -198,8 +208,8 @@ CStdString CSysInfo::TranslateInfo(int i
+       return g_localizeStrings.Get(13274);
+     else
+       return g_localizeStrings.Get(13297);
+-  case SYSTEM_BATTERY_LEVEL:
+-    return m_info.batteryLevel;
++  case SYSTEM_XBIAN_VER:
++    return m_info.xbianver;
+   default:
+     return "";
+   }
+
+--- a/xbmc/windows/GUIWindowSystemInfo.cpp	
++++ b/xbmc/windows/GUIWindowSystemInfo.cpp	
+@@ -100,7 +100,7 @@ void CGUIWindowSystemInfo::FrameMove()
+ #endif
+     SetControlLabel(i++, "%s: %s", 12390, SYSTEM_UPTIME);
+     SetControlLabel(i++, "%s: %s", 12394, SYSTEM_TOTALUPTIME);
+-    SetControlLabel(i++, "%s: %s", 12395, SYSTEM_BATTERY_LEVEL);
++    SetControlLabel(i++, "XBian version:%s %s", -1, SYSTEM_XBIAN_VER);
+   }
+   else if (m_section == CONTROL_BT_STORAGE)
+   {
+
+--- a/xbmc/GUIInfoManager.h	
++++ b/xbmc/GUIInfoManager.h	
+@@ -398,7 +398,7 @@ namespace INFO
+ #define SYSTEM_HAS_ADDON            711
+ #define SYSTEM_ADDON_TITLE          712
+ #define SYSTEM_ADDON_ICON           713
+-#define SYSTEM_BATTERY_LEVEL        714
++#define SYSTEM_XBIAN_VER            714
+ #define SYSTEM_IDLE_TIME            715
+ #define SYSTEM_FRIENDLY_NAME        716
+ #define SYSTEM_SCREENSAVER_ACTIVE   717
+
+--- a/xbmc/GUIInfoManager.cpp	
++++ b/xbmc/GUIInfoManager.cpp	
+@@ -269,7 +269,7 @@ const infomap system_labels[] =  {{ "has
+                                   { "profilethumb",     SYSTEM_PROFILETHUMB },
+                                   { "profilecount",     SYSTEM_PROFILECOUNT },
+                                   { "progressbar",      SYSTEM_PROGRESS_BAR },
+-                                  { "batterylevel",     SYSTEM_BATTERY_LEVEL },
++                                  { "xbianver",         SYSTEM_XBIAN_VER },
+                                   { "friendlyname",     SYSTEM_FRIENDLY_NAME },
+                                   { "alarmpos",         SYSTEM_ALARM_POS },
+                                   { "isinhibit",        SYSTEM_ISINHIBIT },
+@@ -1518,7 +1518,7 @@ CStdString CGUIInfoManager::GetLabel(int
+   case SYSTEM_INTERNET_STATE:
+   case SYSTEM_UPTIME:
+   case SYSTEM_TOTALUPTIME:
+-  case SYSTEM_BATTERY_LEVEL:
++  case SYSTEM_XBIAN_VER:
+     return g_sysinfo.GetInfo(info);
+     break;
+ 
+@@ -1971,9 +1971,6 @@ bool CGUIInfoManager::GetInt(int &value,
+     case PVR_ACTUAL_STREAM_SNR_PROGR:
+       value = g_PVRManager.TranslateIntInfo(info);
+       return true;
+-    case SYSTEM_BATTERY_LEVEL:
+-      value = g_powerManager.BatteryLevel();
+-      return true;
+   }
+   return false;
+ }
+
+--- a/xbmc/utils/SystemInfo.h	
++++ b/xbmc/utils/SystemInfo.h	
+@@ -52,7 +52,7 @@ public:
+   CStdString cpuFrequency;
+   CStdString kernelVersion;
+   CStdString macAddress;
+-  CStdString batteryLevel;
++  CStdString xbianver;
+ };
+ 
+ class CSysInfoJob : public CJob
+@@ -71,7 +71,7 @@ private:
+   CStdString GetCPUFreqInfo();
+   CStdString GetMACAddress();
+   CStdString GetVideoEncoder();
+-  CStdString GetBatteryLevel();
++  CStdString GetXBianVer();
+ 
+   CSysData m_info;
+ };
+

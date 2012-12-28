@@ -1,0 +1,75 @@
+#!/bin/bash
+
+if [ $1 == "install" -o $1 == "upgrade" ]; then
+
+	rm /usr/local/bin/easy_install* 2>/dev/null >/dev/null
+	rm /usr/local/bin/pip* 2>/dev/null >/dev/null
+	rm /usr/local/bin/gpio 2>/dev/null >/dev/null
+	rm /usr/local/include/gertboard.h 2>/dev/null >/dev/null
+	rm /usr/local/include/lcd.h 2>/dev/null >/dev/null
+	rm /usr/local/include/piNes.h 2>/dev/null >/dev/null
+	rm /usr/local/include/softPwm.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringPi.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringPiSPI.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringSerial.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringShift.h 2>/dev/null >/dev/null
+	rm /usr/local/lib/libwiringPi* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/distribute* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/pip* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/RPi* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/setuptools* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/easy-install.pth 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/setuptools.pth 2>/dev/null >/dev/null
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages;
+	fi
+	
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/RPi.GPIO-0.4.1a-py2.7.egg-info ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/RPi.GPIO-0.4.1a-py2.7.egg-info;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/RPi ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/RPi;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/EGG-INFO ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/EGG-INFO;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/_markerlib ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/_markerlib;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools/command ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools/command;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools/tests ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools/tests;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/distribute-0.6.30-py2.7.egg/setuptools;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/pip-1.2.1.egg-info ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/pip-1.2.1.egg-info;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/pip ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/pip;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/pip/commands ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/pip/commands;
+	fi
+
+	if [ ! -d /usr/local/lib/python2.7/dist-packages/pip/vcs ]; then
+		mkdir -p /usr/local/lib/python2.7/dist-packages/pip/vcs;
+	fi
+fi
