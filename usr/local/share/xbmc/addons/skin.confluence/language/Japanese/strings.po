@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon version: 2.1.0
+# Addon version: 2.1.2
 # Addon Provider: Jezz_X, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-04 12:52+0000\n"
-"PO-Revision-Date: 2012-10-28 23:31+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Japanese (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/ja/)\n"
 "MIME-Version: 1.0\n"
@@ -183,11 +183,11 @@ msgstr "「メインメニュー」ボタンを隠す"
 
 msgctxt "#31109"
 msgid "Enable Custom Background"
-msgstr ""
+msgstr "カスタムの背景を有効にする"
 
 msgctxt "#31110"
 msgid "Background path:"
-msgstr ""
+msgstr "背景のパス："
 
 msgctxt "#31111"
 msgid "Hide"
@@ -239,7 +239,7 @@ msgstr "歌詞"
 
 msgctxt "#31129"
 msgid "Hide Fanart in full screen visualization"
-msgstr ""
+msgstr "フルスクリーン時にファンアートを隠す"
 
 msgctxt "#31132"
 msgid "Lyrics Add-on"
@@ -451,7 +451,7 @@ msgstr "[B]アドオン設定[/B][CR][CR]インストール済みアドオン管
 
 msgctxt "#31409"
 msgid "[B]CONFIGURE TV SETTINGS[/B][CR][CR]Change fullscreen info · Manage EPG data settings"
-msgstr ""
+msgstr "[B]TV設定[/B][CR][CR]フルスクリーン情報の変更 · EPGデータ設定"
 
 msgctxt "#31410"
 msgid "[B]CONFIGURE SERVICE SETTINGS[/B][CR][CR]Setup control of XBMC via UPnP and HTTP · Configure file sharing[CR]Enable Zeroconf · Configure AirPlay"
@@ -459,11 +459,11 @@ msgstr "[B]サービス設定[/B][CR][CR]UPnP や HTTP 経由による XBMC 操�
 
 msgctxt "#31411"
 msgid "First run help...."
-msgstr ""
+msgstr "初回起動時のヘルプ..."
 
 msgctxt "#31412"
 msgid "This tab signifies that there is a menu off to the side of this window that contains extra options for this section.  To access the menu, navigate to the left with your remote control or keyboard or place your mouse pointer over the tab. [CR][CR]Click \"Ok\" to close this dialog. It will not appear again."
-msgstr ""
+msgstr "このタブは、このウィンドウの端のメニューがあり、本セクションの追加設定が可能である事を示しています。メニューにアクセスするには、リモコンやキーボードで左端に移動するか、マウスポインターをこのタブの上に持ってきてください。[CR][CR]「OK」をクリックするとこのダイアログを閉じます。このメッセージは再び表示されることはありません。"
 
 msgctxt "#31421"
 msgid "Select your XBMC user Profile[CR]to login and continue"
@@ -471,43 +471,43 @@ msgstr "XBMC ユーザープロファイルを選択して[CR]ログインして
 
 msgctxt "#31500"
 msgid "Recording Timers"
-msgstr ""
+msgstr "録画タイマー"
 
 msgctxt "#31501"
 msgid "Scheduled Time"
-msgstr ""
+msgstr "タイマー予約時間"
 
 msgctxt "#31502"
 msgid "Live TV"
-msgstr ""
+msgstr "ライブTV"
 
 msgctxt "#31503"
 msgid "Add Group"
-msgstr ""
+msgstr "グループの追加"
 
 msgctxt "#31504"
 msgid "Rename Group"
-msgstr ""
+msgstr "グループの名称変更"
 
 msgctxt "#31505"
 msgid "Delete Group"
-msgstr ""
+msgstr "グループの削除"
 
 msgctxt "#31506"
 msgid "Available[CR]Groups"
-msgstr ""
+msgstr "利用可能な[CR]グループ"
 
 msgctxt "#31509"
 msgid "Channel Group"
-msgstr ""
+msgstr "チャンネルグループ"
 
 msgctxt "#31510"
 msgid "Timer Set"
-msgstr ""
+msgstr "タイマーセット完了"
 
 msgctxt "#31511"
 msgid "Channel Options"
-msgstr ""
+msgstr "チャンネルオプション"
 
 msgctxt "#31901"
 msgid "36 Hour Forecast"
@@ -529,10 +529,6 @@ msgctxt "#31905"
 msgid "Forecast"
 msgstr "予報"
 
-msgctxt "#31906"
-msgid "Maps & Video"
-msgstr "天気図 & ビデオ"
-
 msgctxt "#31908"
 msgid "Chance of Precipitation"
 msgstr "降水確率"
@@ -540,3 +536,7 @@ msgstr "降水確率"
 msgctxt "#31909"
 msgid "Fetching forecast info..."
 msgstr "天気予報データ取得中..."
+
+msgctxt "#31910"
+msgid "Map & Alerts"
+msgstr "マップ＆アラート"

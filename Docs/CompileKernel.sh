@@ -53,31 +53,27 @@ cd linux3.2.27
 
 #Begin 3.2.27
 #Download the used config from the XBian github for 3.2.27
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config3_2_27
+sudo wget https://raw.github.com/xbianonpi/xbian/master/Patches/kernel/.config3_2_27
 mv .config3_2_27 .config
-sudo ln -s /opt/raspberry/linux3.2.27/drivers/staging/media/lirc /opt/raspberry/linux3.2.27/drivers/staging/lirc
 #End 3.2.27
 
 #Begin 3.6.1
 #Download the used config from the XBian github for 3.2.27
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/.config3_6_1
-mv .config3_6.1 .config
-sudo ln -s /opt/raspberry/linux3.6.1/drivers/staging/media/lirc /opt/raspberry/linux3.6.1/drivers/staging/lirc
+sudo wget https://raw.github.com/xbianonpi/xbian/master/Patches/kernel/.config3_6_1
+mv .config3_6_1 .config
 #End 3.6.1
 
 #Symlink the lirc drivers to get the patch working
-sudo wget https://raw.github.com/Koenkk/xbian/master/Patches/kernel/additional-lirc_rpi+lirc_xbox.patch
+sudo wget https://raw.github.com/xbianonpi/xbian/master/Patches/kernel/additional-lirc_rpi+lirc_xbox.patch
 sudo patch -p1 < additional-lirc_rpi+lirc_xbox.patch
-
-sudo cat drivers/staging/lirc/lirc_rpi.c | sed -e 's/lirc_rpi/lirc_rp1/g' > drivers/staging/lirc/lirc_rp1.c
 
 #Stop XBMC to increase compilation speed
 sudo kill -9 $(pgrep xbmc)
 
 #Make steps with custom commands not supported by the official config
-sudo make CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
-sudo make modules CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
-sudo make modules_install CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m INSTALL_MOD_PATH=/
+sudo make ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m CONFIG_DM_CRYPT=m
+sudo make modules ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m CONFIG_DM_CRYPT=m
+sudo make modules_install ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m CONFIG_DM_CRYPT=m INSTALL_MOD_PATH=/
 
 #Implement the new kernel
 cp arch/arm/boot/Image /boot/kernel.img

@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: Confluence
 # Addon id: skin.confluence
-# Addon version: 2.1.0
+# Addon version: 2.1.2
 # Addon Provider: Jezz_X, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-04 12:52+0000\n"
-"PO-Revision-Date: 2012-10-30 13:45+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -529,10 +529,6 @@ msgctxt "#31905"
 msgid "Forecast"
 msgstr "Pronóstico"
 
-msgctxt "#31906"
-msgid "Maps & Video"
-msgstr "Mapas y Video"
-
 msgctxt "#31908"
 msgid "Chance of Precipitation"
 msgstr "Cambio de Precipitación"
@@ -540,3 +536,7 @@ msgstr "Cambio de Precipitación"
 msgctxt "#31909"
 msgid "Fetching forecast info..."
 msgstr "Obteniendo información de pronóstico"
+
+msgctxt "#31910"
+msgid "Map & Alerts"
+msgstr "Mapa & Alertas"

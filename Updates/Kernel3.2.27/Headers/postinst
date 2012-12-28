@@ -1,0 +1,20 @@
+#!/bin/bash
+
+if [ $1 == "configure" ]; then
+
+	if [ -d /lib/modules/3.2.27 ]; then
+		ln -s /opt/linux3.2.27 /lib/modules/3.2.27/source
+	fi
+	
+	if [ -d /lib/modules/3.2.27+/ ]; then
+		ln -s /opt/linux3.2.27 /lib/modules/3.2.27+/source
+	fi
+	
+	if [ -d /lib/modules/3.2.27 ]; then
+		ln -s /opt/linux3.2.27 /lib/modules/3.2.27/build
+	fi
+		
+	if [ -d /lib/modules/3.2.27+ ]; then
+		ln -s /opt/linux3.2.27 /lib/modules/3.2.27+/build
+	fi
+fi 

@@ -1,37 +1,22 @@
 # XBMC Media Center language file
-# Addon Name: MediaPortal PVR addon
-# Addon id: pvr.team-mediaportal.tvserver
-# Addon version: 1.2.3.114
+# Addon Name: MediaPortal PVR Client
+# Addon id: pvr.mediaportal.tvserver
+# Addon version: 1.2.3.117
 # Addon Provider: Marcel Groothuis
-# Translators:
-#   <margro.xbmc@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC MediaPortal pvr addon\n"
-"Report-Msgid-Bugs-To: margro.xbmc@gmail.com\n"
-"POT-Creation-Date: 2012-06-03 16:35+0000\n"
-"PO-Revision-Date: 2012-06-03 17:28+0000\n"
-"Last-Translator: margro <margro.xbmc@gmail.com>\n"
-"Language-Team: LANGUAGE\n"
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Finnish (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fi_FI\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "Addon Summary"
-msgid "XBMC frontend for the MediaPortal TV Server (ffmpeg + tsreader version)"
-msgstr ""
-
-msgctxt "Addon Description"
-msgid "MediaPortal TV Server frontend. Supports streaming of Live TV &amp; Recordings, listening to Radio channels, EPG and Timers. This addon combines the former ffmpeg and tsreader addons."
-msgstr ""
-
-msgctxt "Addon Disclaimer"
-msgid "This is unstable software! The authors are in no way responsible for failed recordings, incorrect timers, wasted hours, or any other undesirable effects."
-msgstr ""
-
-# Settings labels
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
 msgstr "Mediaportal-palvelimen nimi"
@@ -47,10 +32,6 @@ msgstr "Vain ilmaiskanavat"
 msgctxt "#30003"
 msgid "Include Radio"
 msgstr "Sisällytä radiokanavat"
-
-msgctxt "#30004"
-msgid "Fast channel switching (don't stop timeshift)"
-msgstr ""
 
 msgctxt "#30005"
 msgid "Connect timeout (s)"
@@ -76,23 +57,18 @@ msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
 msgstr "Odotusaika kanavan virittämisen jälkeen (ms)"
 
-msgctxt "#30015"
-msgid "Streaming method"
-msgstr ""
-
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
-msgstr ""
+msgstr "Windows-käyttäjätunnus (SMB)"
 
 msgctxt "#30017"
 msgid "Windows password (SMB)"
-msgstr ""
+msgstr "Windows-salasana (SMB)"
 
 msgctxt "#30018"
 msgid "Use RTSP streaming"
-msgstr ""
+msgstr "Käytä RTSP-suoratoistoa"
 
-# Category labels
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Yhteys"
@@ -103,84 +79,28 @@ msgstr "MediaPortal"
 
 msgctxt "#30042"
 msgid "Playback"
-msgstr ""
+msgstr "Toisto"
 
-# on-screen error messages
 msgctxt "#30050"
-msgid ""
-"Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
 msgstr "TVServerXBMC:n versio '%s' on liian vanha. Päivitä vähintään versioon '%s' tai uudempaan!"
 
 msgctxt "#30051"
-msgid ""
-"Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
 msgstr "TVServerXBMC:n versio on liian vanha. Päivitä vähintään versioon '%s' tai uudempaan!"
-
-msgctxt "#30052"
-msgid "Recording playback failed. Empty URL of filename."
-msgstr ""
-
-# Status message strings corresponding to the MediaPortal TvResult enum
-msgctxt "#30060"
-msgid "All cards are busy"
-msgstr ""
-
-msgctxt "#30061"
-msgid "Channel is scrambled"
-msgstr ""
-
-msgctxt "#30062"
-msgid "No video or audio detected"
-msgstr ""
-
-msgctxt "#30063"
-msgid "No signal detected"
-msgstr ""
 
 msgctxt "#30064"
 msgid "Unknown error"
-msgstr ""
-
-msgctxt "#30065"
-msgid "Unable to start graph"
-msgstr ""
+msgstr "Tuntematon virhe"
 
 msgctxt "#30066"
 msgid "Unknown channel"
-msgstr ""
-
-msgctxt "#30067"
-msgid "No tuning details"
-msgstr ""
-
-msgctxt "#30068"
-msgid "Channel is not mapped to any card"
-msgstr ""
-
-msgctxt "#30069"
-msgid "Card is disabled"
-msgstr ""
-
-msgctxt "#30070"
-msgid "Connection to slave failed"
-msgstr ""
+msgstr "Tuntematon kanava"
 
 msgctxt "#30071"
 msgid "Not the owner"
-msgstr ""
-
-msgctxt "#30072"
-msgid "Graph building failed"
-msgstr ""
-
-msgctxt "#30073"
-msgid "SW Encoder missing"
-msgstr ""
+msgstr "Ei omistaja"
 
 msgctxt "#30074"
 msgid "No free disk space"
-msgstr ""
-
-msgctxt "#30075"
-msgid "No PMT found"
-msgstr ""
+msgstr "Vapaata levytilaa ei ole"

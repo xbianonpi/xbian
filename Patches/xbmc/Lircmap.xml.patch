@@ -1,0 +1,42 @@
+--- a/usr/local/share/xbmc/system/Lircmap.xml
++++ b/usr/local/share/xbmc/system/Lircmap.xml
+@@ -10,6 +10,7 @@
+ 
+ <lircmap>
+   <remote device="mceusb">
++	<altname>srm7500</altname>	
+ 		<play>Play</play>
+ 		<pause>Pause</pause>
+ 		<stop>Stop</stop>
+@@ -510,4 +511,31 @@
+ 		<mypictures>yellow</mypictures>
+ 		<myvideo>blue</myvideo>
+ 	</remote>
++
++	<remote device="smt1000t">
++		<mute>KEY_MUTE</mute>
++		<mypvr>KEY_TV</mypvr>
++		<subtitle>KEY_TEXT</subtitle>
++		<language>KEY_AUDIO</language>
++		<menu>KEY_MENU</menu>
++		<title>KEY_INFO</title>
++		<select>KEY_OK</select>
++		<stop>KEY_EXIT</stop>
++		<info>KEY_EPG</info>
++		<pageplus>KEY_CHANNELUP</pageplus>
++		<pageminus>KEY_CHANNELDOWN</pageminus>
++		<myvideo>KEY_RED</myvideo>
++		<mymusic>KEY_GREEN</mymusic>
++		<mytv>KEY_YELLOW</mytv>
++		<mypictures>KEY_BLUE</mypictures>
++	</remote>
++
++	<remote device="srm7500">
++		<display>KEY_SETUP</display>
++		<title>KEY_CONTEXT_MENU</title>
++		<star>KEY_STAR</star>
++		<subtitle>KEY_TEXT</subtitle>
++		<hash>KEY_HASHTAG</hash>
++		<aspectratio>KEY_SWITCHVIDEOMODE</aspectratio>
++	</remote>
+ </lircmap>

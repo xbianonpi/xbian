@@ -1,47 +1,25 @@
 # XBMC Media Center language file
-# Addon Name: MediaPortal PVR addon
-# Addon id: pvr.team-mediaportal.tvserver
-# Addon version: 1.2.3.114
+# Addon Name: MediaPortal PVR Client
+# Addon id: pvr.mediaportal.tvserver
+# Addon version: 1.2.3.117
 # Addon Provider: Marcel Groothuis
-# Translators:
-#   <margro.xbmc@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC MediaPortal pvr addon\n"
-"Report-Msgid-Bugs-To: margro.xbmc@gmail.com\n"
-"POT-Creation-Date: 2012-06-03 16:35+0000\n"
-"PO-Revision-Date: 2012-06-03 15:41+0000\n"
-"Last-Translator: margro <margro.xbmc@gmail.com>\n"
-"Language-Team: LANGUAGE\n"
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: nl\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "Addon Summary"
-msgid ""
-"XBMC frontend for the MediaPortal TV Server (ffmpeg + tsreader version)"
-msgstr "XBMC frontend voor de MediaPortal TV Server (ffmpeg + tsreader versie)"
-
-msgctxt "Addon Description"
-msgid ""
-"MediaPortal TV Server frontend. Supports streaming of Live TV &amp; "
-"Recordings, listening to Radio channels, EPG and Timers. This addon combines"
-" the former ffmpeg and tsreader addons."
-msgstr "MediaPortal TV Server frontend. Ondersteunt het bekijken van Live TV en opnames, het luisteren van radio zenders, het tonen van de EPG en het inplannen/beheren van nieuwe opnames. Deze addon combineert de voorgaande \"ffmpeg\" en \"tsreader\" addons."
-
-msgctxt "Addon Disclaimer"
-msgid ""
-"This is unstable software! The authors are in no way responsible for failed "
-"recordings, incorrect timers, wasted hours, or any other undesirable "
-"effects."
-msgstr "De auteurs zijn niet aansprakelijk voor mislukte opnames, verkeerde opnames of enig ander onwenselijk effect."
-
-# Settings labels
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
-msgstr "Mediaportal hostnaam"
+msgstr "Mediaportal Hostnaam"
 
 msgctxt "#30001"
 msgid "Mediaportal XBMC plugin Port"
@@ -99,7 +77,6 @@ msgctxt "#30018"
 msgid "Use RTSP streaming"
 msgstr "Gebruik RTSP streaming"
 
-# Category labels
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Verbinding"
@@ -112,22 +89,18 @@ msgctxt "#30042"
 msgid "Playback"
 msgstr "Afspelen"
 
-# on-screen error messages
 msgctxt "#30050"
-msgid ""
-"Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
 msgstr "Uw TVServerXBMC plugin '%s' is te oud. U heeft minimaal versie '%s' of nieuwer nodig!"
 
 msgctxt "#30051"
-msgid ""
-"Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
+msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
 msgstr "Uw TVServerXBMC plugin is te oud. U heeft minimaal versie '%s' of nieuwer nodig!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
 msgstr "Afspelen opname mislukt. Lege URL of bestandsnaam."
 
-# Status message strings corresponding to the MediaPortal TvResult enum
 msgctxt "#30060"
 msgid "All cards are busy"
 msgstr "Alle kaarten zijn bezet"

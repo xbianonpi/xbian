@@ -1,14 +1,14 @@
 # XBMC Media Center language file
 # Addon Name: projectM
 # Addon id: visualization.projectm
-# Addon version: 1.0.1
+# Addon version: 1.0.2
 # Addon Provider: Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-28 15:15+0000\n"
-"PO-Revision-Date: 2012-05-28 23:39+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: Afrikaans (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/af/)\n"
 "MIME-Version: 1.0\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Render Quality"
-msgstr ""
+msgstr "Verbeeld Kwaliteit"
 
 msgctxt "#30001"
 msgid "Low"
@@ -35,44 +35,44 @@ msgstr "Hoog"
 
 msgctxt "#30004"
 msgid "Maximum"
-msgstr ""
+msgstr "Maksimum"
 
 msgctxt "#30005"
 msgid "Shuffle Mode"
-msgstr ""
+msgstr "Skommel Modus"
 
 msgctxt "#30006"
 msgid "Smooth Preset Duration"
-msgstr ""
+msgstr "Gladde Voorafinstelling Duur"
 
 msgctxt "#30007"
 msgid "Preset Duration"
-msgstr ""
+msgstr "Voorafinstelling Duur"
 
 msgctxt "#30008"
 msgid "Beat Sensitivity"
-msgstr ""
+msgstr "Maatslag Sensitiwiteit"
 
 msgctxt "#30009"
 msgid "Preset Pack"
-msgstr ""
+msgstr "Voorafinstelling Pak"
 
 msgctxt "#30010"
 msgid "Default Pack"
-msgstr ""
+msgstr "Bestek Pak"
 
 msgctxt "#30011"
 msgid "User Defined Preset Folder"
-msgstr ""
+msgstr "Gebruiker Gedefinieerde Voorafinstelling Vouer"
 
 msgctxt "#30012"
 msgid "User Preset Folder"
-msgstr ""
+msgstr "Gebruiker Voorafinstelling Vouer"
 
 msgctxt "#30050"
 msgid "%2.0f secs"
-msgstr ""
+msgstr "%2.0f sek."
 
 msgctxt "#30051"
 msgid "%2.0f %%"
-msgstr ""
+msgstr "%2.0f %%"

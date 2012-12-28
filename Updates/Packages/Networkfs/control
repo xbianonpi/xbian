@@ -1,0 +1,11 @@
+Origin: XBian
+Package: xbian-package-networkfs
+Version: 1.0
+Section: net
+Priority: optional
+Codename: wheezy
+Architecture: armhf
+Depends: samba, samba-client, samba-common-bin
+Installed-Size: 1
+Maintainer: CurlyMo <development@xbian.org>
+Description: Windows <--> linux networkfs.

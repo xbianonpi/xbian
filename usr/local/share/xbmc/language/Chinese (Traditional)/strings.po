@@ -1,13 +1,13 @@
 # XBMC Media Center language file
-# XBMC-core v12.0-ALPHA7
+# XBMC-core v12.0-RC1
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-04 12:46+0000\n"
-"PO-Revision-Date: 2012-11-08 03:10+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
-"Language-Team: Chinese (Taiwan) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/zh_TW/)\n"
+"Language-Team: Chinese (Traditional) (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2203,12 +2203,12 @@ msgid "Enter number"
 msgstr "輸入數字"
 
 msgctxt "#612"
-msgid "Bits/Sample"
-msgstr "Bits/取樣"
+msgid "Bits/sample"
+msgstr "位元/樣本"
 
 msgctxt "#613"
-msgid "Sample Frequency"
-msgstr "取樣頻率"
+msgid "Sample rate"
+msgstr "取樣率"
 
 msgctxt "#620"
 msgid "Audio CDs"
@@ -2233,10 +2233,6 @@ msgstr "包括音軌編號"
 msgctxt "#625"
 msgid "All songs of"
 msgstr "所有歌曲"
-
-msgctxt "#626"
-msgid "In progress TV shows"
-msgstr ""
 
 msgctxt "#629"
 msgid "View mode"
@@ -2725,10 +2721,6 @@ msgstr "網際網路訪問"
 msgctxt "#799"
 msgid "Library Update"
 msgstr "資料庫更新"
-
-msgctxt "#800"
-msgid "Music library needs to rescan art from tags"
-msgstr ""
 
 msgctxt "#801"
 msgid "Would you like to scan now?"
@@ -3250,10 +3242,6 @@ msgctxt "#1429"
 msgid "Ash"
 msgstr "灰"
 
-msgctxt "#1430"
-msgid "Widespread"
-msgstr ""
-
 msgctxt "#1431"
 msgid "Dust"
 msgstr "塵"
@@ -3290,21 +3278,9 @@ msgctxt "#1439"
 msgid "and"
 msgstr "且"
 
-msgctxt "#1440"
-msgid "Sleet"
-msgstr ""
-
 msgctxt "#1441"
 msgid "with"
 msgstr "有"
-
-msgctxt "#1442"
-msgid "Chance"
-msgstr ""
-
-msgctxt "#1443"
-msgid "of"
-msgstr ""
 
 msgctxt "#1444"
 msgid "Funnel"
@@ -3317,10 +3293,6 @@ msgstr "雲"
 msgctxt "#1446"
 msgid "Unknown"
 msgstr "未知"
-
-msgctxt "#1447"
-msgid "Squals"
-msgstr ""
 
 msgctxt "#1448"
 msgid "Precipitation"
@@ -4170,10 +4142,6 @@ msgctxt "#13211"
 msgid "Alarm!"
 msgstr "響鈴！"
 
-msgctxt "#13212"
-msgid "Canceled with %im%is left"
-msgstr "鬧鈴取消，剩下 %i 分 %i 秒"
-
 msgctxt "#13213"
 msgid "%2.0fm"
 msgstr "%2.0f分"
@@ -4756,7 +4724,7 @@ msgstr "自動播放下一個影片"
 
 msgctxt "#13434"
 msgid "Play only this"
-msgstr ""
+msgstr "只播放這個"
 
 msgctxt "#13500"
 msgid "A/V sync method"
@@ -5460,7 +5428,7 @@ msgstr "收聽 %name% 的同類型藝人在 Last.fm 廣播"
 
 msgctxt "#15268"
 msgid "Top artists for user %name%"
-msgstr "%name% 演出者排行"
+msgstr "%name% 的演出者排行"
 
 msgctxt "#15269"
 msgid "Top albums for user %name%"
@@ -5480,7 +5448,7 @@ msgstr "%name% 同好"
 
 msgctxt "#15273"
 msgid "Weekly artist chart for %name%"
-msgstr "%name% 演出者週排行"
+msgstr "%name% 的演出者週排行"
 
 msgctxt "#15274"
 msgid "Weekly album chart for %name%"
@@ -5679,8 +5647,8 @@ msgid "Bob (inverted)"
 msgstr "抖動(倒轉)"
 
 msgctxt "#16024"
-msgid "Canceling..."
-msgstr "取消中…"
+msgid "Cancelling..."
+msgstr "正在取消..."
 
 msgctxt "#16025"
 msgid "Enter the artist name"
@@ -6026,10 +5994,6 @@ msgctxt "#19024"
 msgid "Radio channels"
 msgstr "無線電廣播頻道"
 
-msgctxt "#19025"
-msgid "Upcoming recordings"
-msgstr ""
-
 msgctxt "#19026"
 msgid "Add timer..."
 msgstr "新增定時器..."
@@ -6105,10 +6069,6 @@ msgstr "錄影中"
 msgctxt "#19044"
 msgid "Please check your configuration or check the log for details."
 msgstr "請檢查你的設定或從日誌查看詳情。"
-
-msgctxt "#19045"
-msgid "No PVR clients have been started yet. Wait for the PVR clients to start up or check the log for details."
-msgstr ""
 
 msgctxt "#19046"
 msgid "New channel"
@@ -6214,10 +6174,6 @@ msgctxt "#19073"
 msgid "Delay channel switch"
 msgstr "延遲頻道切換"
 
-msgctxt "#19074"
-msgid "Active:"
-msgstr ""
-
 msgctxt "#19075"
 msgid "Name:"
 msgstr "名稱："
@@ -6253,10 +6209,6 @@ msgstr "優先權："
 msgctxt "#19083"
 msgid "Lifetime (days):"
 msgstr "生命周期(天)"
-
-msgctxt "#19084"
-msgid "First day:"
-msgstr ""
 
 msgctxt "#19085"
 msgid "Unknown channel %u"
@@ -6321,10 +6273,6 @@ msgstr "請切換到另一個頻道"
 msgctxt "#19104"
 msgid "Enter the name of the folder for the recording"
 msgstr "輸入存放這個錄影的資料夾名稱"
-
-msgctxt "#19106"
-msgid "Next timer on"
-msgstr ""
 
 msgctxt "#19107"
 msgid "at"
@@ -6405,14 +6353,6 @@ msgstr "開始日期"
 msgctxt "#19129"
 msgid "End date"
 msgstr "結束日期"
-
-msgctxt "#19130"
-msgid "Minimum duration"
-msgstr ""
-
-msgctxt "#19131"
-msgid "Maximum duration"
-msgstr ""
 
 msgctxt "#19132"
 msgid "Include unknown genres"
@@ -6526,10 +6466,6 @@ msgctxt "#19160"
 msgid "to"
 msgstr "到"
 
-msgctxt "#19162"
-msgid "Recording active"
-msgstr ""
-
 msgctxt "#19163"
 msgid "Recordings"
 msgstr "錄影"
@@ -6550,17 +6486,9 @@ msgctxt "#19167"
 msgid "Scan for missing icons"
 msgstr "尋找遺失的圖示"
 
-msgctxt "#19168"
-msgid "Switch channel without pressing OK"
-msgstr "切換頻道不需要按確定"
-
 msgctxt "#19169"
 msgid "Hide video information box"
 msgstr "隱藏視訊資訊盒"
-
-msgctxt "#19170"
-msgid "Timeout when starting playback"
-msgstr ""
 
 msgctxt "#19171"
 msgid "Start playback minimized"
@@ -6722,10 +6650,6 @@ msgctxt "#19211"
 msgid "Delete channel"
 msgstr "刪除頻道"
 
-msgctxt "#19212"
-msgid "This list contains changes"
-msgstr ""
-
 msgctxt "#19213"
 msgid "Select backend"
 msgstr "選擇後端"
@@ -6745,10 +6669,6 @@ msgstr "所有的廣播頻道"
 msgctxt "#19217"
 msgid "All TV channels"
 msgstr "所有的電視頻道"
-
-msgctxt "#19218"
-msgid "Visible"
-msgstr ""
 
 msgctxt "#19219"
 msgid "Ungrouped channels"
@@ -6856,7 +6776,7 @@ msgstr "後端閒置時間"
 
 msgctxt "#19245"
 msgid "Set wakeup command (cmd [timestamp])"
-msgstr ""
+msgstr "設定喚醒命令 (cmd [timestamp])"
 
 msgctxt "#19246"
 msgid "Wakeup before recording"
@@ -6916,7 +6836,7 @@ msgstr "家長控制"
 
 msgctxt "#19260"
 msgid "Unlock duration"
-msgstr ""
+msgstr "解鎖時間"
 
 msgctxt "#19261"
 msgid "Change PIN"
@@ -6964,11 +6884,11 @@ msgstr "找不到任何 PVR 附加元件"
 
 msgctxt "#19272"
 msgid "You need a tuner, backend software, and an"
-msgstr ""
+msgstr "你需要一個接收器 (tuner)、後端軟體和為該後端軟體"
 
 msgctxt "#19273"
 msgid "add-on for the backend to be able to use PVR."
-msgstr ""
+msgstr "設計的附加元件才能使用 PVR 功能。"
 
 msgctxt "#19274"
 msgid "Please visit xbmc.org/pvr to learn more."
@@ -6989,6 +6909,10 @@ msgstr "錄影衝突"
 msgctxt "#19278"
 msgid "Recording error"
 msgstr "錄影錯誤"
+
+msgctxt "#19281"
+msgid "Confirm channel switches by pressing OK"
+msgstr "轉台時需要按OK確認"
 
 msgctxt "#19499"
 msgid "Other/Unknown"
@@ -8198,6 +8122,26 @@ msgctxt "#20316"
 msgid "Sort by: ID"
 msgstr "排序：標籤"
 
+msgctxt "#20317"
+msgid "Scanning movies using %s"
+msgstr "正在使用 %s 掃描電影"
+
+msgctxt "#20318"
+msgid "Scanning music videos using %s"
+msgstr "正在使用 %s 掃描音樂影片"
+
+msgctxt "#20319"
+msgid "Scanning tvshows using %s"
+msgstr "正在使用 %s 掃描電視節目"
+
+msgctxt "#20320"
+msgid "Scanning artists using %s"
+msgstr "正在使用 %s 掃描演出者"
+
+msgctxt "#20321"
+msgid "Scanning albums using %s"
+msgstr "正在使用 %s 掃描專輯"
+
 msgctxt "#20324"
 msgid "Play part..."
 msgstr "播放部分的…"
@@ -9154,6 +9098,10 @@ msgctxt "#21456"
 msgid "External storage"
 msgstr "外部儲存"
 
+msgctxt "#21457"
+msgid "Watched episode count"
+msgstr "已觀看的集數"
+
 msgctxt "#21460"
 msgid "Subtitle location"
 msgstr "字幕位置"
@@ -9756,7 +9704,7 @@ msgstr "電視資訊"
 
 msgctxt "#24015"
 msgid "Music video information"
-msgstr "音樂錄影帶資訊"
+msgstr "音樂影片資訊"
 
 msgctxt "#24016"
 msgid "Album information"
@@ -10550,10 +10498,6 @@ msgctxt "#35100"
 msgid "Enable joystick and gamepad support"
 msgstr "啟用搖桿和手把支援"
 
-msgctxt "#35101"
-msgid "Disable joystick when iMON is present"
-msgstr "使用 iMON 時停用遊戲遙桿"
-
 msgctxt "#35500"
 msgid "Location"
 msgstr "位置"
@@ -10668,11 +10612,7 @@ msgstr "關閉 XBMC 時送出 \"非作用中來源\" 的命令"
 
 msgctxt "#36026"
 msgid "Put devices in standby mode when putting the PC in standby"
-msgstr ""
-
-msgctxt "#36027"
-msgid "This device needs servicing"
-msgstr ""
+msgstr "當電腦進入待機時讓裝置也待機"
 
 msgctxt "#36028"
 msgid "Ignore"
@@ -10716,8 +10656,12 @@ msgstr "放大器/AVR 裝置"
 
 msgctxt "#36039"
 msgid "TV and AVR device (explicit)"
-msgstr ""
+msgstr "電視和 AVR 裝置(外接式)"
 
 msgctxt "#36040"
 msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
 msgstr "未支援的 libECE 介面版本。版本 %x 小於 XBMC 所支援的版本(%x)"
+
+msgctxt "#36041"
+msgid "* Item folder"
+msgstr "* 項目資料夾"

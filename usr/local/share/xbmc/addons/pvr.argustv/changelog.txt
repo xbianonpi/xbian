@@ -1,0 +1,120 @@
+v1.0.150.144 (18-11-2012)
+- First ARGUS TV implementation
+- Support XBMC play count
+
+v1.0.150.143 (03-11-2012)
+- Bump version to 1 for Frodo :)
+- Version number: major.minor.apiversion.buildnumber
+- Fully supports setting and retrieving lastplayed position
+  on the FTR server for recordings
+- Support Timer conflict notification
+- Add episode name to epg title
+- Credit Team Mediaportal for original TsReader code
+v0.0.1.142 (06-09-2012)
+- Use the XBMC lifetime setting for a recording when possible
+- Now can delete scheduled recordings/programs on the FTR server
+  that were created by other clients
+- At startup try to connect to FTR for 30 seconds,
+  This fixes startup problems on linux systems where the add-on is
+  started before the network interface is up (eg. OpenElec)
+- Notify user when no free tuner is found, channel is scrambled etc.
+- Shorter keep-alive delay to fix loosing Live-TV in certain cases
+v0.0.1.141 (04-09-2012)
+- Updated to Frodo PVR API
+- Add timeshift support for Frodo
+v0.0.1.140 (03-06-2012)
+- Fixed deletion of recordings due to api change
+- Fixed instant-record failed due to start time set to 1970 by XBMC
+v0.0.1.138 (02-06-2012)
+- Full support for timeshift implemented in the add-on
+v0.0.1.137 (18-05-2012)
+- Fixed playing recording with national characters in names on Windows
+v0.0.1.136 (01-05-2012)
+- Aggressively optimised TsReader class
+- Added new configurable delay in milliseconds after tuning a channel
+v0.0.1.135 (12-04-2012)
+- Small regression fixes after switch to new platform library
+  When ForTheRecord returns 'NoRetunePossible' close the current live stream and
+  then try to tune again
+v0.0.1.134 (07-04-2012)
+- Internal change: Switch to new platform library for threading and lock mechanisms
+v0.0.1.133 (31-03-2012)
+- The add-on now sets the time a recording was last watched on the server
+v0.0.1.132 (20-03-2012)
+- Small fix to correct one invalid GUID error message at start 
+v0.0.1.131 (16-03-2012)
+- Added many internal verifications to the <FTR GUID> to <XBMC number> 
+  channel mappings. External factors can break the mapping and these
+  checks will hopefully warn the user to reset the PVR database
+v0.0.1.130 (11-03-2012)
+- Fixed 64-bit Linux .tsbuffer processing
+v0.0.1.129 (04-03-2012)
+- Media Portal TV-Server will now work with the FTR - FTR Addon - XBMC combination
+  Recording titles with trailing periods '...' will show up in XBMC,
+  NOTICE: this requires FTR 1.6.1.0 Beta 5 or newer
+v0.0.1.128 (23-01-2012)
+- Added: System Info - PVR Information now shows FTR version info
+  Timers do no longer retrieve the cancelled 'upcomingprograms' from ForTheRecord
+v0.0.1.127 (20-01-2012)
+- Added: System Info - PVR Information now shows total and used disk sizes
+v0.0.1.126 (10-01-2012)
+- Added: titles of recordings changed to be more descriptive
+v0.0.1.125 (04-01-2012)
+- Added: validation of the shares for all ForTheRecord tuners at startup
+v0.0.1.124 (01-01-2012)
+- Fixed Linux mutex initialisation, caused by C++ not having static constructors
+v0.0.1.123 (20-12-2011)
+- Pressing 'record' while viewing will schedule the recording of the show watched
+- Delete Timer: will abort an active recording,
+                will remove the upcoming program from the server
+                will remove the corresponding schedule from the server
+                (the schedule name MUST be: "XBMC - " + timer title, this is the case
+                 when the schedule was added by the addon and unchanged by the user)
+v0.0.1.122 (07-12-2011)
+- Signal quality retrieval implemented
+v0.0.1.121 (04-12-2011)
+- Channel logo retrieval added
+v0.0.1.120 (07-11-2011)
+- Windows, Linux and OSX version using TsReader
+- Reliable switching between channels with HD and SD content
+- TsReader streamlined
+v0.0.1.117 (unreleased)
+- Adaptation to many changes within XBMC
+v0.0.1.116 (16-06-2011)
+- Greatly improved channel zapping
+- Add timer will now force a recording when no matching show title 
+  is found in the channel epg data on the server
+- Add timer fixed: new PVR API
+- GUI update triggers added: new PVR API
+v0.0.1.115 (10-05-2011)
+- First implementation of channelgroups
+v0.0.1.114 (26-02-2011)
+- Delete recording is now actually working...
+v0.0.1.113 (26-02-2011)
+- Upcoming recordings now showing as timers in EPG and timerlist
+- Delete timer implemented
+- Add timer implemented
+v0.0.1.112 (23-02-2011)
+- Fixed bad bug that caused loss of epg data every 10 minutes
+v0.0.1.111 (01-02-2011)
+- EPG loading optimised. Programme descriptions only loaded for ForTheRecord 1.5.1.
+- EPG loads 48 hours of data now.
+- Tune live stream now also supports radio.
+v0.0.1.110 (22-01-2011)
+- Delete recording implemented, needs ForTheRecord 1.5.1.0 Beta 6 or newer
+- Programme descriptions added to EPG and TV channels screen
+- More fixes to memory handling
+v0.0.1.109 (13-01-2011)
+- Initial support for retrieval of recordings on the ForTheRecord Argus server
+- Overview of recordings, grouped by Title
+- Viewing of a selected recording via the ForTheRecord shares
+- Fixes some memory corruptions 
+- Support for retrieval of recordings on the ForTheRecord Argus server
+- Overview of recordings, grouped by Title, including recording starttime, and description
+- Credits: Red-F
+v0.0.1.108 (08-01-2011)
+- EPG data retrieval fixed for dates where month and day have less than 2 digits (credits: Red-F)
+v0.0.1.107 (27-11-2010)
+- First release of the ForTheRecord PVR client (Windows only, TSReader)
+- Implemented: Channel retrieval, tuning of live TV and live radio (tsbuffer only, no rtsp), basic EPG
+- Tested ForTheRecord Argus version: v1.5.0.3

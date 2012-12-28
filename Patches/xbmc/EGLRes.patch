@@ -1,0 +1,114 @@
+--- a/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp
++++ b/xbmc/windowing/egl/EGLNativeTypeRaspberryPI.cpp
+@@ -24,6 +24,7 @@
+ #include "utils/log.h"
+ #include "guilib/gui3d.h"
+ #include "linux/DllBCM.h"
++#include <fstream>
+ 
+ #ifndef __VIDEOCORE4__
+ #define __VIDEOCORE4__
+@@ -97,8 +98,49 @@
+   m_dispman_element2        = DISPMANX_NO_HANDLE;
+   m_dispman_display         = DISPMANX_NO_HANDLE;
+ 
+-  m_width                   = 1280;
+-  m_height                  = 720;
++  m_width = 1280;
++  m_height = 720;
++    
++  std::ifstream file( "/home/xbian/.xbmc/userdata/advancedsettings.xml" ) ;
++  if (file.good()) {
++    std::string line;
++    int res;
++    int line_number = 0 ;
++    while( std::getline( file, line ) )
++    {
++        ++line_number ;
++        if( line.find("guires") != std::string::npos ) {
++            line.erase(remove_if(line.begin(), line.end(), isspace), line.end());
++            line.replace(0, 8, "");
++            if (line.length() == 13)
++                line.replace(4, 9, "");
++            else if (line.length() == 12)
++                line.replace(3, 9, "");
++            res = atoi(line.c_str());
++            break;
++        }
++    }
++      
++    switch (res) {
++        case 1080: CLog::Log(LOGDEBUG, "I found <guires>1080</guires>, using 1080p");
++            m_width = 1920;
++            m_height = 1080;
++            break;
++        case 540: CLog::Log(LOGDEBUG, "I found <guires>540</guires>, using 540p");
++            m_width = 960;
++            m_height = 540;
++            break;
++        case 480: CLog::Log(LOGDEBUG, "I found <guires>480</guires>, using 480p");
++            m_width = 853;
++            m_height = 480;
++            break;
++        default: CLog::Log(LOGDEBUG, "I found <guires>720</guires> or no <guires></guires>, using 720p");
++            m_width = 1280;
++            m_height = 720;
++            break;
++    }
++  }
++    
+   m_initDesktopRes          = true;
+ 
+   m_DllBcmHost = new DllBcmHost;
+@@ -554,8 +596,49 @@
+ 
+ bool CEGLNativeTypeRaspberryPI::ClampToGUIDisplayLimits(int &width, int &height)
+ {
+-  const int max_width = 1280, max_height = 720;
+-  float ar = (float)width/(float)height;
++  int max_width = 1280, max_height = 720;
++  
++  std::ifstream file( "/home/xbian/.xbmc/userdata/advancedsettings.xml" ) ;
++  if (file.good()) {
++      std::string line;
++      int res;
++      int line_number = 0 ;
++      while( std::getline( file, line ) )
++      {
++          ++line_number ;
++          if( line.find("guires") != std::string::npos ) {
++            line.erase(remove_if(line.begin(), line.end(), isspace), line.end());
++            line.replace(0, 8, "");
++            if (line.length() == 13)
++                line.replace(4, 9, "");
++            else if (line.length() == 12)
++                line.replace(3, 9, "");
++            res = atoi(line.c_str());
++            break;
++        }
++    }
++        
++    switch (res) {
++        case 1080: CLog::Log(LOGDEBUG, "I found <guires>1080</guires>, using 1080p");
++            max_width = 1920;
++            max_height = 1080;
++            break;
++        case 540: CLog::Log(LOGDEBUG, "I found <guires>540</guires>, using 540p");
++            max_width = 960;
++            max_height = 540;
++            break;
++        case 480: CLog::Log(LOGDEBUG, "I found <guires>480</guires>, using 480p");
++            max_width = 853;
++            max_height = 480;
++            break;
++        default: CLog::Log(LOGDEBUG, "I found <guires>720</guires> or no <guires></guires>, using 720p");
++            max_width = 1280;
++            max_height = 720;
++            break;
++     }
++  }
++    
++ float ar = (float)width/(float)height;
+   // bigger than maximum, so need to clamp
+   if (width > max_width || height > max_height) {
+     // wider than max, so clamp width first

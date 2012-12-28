@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [[ $1 == "remove" ]]; then
+	if [ -f /etc/modprobe.d/raspi-blacklist.conf ]; then
+		if [ $(cat /etc/modprobe.d/raspi-blacklist.conf | grep spi-bcm2708 | grep blacklist | wc -l) -eq 0 ]; then
+			echo "blacklist spi-bcm2708" >> /etc/modprobe.d/raspi-blacklist.conf
+		fi
+		if [ $(cat /etc/modprobe.d/raspi-blacklist.conf | grep i2c-bcm2708 | grep blacklist | wc -l) -eq 0 ]; then
+			echo "blacklist i2c-bcm2708" >> /etc/modprobe.d/raspi-blacklist.conf
+		fi
+	fi
+
+	rm /usr/local/bin/easy_install* 2>/dev/null >/dev/null
+	rm /usr/local/bin/pip* 2>/dev/null >/dev/null
+	rm /usr/local/bin/gpio 2>/dev/null >/dev/null
+	rm /usr/local/include/gertboard.h 2>/dev/null >/dev/null
+	rm /usr/local/include/lcd.h 2>/dev/null >/dev/null
+	rm /usr/local/include/piNes.h 2>/dev/null >/dev/null
+	rm /usr/local/include/softPwm.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringPi.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringPiSPI.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringSerial.h 2>/dev/null >/dev/null
+	rm /usr/local/include/wiringShift.h 2>/dev/null >/dev/null
+	rm /usr/local/lib/libwiringPi* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/distribute* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/pip* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/RPi* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/setuptools* 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/easy-install.pth 2>/dev/null >/dev/null
+	rm -r /usr/local/lib/python2.7/dist-packages/setuptools.pth 2>/dev/null >/dev/null
+	
+	exit 0;
+fi

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="visualization.waveform"
-  version="1.0.0"
+  version="1.0.1"
   name="Waveform"
   provider-name="MrC">
   <extension
@@ -13,15 +13,16 @@
   <extension point="xbmc.addon.metadata">
     <summary lang="af">Visualisering wat 2 golfvorm grafieke op die skerm vertoon</summary>
     <summary lang="ar">التصوير يظهر2 رسم بياني موجي على الشاشة</summary>
-    <summary lang="be">Visualization showing 2 Waveform Graphs on the screen</summary>
+    <summary lang="be">Візуалізацыя што паказвае 2 графікі сыгналу на экране</summary>
     <summary lang="bg">Визуализация представяща две осцилиращи вълни</summary>
     <summary lang="ca">Visualització que mostra 2 gràfics en forma d'ona a la pantalla</summary>
     <summary lang="cs">Vizualizace zobrazující 2 grafy průběhu vlny na obrazovce</summary>
-    <summary lang="da">Visualisering, der viser 2 bølgeagtige grafer på skærmen</summary>
+    <summary lang="da">Visualisering der viser 2 bølgeagtige grafer på skærmen</summary>
     <summary lang="de">Eine Visualisierung, welche 2 wellenförmige Grafiken auf dem Bildschirm zeigt</summary>
     <summary lang="el">Οπτικοποίηση που εμφανίζει 2 Κυματομορφές στην οθόνη</summary>
     <summary lang="en">Visualization showing 2 Waveform Graphs on the screen</summary>
     <summary lang="es">Visualización mostrando 2 gráficos de ondas en la pantalla</summary>
+    <summary lang="es_AR">Visualización mostrando 2 gráficos de ondas en la pantalla</summary>
     <summary lang="es_MX">Visualización que muestra 2 Gráficos de Forma de onda</summary>
     <summary lang="et">Visuaal, mis näitab ekraanil kahte signaalikujulist graafikut</summary>
     <summary lang="fi">Kaksi aaltomuotograafia</summary>
@@ -34,6 +35,7 @@
     <summary lang="ja">画面に2波形グラフを表示するビジュアライザー</summary>
     <summary lang="ko">두개의 웨이브폼을 보여주는 음악시각화</summary>
     <summary lang="lt">Vizualizacija kuri parodo dvi garso bangas</summary>
+    <summary lang="mk">Визуализација која покажува 2 брана на екранот</summary>
     <summary lang="nl">Visualisatie die twee grafieken in golfvorm weergeeft</summary>
     <summary lang="no">Visualisator som viser to bølgeformede grafer på skjermen</summary>
     <summary lang="pl">Wizualizacja pokazująca dwie fale dźwięku</summary>
@@ -46,6 +48,7 @@
     <summary lang="sl">Vizualizacija zvoka z dvema valovnima oblikama</summary>
     <summary lang="sq">Vizualizim që shfaq 2 Grafikë Valëzues në ekran</summary>
     <summary lang="sv">Visualisering som visar 2 vågformgrafer på skärmen</summary>
+    <summary lang="th">กำลังแสดงผลภาพเวอร์ชวลไลเซชั่น 'Waveform' เป็น 2  กราฟสัญญาณบนหน้าจอ</summary>
     <summary lang="uk">Візуалізація показує на екрані 2 лінії, що змінюються в такт з музикою.</summary>
     <summary lang="zh">在屏幕上显示两个波形图的可视化效果</summary>
     <description lang="af">Golfvorm is 'n eenvoudige visualisering wat 2 golfvorm grafieke op die skerm vertoon, een elk vir Linker en Regter kanale wat beweeg op die maat van die musiek.</description>
@@ -54,11 +57,12 @@
     <description lang="bg">Waveform представя графика на две осцилиращи вълни на екрана, по една за всеки канал (ляв и десен), който реагират на ритъма на музиката.</description>
     <description lang="ca">Waveform és una visualització molt simple que mostra 2 gràfics en forma d'ona a la pantalla, un per a cada un dels canals, esquerre i dret, que es mouen al ritme de la música.</description>
     <description lang="cs">Průběh vlny je jednoduchá vizualizace zobrazující 2 grafy průběhu vlny na obrazovce, které znázorňují levý a pravý kanál a pohybují se v rytmu hudby</description>
-    <description lang="da">Waveform er en simpel Visualisering der viser 2 bølgeagtige grafer på skærmen. Én til den venstre og én til den højre kanal der bevæger sig til musikkens rytme.</description>
+    <description lang="da">Waveform er en simpel visualisering, der viser 2 bølgeagtige grafer på skærmen. Én til den venstre og én til den højre kanal, der bevæger sig til musikkens rytme.</description>
     <description lang="de">Waveform  ist eine einfache Visualisierung, welche 2 wellenförmige Grafiken zeigt. Je eine Grafik für den linken und rechten Kanal, welche sich im Takt der Musik bewegen</description>
     <description lang="el">Το Waveform είναι μία απλή Οπτικοποίηση του εμφανίζει 2 Κυματομορφές στην οθόνη, μία για το Αριστερό και μία για το Δεξί κανάλι οι οποίες κινούνται στο ρυθμό της μουσικής</description>
     <description lang="en">Waveform is a simple Visualization showing 2 Waveform Graphs on the screen, One each for Left and Right channels that move to the beat of the music</description>
     <description lang="es">Waveform es un sencillo visualizador que muestra 2 gráficos de ondas en la pantalla, uno para cada canal, derecho e izquierdo, que se mueven al ritmo de la música.</description>
+    <description lang="es_AR">Waveform es un sencillo visualizador que muestra 2 gráficos de ondas en la pantalla, uno para cada canal, derecho e izquierdo, que se mueven al ritmo de la música.</description>
     <description lang="es_MX">Waveform es una Visualización simple que muestra 2 Gráficos de Forma de onda en la pantalla, uno para cada canal Izquierdo y Derecho que se mueven al ritmo de la música</description>
     <description lang="et">Waveform on lihte visuaal, mis näitab ekraanil kahte signaalikujulist graafikut - üks vasaku ja teine parema kanali jaoks, mis mõlemad liiguvad muusika rütmis.</description>
     <description lang="fi">Waveform on kaksi aaltomuotograafia näyttävä yksinkertainen visualisointi. Toinen on vasemmalle ja toinen oikealle kanavalla ja ne liikkuvat musiikin tahdissa.</description>
@@ -71,6 +75,7 @@
     <description lang="ja">Waveform は画面に2波形グラフを表示するシンプルなビジュアライザーです。音楽に合わせて、右チャンネル、左チャンネルの波形が表示されます。</description>
     <description lang="ko">Waveform은 간단히 두개의 웨이브폼을 화면에 보여줍니다. 각각 왼쪽, 오른쪽 채널이고 음악의 비트에 따라 움직입니다.</description>
     <description lang="lt">Waveform yra paprasta vizualizacija katra rodo dvi garso bangas ekrane. Viena banga vieno kanalo garsas.</description>
+    <description lang="mk">Бранови е едноставна визуализација која покажува 2 брановидни графови на екран, по еден за десниот и левиот канал од музиката</description>
     <description lang="nl">Waveform is een simpele muziekvisualisatie die twee golfvormen op het scherm toont, respectievelijk voor het linker- en rechtergeluidskanaal. De golfvormen bewegen mee met de beat van de muziek.</description>
     <description lang="no">Waveform er en enkel visualiserer. Waveform viser to bølgeformede grafer på skjermen som beveger seg til musikkens rytme. En for venstre og en for høyre lydkanal.</description>
     <description lang="pl">Waveform jest prostą wizualizacją pokazującą dwie fale dźwiękowe na ekranie. Każda na jeden kanał dźwięku.</description>
@@ -83,9 +88,9 @@
     <description lang="sl">Waveform je preprosta vizualizacija, ki prikazuje valovni obliki zvoka iz levega in desnega kanala, ki sledita ritmu glasbe</description>
     <description lang="sq">Valëzuesi është një Vizualizim i thjeshtë që shfaq 2 Grafikë Valëzues në ekran, nga Një për secilin kanal, të Majtë dhe të Djathtë, që lëvizin sipas ritmit të muzikës</description>
     <description lang="sv">Waveform är en enkel visualisering som visar 2 vågformgrafer på skärmen, en vardera för vänster och höger kanal som rör sig i takt med musiken.</description>
+    <description lang="th">Waveform เป็นการแสดงผลภาพเวอร์ชวลไลเซชั่นพื้นฐานที่จะแสดงกราฟสัญญาณเสียง 2 กราฟบนหน้าจอ โดยเป็นกราฟสัญญาณเสียงซ้ายและขวาตามจังหวะของเพลง</description>
     <description lang="uk">Waveform є простою візуалізацією що показує 2 осцилограми на екрані. Кожна лінія відповідає своєму каналу і змінюється в такт з музикою.</description>
     <description lang="zh">Waveform是一个简单的可视化效果，它在屏幕上显示两个波形图，分别与音乐左右声道的节拍相呼应。</description>
     <platform>all</platform>
   </extension>
 </addon>
-

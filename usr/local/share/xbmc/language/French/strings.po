@@ -1,11 +1,11 @@
 # XBMC Media Center language file
-# XBMC-core v12.0-ALPHA7
+# XBMC-core v12.0-RC1
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
 "Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
-"POT-Creation-Date: 2012-05-04 12:46+0000\n"
-"PO-Revision-Date: 2012-11-06 16:34+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: XBMC Translation Team\n"
 "Language-Team: French (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -1048,19 +1048,19 @@ msgstr "Signets"
 
 msgctxt "#299"
 msgid "- AAC capable receiver"
-msgstr "- périphérique compatible ACC"
+msgstr "- Périphérique compatible AAC"
 
 msgctxt "#300"
 msgid "- MP1 capable receiver"
-msgstr "- périphérique compatible MP1"
+msgstr "- Périphérique compatible MP1"
 
 msgctxt "#301"
 msgid "- MP2 capable receiver"
-msgstr "- périphérique compatible MP2"
+msgstr "- Périphérique compatible MP2"
 
 msgctxt "#302"
 msgid "- MP3 capable receiver"
-msgstr "- périphérique compatible MP3"
+msgstr "- Périphérique compatible MP3"
 
 msgctxt "#303"
 msgid "Delay"
@@ -1228,15 +1228,15 @@ msgstr "Amplifier le volume lors du démultiplexage"
 
 msgctxt "#347"
 msgid "- DTS-HD capable receiver"
-msgstr "Amplificateur compatible DTS-HD"
+msgstr "- Périphérique compatible DTS-HD"
 
 msgctxt "#348"
 msgid "- Multichannel LPCM capable receiver"
-msgstr "Amplificateur compatible LPCM multicanal"
+msgstr "- Périphérique compatible LPCM multicanal"
 
 msgctxt "#349"
 msgid "- TrueHD capable receiver"
-msgstr "Amplificateur compatible TrueHD"
+msgstr "- Périphérique compatible TrueHD"
 
 msgctxt "#350"
 msgid "Programs"
@@ -2203,12 +2203,12 @@ msgid "Enter number"
 msgstr "Indiquer le numéro"
 
 msgctxt "#612"
-msgid "Bits/Sample"
-msgstr "Bits/Sample"
+msgid "Bits/sample"
+msgstr "Octets/Échantillon"
 
 msgctxt "#613"
-msgid "Sample Frequency"
-msgstr "Fréquence d'échantillonage"
+msgid "Sample rate"
+msgstr "Fréquence d'échantillonnage"
 
 msgctxt "#620"
 msgid "Audio CDs"
@@ -4171,7 +4171,7 @@ msgid "Alarm!"
 msgstr "Alarme !"
 
 msgctxt "#13212"
-msgid "Canceled with %im%is left"
+msgid "Cancelled with %im%is left"
 msgstr "Annulé avec %im%is restantes"
 
 msgctxt "#13213"
@@ -5679,7 +5679,7 @@ msgid "Bob (inverted)"
 msgstr "Bob (inversé)"
 
 msgctxt "#16024"
-msgid "Canceling..."
+msgid "Cancelling..."
 msgstr "Annulation..."
 
 msgctxt "#16025"
@@ -6550,10 +6550,6 @@ msgctxt "#19167"
 msgid "Scan for missing icons"
 msgstr "Rechercher des icônes manquantes"
 
-msgctxt "#19168"
-msgid "Switch channel without pressing OK"
-msgstr "Changer de chaîne sans valider par OK"
-
 msgctxt "#19169"
 msgid "Hide video information box"
 msgstr "Cacher la boite d'information vidéo"
@@ -6989,6 +6985,18 @@ msgstr "Conflit d'enregistrement"
 msgctxt "#19278"
 msgid "Recording error"
 msgstr "Erreur d'enregistrement"
+
+msgctxt "#19279"
+msgid "Client specific"
+msgstr "Paramètres client"
+
+msgctxt "#19280"
+msgid "Client specific settings"
+msgstr "Paramètres spécifiques au client"
+
+msgctxt "#19281"
+msgid "Confirm channel switches by pressing OK"
+msgstr "Confirmer le changement de chaîne en appuyant sur OK"
 
 msgctxt "#19499"
 msgid "Other/Unknown"
@@ -8198,6 +8206,26 @@ msgctxt "#20316"
 msgid "Sort by: ID"
 msgstr "Trier par : ID"
 
+msgctxt "#20317"
+msgid "Scanning movies using %s"
+msgstr "Analyse des films avec %s"
+
+msgctxt "#20318"
+msgid "Scanning music videos using %s"
+msgstr "Analyse des clips avec %s"
+
+msgctxt "#20319"
+msgid "Scanning tvshows using %s"
+msgstr "Analyse des séries TV avec %s"
+
+msgctxt "#20320"
+msgid "Scanning artists using %s"
+msgstr "Analyse des artistes avec %s"
+
+msgctxt "#20321"
+msgid "Scanning albums using %s"
+msgstr "Analyse des albums avec %s"
+
 msgctxt "#20324"
 msgid "Play part..."
 msgstr "Lecture partie..."
@@ -9153,6 +9181,10 @@ msgstr "Contenu du cache insuffisant pour une lecture continue"
 msgctxt "#21456"
 msgid "External storage"
 msgstr "Stockage externe"
+
+msgctxt "#21457"
+msgid "Watched episode count"
+msgstr "Nombre d'épisodes vus"
 
 msgctxt "#21460"
 msgid "Subtitle location"
@@ -10550,9 +10582,9 @@ msgctxt "#35100"
 msgid "Enable joystick and gamepad support"
 msgstr "Activer le support du joystick et du gamepad"
 
-msgctxt "#35101"
-msgid "Disable joystick when iMON is present"
-msgstr "Désactiver le joystick si iMON est présent"
+msgctxt "#35102"
+msgid "Disable joystick when device is present"
+msgstr "Désactiver la manette de jeu si présente"
 
 msgctxt "#35500"
 msgid "Location"
@@ -10721,3 +10753,7 @@ msgstr "TV et amplificateur Home Cinéma (explicite)"
 msgctxt "#36040"
 msgid "Unsupported libCEC interface version. %x is lower than the version XBMC supports (%x)"
 msgstr "Version de libCEC non supportée. %x est inférieur à la version requise par XBMC (%x)"
+
+msgctxt "#36041"
+msgid "* Item folder"
+msgstr "* Dossier de l'objet"
