@@ -55,7 +55,7 @@ apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog li
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev libass-dev fbset libplist1 pv exfat-fuse bc network-manager libbluray-dev \
-python-dbus usbutils --fix-missing
+python-dbus usbutils console-tools --fix-missing
 
 apt-get autoremove -y
 
@@ -199,10 +199,6 @@ echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
 apt-get update 
 apt-get install -y xbian-update
-
-rm -rf /lib/modules/3.2.27+
-rm -rf /lib/modules/3.2.27-cutdown+
-
 apt-get autoremove -y
 
 echo "evdev" >> /etc/modules
