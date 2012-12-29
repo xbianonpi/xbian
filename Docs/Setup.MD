@@ -132,6 +132,8 @@ rm -rf /opt/vc
 cp -r opt/vc /opt
 cp -R var/* /var/
 
+rm /etc/profile.d/raspi-config.sh
+
 # Correcting permissions
 chmod +x /etc/init.d/*
 chmod +x /usr/local/sbin/*
