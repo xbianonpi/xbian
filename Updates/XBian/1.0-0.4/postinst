@@ -524,8 +524,10 @@ EOF
 	ldconfig >/dev/null 2>/dev/null
 
 	mv /home/xbian/Splash.png /usr/local/share/xbmc/media/Splash.png
-	mv /home/xbian/SplashCristmass.png /usr/local/share/xbmc/media/SplashCristmass.png
+	mv /home/xbian/SplashChristmass.png /usr/local/share/xbmc/media/SplashChristmass.png
 
+	perl -p -i -e 's/\r\n$/\n/g' /boot/config.txt
+	
 	echo "6) Make kernel 3.6.11 the default"
 	cp /boot/kernel3_6_11.img /boot/kernel.img
 
