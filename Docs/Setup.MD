@@ -197,6 +197,10 @@ echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
 apt-get update 
 apt-get install -y xbian-update
+
+rm -rf /lib/modules/3.2.27+
+rm -rf /lib/modules/3.2.27-cutdown+
+
 apt-get autoremove -y
 
 echo "evdev" >> /etc/modules
