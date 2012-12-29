@@ -51,7 +51,7 @@ gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 triggerhappy libtagc
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
 libxdmcp6 make libx11-6
 
-apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog libsamplerate0 \
+apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog \
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev libass-dev fbset libplist1 pv exfat-fuse bc network-manager libbluray-dev \
