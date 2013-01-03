@@ -5,4 +5,3 @@ gpu_mem_256=100
 gpu_mem_512=100
 sdram_freq=400
 over_voltage=0
-

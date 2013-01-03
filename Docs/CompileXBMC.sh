@@ -132,17 +132,17 @@
 	cd /opt/xbmc/
 
     	# Applying patches
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/TPNno.patch
-    	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/EGLRes.patch
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/XBianSysSum.patch
-        wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/Patches/xbmc/NetworkCachingRedux.patch
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/TPNno.patch
+    	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/EGLRes.patch
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/XBianSysSum.patch
+        wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/NetworkCachingRedux.patch
    	patch -p1 < TPNno.patch
     	patch -p1 < EGLRes.patch
 	patch -p1 < XBianSysSum.patch
         patch -p1 < NetworkCachingRedux.patch
 
 	# Replacing the default splash screen
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha4/usr/local/share/xbmc/media/Splash.png
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/usr/local/share/xbmc/media/Splash.png
 	mv Splash.png media/
 
 	sed -i 's/USE_BUILDROOT=1/USE_BUILDROOT=0/' tools/rbp/setup-sdk.sh

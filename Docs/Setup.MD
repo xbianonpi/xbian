@@ -32,7 +32,7 @@ xserver-xorg-video-fbdev xserver-xorg-input-synaptics xserver-xorg-input-evdev x
 lxappearance lxde lxde-common lxde-core lxde-icon-theme lxinput lxmenu-data lxpanel lxpolkit lxrandr lxsession \
 lxsession-edit lxshortcut lxtask lxterminal gnome-icon-theme gnome-themes-standard libgnome-keyring-common \
 libgnome-keyring0:armhf libsoup-gnome2.4-1:armhf idle desktop-base desktop-file-utils dbus-x11 dictionaries-common \
-fbset fonts-freefont-ttf gconf2 gdb gtk2-engines:armhf hicolor-icon-theme libgdk-pixbuf2.0-0:armhf \
+fonts-freefont-ttf gconf2 gdb gtk2-engines:armhf hicolor-icon-theme libgdk-pixbuf2.0-0:armhf \
 libgl1-mesa-glx:armhf menu omxplayer penguinspuzzle x11-common xdg-utils xkb-data libatasmart4:armhf \
 libcairo-gobject2:armhf libcups2:armhf aptitude-common curl debconf-utils debian-reference-common debian-reference-en \
 dphys-swapfile dpkg-dev fake-hwclock g++ gcc hardlink keyboard-configuration libatasmart4:armhf libblas3 libblas3gf \
@@ -40,14 +40,14 @@ libbluetooth3:armhf libboost-iostreams1.50.0 libdrm2:armhf libgfortran3:armhf li
 libiw30:armhf liblapack3 liblapack3gf libluajit-5.1-common libpci3:armhf libpolkit-gobject-1-0:armhf libsgutils2-2 \
 libusb-1.0-0:armhf luajit menu-xdg module-init-tools ncdu pciutils pkg-config python-rpi.gpio python3 python3-minimal \
 python3-numpy python3-rpi.gpio python3.2 python3.2-minimal raspi-copies-and-fills rsyslog shared-mime-info strace \
-usbutils dillo fontconfig-config libbluetooth3 libfltk1.3:armhf libfontconfig1:armhf libfreetype6:armhf \
+dillo fontconfig-config libbluetooth3 libfltk1.3:armhf libfontconfig1:armhf \
 libjbig2dec0 libopenjpeg2 libxext6 libxft2 libxinerama1 libxrender1 mupdf ttf-dejavu-core fuse gettext-base \
 libasprintf0c2 libasyncns0 libaudit0 libcaca0 libdirectfb-1.2-9 libflac8 libfm-data libfuse2 libgif4 libid3tag0 \
 libjavascriptcoregtk-3.0-0 libjson0 libmad0 libmenu-cache1 libmikmod2 libmtdev1 libogg0 libpciaccess0 libportmidi0 \
 libsndfile1 libts-0.0-0 libvorbis0a libvorbisenc2 libvorbisfile3 libvte-common libwebkitgtk-3.0-common libwebp2 \
 libwnck-common libxkbfile1 python-support tcl8.5 tsconf zenity-common tasksel tasksel-data libept1.4.12 libxapian22 \
 libxau6 libxcb1 libxdmcp6:armhf raspi-config ed kbd krb5-locales alsa-base alsa-utils gcc-4.4-base:armhf \
-gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 libsamplerate0 triggerhappy libtagcoll2-dev libgmp10 \
+gcc-4.5-base:armhf gcc-4.6 gcc-4.6-base libasound2 libgomp1 triggerhappy libtagcoll2-dev libgmp10 \
 libmpc2 libmpfr4 libtirpc1 libp11-kit0 libswitch-perl perl perl-modules tasksel tasksel-data libx11-data libxau6 libxcb1 \
 libxdmcp6 make libx11-6
 
@@ -55,7 +55,7 @@ apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog li
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev libass-dev fbset libplist1 pv exfat-fuse bc network-manager libbluray-dev \
-python-dbus usbutils libbluray-dev --fix-missing
+python-dbus usbutils console-tools --fix-missing
 
 apt-get autoremove -y
 
@@ -117,7 +117,7 @@ sed -i 's/raspberrypi/xbian/g' /etc/hosts
 
 #Clone xbian git
 cd /home/xbian/
-git clone --depth 5 -b xbian-alpha4 https://github.com/xbianonpi/xbian.git source
+git clone --depth 5 -b xbian-alpha5 https://github.com/xbianonpi/xbian.git source
 cd source
 
 #Installation
@@ -131,6 +131,8 @@ cp -R home/* /home/
 rm -rf /opt/vc
 cp -r opt/vc /opt
 cp -R var/* /var/
+
+rm /etc/profile.d/raspi-config.sh
 
 # Correcting permissions
 chmod +x /etc/init.d/*
@@ -191,6 +193,9 @@ echo "" > /home/xbian/.bash_history
 #Removing swap file & XBian repo clone
 rm /var/swap
 rm -rf /home/xbian/source
+
+#Removing man pages
+rm -rf /usr/local/man /usr/local/share/man /usr/share/man
 
 #Add apt sources
 echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
