@@ -701,6 +701,8 @@ kernel/drivers/media/dvb/dvb-usb/dvb-usb-az6007.ko: kernel/drivers/media/dvb/dvb
 kernel/drivers/media/dvb/dvb-usb/dvb-usb-az6027.ko: kernel/drivers/media/dvb/frontends/stb6100.ko kernel/drivers/media/dvb/frontends/stb0899.ko kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
 kernel/drivers/media/dvb/dvb-usb/dvb-usb-lmedm04.ko: kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
 kernel/drivers/media/dvb/dvb-usb/dvb-usb-technisat-usb2.ko: kernel/drivers/media/dvb/frontends/stv090x.ko kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
+kernel/drivers/media/dvb/dvb-usb/dvb-usb-it913xv1.ko: kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
+kernel/drivers/media/dvb/dvb-usb/dvb-usb-it913xv2.ko: kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
 kernel/drivers/media/dvb/dvb-usb/dvb-usb-rtl28xxu.ko: kernel/drivers/media/dvb/frontends/rtl2830.ko kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
 kernel/drivers/media/dvb/dvb-usb/dvb-usb-af9035.ko: kernel/drivers/media/dvb/dvb-usb/dvb-usb.ko kernel/drivers/media/dvb/dvb-core/dvb-core.ko kernel/drivers/media/rc/rc-core.ko
 kernel/drivers/media/dvb/siano/smsmdtv.ko: kernel/drivers/media/rc/rc-core.ko
@@ -773,6 +775,8 @@ kernel/drivers/hid/hid-wacom.ko:
 kernel/drivers/hid/hid-waltop.ko:
 kernel/drivers/hid/hid-wiimote.ko: kernel/drivers/input/ff-memless.ko
 kernel/drivers/staging/media/lirc/lirc_rpi.ko: kernel/drivers/media/rc/lirc_dev.ko
+kernel/drivers/staging/media/lirc/lirc_rp1.ko: kernel/drivers/media/rc/lirc_dev.ko
+kernel/drivers/staging/media/lirc/lirc_xbox.ko: kernel/drivers/media/rc/lirc_dev.ko
 kernel/drivers/staging/winbond/w35und.ko: kernel/net/mac80211/mac80211.ko kernel/net/wireless/cfg80211.ko
 kernel/drivers/staging/wlan-ng/prism2_usb.ko: kernel/net/wireless/cfg80211.ko
 kernel/drivers/staging/rtl8712/r8712u.ko:

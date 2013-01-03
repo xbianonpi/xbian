@@ -4979,6 +4979,16 @@ alias usb:v13D3p3275d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_az6027
 alias usb:v3344p22F0d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_lmedm04
 alias usb:v3344p1120d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_lmedm04
 alias usb:v3344p1122d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_lmedm04
+alias usb:v048Dp9006d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv1
+alias usb:v048Dp9005d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv1
+alias usb:v1B80pE411d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv1
+alias usb:v048Dp9135d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv1
+alias usb:v1B80pE409d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv1
+alias usb:v048Dp9006d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv2
+alias usb:v048Dp9005d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv2
+alias usb:v1B80pE411d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv2
+alias usb:v048Dp9135d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv2
+alias usb:v1B80pE409d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_it913xv2
 alias usb:v0CCDp00B3d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_rtl28xxu
 alias usb:v1F4DpB803d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_rtl28xxu
 alias usb:v0CCDp00A9d*dc*dsc*dp*ic*isc*ip*in* dvb_usb_rtl28xxu
@@ -5336,6 +5346,9 @@ alias hid:b0003g*v0000172Fp00000037 hid_waltop
 alias hid:b0003g*v0000172Fp00000034 hid_waltop
 alias hid:b0003g*v0000172Fp00000032 hid_waltop
 alias hid:b0005g*v0000057Ep00000306 hid_wiimote
+alias usb:vFFFFpFFFFd*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
+alias usb:v045Ep0284d*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
+alias usb:v040Bp6521d*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
 alias usb:v1131p2035d*dc*dsc*dp*ic*isc*ip*in* w35und
 alias usb:v18E8p6233d*dc*dsc*dp*ic*isc*ip*in* w35und
 alias usb:v18E8p6230d*dc*dsc*dp*ic*isc*ip*in* w35und
