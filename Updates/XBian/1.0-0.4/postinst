@@ -455,6 +455,7 @@ EOF
 		fi
 	else
 		echo -e "<sources>\n    <files>\n\t<source>\n\t\t<name>XBMC HUB Fusion</name>\n\t\t<path pathversion=\"1\">http://fusion.xbmchub.com/</path>\n\t</source>\n    </files>\n</sources>" >> /home/xbian/.xbmc/userdata/sources.xml
+		chown xbian:xbian /home/xbian/.xbmc/userdata/sources.xml
 		if [ $(cat /home/xbian/.xbmc/userdata/sources.xml | grep "http://fusion.xbmchub.com/" | wc -l) -eq 1 ];	then
 			echo "Success: added xbmc fuse" >> /home/xbian/update.log;
 		else
@@ -525,8 +526,6 @@ EOF
 
 	mv /home/xbian/Splash.png /usr/local/share/xbmc/media/Splash.png
 	mv /home/xbian/SplashChristmass.png /usr/local/share/xbmc/media/SplashChristmass.png
-
-	perl -p -i -e 's/\r\n$/\n/g' /boot/config.txt
 	
 	echo "6) Make kernel 3.6.11 the default"
 	cp /boot/kernel3_6_11.img /boot/kernel.img
@@ -545,4 +544,4 @@ EOF
 	echo "---UPDATE LOG---"
 	cat "/home/xbian/update.log"
 
-fi
+fi 
