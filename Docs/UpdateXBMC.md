@@ -7,7 +7,7 @@ sudo mv /usr/local/lib/xbmc /usr/local/lib/xbmc.bak<br />
 \# Cloning XBian GitHub<br />
 sudo rm -rf /home/xbian/source<br />
 cd /home/xbian/<br />
-git clone --depth 5 https://github.com/Koenkk/xbian.git source<br />
+git clone --depth 5 -b xbian-alpha5 https://github.com/xbianonpi/xbian.git source<br />
 cd source<br />
 <br />
 \# Installing the new XBMC build<br />
