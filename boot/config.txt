@@ -1,7 +1,9 @@
 arm_freq=840
 core_freq=375
 disable_overscan=1
-gpu_mem_256=100
-gpu_mem_512=100
+gpu_mem_256=160
+gpu_mem_512=316
+cma_lwm=16
+cma_hwm=32
 sdram_freq=400
 over_voltage=0
