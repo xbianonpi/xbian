@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -23,7 +23,7 @@ msgstr "Hostname VU+ ou endereço IP"
 
 msgctxt "#30002"
 msgid "Streaming Port"
-msgstr "Porta Streaming"
+msgstr "Porta de Streaming"
 
 msgctxt "#30003"
 msgid "Username"
@@ -35,11 +35,11 @@ msgstr "Senha"
 
 msgctxt "#30007"
 msgid "Response timeout in seconds"
-msgstr "Timeout Resposta em segundos"
+msgstr "Tempo limite para resposta em segundos"
 
 msgctxt "#30008"
 msgid "Icon Path"
-msgstr "Icone Caminho"
+msgstr "Caminho do ícone"
 
 msgctxt "#30010"
 msgid "Update Interval in minutes"
@@ -51,27 +51,27 @@ msgstr "Limpar Timerlist automaticamente"
 
 msgctxt "#30012"
 msgid "Webinterface Port"
-msgstr "Porta Webinterface"
+msgstr "Porta da Interface Web"
 
 msgctxt "#30013"
 msgid "Zap before channelswitch (i.e. for Single Tuner boxes)"
-msgstr "Zap antes trocar canal (i.e. para tuner simples)"
+msgstr "Zapear antes de trocar canal (isto é, para conversores com sintonizador único)"
 
 msgctxt "#30014"
 msgid "Folder for channeldata"
-msgstr "Pasta para dados do canais"
+msgstr "Pasta para dados dos canais"
 
 msgctxt "#30015"
 msgid "Check for bouquett updates"
-msgstr "Verifique por atualizações bouquet"
+msgstr "Verificar atualizações de bouquett"
 
 msgctxt "#30016"
 msgid "Check for channel updates"
-msgstr "Checar pro atualização do canal"
+msgstr "Verificar atualizações de canal"
 
 msgctxt "#30017"
 msgid "Use only the DVB boxes' current recording path"
-msgstr "Use somente boxes DVB caminho gravações atual"
+msgstr "Usar somente o caminho de gravação atual do conversor DVB"
 
 msgctxt "#30018"
 msgid "General"
@@ -91,15 +91,15 @@ msgstr "HTTP"
 
 msgctxt "#30022"
 msgid "Recordings / Timer"
-msgstr "Gravações/Agendamentos"
+msgstr "Gravações / Agendamentos"
 
 msgctxt "#30023"
 msgid "Recording folder on the receiver"
-msgstr "Pasta de Gravações no receiver"
+msgstr "Pasta de gravações no receptor"
 
 msgctxt "#30024"
 msgid "Send DeepStandby-Command"
-msgstr "Enviar comando Standby Profundo"
+msgstr "Enviar comando de Standby Profundo"
 
 msgctxt "#30025"
 msgid "Fetch only one TV bouquet"
@@ -111,8 +111,8 @@ msgstr "TV-Bouquet"
 
 msgctxt "#30500"
 msgid "Disconnected from '%s'"
-msgstr "Disconectado de  '%s'"
+msgstr "Desconectado de  '%s'"
 
 msgctxt "#30501"
 msgid "Reconnected to '%s'"
-msgstr "Reconectado para  '%s'"
+msgstr "Reconectado a '%s'"

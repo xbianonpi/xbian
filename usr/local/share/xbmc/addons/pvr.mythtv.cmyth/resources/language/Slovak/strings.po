@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MythTV cmyth PVR Client
 # Addon id: pvr.mythtv.cmyth
-# Addon version: 0.5.0
+# Addon version: 1.6.7
 # Addon Provider: Christian Fetzer, Jean-Luc Barrière, Tonny Petersen
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "MythTV Backend Hostname or IP"
-msgstr "Hostname alebo IP addresa MythTV backendu"
+msgstr "Názov hostiteľa alebo IP addresa MythTV backendu"
 
 msgctxt "#30001"
 msgid "MythTV Backend Port"
@@ -27,11 +27,11 @@ msgstr "Sieťový port MythTV backendu"
 
 msgctxt "#30002"
 msgid "MythTV Database Username"
-msgstr "Užívateľské meno MythTV databázy"
+msgstr "Používateľské meno MythTV databázy"
 
 msgctxt "#30003"
 msgid "MythTV Database Password"
-msgstr "Heslo užívateľa MythTV databázy"
+msgstr "Heslo používateľa MythTV databázy"
 
 msgctxt "#30004"
 msgid "MythTV Database Databasename"
@@ -39,7 +39,7 @@ msgstr "Názov databázy MythTV"
 
 msgctxt "#30005"
 msgid "Include more debug information in the log file"
-msgstr "Zahrnúť viac debug informácií v logu"
+msgstr "Zahrnúť viac ladiacich informácií do denníka"
 
 msgctxt "#30006"
 msgid "Enable Live TV"
@@ -47,4 +47,4 @@ msgstr "Povoliť Live TV"
 
 msgctxt "#30007"
 msgid "Allow Live TV to move scheduled shows"
-msgstr "Povoliť Live TV presunúť plánované relácie"
+msgstr "Umožniť Live TV rozhraniu presunúť plánované relácie"

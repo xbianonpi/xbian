@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MythTV cmyth PVR Client
 # Addon id: pvr.mythtv.cmyth
-# Addon version: 0.5.0
+# Addon version: 1.6.7
 # Addon Provider: Christian Fetzer, Jean-Luc Barrière, Tonny Petersen
 msgid ""
 msgstr ""
@@ -19,23 +19,23 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "MythTV Backend Hostname or IP"
-msgstr "Nome do servidor MythTV Backend ou IP"
+msgstr "Nome do servidor ou IP da Backend MythTV"
 
 msgctxt "#30001"
 msgid "MythTV Backend Port"
-msgstr "Porta MythTV Backend"
+msgstr "Porta da Backend MythTV"
 
 msgctxt "#30002"
 msgid "MythTV Database Username"
-msgstr "Utilizador da Base de Dados MythTV "
+msgstr "Nome Utilizador da Base de Dados MythTV "
 
 msgctxt "#30003"
 msgid "MythTV Database Password"
-msgstr "Palavra Passe da Base de Dados MythTV"
+msgstr "Palavra-passe da Base de Dados MythTV"
 
 msgctxt "#30004"
 msgid "MythTV Database Databasename"
-msgstr "Nome da base de dados de MythTV"
+msgstr "Nome da base de dados MythTV"
 
 msgctxt "#30005"
 msgid "Include more debug information in the log file"
@@ -47,4 +47,4 @@ msgstr "Activar TV em Directo"
 
 msgctxt "#30007"
 msgid "Allow Live TV to move scheduled shows"
-msgstr "Permitir TV em Directo para mover programas agendados"
+msgstr "Permitir que TV em Directo mova programas agendados"

@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -33,6 +33,10 @@ msgctxt "#30003"
 msgid "Include Radio"
 msgstr "Includi Radio"
 
+msgctxt "#30004"
+msgid "Fast channel switching (don't stop timeshift)"
+msgstr "Cambio veloce canale (non ferma il timeshift)"
+
 msgctxt "#30005"
 msgid "Connect timeout (s)"
 msgstr "Timeout per la connessione (s)"
@@ -57,6 +61,10 @@ msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
 msgstr "Tempo di attesa dopo il tuning di un canale (ms)"
 
+msgctxt "#30015"
+msgid "Streaming method"
+msgstr "Metodologia di streaming"
+
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
 msgstr "Account utente Windows (SMB)"
@@ -64,6 +72,10 @@ msgstr "Account utente Windows (SMB)"
 msgctxt "#30017"
 msgid "Windows password (SMB)"
 msgstr "Password Windows (SMB)"
+
+msgctxt "#30018"
+msgid "Use RTSP streaming"
+msgstr "Usa streaming RTSP"
 
 msgctxt "#30040"
 msgid "Connection"
@@ -85,6 +97,18 @@ msgctxt "#30051"
 msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
 msgstr "La tua versione di TVServerXBMC è troppo vecchia. Per favore, aggiornala a '%s' o superiore!"
 
+msgctxt "#30052"
+msgid "Recording playback failed. Empty URL of filename."
+msgstr "La riproduzione della registrazione non è riuscita. URL o nome del file vuoti."
+
+msgctxt "#30060"
+msgid "All cards are busy"
+msgstr "Tutte le card sono occupate"
+
+msgctxt "#30061"
+msgid "Channel is scrambled"
+msgstr "Il canale è criptato"
+
 msgctxt "#30062"
 msgid "No video or audio detected"
 msgstr "Nessun video o audio trovato"
@@ -96,6 +120,38 @@ msgstr "Nessun segnale trovato"
 msgctxt "#30064"
 msgid "Unknown error"
 msgstr "Errore sconosciuto"
+
+msgctxt "#30065"
+msgid "Unable to start graph"
+msgstr "Impossibile inizializzare grafico"
+
+msgctxt "#30066"
+msgid "Unknown channel"
+msgstr "Canale sconosciuto"
+
+msgctxt "#30067"
+msgid "No tuning details"
+msgstr "Nessun dettaglio di sintonizzazione"
+
+msgctxt "#30068"
+msgid "Channel is not mapped to any card"
+msgstr "Il canale non è mappata in nessuna card"
+
+msgctxt "#30069"
+msgid "Card is disabled"
+msgstr "La card è disabilitata"
+
+msgctxt "#30070"
+msgid "Connection to slave failed"
+msgstr "Connessione allo slave fallita"
+
+msgctxt "#30071"
+msgid "Not the owner"
+msgstr "Non sei il proprietario"
+
+msgctxt "#30072"
+msgid "Graph building failed"
+msgstr "Costruzione del grafico fallita"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"

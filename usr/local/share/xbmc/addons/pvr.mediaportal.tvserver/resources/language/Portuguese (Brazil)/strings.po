@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -19,11 +19,11 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
-msgstr "Nome do Host do Mediaportal"
+msgstr "Nome do host do Mediaportal"
 
 msgctxt "#30001"
 msgid "Mediaportal XBMC plugin Port"
-msgstr "Porta do Plugin XBMC Mediaportal"
+msgstr "Porta do plugin XBMC do Mediaportal"
 
 msgctxt "#30002"
 msgid "Free-to-air only"
@@ -51,7 +51,7 @@ msgstr "Importar somente canais de rádio do grupo"
 
 msgctxt "#30008"
 msgid "Convert hostname to IP-adress"
-msgstr "Converter Hostname para Endereço IP"
+msgstr "Converter nome do host para endereço IP"
 
 msgctxt "#30009"
 msgid "EPG: Read genre strings (slow)"
@@ -67,15 +67,15 @@ msgstr "Método Streaming"
 
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
-msgstr "Conta Usuário Windows (SMB)"
+msgstr "Conta de usuário do Windows (SMB)"
 
 msgctxt "#30017"
 msgid "Windows password (SMB)"
-msgstr "Senha Windows (SMB)"
+msgstr "Senha do Windows (SMB)"
 
 msgctxt "#30018"
 msgid "Use RTSP streaming"
-msgstr "Usar Streaming RTSP"
+msgstr "Usar streaming RTSP"
 
 msgctxt "#30040"
 msgid "Connection"
@@ -87,19 +87,19 @@ msgstr "MediaPortal"
 
 msgctxt "#30042"
 msgid "Playback"
-msgstr "Reproduzir"
+msgstr "Reprodução"
 
 msgctxt "#30050"
 msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
-msgstr "Sua versão TVServerXBMC '%s' é muito antiga. Por favor atualize para '%s' ou maior!"
+msgstr "Seu TVServerXBMC versão '%s' é muito antigo. Por favor, atualize para '%s' ou maior!"
 
 msgctxt "#30051"
 msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
-msgstr "Sua versão TVServerXBMC é muito antiga. Por favor atualize para '%s' ou maior!"
+msgstr "A versão do seu TVServerXBMC é muito antiga. Por favor, atualize para '%s' ou maior!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
-msgstr "Gravação falhou. URL vazia ou nome do arquivo."
+msgstr "Falha na gravação. URL do nome do arquivo vazia."
 
 msgctxt "#30060"
 msgid "All cards are busy"
@@ -151,7 +151,7 @@ msgstr "Não é o proprietário"
 
 msgctxt "#30072"
 msgid "Graph building failed"
-msgstr "Construindo Gráficos falhou "
+msgstr "Falha na construção do gráfico"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"
@@ -159,8 +159,8 @@ msgstr "Encoder SW faltando"
 
 msgctxt "#30074"
 msgid "No free disk space"
-msgstr "Nenhum espaço de disco livre"
+msgstr "Sem espaço livre no disco"
 
 msgctxt "#30075"
 msgid "No PMT found"
-msgstr "Nenhum PMT Encontrado"
+msgstr "Nenhum PMT encontrado"

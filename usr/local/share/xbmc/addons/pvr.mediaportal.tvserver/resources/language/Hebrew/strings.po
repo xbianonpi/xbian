@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -47,7 +47,7 @@ msgstr "ייבא ערוצי טלוויזיה רק מקבוצת"
 
 msgctxt "#30007"
 msgid "Import only Radio Channels from group"
-msgstr "ייבא ערוצי רדיו רק מקבוצת"
+msgstr "יבא רק תחנות רדיו מקבוצה"
 
 msgctxt "#30008"
 msgid "Convert hostname to IP-adress"

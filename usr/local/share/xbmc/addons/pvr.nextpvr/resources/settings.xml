@@ -6,4 +6,9 @@
     <setting id="port" type="number" label="30001" default="8866" />
     <setting id="pin" type="text" label="30002" default="0000" />
   </category>
+
+  <!-- advanced -->
+  <category label="30041">
+    <setting id="usetimeshift" type="bool" label="30003" default="false"/>
+  </category>
 </settings>

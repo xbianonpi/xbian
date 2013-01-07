@@ -1,8 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: VDR VNSI Client
 # Addon id: pvr.vdr.vnsi
-# Addon version: 1.0.0
-# Addon Provider: Alwin Esch, Team XBMC
+# Addon version: 1.6.4
+# Addon Provider: FernetMenta, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
@@ -192,3 +192,15 @@ msgstr "Kanalen scan - Geanuleerd"
 msgctxt "#30043"
 msgid "Channel search - Error"
 msgstr "Kanalen scan - Fout"
+
+msgctxt "#30044"
+msgid "Lost connection to VDR Server"
+msgstr "Connectie naar VDR Server Verloren"
+
+msgctxt "#30045"
+msgid "Connection to VDR Server restored"
+msgstr "Connectie naar VDR Server Hervat"
+
+msgctxt "#30046"
+msgid "Create channel groups automatically on the server"
+msgstr "Automatisch Kanaal Groepen maken op de server"

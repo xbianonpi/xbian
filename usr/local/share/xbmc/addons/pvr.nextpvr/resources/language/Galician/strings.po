@@ -1,0 +1,58 @@
+# XBMC Media Center language file
+# Addon Name: NextPVR PVR Client
+# Addon id: pvr.nextpvr
+# Addon version: 1.6.3
+# Addon Provider: Graeme Blackley
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
+"Report-Msgid-Bugs-To: http://trac.xbmc.org/\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: XBMC Translation Team\n"
+"Language-Team: Galician (http://www.transifex.com/projects/p/XBMC-Main-Frodo/language/gl/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: gl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "NextPVR Hostname"
+msgstr "Nome do host NextPVR"
+
+msgctxt "#30001"
+msgid "NextPVR Port (usually 8866 or 7799)"
+msgstr "Porto de NextPVR (en xeral 8866 ou 7799)"
+
+msgctxt "#30002"
+msgid "NextPVR PinCode"
+msgstr "Código PIN de NextPRV"
+
+msgctxt "#30003"
+msgid "Enable TimeShift with Live TV"
+msgstr "Habilitar TimeShift na TV ao vivo"
+
+msgctxt "#30040"
+msgid "Connection"
+msgstr "Conexión"
+
+msgctxt "#30041"
+msgid "Advanced"
+msgstr "Avanzado"
+
+msgctxt "#30050"
+msgid "NextPVR server is too old."
+msgstr "O servidor NextPRV é demasiado vello."
+
+msgctxt "#30051"
+msgid "Upgrade to '%s' or higher!"
+msgstr "Actualizar a '%s' ou superior!"
+
+msgctxt "#30052"
+msgid "Connection failed. Incorrect PIN?"
+msgstr "A conexión fallou. O PIN é incorrecto?"
+
+msgctxt "#30053"
+msgid "Tuner no longer available"
+msgstr "O sintonizador non está dispoñíbel"
