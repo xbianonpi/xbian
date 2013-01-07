@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: DVBViewer Client
 # Addon id: pvr.dvbviewer
-# Addon version: 0.1.7
+# Addon version: 1.6.5
 # Addon Provider: jdembski, A600
 msgid ""
 msgstr ""
@@ -17,6 +17,10 @@ msgstr ""
 "Language: cs\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
+msgctxt "#30000"
+msgid "DVBViewer Recording Service IP Address"
+msgstr "IP adresa služby nahrávání DVBViewer"
+
 msgctxt "#30001"
 msgid "Webinterface Port"
 msgstr "Port webového rozhraní"
@@ -25,6 +29,10 @@ msgctxt "#30002"
 msgid "Streaming Port"
 msgstr "Port proudového vysílání"
 
+msgctxt "#30003"
+msgid "Recordings Port"
+msgstr "Port nahrávání"
+
 msgctxt "#30004"
 msgid "Username"
 msgstr "Uživatelské jméno"
@@ -32,3 +40,19 @@ msgstr "Uživatelské jméno"
 msgctxt "#30005"
 msgid "Password"
 msgstr "Heslo"
+
+msgctxt "#30006"
+msgid "Load channels from favourites.xml instead of from channels.dat"
+msgstr "Načíst kanály z favourites.xml místo channels.dat"
+
+msgctxt "#30007"
+msgid "Select the favourites.xml file"
+msgstr "Vyberte soubor favourites.xml"
+
+msgctxt "#30500"
+msgid "Can't connect to the Recording Service"
+msgstr "Nelze se spojit se službou nahrávání"
+
+msgctxt "#30501"
+msgid "Recording Service version 1.%d or higher required"
+msgstr "Vyžadována služba nahrávání verze 1.%d nebo novější"

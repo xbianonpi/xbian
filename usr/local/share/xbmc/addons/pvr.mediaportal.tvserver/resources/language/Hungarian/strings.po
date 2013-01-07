@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -23,7 +23,7 @@ msgstr "MediaPortal Kiszolgálónév"
 
 msgctxt "#30001"
 msgid "Mediaportal XBMC plugin Port"
-msgstr "MediaPortal XBMC bővítmény"
+msgstr "MediaPortal XBMC bővítmény port"
 
 msgctxt "#30002"
 msgid "Free-to-air only"
@@ -55,11 +55,11 @@ msgstr "Kiszolgálónév konvertálása IP címre"
 
 msgctxt "#30009"
 msgid "EPG: Read genre strings (slow)"
-msgstr "EPG: Olvassa a műfaj sztringeket (lassú)"
+msgstr "EPG: Olvassa a műfaj karakterláncokat (lassú)"
 
 msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
-msgstr "Csastornahangolás utáni várakozási idő (milliszekundum)"
+msgstr "Csatornahangolás utáni várakozási idő (milliszekundum)"
 
 msgctxt "#30015"
 msgid "Streaming method"
@@ -75,7 +75,7 @@ msgstr "Windows jelszó (SMB)"
 
 msgctxt "#30018"
 msgid "Use RTSP streaming"
-msgstr "Használja az RTSP streaming-et"
+msgstr "Használja az RTSP átvitelt"
 
 msgctxt "#30040"
 msgid "Connection"
@@ -123,7 +123,7 @@ msgstr "Ismeretlen hiba"
 
 msgctxt "#30065"
 msgid "Unable to start graph"
-msgstr "Nem lehet elindítani a grafikákat"
+msgstr "Nem lehet elindítani a dekódolást"
 
 msgctxt "#30066"
 msgid "Unknown channel"
@@ -151,11 +151,11 @@ msgstr "Nem tulajdonos"
 
 msgctxt "#30072"
 msgid "Graph building failed"
-msgstr "Grafikák felépítése nem sikerült"
+msgstr "Dekódoló felépítése nem sikerült"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"
-msgstr "Szoftveres enkóder hiányzik"
+msgstr "Szoftveres kódoló hiányzik"
 
 msgctxt "#30074"
 msgid "No free disk space"

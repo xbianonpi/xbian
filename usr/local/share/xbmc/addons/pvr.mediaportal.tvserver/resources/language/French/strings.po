@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -91,11 +91,11 @@ msgstr "Lecture"
 
 msgctxt "#30050"
 msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
-msgstr "La version '%s' de TVServerXBMC est trop ancienne. Merci de mettre à jour en '%s' ou supérieure !"
+msgstr "Votre version '%s' de TVServerXBMC est obsolète. Merci de mettre à jour en '%s' ou supérieure !"
 
 msgctxt "#30051"
 msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
-msgstr "Votre version de TVServerXBMC est trop ancienne. Merci de mettre à jour en '%s' ou supérieure !"
+msgstr "Votre version de TVServerXBMC est obsolète. Merci de mettre à jour en '%s' ou supérieure !"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
@@ -111,11 +111,11 @@ msgstr "La chaîne est cryptée"
 
 msgctxt "#30062"
 msgid "No video or audio detected"
-msgstr "Pas de vidéo ou d'audio détecté"
+msgstr "Pas de vidéo ou d'audio détectés"
 
 msgctxt "#30063"
 msgid "No signal detected"
-msgstr "Pas de signal"
+msgstr "Aucun signal"
 
 msgctxt "#30064"
 msgid "Unknown error"

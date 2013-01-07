@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -75,7 +75,7 @@ msgstr "Use only the DVB boxes' current recording path"
 
 msgctxt "#30018"
 msgid "General"
-msgstr "General"
+msgstr "Агульныя"
 
 msgctxt "#30019"
 msgid "Channels"

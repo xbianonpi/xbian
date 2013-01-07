@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Tvheadend HTSP Client
 # Addon id: pvr.hts
-# Addon version: 1.1.0
+# Addon version: 1.6.11
 # Addon Provider: Lars Op den Kamp, Team XBMC
 msgid ""
 msgstr ""
@@ -44,6 +44,30 @@ msgstr "Časový limit pre spojenie v sekundách"
 msgctxt "#30007"
 msgid "Response timeout in seconds"
 msgstr "Časový limit pre odpoveď v sekundách"
+
+msgctxt "#30100"
+msgid "Tvheadend transcoding settings"
+msgstr "Nastavenie Tvheadend prekódovania"
+
+msgctxt "#30101"
+msgid "Transcoding settings"
+msgstr "Nastavenie prekódovania"
+
+msgctxt "#30102"
+msgid "Enable transcoding"
+msgstr "Povoliť prekódovanie"
+
+msgctxt "#30103"
+msgid "Audio codec"
+msgstr "Koded audia"
+
+msgctxt "#30104"
+msgid "Video codec"
+msgstr "Kodek videa"
+
+msgctxt "#30105"
+msgid "Resolution"
+msgstr "Rozlíšenie"
 
 msgctxt "#30500"
 msgid "Disconnected from '%s'"

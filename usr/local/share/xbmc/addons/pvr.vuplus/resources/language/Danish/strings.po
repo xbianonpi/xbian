@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -35,19 +35,19 @@ msgstr "Adgangskode"
 
 msgctxt "#30007"
 msgid "Response timeout in seconds"
-msgstr "Tilbagemeldingstimeout i sekunder"
+msgstr "Tidsfrist for tilbagemelding i sekunder"
 
 msgctxt "#30008"
 msgid "Icon Path"
-msgstr "Ikonsti"
+msgstr "Ikon-sti"
 
 msgctxt "#30010"
 msgid "Update Interval in minutes"
-msgstr "Opdater intervaller i minutter"
+msgstr "Opdateringsinterval i minutter"
 
 msgctxt "#30011"
 msgid "Automatic Timerlist Cleanup"
-msgstr "Autimatisk timerliste rengøring"
+msgstr "Automatisk oprydning af Timerliste"
 
 msgctxt "#30012"
 msgid "Webinterface Port"
@@ -55,7 +55,7 @@ msgstr "Web-grænsefladeport"
 
 msgctxt "#30013"
 msgid "Zap before channelswitch (i.e. for Single Tuner boxes)"
-msgstr "Zappe før kanalskift (dvs. enkeltunerbokse)"
+msgstr "Zap før kanalskift (fx. for enkelttuner-bokse)"
 
 msgctxt "#30014"
 msgid "Folder for channeldata"
@@ -63,15 +63,15 @@ msgstr "Mappe til kanaldata"
 
 msgctxt "#30015"
 msgid "Check for bouquett updates"
-msgstr "Kontroller for buketopdateringer"
+msgstr "Søg efter buketopdateringer"
 
 msgctxt "#30016"
 msgid "Check for channel updates"
-msgstr "Kontroller for kanalopdateringer"
+msgstr "Søg efter kanalopdateringer"
 
 msgctxt "#30017"
 msgid "Use only the DVB boxes' current recording path"
-msgstr "Brug kun den nuværende DVB boks optagelsessti"
+msgstr "Brug kun DVB-boksens nuværende sti til optagelser"
 
 msgctxt "#30018"
 msgid "General"
@@ -83,7 +83,7 @@ msgstr "Kanaler"
 
 msgctxt "#30020"
 msgid "Advanced"
-msgstr "Advanceret"
+msgstr "Avanceret"
 
 msgctxt "#30021"
 msgid "HTTP"
@@ -103,16 +103,16 @@ msgstr "Send \"DeepStandby\" kommando"
 
 msgctxt "#30025"
 msgid "Fetch only one TV bouquet"
-msgstr "Hent kun en TV buket"
+msgstr "Hent kun én TV-buket"
 
 msgctxt "#30026"
 msgid "TV-Bouquet"
-msgstr "TV buket"
+msgstr "TV-buket"
 
 msgctxt "#30500"
 msgid "Disconnected from '%s'"
-msgstr "Afbryd fra '%s'"
+msgstr "Forbindelse afbrudt fra '%s'"
 
 msgctxt "#30501"
 msgid "Reconnected to '%s'"
-msgstr "Forbind til '%s'"
+msgstr "Forbundet igen til '%s'"

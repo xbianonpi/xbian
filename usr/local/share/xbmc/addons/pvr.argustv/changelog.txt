@@ -1,3 +1,15 @@
+v1.6.163 (01-01-2013)
+- Updated language files from Transifex
+v1.6.162 (15-12-2012)
+- Updated language files from Transifex
+v1.6.161 (12-12-2012)
+- New version number by Team XBMC
+v1.6.160.145 (11-12-2012)
+- Support ARGUS TV channel numbers on XBMC, switch on:
+  Settings / Live-TV / General / 
+    "Use backend channels..." and 
+    "Always use the channel order..."
+- New version number by Team XBMC
 v1.0.150.144 (18-11-2012)
 - First ARGUS TV implementation
 - Support XBMC play count
