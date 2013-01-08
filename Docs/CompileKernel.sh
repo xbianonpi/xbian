@@ -30,6 +30,7 @@ sudo ln -s /usr/src/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-
 sudo mkdir /opt/raspberry
 cd /opt/raspberry
 sudo git clone --depth 5 git://github.com/raspberrypi/linux.git
+cd linux
 
 #Download xbian .config file
 sudo wget https://raw.github.com/xbianonpi/xbian/master/Patches/kernel/.config
