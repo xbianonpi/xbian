@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -107,7 +107,7 @@ msgstr "Csak egy csatornalista letöltése"
 
 msgctxt "#30026"
 msgid "TV-Bouquet"
-msgstr "TV csatornalista"
+msgstr "TV-csatorna-csoport"
 
 msgctxt "#30500"
 msgid "Disconnected from '%s'"

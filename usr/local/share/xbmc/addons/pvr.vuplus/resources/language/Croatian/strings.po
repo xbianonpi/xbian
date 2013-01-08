@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -28,3 +28,11 @@ msgstr "Zaporka"
 msgctxt "#30018"
 msgid "General"
 msgstr "Općenito"
+
+msgctxt "#30019"
+msgid "Channels"
+msgstr "Kanali"
+
+msgctxt "#30020"
+msgid "Advanced"
+msgstr "Napredno"

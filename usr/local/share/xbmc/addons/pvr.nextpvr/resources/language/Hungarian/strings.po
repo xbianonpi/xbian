@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: NextPVR PVR Client
 # Addon id: pvr.nextpvr
-# Addon version: 1.0.0.0
+# Addon version: 1.6.3
 # Addon Provider: Graeme Blackley
 msgid ""
 msgstr ""
@@ -29,18 +29,30 @@ msgctxt "#30002"
 msgid "NextPVR PinCode"
 msgstr "NextPVR PIN kód"
 
+msgctxt "#30003"
+msgid "Enable TimeShift with Live TV"
+msgstr "Időeltolás engedélyezése az Élő TV-vel"
+
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Kapcsolat"
+
+msgctxt "#30041"
+msgid "Advanced"
+msgstr "Haladó"
 
 msgctxt "#30050"
 msgid "NextPVR server is too old."
 msgstr "A NextPVR szerver túl régi."
 
 msgctxt "#30051"
-msgid "Upgrade to '2.5.8' or higher!"
-msgstr "Frissítsen 2.5.8 vagy magasabb verióra!"
+msgid "Upgrade to '%s' or higher!"
+msgstr "Frissíts '%s'-re  vagy újabbra!"
 
 msgctxt "#30052"
 msgid "Connection failed. Incorrect PIN?"
 msgstr "A kapcsolódás sikertelen. Helyes PIN kódot adott meg?"
+
+msgctxt "#30053"
+msgid "Tuner no longer available"
+msgstr "A vevőkártya már nem elérhető"

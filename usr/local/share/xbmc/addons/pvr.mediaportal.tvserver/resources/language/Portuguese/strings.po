@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -27,11 +27,11 @@ msgstr "Porta do plugin XBMC Mediaportal"
 
 msgctxt "#30002"
 msgid "Free-to-air only"
-msgstr "Somente Free-to-air"
+msgstr "Apenas Emissão Livre"
 
 msgctxt "#30003"
 msgid "Include Radio"
-msgstr "Incluir Radio"
+msgstr "Incluir Rádio"
 
 msgctxt "#30004"
 msgid "Fast channel switching (don't stop timeshift)"
@@ -43,11 +43,11 @@ msgstr "Timeout de ligação (s)"
 
 msgctxt "#30006"
 msgid "Import only TV Channels from group"
-msgstr "Importar apenas canais de Tv do grupo"
+msgstr "Importar apenas Canais de TV do grupo"
 
 msgctxt "#30007"
 msgid "Import only Radio Channels from group"
-msgstr "Importar apenas canais de Rádio do grupo"
+msgstr "Importar apenas Canais de Rádio do grupo"
 
 msgctxt "#30008"
 msgid "Convert hostname to IP-adress"
@@ -55,7 +55,7 @@ msgstr "Converter nome do servidor para endereço IP"
 
 msgctxt "#30009"
 msgid "EPG: Read genre strings (slow)"
-msgstr "EPG: Ler strings de géneros (lento)"
+msgstr "EPG: Obter géneros (lento)"
 
 msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
@@ -63,7 +63,7 @@ msgstr "Tempo de espera após sintonizar um canal (ms)"
 
 msgctxt "#30015"
 msgid "Streaming method"
-msgstr "Método Streaming"
+msgstr "Método de transmissão"
 
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
@@ -91,19 +91,19 @@ msgstr "Reprodução"
 
 msgctxt "#30050"
 msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
-msgstr "A sua versão TVServerXBMC '%s' é demasiado antiga. Por favor actualize para a '%s' ou superior!"
+msgstr "A sua versão TVServerXBMC '%s' é demasiado antiga. Por favor actualize para '%s' ou superior!"
 
 msgctxt "#30051"
 msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
-msgstr "A sua versão TVServerXBMC é demasiado antiga. Por favor actualize para a '%s' ou superior!"
+msgstr "A sua versão TVServerXBMC é demasiado antiga. Por favor actualize para '%s' ou superior!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
-msgstr "A reprodução da gravação falhou. Nome do ficheiro ou URL vazia."
+msgstr "A reprodução da gravação falhou. Nome do ficheiro ou URL vazios."
 
 msgctxt "#30060"
 msgid "All cards are busy"
-msgstr "Todos os cartões estão ocupados"
+msgstr "Todos as placas estão ocupadass"
 
 msgctxt "#30061"
 msgid "Channel is scrambled"
@@ -111,7 +111,7 @@ msgstr "O canal é codificado"
 
 msgctxt "#30062"
 msgid "No video or audio detected"
-msgstr "Não foi detectado video ou audio"
+msgstr "Não foi detectado vídeo nem áudio"
 
 msgctxt "#30063"
 msgid "No signal detected"
@@ -123,7 +123,7 @@ msgstr "Erro desconhecido"
 
 msgctxt "#30065"
 msgid "Unable to start graph"
-msgstr "Não foi possível iniciar grafico"
+msgstr "Não foi possível iniciar gráfico"
 
 msgctxt "#30066"
 msgid "Unknown channel"
@@ -131,15 +131,15 @@ msgstr "Canal desconhecido"
 
 msgctxt "#30067"
 msgid "No tuning details"
-msgstr "Não há detalhes de sintonização"
+msgstr "A sintonização não tem detalhes"
 
 msgctxt "#30068"
 msgid "Channel is not mapped to any card"
-msgstr "O canal não está mapeado para nenhum cartão"
+msgstr "O canal não está mapeado para nenhuma placa"
 
 msgctxt "#30069"
 msgid "Card is disabled"
-msgstr "O cartão está desactivado"
+msgstr "A placa está desactivada"
 
 msgctxt "#30070"
 msgid "Connection to slave failed"
@@ -147,11 +147,11 @@ msgstr "Ligação ao escravo falhou"
 
 msgctxt "#30071"
 msgid "Not the owner"
-msgstr "Não é o proprietário "
+msgstr "Não é o proprietário"
 
 msgctxt "#30072"
 msgid "Graph building failed"
-msgstr "Falhou a criação do gráfico"
+msgstr "A criação do gráfico falhou"
 
 msgctxt "#30073"
 msgid "SW Encoder missing"

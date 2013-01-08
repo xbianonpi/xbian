@@ -1,0 +1,170 @@
+<window>
+    <defaultcontrol always="true">10</defaultcontrol>
+    <coordinates>
+        <system>1</system>
+        <posx>240</posx>
+        <posy>100</posy>
+    </coordinates>
+    <include>dialogeffect</include>
+    <controls>
+        <control type="image">
+            <description>background image</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>800</width>
+            <height>500</height>
+            <texture border="40">DialogBack.png</texture>
+        </control>
+        <control type="image">
+            <description>Dialog Header image</description>
+            <posx>40</posx>
+            <posy>16</posy>
+            <width>720</width>
+            <height>40</height>
+            <texture>dialogheader.png</texture>
+        </control>
+        <control type="label">
+            <description>header label</description>
+            <posx>40</posx>
+            <posy>20</posy>
+            <width>720</width>
+            <height>30</height>
+            <font>font13_title</font>
+            <label>$ADDON[pvr.hts 30101]</label>
+            <align>center</align>
+            <aligny>center</aligny>
+            <textcolor>selected</textcolor>
+            <shadowcolor>black</shadowcolor>
+        </control>
+        <control type="button">
+            <description>Close Window button</description>
+            <posx>710</posx>
+            <posy>15</posy>
+            <width>64</width>
+            <height>32</height>
+            <label>-</label>
+            <font>-</font>
+            <onclick>PreviousMenu</onclick>
+            <texturefocus>DialogCloseButton-focus.png</texturefocus>
+            <texturenofocus>DialogCloseButton.png</texturenofocus>
+            <onleft>10</onleft>
+            <onright>10</onright>
+            <onup>10</onup>
+            <ondown>10</ondown>
+            <visible>system.getbool(input.enablemouse)</visible>
+        </control>
+
+        <control type="radiobutton" id="10">
+            <description>Enable transcoding</description>
+            <posx>40</posx>
+            <posy>50</posy>
+            <height>40</height>
+            <width>720</width>
+            <label>$ADDON[pvr.hts 30102]</label>
+            <font>font13</font>
+            <textcolor>grey2</textcolor>
+            <focusedcolor>white</focusedcolor>
+            <texturenofocus border="5">button-nofocus.png</texturenofocus>
+            <texturefocus border="5">button-focus2.png</texturefocus>
+            <onright>10</onright>
+            <onleft>10</onleft>
+            <onup>1</onup>
+            <ondown>11</ondown>
+        </control>
+
+        <control type="spincontrolex" id="11">
+          <description>Audio codec</description>
+          <posx>40</posx>
+          <posy>100</posy>
+          <width>720</width>
+          <height>40</height>
+          <font>font13</font>
+          <textcolor>grey2</textcolor>
+          <focusedcolor>white</focusedcolor>
+          <texturenofocus border="5">button-nofocus.png</texturenofocus>
+          <texturefocus border="5">button-focus2.png</texturefocus>
+          <label>$ADDON[pvr.hts 30103]</label>
+          <onright>11</onright>
+          <onleft>11</onleft>
+          <onup>10</onup>
+          <ondown>12</ondown>
+        </control>
+
+        <control type="spincontrolex" id="12">
+          <description>Video codec</description>
+          <posx>40</posx>
+          <posy>150</posy>
+          <width>720</width>
+          <height>40</height>
+          <font>font13</font>
+          <textcolor>grey2</textcolor>
+          <focusedcolor>white</focusedcolor>
+          <texturenofocus border="5">button-nofocus.png</texturenofocus>
+          <texturefocus border="5">button-focus2.png</texturefocus>
+          <aligny>center</aligny>
+          <label>$ADDON[pvr.hts 30104]</label>
+          <onright>12</onright>
+          <onleft>12</onleft>
+          <onup>11</onup>
+          <ondown>13</ondown>
+        </control>
+
+        <control type="spincontrolex" id="13">
+          <description>Resolution</description>
+          <posx>40</posx>
+          <posy>200</posy>
+          <width>720</width>
+          <height>40</height>
+          <font>font13</font>
+          <textcolor>grey2</textcolor>
+          <focusedcolor>white</focusedcolor>
+          <texturenofocus border="5">button-nofocus.png</texturenofocus>
+          <texturefocus border="5">button-focus2.png</texturefocus>
+          <aligny>center</aligny>
+          <label>$ADDON[pvr.hts 30105]</label>
+          <onright>13</onright>
+          <onleft>13</onleft>
+          <onup>12</onup>
+          <ondown>1</ondown>
+        </control>
+
+        <control type="group" id="9001">
+            <posx>190</posx>
+            <posy>435</posy>
+            <control type="button" id="1">
+                <description>Ok Button</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>200</width>
+                <height>40</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <texturenofocus border="5">button-nofocus.png</texturenofocus>
+                <texturefocus border="5">button-focus.png</texturefocus>
+                <label>186</label>
+                <font>font12_title</font>
+                <onup>13</onup>
+                <onleft>2</onleft>
+                <onright>2</onright>
+                <ondown>10</ondown>
+            </control>
+            <control type="button" id="2">
+                <description>Cancel Button</description>
+                <posx>210</posx>
+                <posy>0</posy>
+                <width>200</width>
+                <height>40</height>
+                <align>center</align>
+                <aligny>center</aligny>
+                <texturenofocus border="5">button-nofocus.png</texturenofocus>
+                <texturefocus border="5">button-focus.png</texturefocus>
+                <label>222</label>
+                <font>font12_title</font>
+                <onup>13</onup>
+                <onleft>1</onleft>
+                <onright>1</onright>
+                <ondown>10</ondown>
+            </control>
+        </control>
+    </controls>
+</window>

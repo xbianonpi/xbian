@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: DVBViewer Client
 # Addon id: pvr.dvbviewer
-# Addon version: 0.1.7
+# Addon version: 1.6.5
 # Addon Provider: jdembski, A600
 msgid ""
 msgstr ""
@@ -16,6 +16,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgctxt "#30000"
+msgid "DVBViewer Recording Service IP Address"
+msgstr "Διεύθυνση IP της Υπηρεσίας Εγγραφών του DVBViewer"
 
 msgctxt "#30001"
 msgid "Webinterface Port"
@@ -37,6 +41,10 @@ msgctxt "#30005"
 msgid "Password"
 msgstr "Κωδικός πρόσβασης"
 
+msgctxt "#30006"
+msgid "Load channels from favourites.xml instead of from channels.dat"
+msgstr "Φόρτωση καναλιών από το favourites.xml αντί του channels.dat"
+
 msgctxt "#30007"
 msgid "Select the favourites.xml file"
 msgstr "Επιλογή του αρχείου favourites.xml"
@@ -44,3 +52,7 @@ msgstr "Επιλογή του αρχείου favourites.xml"
 msgctxt "#30500"
 msgid "Can't connect to the Recording Service"
 msgstr "Αδυναμία σύνδεσης με την Υπηρεσία Εγγραφών"
+
+msgctxt "#30501"
+msgid "Recording Service version 1.%d or higher required"
+msgstr "Απαιτείται έκδοση 1.%d ή ανώτερη της Υπηρεσίας Εγγραφών"

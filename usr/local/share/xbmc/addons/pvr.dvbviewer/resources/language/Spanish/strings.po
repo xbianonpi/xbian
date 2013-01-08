@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: DVBViewer Client
 # Addon id: pvr.dvbviewer
-# Addon version: 0.1.7
+# Addon version: 1.6.5
 # Addon Provider: jdembski, A600
 msgid ""
 msgstr ""
@@ -17,6 +17,10 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+msgctxt "#30000"
+msgid "DVBViewer Recording Service IP Address"
+msgstr "Dirección IP del Servicio de Grabaciones de DVBViewer"
+
 msgctxt "#30001"
 msgid "Webinterface Port"
 msgstr "Puerto interface web"
@@ -25,6 +29,10 @@ msgctxt "#30002"
 msgid "Streaming Port"
 msgstr "Puerto streaming"
 
+msgctxt "#30003"
+msgid "Recordings Port"
+msgstr "Puerto de Grabaciones"
+
 msgctxt "#30004"
 msgid "Username"
 msgstr "Usuario"
@@ -32,3 +40,19 @@ msgstr "Usuario"
 msgctxt "#30005"
 msgid "Password"
 msgstr "Contraseña"
+
+msgctxt "#30006"
+msgid "Load channels from favourites.xml instead of from channels.dat"
+msgstr "Cargar canales de favourites.xml en lugar de hacerlo de channels.dat"
+
+msgctxt "#30007"
+msgid "Select the favourites.xml file"
+msgstr "Elegir el archivo favourites.xml"
+
+msgctxt "#30500"
+msgid "Can't connect to the Recording Service"
+msgstr "No se puede conectar con el Servicio de Grabación"
+
+msgctxt "#30501"
+msgid "Recording Service version 1.%d or higher required"
+msgstr "Versión del Servicio de Grabación requerida 1.%d o superior"

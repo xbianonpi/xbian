@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""

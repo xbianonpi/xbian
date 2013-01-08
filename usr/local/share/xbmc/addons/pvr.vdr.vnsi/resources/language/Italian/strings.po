@@ -1,8 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: VDR VNSI Client
 # Addon id: pvr.vdr.vnsi
-# Addon version: 1.0.0
-# Addon Provider: Alwin Esch, Team XBMC
+# Addon version: 1.6.4
+# Addon Provider: FernetMenta, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
@@ -61,6 +61,10 @@ msgctxt "#30010"
 msgid "Start Channel search"
 msgstr "Inizia la ricerca canale"
 
+msgctxt "#30011"
+msgid "Source Type"
+msgstr "Tipo sorgente"
+
 msgctxt "#30012"
 msgid "TV channels"
 msgstr "Canali TV"
@@ -73,6 +77,10 @@ msgctxt "#30014"
 msgid "FTA channels"
 msgstr "Canali FTA"
 
+msgctxt "#30015"
+msgid "Scrambled channels"
+msgstr "Canali criptati"
+
 msgctxt "#30016"
 msgid "HD channels"
 msgstr "Canali HD"
@@ -81,13 +89,37 @@ msgctxt "#30017"
 msgid "Country"
 msgstr "Nazione"
 
+msgctxt "#30018"
+msgid "Cable Inversion"
+msgstr "Inversione cavo"
+
+msgctxt "#30019"
+msgid "Cable Symbolrate"
+msgstr "Symbolrate cavo"
+
+msgctxt "#30020"
+msgid "Cable modulation"
+msgstr "Modulazione cavo"
+
+msgctxt "#30021"
+msgid "Terr Inversion"
+msgstr "Inversione terr"
+
 msgctxt "#30022"
 msgid "Satellite"
 msgstr "Satellite"
 
+msgctxt "#30023"
+msgid "ATSC Type"
+msgstr "Tipo ATSC"
+
 msgctxt "#30024"
 msgid "Back"
 msgstr "Indietro"
+
+msgctxt "#30025"
+msgid "Channel search - running... %i %%"
+msgstr "Ricerca canale - in esecuzione... %i %%"
 
 msgctxt "#30026"
 msgid "Type:"
@@ -137,6 +169,10 @@ msgctxt "#30037"
 msgid "No device available - exiting"
 msgstr "Nessuno dispositivo disponibile - esistente"
 
+msgctxt "#30038"
+msgid "No DVB-S2 device available - trying fallback to DVB-S"
+msgstr "Non sono disponibili dispositivi DVB-S2 - fallback a DVB-S"
+
 msgctxt "#30039"
 msgid "Running"
 msgstr "In esecuzione"
@@ -164,3 +200,7 @@ msgstr "Connessione al server VDR persa"
 msgctxt "#30045"
 msgid "Connection to VDR Server restored"
 msgstr "Connessione al server VDR ripristinata"
+
+msgctxt "#30046"
+msgid "Create channel groups automatically on the server"
+msgstr "Crea automaticamente gruppi di canali sul server"

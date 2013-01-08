@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: VU+ / Enigma2 Client
 # Addon id: pvr.vuplus
-# Addon version: 0.3.4
+# Addon version: 1.6.6
 # Addon Provider: Joerg Dembski
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "VU+ hostname or IP address"
-msgstr "IP lub nazwa hosta VU+"
+msgstr "Adres IP lub nazwa hosta VU+"
 
 msgctxt "#30002"
 msgid "Streaming Port"
@@ -27,7 +27,7 @@ msgstr "Port strumieniowania"
 
 msgctxt "#30003"
 msgid "Username"
-msgstr "Nazwa użytkownika"
+msgstr "Użytkownik"
 
 msgctxt "#30004"
 msgid "Password"
@@ -39,7 +39,7 @@ msgstr "Limit czasu odpowiedzi w sekundach"
 
 msgctxt "#30008"
 msgid "Icon Path"
-msgstr "Ścieżka do icony"
+msgstr "Ścieżka do ikony"
 
 msgctxt "#30010"
 msgid "Update Interval in minutes"
@@ -47,7 +47,7 @@ msgstr "Częstotliwość aktualizacji w minutach"
 
 msgctxt "#30011"
 msgid "Automatic Timerlist Cleanup"
-msgstr "Automatyczne czyszczenie listy wyłączników czasowych"
+msgstr "Automatyczne czyszczenie listy planowanych nagrań"
 
 msgctxt "#30012"
 msgid "Webinterface Port"
@@ -55,7 +55,7 @@ msgstr "Port interfejsu webowego"
 
 msgctxt "#30013"
 msgid "Zap before channelswitch (i.e. for Single Tuner boxes)"
-msgstr "Przeskocz przed zmianą kanału (np.: dla urządzeń z jednym tunerem)"
+msgstr "Przeskocz przed zmianą kanału (np. dla urządzeń z jednym tunerem)"
 
 msgctxt "#30014"
 msgid "Folder for channeldata"
@@ -63,7 +63,7 @@ msgstr "Folder na dane kanałowe"
 
 msgctxt "#30015"
 msgid "Check for bouquett updates"
-msgstr "Sprawdź aktualizację zestawu kanałów (bouquett)"
+msgstr "Sprawdź aktualizację bukietów"
 
 msgctxt "#30016"
 msgid "Check for channel updates"
@@ -71,7 +71,7 @@ msgstr "Sprawdź aktualizację kanałów"
 
 msgctxt "#30017"
 msgid "Use only the DVB boxes' current recording path"
-msgstr "Używaj jedynie bieżącego folderu nagrywania urządzenia DVB"
+msgstr "Używaj tylko bieżącego folderu nagrywania urządzenia DVB"
 
 msgctxt "#30018"
 msgid "General"
@@ -91,7 +91,7 @@ msgstr "HTTP"
 
 msgctxt "#30022"
 msgid "Recordings / Timer"
-msgstr "Nagrania / Wyłącznik czasowy"
+msgstr "Nagrania / Planowane nagrania"
 
 msgctxt "#30023"
 msgid "Recording folder on the receiver"
@@ -103,15 +103,15 @@ msgstr "Wyślij polecenie głębokiego czuwania (DeepStandby)"
 
 msgctxt "#30025"
 msgid "Fetch only one TV bouquet"
-msgstr "Pobierz jedynie jeden TV bouquet"
+msgstr "Pobierz tylko jeden bukiet"
 
 msgctxt "#30026"
 msgid "TV-Bouquet"
-msgstr "TV-Bouquet"
+msgstr "Bukiet"
 
 msgctxt "#30500"
 msgid "Disconnected from '%s'"
-msgstr "Rozłączono z '%s'"
+msgstr "Rozłączono od '%s'"
 
 msgctxt "#30501"
 msgid "Reconnected to '%s'"
