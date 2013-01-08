@@ -1,3 +1,16 @@
+1.6.6
+- updated language files from Transifex
+
+1.6.5
+- updated language files from Transifex
+
+1.6.4
+
+- New version number by Team XBMC
+
+0.3.5:
+- fix: URL encoding in timer-add operations
+
 0.3.4:
 - fix: several crashes on win32 due to missing locks / invalid memory access
 - fix: do not report connection problems when there is an empty TV-channel bouquet

@@ -1,8 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: VDR VNSI Client
 # Addon id: pvr.vdr.vnsi
-# Addon version: 1.0.0
-# Addon Provider: Alwin Esch, Team XBMC
+# Addon version: 1.6.4
+# Addon Provider: FernetMenta, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
@@ -27,7 +27,7 @@ msgstr "VNSI port"
 
 msgctxt "#30002"
 msgid "Priority"
-msgstr "Prioritering"
+msgstr "Prioritet"
 
 msgctxt "#30003"
 msgid "Character Set Conversion"
@@ -35,7 +35,7 @@ msgstr "Tegnsæt konvertering"
 
 msgctxt "#30004"
 msgid "Connect timeout (s)"
-msgstr "Forbindelsestimeout (s)"
+msgstr "Tidsfrist for forbindelse (s)"
 
 msgctxt "#30005"
 msgid "Allow VDR Messages"
@@ -43,7 +43,7 @@ msgstr "Tillad VDR meddelser"
 
 msgctxt "#30006"
 msgid "Read recordings from directory"
-msgstr "Læs optagelser fra mappen"
+msgstr "Indlæs optagelser fra mappen"
 
 msgctxt "#30007"
 msgid "VDR recordings directory"
@@ -59,7 +59,7 @@ msgstr "Kanalsøgning - Indstillinger"
 
 msgctxt "#30010"
 msgid "Start Channel search"
-msgstr "Start kanalsøgning"
+msgstr "Start Kanalsøgning"
 
 msgctxt "#30011"
 msgid "Source Type"
@@ -167,7 +167,7 @@ msgstr "Kanalsøgning - Færdig"
 
 msgctxt "#30037"
 msgid "No device available - exiting"
-msgstr "Ingen enhed tilgængelig - går ud"
+msgstr "Ingen enhed tilgængelig - afslutter"
 
 msgctxt "#30038"
 msgid "No DVB-S2 device available - trying fallback to DVB-S"

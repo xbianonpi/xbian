@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: NextPVR PVR Client
 # Addon id: pvr.nextpvr
-# Addon version: 1.0.0.0
+# Addon version: 1.6.3
 # Addon Provider: Graeme Blackley
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "NextPVR Hostname"
-msgstr "NextPVR host vardas"
+msgstr "NextPVR mazgo vardas"
 
 msgctxt "#30001"
 msgid "NextPVR Port (usually 8866 or 7799)"
@@ -27,20 +27,32 @@ msgstr "NextPVR portas (paprastai 8866 arba 7799)"
 
 msgctxt "#30002"
 msgid "NextPVR PinCode"
-msgstr "NextPVR Pin Kodas"
+msgstr "NextPVR pin kodas"
+
+msgctxt "#30003"
+msgid "Enable TimeShift with Live TV"
+msgstr "Įjungti TimeShift su Live TV"
 
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Prijungimas"
+
+msgctxt "#30041"
+msgid "Advanced"
+msgstr "Išplėstinė(-is)"
 
 msgctxt "#30050"
 msgid "NextPVR server is too old."
 msgstr "NextPVR serveris per senas"
 
 msgctxt "#30051"
-msgid "Upgrade to '2.5.8' or higher!"
-msgstr "Atnaujinti į '2.5.8' arba didesnis!"
+msgid "Upgrade to '%s' or higher!"
+msgstr "Atnaujinti į '%s' arba naujesnį!"
 
 msgctxt "#30052"
 msgid "Connection failed. Incorrect PIN?"
 msgstr "Ryšys nutrūko. Klaidingas PIN kodas?"
+
+msgctxt "#30053"
+msgid "Tuner no longer available"
+msgstr "Imtuvas nebepasiekiamas"

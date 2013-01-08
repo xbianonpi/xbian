@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: NextPVR PVR Client
 # Addon id: pvr.nextpvr
-# Addon version: 1.0.0.0
+# Addon version: 1.6.3
 # Addon Provider: Graeme Blackley
 msgid ""
 msgstr ""
@@ -29,18 +29,30 @@ msgctxt "#30002"
 msgid "NextPVR PinCode"
 msgstr "Kod pin NextPVR "
 
+msgctxt "#30003"
+msgid "Enable TimeShift with Live TV"
+msgstr "Włącz TimeShift dla Live TV"
+
 msgctxt "#30040"
 msgid "Connection"
 msgstr "Połączenie"
+
+msgctxt "#30041"
+msgid "Advanced"
+msgstr "Zaawansowane"
 
 msgctxt "#30050"
 msgid "NextPVR server is too old."
 msgstr "Serwer NextPVR jest zbyt stary."
 
 msgctxt "#30051"
-msgid "Upgrade to '2.5.8' or higher!"
-msgstr "Uaktualnij do wersji '2.5.8' lub wyższej!"
+msgid "Upgrade to '%s' or higher!"
+msgstr "Uaktulanij do '%s' lub wyższej!"
 
 msgctxt "#30052"
 msgid "Connection failed. Incorrect PIN?"
 msgstr "Połączenie nie powiodło się. Nieprawidłowy PIN?"
+
+msgctxt "#30053"
+msgid "Tuner no longer available"
+msgstr "Tuner niedostępny"

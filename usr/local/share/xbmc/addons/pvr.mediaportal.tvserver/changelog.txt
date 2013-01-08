@@ -1,3 +1,20 @@
+v1.6.7
+- Updated language files from Transifex
+
+v1.6.6
+- Added: Set recording play count on backend (requires TVServerXBMC build 118)
+- Added: Enable/Disable support for individual programs on Series Schedules  (requires TVServerXBMC build 118)
+- Timers: Fixed: MarginStart and MarginEnd are in minuted
+- Timers: Fixed: Update and Delete of timers for series Schedules
+- TSReader: additional debug/error messages on recording/timeshift buffer file access errors
+
+v1.6.5
+- Updated language files from Transifex
+
+v1.6.4
+
+-New version number by Team XBMC
+
 v1.2.3.117
 - Added: timeshift support for XBMC Frodo
 

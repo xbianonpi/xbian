@@ -1,3 +1,27 @@
+1.6.5
+
+[updated] Language files from Transifex
+
+1.6.4
+
+[fixed] Use utf-8 encoding to get and set the timers.
+[fixed] Channel names with more than 25 chars could crash the add-on.
+
+1.6.3
+
+[updated] Language files from Transifex
+
+1.6.2
+
+New version number by Team XBMC
+
+0.1.8
+
+[fixed] Changed the way timers are calculated. This should fix problems with scheduled and instant recordings on some machines.
+[fixed] Favourites didn't show channels if the audio track wasn't the first one.
+[fixed] Channel settings weren't saved/restored after a channel switch with the channels OSD.
+[fixed] XBMC could hang after a channel switch with the channels OSD.
+
 0.1.7
 
 [added] The Recording Service version 1.21 or higher is now required. Download the latest version from the DVBViewer members area and install it.
@@ -7,7 +31,6 @@
 [fixed] The add-on crashed if favourites.xml had entries with the old 32 bits ID.
 [fixed] Channel names with ansi chars are converted to utf8 so they can be displayed properly (a reset of the PVR database may be required).
 [fixed] Channel names with more than 25 chars.
-
 
 0.1.5
 
@@ -20,7 +43,6 @@
 [added] Receiving device name to the status info.
 [fixed] The preferred language is loaded from the DVBViewer config and used to get the correct EPG in case it supports multi language entries.
 [fixed] When the EPG is missing the description entry, the event entry is used instead.
-
 
 0.1.0
 

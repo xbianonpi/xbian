@@ -1,8 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: VDR VNSI Client
 # Addon id: pvr.vdr.vnsi
-# Addon version: 1.0.0
-# Addon Provider: Alwin Esch, Team XBMC
+# Addon version: 1.6.4
+# Addon Provider: FernetMenta, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"

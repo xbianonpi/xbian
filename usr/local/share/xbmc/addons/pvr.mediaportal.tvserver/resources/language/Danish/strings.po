@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: MediaPortal PVR Client
 # Addon id: pvr.mediaportal.tvserver
-# Addon version: 1.2.3.117
+# Addon version: 1.6.7
 # Addon Provider: Marcel Groothuis
 msgid ""
 msgstr ""
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "Mediaportal Hostname"
-msgstr "Mediaportal værtsnavn"
+msgstr "Mediaportal Værtsnavn"
 
 msgctxt "#30001"
 msgid "Mediaportal XBMC plugin Port"
@@ -27,11 +27,11 @@ msgstr "Mediaportal XBMC plug-in port"
 
 msgctxt "#30002"
 msgid "Free-to-air only"
-msgstr "Kun ukodet tv signal"
+msgstr "Kun ukodet"
 
 msgctxt "#30003"
 msgid "Include Radio"
-msgstr "Inkluder radio"
+msgstr "Inkluder Radio"
 
 msgctxt "#30004"
 msgid "Fast channel switching (don't stop timeshift)"
@@ -39,15 +39,15 @@ msgstr "Hurtig kanalskift (stop ikke tidsforskydning)"
 
 msgctxt "#30005"
 msgid "Connect timeout (s)"
-msgstr "Forbind timeout (s)"
+msgstr "Tidsfrist for forbindelse (s)"
 
 msgctxt "#30006"
 msgid "Import only TV Channels from group"
-msgstr "Importer kun TV kanaler fra gruppe"
+msgstr "Importer kun TV-kanaler fra gruppe"
 
 msgctxt "#30007"
 msgid "Import only Radio Channels from group"
-msgstr "Importer kun Radio kanaler fra gruppe"
+msgstr "Importer kun Radio-kanaler fra gruppe"
 
 msgctxt "#30008"
 msgid "Convert hostname to IP-adress"
@@ -55,15 +55,15 @@ msgstr "Konverter værtsnavn til IP-adresse"
 
 msgctxt "#30009"
 msgid "EPG: Read genre strings (slow)"
-msgstr "EPG: Læs genrerække (langsom)"
+msgstr "EPG: Læs genrestrenge (langsom)"
 
 msgctxt "#30010"
 msgid "Wait time after tuning a channel (ms)"
-msgstr "Ventetid efter indstilling af en kanal (ms)"
+msgstr "Ventetid efter valg af kanal (ms)"
 
 msgctxt "#30015"
 msgid "Streaming method"
-msgstr "Stream metode"
+msgstr "Stream-metode"
 
 msgctxt "#30016"
 msgid "Windows user account (SMB)"
@@ -91,19 +91,19 @@ msgstr "Afspilning"
 
 msgctxt "#30050"
 msgid "Your TVServerXBMC version '%s' is too old. Please upgrade to '%s' or higher!"
-msgstr "Din TVserverXBMC version '%s' er for gammel. Opgrader til '%s' eller højere!"
+msgstr "Din TVserverXBMC version '%s' er for gammel. Opgrader venligst til '%s' eller højere!"
 
 msgctxt "#30051"
 msgid "Your TVServerXBMC version is too old. Please upgrade to '%s' or higher!"
-msgstr "Din TVserverXBMC version er for gammel. Opgrader til '%s' eller højere!"
+msgstr "Din TVserverXBMC version er for gammel. Opgrader venligst til '%s' eller højere!"
 
 msgctxt "#30052"
 msgid "Recording playback failed. Empty URL of filename."
-msgstr "Afspilning af optagelsen mislykkedes. Fjern URL fra filnavn."
+msgstr "Afspilning af optagelsen mislykkedes. Fjern filnavn fra URL"
 
 msgctxt "#30060"
 msgid "All cards are busy"
-msgstr "Alle kort er optaget"
+msgstr "Alle kort er optagede"
 
 msgctxt "#30061"
 msgid "Channel is scrambled"
@@ -115,7 +115,7 @@ msgstr "Ingen video eller lyd fundet"
 
 msgctxt "#30063"
 msgid "No signal detected"
-msgstr "Ingen signal fundet"
+msgstr "Intet signal fundet"
 
 msgctxt "#30064"
 msgid "Unknown error"
@@ -123,7 +123,7 @@ msgstr "Ukendt fejl"
 
 msgctxt "#30065"
 msgid "Unable to start graph"
-msgstr "Ude af stand til at starte grafen"
+msgstr "Grafen kan ikke startes"
 
 msgctxt "#30066"
 msgid "Unknown channel"
@@ -131,11 +131,11 @@ msgstr "Ukendt kanal"
 
 msgctxt "#30067"
 msgid "No tuning details"
-msgstr "Ingen indstillingsdetaljer"
+msgstr "Ingen tuning-detaljer"
 
 msgctxt "#30068"
 msgid "Channel is not mapped to any card"
-msgstr "Kanalen er ikke kortlagt til nogen kort"
+msgstr "Kanalen er ikke defineret til nogen kort"
 
 msgctxt "#30069"
 msgid "Card is disabled"

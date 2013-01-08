@@ -1,8 +1,8 @@
 # XBMC Media Center language file
 # Addon Name: VDR VNSI Client
 # Addon id: pvr.vdr.vnsi
-# Addon version: 1.0.0
-# Addon Provider: Alwin Esch, Team XBMC
+# Addon version: 1.6.4
+# Addon Provider: FernetMenta, Team XBMC
 msgid ""
 msgstr ""
 "Project-Id-Version: XBMC Main Translation Project (Frodo)\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 msgctxt "#30000"
 msgid "VDR Hostname or IP"
-msgstr "VDR Hostname ou IP"
+msgstr "Hostname ou IP VDR"
 
 msgctxt "#30001"
 msgid "VNSI Port"
@@ -35,7 +35,7 @@ msgstr "Conversão do conjunto de caracteres"
 
 msgctxt "#30004"
 msgid "Connect timeout (s)"
-msgstr "Timeout de ligação (s)"
+msgstr "Tempo limite de ligação (seg)"
 
 msgctxt "#30005"
 msgid "Allow VDR Messages"
@@ -43,11 +43,11 @@ msgstr "Permitir mensagens VDR"
 
 msgctxt "#30006"
 msgid "Read recordings from directory"
-msgstr "Ler gravações a partir do diretório"
+msgstr "Ler gravações a partir do directório"
 
 msgctxt "#30007"
 msgid "VDR recordings directory"
-msgstr "Diretório de gravações VDR"
+msgstr "Directório de gravações VDR"
 
 msgctxt "#30008"
 msgid "Channel search"
@@ -59,7 +59,7 @@ msgstr "Pesquisa de canais - Definições "
 
 msgctxt "#30010"
 msgid "Start Channel search"
-msgstr "Dar inicio à pesquisa de canais"
+msgstr "Iniciar a pesquisa de canais"
 
 msgctxt "#30011"
 msgid "Source Type"
@@ -71,7 +71,7 @@ msgstr "Canais de TV"
 
 msgctxt "#30013"
 msgid "Radio channels"
-msgstr "Estações de Radio"
+msgstr "Estações de Rádio"
 
 msgctxt "#30014"
 msgid "FTA channels"
@@ -95,11 +95,11 @@ msgstr "Inversão de cabo"
 
 msgctxt "#30019"
 msgid "Cable Symbolrate"
-msgstr "Symbolrate Cabo"
+msgstr "Symbolrate do Cabo"
 
 msgctxt "#30020"
 msgid "Cable modulation"
-msgstr "Modulação de cabo"
+msgstr "Modulação do cabo"
 
 msgctxt "#30021"
 msgid "Terr Inversion"
@@ -119,7 +119,7 @@ msgstr "Retroceder"
 
 msgctxt "#30025"
 msgid "Channel search - running... %i %%"
-msgstr "A procurar canais... %i %%"
+msgstr "Efectuando a procura de canais... %i %%"
 
 msgctxt "#30026"
 msgid "Type:"
@@ -131,7 +131,7 @@ msgstr "Dispositivo:"
 
 msgctxt "#30028"
 msgid "Scan: %i"
-msgstr "Sprocurar: %i"
+msgstr "Procurar: %i"
 
 msgctxt "#30029"
 msgid "Signal: %i %%"
@@ -151,7 +151,7 @@ msgstr "TV analógica "
 
 msgctxt "#30033"
 msgid "Analog Radio"
-msgstr "Radio analogico "
+msgstr "Rádio analógico "
 
 msgctxt "#30034"
 msgid "Transponder:"
@@ -163,15 +163,15 @@ msgstr "Novos Canais"
 
 msgctxt "#30036"
 msgid "Channel search - Finished"
-msgstr "Procura de canais - Terminou"
+msgstr "Procura de canais - Concluída"
 
 msgctxt "#30037"
 msgid "No device available - exiting"
-msgstr "Não há dispositivos disponíveis - a sair"
+msgstr "Não há dispositivos disponíveis - encerrando"
 
 msgctxt "#30038"
 msgid "No DVB-S2 device available - trying fallback to DVB-S"
-msgstr "Não está disponibvel nenhum dispositivo DVB-S2 - a tentar DVB-S"
+msgstr "Nenhum dispositivo DVB-S2 está disponível - tentando DVB-S"
 
 msgctxt "#30039"
 msgid "Running"
@@ -183,11 +183,11 @@ msgstr "Parado"
 
 msgctxt "#30041"
 msgid "Finished"
-msgstr "Finalizado"
+msgstr "Concluído"
 
 msgctxt "#30042"
 msgid "Channel search - Canceled"
-msgstr "Procura de canais - Cancelado"
+msgstr "Procura de canais - Cancelada"
 
 msgctxt "#30043"
 msgid "Channel search - Error"
@@ -195,12 +195,12 @@ msgstr "Procura de canais - Erro"
 
 msgctxt "#30044"
 msgid "Lost connection to VDR Server"
-msgstr "Ligação perdida com o servidor VDR"
+msgstr "A ligação ao servidor VDR foi perdida"
 
 msgctxt "#30045"
 msgid "Connection to VDR Server restored"
-msgstr "Ligação com o servidor VDR foi restabelecida"
+msgstr "A ligação ao servidor VDR foi restabelecida"
 
 msgctxt "#30046"
 msgid "Create channel groups automatically on the server"
-msgstr "Criar grupos de canais automaticamente no servidor"
+msgstr "Criar automaticamente grupos de canais no servidor"

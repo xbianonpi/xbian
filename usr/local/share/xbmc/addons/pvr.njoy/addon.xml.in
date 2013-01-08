@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<addon
+  id="pvr.njoy"
+  version="1.6.2"
+  name="Njoy N7 PVR Client"
+  provider-name="Team XBMC">
+  <requires>
+    <c-pluff version="0.1"/>
+    <import addon="xbmc.pvr" version="1.6.0"/>
+  </requires>
+  <extension
+    point="xbmc.pvrclient"
+    library_osx="XBMC_Njoy.pvr"
+    library_linux="XBMC_Njoy.pvr"
+    library_wingl="XBMC_njoy_win32.dll"
+    library_windx="XBMC_njoy_win32.dll"
+    library_android="libXBMC_njoy.so"/>
+  <extension point="xbmc.addon.metadata">
+    <summary lang="en">Njoy N7 PVR Client</summary>
+    <platform>@OS@</platform>
+  </extension>
+</addon>
