@@ -119,3 +119,5 @@ kernel/lib/crc32.ko
 kernel/lib/libcrc32c.ko
 kernel/lib/lzo/lzo_compress.ko
 kernel/lib/lzo/lzo_decompress.ko
+kernel/lib/xz/xz_dec.ko
+kernel/lib/zlib_inflate/zlib_inflate.ko
