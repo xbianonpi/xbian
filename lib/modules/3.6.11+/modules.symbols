@@ -100,7 +100,6 @@ alias symbol:fuse_do_open fuse
 alias symbol:dib7000p_update_pll dib7000p
 alias symbol:arpt_alloc_initial_table arp_tables
 alias symbol:v4l2_subdev_queryctrl videodev
-alias symbol:zlib_inflateIncomp zlib_inflate
 alias symbol:au8522_led_ctrl au8522_common
 alias symbol:ax25_listen_register ax25
 alias symbol:vb2_ioctl_dqbuf videobuf2_core
@@ -690,7 +689,6 @@ alias symbol:nf_ct_helper_expectfn_find_by_name nf_conntrack
 alias symbol:snd_card_set_id snd
 alias symbol:serio_reconnect serio
 alias symbol:ar9003_hw_disable_phy_restart ath9k_hw
-alias symbol:zlib_inflate zlib_inflate
 alias symbol:crc_ccitt crc_ccitt
 alias symbol:CsrUint8Des csr_helper
 alias symbol:lbs_get_firmware_async libertas
@@ -930,7 +928,6 @@ alias symbol:irda_init_max_qos_capabilies irda
 alias symbol:snd_add_device_sysfs_file snd
 alias symbol:irias_find_object irda
 alias symbol:rc_keydown rc_core
-alias symbol:zlib_inflateEnd zlib_inflate
 alias symbol:ipt_unregister_table ip_tables
 alias symbol:CsrWifiEventSizeof csr_helper
 alias symbol:vb2_buffer_done videobuf2_core
@@ -980,7 +977,6 @@ alias symbol:v4l2_subdev_s_ext_ctrls videodev
 alias symbol:ath_hw_get_listen_time ath
 alias symbol:irttp_udata_request irda
 alias symbol:snd_card_register snd
-alias symbol:xz_dec_init xz_dec
 alias symbol:nf_nat_sip_hook nf_conntrack_sip
 alias symbol:nf_nat_irc_hook nf_conntrack_irc
 alias symbol:nf_nat_ftp_hook nf_conntrack_ftp
@@ -1562,7 +1558,6 @@ alias symbol:dib7000p_pid_filter_ctrl dib7000p
 alias symbol:dib7000m_pid_filter_ctrl dib7000m
 alias symbol:usb_serial_handle_dcd_change usbserial
 alias symbol:v4l2_ctrl_add_handler videodev
-alias symbol:xz_dec_reset xz_dec
 alias symbol:xfrm6_input_addr ipv6
 alias symbol:tda8083_attach tda8083
 alias symbol:ar9003_hw_bb_watchdog_dbg_info ath9k_hw
@@ -1731,7 +1726,6 @@ alias symbol:snd_virmidi_new snd_seq_virmidi
 alias symbol:p9_client_setattr 9pnet
 alias symbol:ocfs2_cluster_disconnect ocfs2_stackglue
 alias symbol:videobuf_queue_is_busy videobuf_core
-alias symbol:zlib_inflate_blob zlib_inflate
 alias symbol:ieee80211_alloc_hw mac80211
 alias symbol:llc_remove_pack llc
 alias symbol:cfg80211_disconnected cfg80211
@@ -1874,7 +1868,6 @@ alias symbol:videobuf_next_field videobuf_core
 alias symbol:hostap_set_hostapd_sta hostap
 alias symbol:mlog_and_bits ocfs2_nodemanager
 alias symbol:p9_client_fcreate 9pnet
-alias symbol:zlib_inflate_workspacesize zlib_inflate
 alias symbol:set_ras_addr_hook nf_conntrack_h323
 alias symbol:v4l2_chip_ident_i2c_client v4l2_common
 alias symbol:lirc_register_driver lirc_dev
@@ -2048,8 +2041,6 @@ alias symbol:nf_conntrack_tuple_taken nf_conntrack
 alias symbol:snd_device_register snd
 alias symbol:ip_set_range_to_cidr ip_set
 alias symbol:usb_wwan_ioctl usb_wwan
-alias symbol:xz_dec_run xz_dec
-alias symbol:xz_dec_end xz_dec
 alias symbol:snd_ctl_find_id snd
 alias symbol:__uio_register_device uio
 alias symbol:p9_idpool_destroy 9pnet
@@ -2058,7 +2049,6 @@ alias symbol:v4l2_fh_exit videodev
 alias symbol:llc_build_and_send_ui_pkt llc
 alias symbol:hostap_remove_interface hostap
 alias symbol:rt2800_get_tsf rt2800lib
-alias symbol:zlib_inflateReset zlib_inflate
 alias symbol:xt_register_matches x_tables
 alias symbol:roccat_report_event hid_roccat
 alias symbol:cx24123_get_tuner_i2c_adapter cx24123
@@ -2159,7 +2149,6 @@ alias symbol:rt2x00mac_get_ringparam rt2x00lib
 alias symbol:btmrvl_send_hscfg_cmd btmrvl
 alias symbol:ath9k_cmn_update_txpow ath9k_common
 alias symbol:dib0090_get_wbd_offset dib0090
-alias symbol:zlib_inflateInit2 zlib_inflate
 alias symbol:ath_printk ath
 alias symbol:ath9k_hw_disable ath9k_hw
 alias symbol:rt2800_gain_calibration rt2800lib
