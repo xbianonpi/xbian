@@ -30,6 +30,7 @@ sudo ln -s /usr/src/tools/arm-bcm2708/arm-bcm2708-linux-gnueabi/bin/arm-bcm2708-
 sudo mkdir /opt/raspberry
 cd /opt/raspberry
 sudo git clone --depth 5 git://github.com/raspberrypi/linux.git
+cd linux
 
 #Download xbian .config file
 sudo wget https://raw.github.com/xbianonpi/xbian/master/Patches/kernel/.config
@@ -46,6 +47,9 @@ sudo kill -9 $(pgrep xbmc)
 #Make steps with custom commands not supported by the official config
 sudo make ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
 sudo make modules ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m
+
+sudo sed -i 's/\x8d\x04\x35\x91/\xcd\x0c\x99\x00/g' drivers/media/dvb/dvb-usb/dvb-usb-it913xv2.ko
+
 sudo make modules_install ARCH=arm CROSS_COMPILE=/usr/bin/ CONFIG_LIRC_STAGING=y CONFIG_LIRC_RPI=m CONFIG_I2C_DEV=m CONFIG_LIRC_RP1=m CONFIG_LIRC_XBOX=m INSTALL_MOD_PATH=/
 
 #Implement the new kernel
