@@ -61,7 +61,6 @@
 	
 	# Copying libraries
 	cp -R /opt/vc/include/* /usr/include
-	cp /opt/vc/include/interface/vcos/pthreads/* /usr/include/interface/vcos
 
 	# Creating symbolic links
 	ln -fs /opt/vc/lib/libEGL.so /usr/lib/libEGL.so
@@ -85,11 +84,24 @@
 	ln -fs /opt/vc/lib/libvcos.so /usr/lib/libvcos.so
 	ln -fs /opt/vc/lib/libvcos.so /usr/lib/arm-linux-gnueabihf/libvcos.so
 
+        # Setup *FLAGS
+	export TARGET_SUBARCH="armv6zk"
+	export TARGET_CPU="arm1176jzf-s"
+	export TARGET_FLOAT="hard"
+	export TARGET_FPU="vfp"
+	export TARGET_FPU_FLAGS="-mfloat-abi=$TARGET_FLOAT -mfpu=$TARGET_FPU"
+	export TARGET_EXTRA_FLAGS="-Wno-psabi -Wa,-mno-warn-deprecated"
+	export TARGET_COPT="-Wall -pipe -fomit-frame-pointer -O3 -fexcess-precision=fast -ffast-math  -fgnu89-inline"
+	export TARGET_LOPT="-s -Wl,--as-needed"
+        export TARGET_INCLUDES="-I/usr/include/interface/vcos/pthreads/ -I/usr/include/interface/vmcs_host/linux"
+	export CFLAGS="-march=$TARGET_SUBARCH -mcpu=$TARGET_CPU $TARGET_FPU_FLAGS -mabi=aapcs-linux $TARGET_COPT $TARGET_EXTRA_FLAGS $TARGET_INCLUDES"
+	export CXXFLAGS="$CFLAGS"
+	export LDFLAGS="-march=$TARGET_SUBARCH -mtune=$TARGET_CPU $TARGET_LOPT"
+
    	# Cloning xbmc
 	mkdir /opt
    	cd /opt/
    	git clone --depth 5  git://github.com/xbmc/xbmc.git
-
 
 # 2. Compiling taglib (XBMC dependency)
 	cd /opt/xbmc
@@ -106,28 +118,12 @@
 	make
 	make install
 
-	
-
 # 4. Compiling libshairport
 	cd /opt/xbmc
 	make -C lib/libshairport
    	make -C lib/libshairport install
 
-
 # 5. Compiling XBMC	
-	# Setup *FLAGS
-	export TARGET_SUBARCH="armv6zk"
-	export TARGET_CPU="arm1176jzf-s"
-	export TARGET_FLOAT="hard"
-	export TARGET_FPU="vfp"
-	export TARGET_FPU_FLAGS="-mfloat-abi=$TARGET_FLOAT -mfpu=$TARGET_FPU"
-	export TARGET_EXTRA_FLAGS="-Wno-psabi -Wa,-mno-warn-deprecated"
-	export TARGET_COPT="-Wall -pipe -fomit-frame-pointer -O3 -fexcess-precision=fast -ffast-math  -fgnu89-inline"
-	export TARGET_LOPT="-s -Wl,--as-needed"
-	export CFLAGS="-march=$TARGET_SUBARCH -mcpu=$TARGET_CPU $TARGET_FPU_FLAGS -mabi=aapcs-linux $TARGET_COPT $TARGET_EXTRA_FLAGS"
-	export CXXFLAGS="$CFLAGS"
-	export LDFLAGS="-march=$TARGET_SUBARCH -mtune=$TARGET_CPU $TARGET_LOPT"
-
 	# Preparing the XBMC code for compilation
 	cd /opt/xbmc/
 
