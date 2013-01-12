@@ -174,6 +174,15 @@ export LANGUAGE=C
 #Make locale settings permanent
 sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUAGE=C/g' /etc/profile
 
+#Enable external HDD spindown (5 minutes)
+echo "/dev/sda {
+    spindown_time = 60
+}
+" >> /etc/hdparm.conf
+echo "/dev/sdb {
+    spindown_time = 60
+}" >> /etc/hdparm.conf
+
 #Enable xbian autologin
 sed -i 's/1:2345:respawn:\/sbin\/getty --noclear 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f xbian tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
 sed -i '/root/d' /etc/inittab
