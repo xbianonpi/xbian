@@ -1,6 +1,6 @@
 <advancedsettings>   
    <network>
-        <cachemembuffersize>5282880</cachemembuffersize>
+        <cachemembuffersize>20971520</cachemembuffersize>
    </network>
    <fanartres>540</fanartres>
    <thumbres>256</thumbres>
