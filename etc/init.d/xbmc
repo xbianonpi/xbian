@@ -46,7 +46,7 @@ do_start()
 	if [ $(($(ps -A | grep xbmc.bin | wc -l))) -eq 0 ]; then
 		/usr/bin/black;
 		start-stop-daemon -c xbian -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test || return 1;
-		echo $(start-stop-daemon -c xbian -u xbian -m --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; RETURN=$?; case $RETURN in 0 ) echo do normal exit.....; pkill black; ;; 64 ) echo do power off.....; sudo halt ;; 66 ) echo do reboot.....; sudo reboot; ;; esac || return 2) &exit
+		echo $(start-stop-daemon -c xbian -u xbian -m --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; RETURN=$?; case $RETURN in 0 ) pkill black; ;; 64 ) sudo halt ;; 66 ) sudo reboot; ;; esac || return 2) &exit
 	fi
 }
 
