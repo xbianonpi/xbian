@@ -183,11 +183,6 @@ echo "/dev/sdb {
     spindown_time = 60
 }" >> /etc/hdparm.conf
 
-#Enable xbian autologin
-sed -i 's/1:2345:respawn:\/sbin\/getty --noclear 38400 tty1/\#1:2345:respawn:\/sbin\/getty 38400 tty1\n1:2345:respawn:\/bin\/login -f xbian tty1 <\/dev\/tty1 >\/dev\/tty1 2>\&1/g' /etc/inittab
-sed -i '/root/d' /etc/inittab
-reboot
-
 #After the reboot execute this command
 sudo su
 depmod -a

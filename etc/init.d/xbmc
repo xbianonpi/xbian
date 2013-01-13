@@ -4,23 +4,23 @@
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
-#XBian is free software: you can redistribute it and/or modify it under the 
-#terms of the GNU General Public License as published by the Free Software 
-#Foundation, either version 3 of the License, or (at your option) any later 
+#XBian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
 #version.
 #
-#XBian is distributed in the hope that it will be useful, but WITHOUT ANY 
-#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
-#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+#XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
 #details.
 #
-#You should have received a copy of the GNU General Public License along 
+#You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 #
 ### BEGIN INIT INFO
 # Provides:          xbmc
 # Required-Start:    bootlocal
-# Required-Stop:     
+# Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Start and stop XBMC through init
@@ -44,15 +44,16 @@ SCRIPTNAME=/etc/init.d/xbmc
 do_start()
 {
 	if [ $(($(ps -A | grep xbmc.bin | wc -l))) -eq 0 ]; then
+		/usr/bin/black;
 		start-stop-daemon -c xbian -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test || return 1;
-		echo $(chvt 1; start-stop-daemon -c xbian -u xbian -m --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; RETURN=$?; case $RETURN in 0 ) echo do normal exit.....; chvt 2; ;; 64 ) echo do power off.....; sudo halt ;; 66 ) echo do reboot.....; sudo reboot; ;; esac || return 2) &exit
+		echo $(start-stop-daemon -c xbian -u xbian -m --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; RETURN=$?; case $RETURN in 0 ) echo do normal exit.....; pkill black; ;; 64 ) echo do power off.....; sudo halt ;; 66 ) echo do reboot.....; sudo reboot; ;; esac || return 2) &exit
 	fi
 }
 
 do_stop()
 {
-       start-stop-daemon --stop --signal 9 --retry 5 --quiet --pidfile $PIDFILE
-       chvt 2;
+	start-stop-daemon --stop --signal 9 --retry 5 --quiet --pidfile $PIDFILE
+	pkill black;
 }
 
 case "$1" in
