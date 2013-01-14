@@ -3,7 +3,7 @@
         <cachemembuffersize>20971520</cachemembuffersize>
    </network>
    <fanartres>540</fanartres>
-   <thumbres>256</thumbres>
+   <imageres>256</imageres>
    <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</cputempcommand>
    <gputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</gputempcommand>
    <lookandfeel>  
