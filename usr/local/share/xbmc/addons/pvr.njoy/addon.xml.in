@@ -14,7 +14,7 @@
     library_linux="XBMC_Njoy.pvr"
     library_wingl="XBMC_njoy_win32.dll"
     library_windx="XBMC_njoy_win32.dll"
-    library_android="libXBMC_njoy.so"/>
+    library_android="libXBMC_Njoy.so"/>
   <extension point="xbmc.addon.metadata">
     <summary lang="en">Njoy N7 PVR Client</summary>
     <platform>@OS@</platform>
