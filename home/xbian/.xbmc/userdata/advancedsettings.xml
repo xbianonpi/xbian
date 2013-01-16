@@ -4,8 +4,8 @@
    </network>
    <fanartres>540</fanartres>
    <imageres>256</imageres>
-   <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</cputempcommand>
-   <gputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | cut -d"=" -f 2 | cut -d"'" -f 1 | cut -d"." -f 1) C"</gputempcommand>
+   <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | grep -o "[0-9]\{2\}") C"</cputempcommand>
+   <gputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | grep -o "[0-9]\{2\}") C"</gputempcommand>
    <lookandfeel>  
         <guires>720</guires>
         <webserver>true</webserver>
