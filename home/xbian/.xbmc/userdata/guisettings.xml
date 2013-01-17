@@ -240,7 +240,7 @@
         <skinsettings></skinsettings>
         <skintheme>SKINDEFAULT</skintheme>
         <skinzoom>0</skinzoom>
-        <soundskin>SKINDEFAULT</soundskin>
+        <soundskin>OFF</soundskin>
         <startupwindow>10000</startupwindow>
     </lookandfeel>
     <masterlock>
