@@ -155,7 +155,7 @@
     </audiocds>
     <audiooutput>
         <ac3passthrough>true</ac3passthrough>
-        <channellayout>8</channellayout>
+        <channels>8</channels>
         <dtspassthrough>true</dtspassthrough>
         <mode>2</mode>
         <normalizelevels>false</normalizelevels>
