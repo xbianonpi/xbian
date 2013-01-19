@@ -132,10 +132,12 @@
     	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/EGLRes.patch
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/XBianSysSum.patch
         wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/NetworkCachingRedux.patch
+    	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/RemoveGUISoundSettings.patch
    	patch -p1 < TPNno.patch
     	patch -p1 < EGLRes.patch
 	patch -p1 < XBianSysSum.patch
         patch -p1 < NetworkCachingRedux.patch
+	patch -p1 < RemoveGUISoundSettings.patch
 
 	# Replacing the default splash screen
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/usr/local/share/xbmc/media/Splash.png

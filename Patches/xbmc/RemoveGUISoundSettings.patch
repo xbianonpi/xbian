@@ -1,0 +1,11 @@
+--- a/xbmc/xbmc/settings/GUISettings.cpp	
++++ b/xbmc/settings/GUISettings.cpp	
+@@ -878,7 +878,7 @@
+   AddString(laf, "lookandfeel.font",13303,"Default", SPIN_CONTROL_TEXT);
+   AddInt(laf, "lookandfeel.skinzoom",20109, 0, -20, 2, 20, SPIN_CONTROL_INT, MASK_PERCENT);
+   AddInt(laf, "lookandfeel.startupwindow",512,1, WINDOW_HOME, 1, WINDOW_PYTHON_END, SPIN_CONTROL_TEXT);
+-  AddString(laf, "lookandfeel.soundskin",15108,"SKINDEFAULT", SPIN_CONTROL_TEXT);
++  // AddString(laf, "lookandfeel.soundskin",15108,"SKINDEFAULT", SPIN_CONTROL_TEXT);
+   AddSeparator(laf, "lookandfeel.sep2");
+   AddBool(laf, "lookandfeel.enablerssfeeds",13305,  true);
+   AddString(laf, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
