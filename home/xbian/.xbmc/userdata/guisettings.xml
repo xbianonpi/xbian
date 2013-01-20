@@ -385,7 +385,7 @@
     <services>
         <airplay>false</airplay>
         <airplaypassword></airplaypassword>
-        <devicename>XBMC</devicename>
+        <devicename>XBian</devicename>
         <esallinterfaces>false</esallinterfaces>
         <escontinuousdelay>25</escontinuousdelay>
         <esenabled>true</esenabled>
