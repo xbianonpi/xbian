@@ -1,0 +1,1200 @@
+--- a/language/English/strings.po
++++ b/language/English/strings.po
+@@ -4283,7 +4283,55 @@ msgctxt "#13025"
+ msgid "Joystick unplugged"
+ msgstr ""
+ 
+-#empty strings from id 13026 to 13049
++msgctxt "#13026"
++msgid "Try to wake remote servers on access"
++msgstr ""
++
++msgctxt "#13027"
++msgid "Wake on Lan (%s)"
++msgstr ""
++
++msgctxt "#13028"
++msgid "Server already running"
++msgstr ""
++
++msgctxt "#13029"
++msgid "Failed to execute Wake on Lan!"
++msgstr ""
++
++msgctxt "#13030"
++msgid "Waiting for network to connect..."
++msgstr ""
++
++msgctxt "#13031"
++msgid "Waiting for server to wake up..."
++msgstr ""
++
++msgctxt "#13032"
++msgid "Extended wait for server to wake up..."
++msgstr ""
++
++msgctxt "#13033"
++msgid "Waiting for services to launch..."
++msgstr ""
++
++msgctxt "#13034"
++msgid "MAC Discovery"
++msgstr ""
++
++msgctxt "#13035"
++msgid "Updated for %s"
++msgstr ""
++
++msgctxt "#13036"
++msgid "Found for %s"
++msgstr ""
++
++msgctxt "#13037"
++msgid "Failed for %s"
++msgstr ""
++
++#empty strings from id 13038 to 13049
+ 
+ msgctxt "#13050"
+ msgid "Running low on battery"
+
+--- a/xbmc/Application.cpp
++++ b/xbmc/Application.cpp
+@@ -5060,6 +5060,14 @@ void CApplication::Process()
+   g_cpuInfo.getUsedPercentage(); // must call it to recalculate pct values
+ }
+ 
++void CApplication::ProcessSlowEnable(bool enable)
++{
++  if (enable)
++    m_slowTimer.Start();
++  else
++    m_slowTimer.Stop();
++}
++
+ // We get called every 500ms
+ void CApplication::ProcessSlow()
+ {
+
+--- a/xbmc/Application.h
++++ b/xbmc/Application.h
+@@ -204,6 +204,7 @@ class CApplication : public CXBApplicationEx, public IPlayerCallback, public IMs
+ 
+   virtual void Process();
+   void ProcessSlow();
++  void ProcessSlowEnable(bool enable);
+   void ResetScreenSaver();
+   int GetVolume() const;
+   void SetVolume(float iValue, bool isPercentage = true);
+
+--- a/xbmc/dbwrappers/mysqldataset.cpp
++++ b/xbmc/dbwrappers/mysqldataset.cpp
+@@ -24,6 +24,7 @@
+ 
+ #include "utils/log.h"
+ #include "system.h" // for GetLastError()
++#include "network/WakeOnAccess.h"
+ 
+ #ifdef HAS_MYSQL
+ #include "mysqldataset.h"
+@@ -119,6 +120,8 @@ int MysqlDatabase::connect(bool create_new) {
+     if (conn == NULL)
+       conn = mysql_init(conn);
+ 
++    CWakeOnAccess::Get().WakeUpHost(host, "MySQL : " + db);
++
+     // establish connection with just user credentials
+     if (mysql_real_connect(conn, host.c_str(),login.c_str(),passwd.c_str(), NULL, atoi(port.c_str()),NULL,0) != NULL)
+     {
+
+--- a/xbmc/filesystem/DirectoryFactory.cpp
++++ b/xbmc/filesystem/DirectoryFactory.cpp
+@@ -43,6 +43,7 @@
+ #include "Application.h"
+ #include "addons/Addon.h"
+ #include "utils/log.h"
++#include "network/WakeOnAccess.h"
+ 
+ #ifdef HAS_FILESYSTEM_SMB
+ #ifdef _WIN32
+@@ -123,6 +124,7 @@
+ IDirectory* CDirectoryFactory::Create(const CStdString& strPath)
+ {
+   CURL url(strPath);
++  CWakeOnAccess::Get().WakeUpHost(url);
+ 
+   CFileItem item(strPath, false);
+   IFileDirectory* pDir=CFileDirectoryFactory::Create(strPath, &item);
+
+--- a/xbmc/filesystem/FileFactory.cpp
++++ b/xbmc/filesystem/FileFactory.cpp
+@@ -94,6 +94,7 @@
+ #include "Application.h"
+ #include "URL.h"
+ #include "utils/log.h"
++#include "network/WakeOnAccess.h"
+ 
+ using namespace XFILE;
+ 
+@@ -113,6 +114,8 @@ IFile* CFileFactory::CreateLoader(const CStdString& strFileName)
+ 
+ IFile* CFileFactory::CreateLoader(const CURL& url)
+ {
++  CWakeOnAccess::Get().WakeUpHost(url);
++
+   CStdString strProtocol = url.GetProtocol();
+   strProtocol.MakeLower();
+ 
+--- a/xbmc/main/main.cpp
++++ b/xbmc/main/main.cpp
+@@ -66,13 +66,6 @@ int main(int argc, char* argv[])
+   if (setrlimit(RLIMIT_CORE, &rlim) == -1)
+     CLog::Log(LOGDEBUG, "Failed to set core size limit (%s)", strerror(errno));
+ #endif
+-  // Prevent child processes from becoming zombies on exit if not waited upon. See also Util::Command
+-  struct sigaction sa;
+-  memset(&sa, 0, sizeof(sa));
+-
+-  sa.sa_flags = SA_NOCLDWAIT;
+-  sa.sa_handler = SIG_IGN;
+-  sigaction(SIGCHLD, &sa, NULL);
+ #endif
+   setlocale(LC_NUMERIC, "C");
+   g_advancedSettings.Initialize();
+
+--- a/xbmc/network/Makefile.in
++++ b/xbmc/network/Makefile.in
+@@ -9,6 +9,7 @@ SRCS += Network.cpp
+ SRCS += Socket.cpp
+ SRCS += TCPServer.cpp
+ SRCS += UdpClient.cpp
++SRCS += WakeOnAccess.cpp
+ SRCS += WebServer.cpp
+ SRCS += ZeroconfBrowser.cpp
+ SRCS += Zeroconf.cpp
+
+--- a/xbmc/network/Network.h
++++ b/xbmc/network/Network.h
+@@ -62,6 +62,8 @@ class CNetworkInterface
+    virtual CStdString GetMacAddress(void) = 0;
+    virtual void GetMacAddressRaw(char rawMac[6]) = 0;
+ 
++   virtual bool GetHostMacAddress(unsigned long host, CStdString& mac) = 0;
++
+    virtual CStdString GetCurrentIPAddress() = 0;
+    virtual CStdString GetCurrentNetmask() = 0;
+    virtual CStdString GetCurrentDefaultGateway(void) = 0;
+@@ -110,6 +112,9 @@ class CNetwork
+    // Return true if the magic packet was send
+    bool WakeOnLan(const char *mac);
+ 
++   // Return true if host replies to ping
++   virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000) = 0;
++
+    // Get/set the nameserver(s)
+    virtual std::vector<CStdString> GetNameServers(void) = 0;
+    virtual void SetNameServers(std::vector<CStdString> nameServers) = 0;
+
+--- /dev/null
++++ b/xbmc/network/WakeOnAccess.cpp
+@@ -0,0 +1,657 @@
++/*
++ *      Copyright (C) 2005-2012 Team XBMC
++ *      http://www.xbmc.org
++ *
++ *  This Program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2, or (at your option)
++ *  any later version.
++ *
++ *  This Program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with XBMC; see the file COPYING.  If not, write to
++ *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
++ *  http://www.gnu.org/copyleft/gpl.html
++ *
++ */
++
++#include <limits.h>
++#include <netinet/in.h>
++#include <sys/socket.h>
++#include <arpa/inet.h>
++
++#include "system.h"
++#include "network/Network.h"
++#include "Application.h"
++#include "DNSNameCache.h"
++#include "dialogs/GUIDialogProgress.h"
++#include "dialogs/GUIDialogKaiToast.h"
++#include "filesystem/SpecialProtocol.h"
++#include "guilib/GUIWindowManager.h"
++#include "guilib/LocalizeStrings.h"
++#include "settings/AdvancedSettings.h"
++#include "settings/GUISettings.h"
++#include "settings/Settings.h"
++#include "utils/JobManager.h"
++#include "utils/log.h"
++#include "utils/XMLUtils.h"
++
++#include "WakeOnAccess.h"
++
++using namespace std;
++
++#define DEFAULT_NETWORK_INIT_SEC      (20)   // wait 20 sec for network after startup or resume
++#define DEFAULT_NETWORK_SETTLE_MS     (500)  // require 500ms of consistent network availability before trusting it
++
++#define DEFAULT_TIMEOUT_SEC (5*60)           // at least 5 minutes between each magic packets
++#define DEFAULT_WAIT_FOR_ONLINE_SEC_1 (40)   // wait at 40 seconds after sending magic packet
++#define DEFAULT_WAIT_FOR_ONLINE_SEC_2 (40)   // same for extended wait
++#define DEFAULT_WAIT_FOR_SERVICES_SEC (5)    // wait 5 seconds after host go online to launch file sharing deamons
++
++static int GetTotalSeconds(const CDateTimeSpan& ts)
++{
++  int hours = ts.GetHours() + ts.GetDays() * 24;
++  int minutes = ts.GetMinutes() + hours * 60;
++  return ts.GetSeconds() + minutes * 60;
++}
++
++static unsigned long HostToIP(const CStdString& host)
++{
++  CStdString ip;
++  CDNSNameCache::Lookup(host, ip);
++  return inet_addr(ip.c_str());
++}
++
++CWakeOnAccess::WakeUpEntry::WakeUpEntry (bool isAwake)
++  : timeout (0, 0, 0, DEFAULT_TIMEOUT_SEC)
++  , wait_online1_sec(DEFAULT_WAIT_FOR_ONLINE_SEC_1)
++  , wait_online2_sec(DEFAULT_WAIT_FOR_ONLINE_SEC_2)
++  , wait_services_sec(DEFAULT_WAIT_FOR_SERVICES_SEC)
++{
++  nextWake = CDateTime::GetCurrentDateTime();
++
++  if (isAwake)
++    nextWake += timeout;
++}
++
++CWakeOnAccess::CMACDiscoveryJob::CMACDiscoveryJob(const CStdString& host)
++  : m_host(host)
++{
++}
++
++bool CWakeOnAccess::CMACDiscoveryJob::DoWork()
++{
++  unsigned long ipAddress = HostToIP(m_host);
++
++  if (ipAddress == INADDR_NONE)
++  {
++    CLog::Log(LOGERROR, "%s - can't determine ip of '%s'", __FUNCTION__, m_host.c_str());
++    return false;
++  }
++
++  vector<CNetworkInterface*>& ifaces = g_application.getNetwork().GetInterfaceList();
++  for (vector<CNetworkInterface*>::const_iterator it = ifaces.begin(); it != ifaces.end(); ++it)
++  {
++    if ((*it)->GetHostMacAddress(ipAddress, m_macAddres))
++      return true;
++  }
++
++  return false;
++}
++
++const CStdString& CWakeOnAccess::CMACDiscoveryJob::GetMAC() const
++{
++  return m_macAddres;
++}
++
++const CStdString& CWakeOnAccess::CMACDiscoveryJob::GetHost() const
++{
++  return m_host;
++}
++
++class WaitCondition
++{
++public:
++  virtual bool SuccessWaiting () const { return false; }
++};
++
++class ProgressDialogHelper
++{
++public:
++  ProgressDialogHelper (const CStdString& heading) : m_dialog(0)
++  {
++    if (g_application.IsCurrentThread() && !g_application.IsPlaying())
++      m_dialog = (CGUIDialogProgress*) g_windowManager.GetWindow(WINDOW_DIALOG_PROGRESS);
++
++    if (m_dialog)
++    {
++      m_dialog->SetHeading (heading); 
++      m_dialog->SetLine(0, "");
++      m_dialog->SetLine(1, "");
++      m_dialog->SetLine(2, "");
++      g_application.ProcessSlowEnable(false); // ProcessSlow will normally be done while dialog->Progress and may call back recursively to wake sleeping server !
++    }
++  }
++  ~ProgressDialogHelper ()
++  {
++    if (m_dialog)
++    {
++      m_dialog->Close();
++      g_application.ProcessSlowEnable(true);
++    }
++  }
++
++  enum wait_result { TimedOut, Canceled, Success };
++
++  wait_result ShowAndWait (const WaitCondition& waitObj, unsigned timeOutSec, const CStdString& line1)
++  {
++    unsigned timeOutMs = timeOutSec * 1000;
++
++    if (m_dialog)
++    {
++      m_dialog->SetLine(1, line1);
++
++      m_dialog->SetPercentage(1); // avoid flickering by starting at 1% ..
++    }
++
++    XbmcThreads::EndTime end_time (timeOutMs);
++
++    while (!end_time.IsTimePast())
++    {
++      if (waitObj.SuccessWaiting())
++        return Success;
++            
++      if (m_dialog)
++      {
++        if (!m_dialog->IsActive())
++          m_dialog->StartModal();
++
++        if (m_dialog->IsCanceled())
++          return Canceled;
++
++        m_dialog->Progress();
++
++        unsigned ms_passed = timeOutMs - end_time.MillisLeft();
++
++        int percentage = (ms_passed * 100) / timeOutMs;
++        m_dialog->SetPercentage(max(percentage, 1)); // avoid flickering , keep minimum 1%
++      }
++
++      Sleep (m_dialog ? 20 : 200);
++    }
++
++    return TimedOut;
++  }
++
++private:
++  CGUIDialogProgress* m_dialog;
++};
++
++class NetworkStartWaiter : public WaitCondition
++{
++public:
++  NetworkStartWaiter (unsigned settle_time_ms) : m_settle_time_ms (settle_time_ms)
++  {
++  }
++  virtual bool SuccessWaiting () const
++  {
++    CNetworkInterface* iface = g_application.getNetwork().GetFirstConnectedInterface();
++
++    bool online = iface && iface->IsEnabled();
++
++    if (!online) // setup endtime so we dont return true until network is consistently connected
++      m_end.Set (m_settle_time_ms);
++
++    return online && m_end.IsTimePast();
++  }
++private:
++  mutable XbmcThreads::EndTime m_end;
++  unsigned m_settle_time_ms;
++};
++
++class PingResponseWaiter : public WaitCondition, private IJobCallback
++{
++public:
++  PingResponseWaiter (const CStdString& host) : m_hostOnline (false)
++  {
++    m_job = new CHostProberJob(host);
++    CSingleLock lock(m_section);
++    m_jobId = CJobManager::GetInstance().AddJob(m_job, this);
++  }
++  ~PingResponseWaiter()
++  {
++    CSingleLock lock(m_section);
++    if (m_job)
++      CJobManager::GetInstance().CancelJob(m_jobId);
++  }
++  virtual bool SuccessWaiting () const
++  {
++    return m_hostOnline;
++  }
++
++  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job)
++  {
++    m_hostOnline = success;
++    CSingleLock lock(m_section);
++    m_job = 0;
++  }
++
++private:
++  class CHostProberJob : public CJob
++  {
++    public:
++      CHostProberJob(const CStdString& host) : m_host (host) {}
++
++      virtual bool DoWork()
++      {
++        while (!ShouldCancel(0,0))
++        {
++          ULONG dst_ip = HostToIP(m_host);
++
++          if (g_application.getNetwork().PingHost(dst_ip, 2000))
++            return true;
++        }
++        return false;
++      }
++
++    private:
++      CStdString m_host;
++  };
++
++  bool m_hostOnline;
++  CHostProberJob* m_job;
++  unsigned int m_jobId;
++  CCriticalSection m_section;
++};
++
++//
++
++class NestDetect
++{
++public:
++  NestDetect() : m_gui_thread (g_application.IsCurrentThread())
++  {
++    if (m_gui_thread)
++      ++m_nest;
++  }
++  ~NestDetect()
++  {
++    if (m_gui_thread)
++      m_nest--;
++  }
++  bool TooDeep() const
++  {
++    return m_gui_thread && m_nest > 1;
++  }
++
++private:
++  static int m_nest;
++  const bool m_gui_thread;
++};
++int NestDetect::m_nest = 0;
++
++//
++
++CWakeOnAccess::CWakeOnAccess()
++  : m_netinit_sec(DEFAULT_NETWORK_INIT_SEC)    // wait for network to connect
++  , m_netsettle_ms(DEFAULT_NETWORK_SETTLE_MS)  // wait for network to settle
++  , m_enabled(false)
++{
++}
++
++CWakeOnAccess &CWakeOnAccess::Get()
++{
++  static CWakeOnAccess sWakeOnAccess;
++  return sWakeOnAccess;
++}
++
++void CWakeOnAccess::WakeUpHost(const CURL& url)
++{
++  CStdString hostName = url.GetHostName();
++
++  if (!hostName.IsEmpty())
++    WakeUpHost (hostName, url.Get());
++}
++
++void CWakeOnAccess::WakeUpHost (const CStdString& hostName, const string& customMessage)
++{
++  if (!IsEnabled())
++    return; // bail if feature is turned off
++
++  for (EntriesVector::iterator i = m_entries.begin();i != m_entries.end(); ++i)
++  {
++    WakeUpEntry& server = *i;
++
++    if (hostName.Equals(server.host.c_str()))
++    {
++      CDateTime now = CDateTime::GetCurrentDateTime();
++
++      if (now > server.nextWake)
++      {
++        CLog::Log(LOGINFO,"WakeOnAccess [%s] trigged by accessing : %s", hostName.c_str(), customMessage.c_str());
++
++        NestDetect nesting ; // detect recursive calls on gui thread and bail out
++
++        if (nesting.TooDeep()) // we can not maintain progress-dialog if it gets called back in loop
++        {
++          CLog::Log(LOGERROR,"WakeOnAccess recursively called on gui-thread : aborting ");
++          return;
++        }
++
++        WakeUpHost(server);
++      }
++
++      server.nextWake = now + server.timeout;
++
++      return;
++    }
++  }
++}
++
++#define LOCALIZED(id) g_localizeStrings.Get(id)
++
++void CWakeOnAccess::WakeUpHost(const WakeUpEntry& server)
++{
++  CStdString heading = LOCALIZED(13027);
++  heading.Format (heading, server.host);
++
++  ProgressDialogHelper dlg (heading);
++
++  {
++    NetworkStartWaiter waitObj (m_netsettle_ms); // wait until network connected before sending wake-on-lan
++
++    if (dlg.ShowAndWait (waitObj, m_netinit_sec, LOCALIZED(13030)) != ProgressDialogHelper::Success)
++    {
++      CLog::Log(LOGINFO,"WakeOnAccess timeout/cancel while waiting for network");
++      return; // timedout or canceled
++    }
++  }
++
++  {
++    ULONG dst_ip = HostToIP(server.host);
++
++    if (g_application.getNetwork().PingHost(dst_ip, 500)) // quick ping with short timeout to not block too long
++    {
++      CLog::Log(LOGINFO,"WakeOnAccess success exit, server already running");
++
++      if (!g_application.IsPlaying())
++        CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, heading, LOCALIZED(13028), 1000);
++      return;
++    }
++  }
++
++  if (!g_application.getNetwork().WakeOnLan(server.mac.c_str()))
++  {
++    CLog::Log(LOGERROR,"WakeOnAccess failed to send. (Is it blocked by firewall?)");
++
++    if (!g_application.IsPlaying())
++      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, heading, LOCALIZED(13029));
++    return;
++  }
++
++  {
++    PingResponseWaiter waitObj (server.host); // wait for ping response ..
++
++    ProgressDialogHelper::wait_result 
++      result = dlg.ShowAndWait (waitObj, server.wait_online1_sec, LOCALIZED(13031));
++
++    if (result == ProgressDialogHelper::TimedOut)
++      result = dlg.ShowAndWait (waitObj, server.wait_online2_sec, LOCALIZED(13032));
++
++    if (result != ProgressDialogHelper::Success)
++    {
++      CLog::Log(LOGINFO,"WakeOnAccess timeout/cancel while waiting for response");
++      return; // timedout or canceled
++    }
++  }
++
++  {
++    WaitCondition waitObj ; // wait uninteruptable fixed time for services ..
++
++    dlg.ShowAndWait (waitObj, server.wait_services_sec, LOCALIZED(13033));
++
++    CLog::Log(LOGINFO,"WakeOnAccess sequence completed, server started");
++  }
++}
++
++static void AddHost (const CStdString& host, vector<string>& hosts)
++{
++  for (vector<string>::const_iterator it = hosts.begin(); it != hosts.end(); ++it)
++    if (host.Equals((*it).c_str()))
++      return; // allready there ..
++
++  if (!host.IsEmpty())
++    hosts.push_back(host);
++}
++
++static void AddHostFromDatabase(const DatabaseSettings& setting, vector<string>& hosts)
++{
++  if (setting.type.Equals("mysql"))
++    AddHost(setting.host, hosts);
++}
++
++void CWakeOnAccess::QueueMACDiscoveryForHost(const CStdString& host)
++{
++  if (IsEnabled())
++    CJobManager::GetInstance().AddJob(new CMACDiscoveryJob(host), this);
++}
++
++void CWakeOnAccess::AddHostsFromShare(const CMediaSource& source, std::vector<std::string>& hosts)
++{
++  for (CStdStringArray::const_iterator it = source.vecPaths.begin() ; it != source.vecPaths.end(); it++)
++  {
++    CURL url = *it;
++
++    AddHost (url.GetHostName(), hosts);
++  }
++}
++
++void CWakeOnAccess::AddHostsFromShares(const VECSOURCES& sources, vector<string>& hosts)
++{
++  for (VECSOURCES::const_iterator it = sources.begin(); it != sources.end(); it++)
++    AddHostsFromShare(*it, hosts);
++}
++
++void CWakeOnAccess::QueueMACDiscoveryForShare(const CMediaSource& source)
++{
++  vector<string> hosts;
++  AddHostsFromShare(source, hosts);
++  for (vector<string>::const_iterator it = hosts.begin(); it != hosts.end(); it++)
++    QueueMACDiscoveryForHost(*it);
++}
++
++void CWakeOnAccess::QueueMACDiscoveryForAllRemotes()
++{
++  vector<string> hosts;
++
++  // add media sources
++  AddHostsFromShares(g_settings.m_videoSources, hosts);
++  AddHostsFromShares(g_settings.m_musicSources, hosts);
++  AddHostsFromShares(g_settings.m_pictureSources, hosts);
++  AddHostsFromShares(g_settings.m_fileSources, hosts);
++
++  // add mysql servers
++  AddHostFromDatabase(g_advancedSettings.m_databaseVideo, hosts);
++  AddHostFromDatabase(g_advancedSettings.m_databaseMusic, hosts);
++  AddHostFromDatabase(g_advancedSettings.m_databaseEpg, hosts);
++  AddHostFromDatabase(g_advancedSettings.m_databaseTV, hosts);
++
++  // add from path substitutions ..
++  for (CAdvancedSettings::StringMapping::iterator i = g_advancedSettings.m_pathSubstitutions.begin(); i != g_advancedSettings.m_pathSubstitutions.end(); ++i)
++  {
++    CURL url = i->second;
++
++    AddHost (url.GetHostName(), hosts);
++  }
++
++  for (vector<string>::const_iterator it = hosts.begin(); it != hosts.end(); it++)
++    QueueMACDiscoveryForHost(*it);
++}
++
++void CWakeOnAccess::OnJobComplete(unsigned int jobID, bool success, CJob *job)
++{
++  CMACDiscoveryJob* discoverJob = (CMACDiscoveryJob*)job;
++
++  CStdString heading = LOCALIZED(13034);
++
++  if (success)
++  {
++    CLog::Log(LOGINFO, "%s - Mac for host '%s' - '%s'", __FUNCTION__, discoverJob->GetHost().c_str(), discoverJob->GetMAC().c_str());
++    for (EntriesVector::iterator i = m_entries.begin(); i != m_entries.end(); ++i)
++    {
++      if (discoverJob->GetHost().Equals(i->host.c_str()))
++      {
++        CLog::Log(LOGDEBUG, "%s - Update existing entry for host '%s'", __FUNCTION__, discoverJob->GetHost().c_str());
++        if (!discoverJob->GetMAC().Equals(i->mac.c_str()))
++        {
++          if (IsEnabled()) // show notification only if we have general feature enabled
++          {
++            CStdString message = LOCALIZED(13035);
++            message.Format(message, discoverJob->GetHost());
++            CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, heading, message, 4000, true, 3000);
++          }
++
++          i->mac = discoverJob->GetMAC();
++          SaveToXML();
++        }
++
++        return;
++      }
++    }
++
++    // not found entry to update - create using default values
++    WakeUpEntry entry (true);
++    entry.host = discoverJob->GetHost();
++    entry.mac  = discoverJob->GetMAC();
++    m_entries.push_back(entry);
++
++    CLog::Log(LOGDEBUG, "%s - Create new entry for host '%s'", __FUNCTION__, discoverJob->GetHost().c_str());
++    if (IsEnabled()) // show notification only if we have general feature enabled
++    {
++      CStdString message = LOCALIZED(13036);
++      message.Format(message, discoverJob->GetHost());
++      CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Info, heading, message, 4000, true, 3000);
++    }
++
++    SaveToXML();
++  }
++  else if (IsEnabled())
++  {
++    CStdString message = LOCALIZED(13037);
++    message.Format(message, discoverJob->GetHost());
++    CGUIDialogKaiToast::QueueNotification(CGUIDialogKaiToast::Error, heading, message, 4000, true, 3000);
++  }
++}
++
++CStdString CWakeOnAccess::GetSettingFile()
++{
++  return CSpecialProtocol::TranslatePath("special://masterprofile/wakeonlan.xml");
++}
++
++void CWakeOnAccess::LoadFromXML()
++{
++  SetEnabled(g_guiSettings.GetBool("powermanagement.wakeonaccess"));
++
++  CXBMCTinyXML xmlDoc;
++  if (!xmlDoc.LoadFile(GetSettingFile()))
++  {
++    CLog::Log(LOGINFO, "%s - unable to load:%s", __FUNCTION__, GetSettingFile().c_str());
++    return;
++  }
++
++  TiXmlElement* pRootElement = xmlDoc.RootElement();
++  if (strcmpi(pRootElement->Value(), "onaccesswakeup"))
++  {
++    CLog::Log(LOGERROR, "%s - XML file %s doesnt contain <onaccesswakeup>", __FUNCTION__, GetSettingFile().c_str());
++    return;
++  }
++
++  m_entries.clear();
++
++  CLog::Log(LOGINFO,"WakeOnAccess - Load settings :");
++
++  int tmp;
++  if (XMLUtils::GetInt(pRootElement, "netinittimeout", tmp, 0, 5 * 60))
++    m_netinit_sec = tmp;
++  CLog::Log(LOGINFO,"  -Network init timeout : [%d] sec", m_netinit_sec);
++  
++  if (XMLUtils::GetInt(pRootElement, "netsettletime", tmp, 0, 5 * 1000))
++    m_netsettle_ms = tmp;
++  CLog::Log(LOGINFO,"  -Network settle time  : [%d] ms", m_netsettle_ms);
++
++  const TiXmlNode* pWakeUp = pRootElement->FirstChildElement("wakeup");
++  while (pWakeUp)
++  {
++    WakeUpEntry entry;
++
++    CStdString strtmp;
++    if (XMLUtils::GetString(pWakeUp, "host", strtmp))
++      entry.host = strtmp;
++
++    if (XMLUtils::GetString(pWakeUp, "mac", strtmp))
++      entry.mac = strtmp;
++
++    if (entry.host.empty())
++      CLog::Log(LOGERROR, "%s - Missing <host> tag or it's empty", __FUNCTION__);
++    else if (entry.mac.empty())
++       CLog::Log(LOGERROR, "%s - Missing <mac> tag or it's empty", __FUNCTION__);
++    else
++    {
++      if (XMLUtils::GetInt(pWakeUp, "timeout", tmp, 10, 12 * 60 * 60))
++        entry.timeout.SetDateTimeSpan (0, 0, 0, tmp);
++
++      if (XMLUtils::GetInt(pWakeUp, "waitonline", tmp, 0, 10 * 60)) // max 10 minutes
++        entry.wait_online1_sec = tmp;
++
++      if (XMLUtils::GetInt(pWakeUp, "waitonline2", tmp, 0, 10 * 60)) // max 10 minutes
++        entry.wait_online2_sec = tmp;
++
++      if (XMLUtils::GetInt(pWakeUp, "waitservices", tmp, 0, 5 * 60)) // max 5 minutes
++        entry.wait_services_sec = tmp;
++
++      CLog::Log(LOGINFO,"  Registering wakeup entry:");
++      CLog::Log(LOGINFO,"    HostName        : %s", entry.host.c_str());
++      CLog::Log(LOGINFO,"    MacAddress      : %s", entry.mac.c_str());
++      CLog::Log(LOGINFO,"    Timeout         : %d (sec)", GetTotalSeconds(entry.timeout));
++      CLog::Log(LOGINFO,"    WaitForOnline   : %d (sec)", entry.wait_online1_sec);
++      CLog::Log(LOGINFO,"    WaitForOnlineEx : %d (sec)", entry.wait_online2_sec);
++      CLog::Log(LOGINFO,"    WaitForServices : %d (sec)", entry.wait_services_sec);
++
++      m_entries.push_back(entry);
++    }
++
++    pWakeUp = pWakeUp->NextSiblingElement("wakeup"); // get next one
++  }
++}
++
++void CWakeOnAccess::SaveToXML()
++{
++  CXBMCTinyXML xmlDoc;
++  TiXmlElement xmlRootElement("onaccesswakeup");
++  TiXmlNode *pRoot = xmlDoc.InsertEndChild(xmlRootElement);
++  if (!pRoot) return;
++
++  XMLUtils::SetInt(pRoot, "netinittimeout", m_netinit_sec);
++  XMLUtils::SetInt(pRoot, "netsettletime", m_netsettle_ms);
++
++  for (EntriesVector::const_iterator i = m_entries.begin(); i != m_entries.end(); ++i)
++  {
++    TiXmlElement xmlSetting("wakeup");
++    TiXmlNode* pWakeUpNode = pRoot->InsertEndChild(xmlSetting);
++    if (pWakeUpNode)
++    {
++      XMLUtils::SetString(pWakeUpNode, "host", i->host);
++      XMLUtils::SetString(pWakeUpNode, "mac", i->mac);
++      XMLUtils::SetInt(pWakeUpNode, "timeout", GetTotalSeconds(i->timeout));
++      XMLUtils::SetInt(pWakeUpNode, "waitonline", i->wait_online1_sec);
++      XMLUtils::SetInt(pWakeUpNode, "waitonline2", i->wait_online2_sec);
++      XMLUtils::SetInt(pWakeUpNode, "waitservices", i->wait_services_sec);
++    }
++  }
++
++  xmlDoc.SaveFile(GetSettingFile());
++}
+
+--- /dev/null
++++ b/xbmc/network/WakeOnAccess.h
+@@ -0,0 +1,90 @@
++/*
++ *      Copyright (C) 2005-2012 Team XBMC
++ *      http://www.xbmc.org
++ *
++ *  This Program is free software; you can redistribute it and/or modify
++ *  it under the terms of the GNU General Public License as published by
++ *  the Free Software Foundation; either version 2, or (at your option)
++ *  any later version.
++ *
++ *  This Program is distributed in the hope that it will be useful,
++ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
++ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ *  GNU General Public License for more details.
++ *
++ *  You should have received a copy of the GNU General Public License
++ *  along with XBMC; see the file COPYING.  If not, write to
++ *  the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
++ *  http://www.gnu.org/copyleft/gpl.html
++ *
++ */
++
++#include "URL.h"
++#include "MediaSource.h"
++#include "XBDateTime.h"
++#include "utils/Job.h"
++
++class CWakeOnAccess : public IJobCallback
++{
++public:
++  CWakeOnAccess();
++  static CWakeOnAccess &Get();
++
++  void WakeUpHost (const CURL& fileUrl);
++  void WakeUpHost (const CStdString& hostName, const std::string& customMessage);
++
++  void SetEnabled(bool enabled) { m_enabled = enabled; }
++  bool IsEnabled() const { return m_enabled; }
++
++  void QueueMACDiscoveryForHost(const CStdString& host);
++  void QueueMACDiscoveryForShare(const CMediaSource& source);
++  void QueueMACDiscoveryForAllRemotes();
++
++  virtual void OnJobComplete(unsigned int jobID, bool success, CJob *job);
++
++  void LoadFromXML();
++private:
++  void AddHostsFromShare(const CMediaSource& source, std::vector<std::string>& hosts);
++  void AddHostsFromShares(const VECSOURCES& sources, std::vector<std::string>& hosts);
++
++  CStdString GetSettingFile();
++  void SaveToXML();
++
++  class CMACDiscoveryJob : public CJob
++  {
++  public:
++    CMACDiscoveryJob(const CStdString& host);
++
++    virtual bool DoWork();
++
++    const CStdString& GetMAC() const;
++    const CStdString& GetHost() const;
++  private:
++    CStdString m_macAddres;
++    CStdString m_host;
++  };
++  
++  // struct to keep per host settings
++  struct WakeUpEntry
++  {
++    WakeUpEntry (bool isAwake = false);
++
++    std::string host;
++    std::string mac;
++    CDateTimeSpan timeout;
++    unsigned int wait_online1_sec; // initial wait
++    unsigned int wait_online2_sec; // extended wait
++    unsigned int wait_services_sec;
++
++    CDateTime nextWake;
++  };
++
++  typedef std::vector<WakeUpEntry> EntriesVector;
++  EntriesVector m_entries;
++
++  unsigned int m_netinit_sec, m_netsettle_ms; //time to wait for network connection
++
++  bool m_enabled;
++
++  void WakeUpHost(const WakeUpEntry& server);
++};
+
+--- a/xbmc/network/linux/NetworkLinux.cpp
++++ b/xbmc/network/linux/NetworkLinux.cpp
+@@ -520,6 +520,63 @@ void CNetworkLinux::SetNameServers(std::vector<CStdString> nameServers)
+ #endif
+ }
+ 
++bool CNetworkLinux::PingHost(unsigned long remote_ip, unsigned int timeout_ms)
++{
++  char cmd_line [64];
++
++  struct in_addr host_ip; 
++  host_ip.s_addr = remote_ip;
++
++  sprintf(cmd_line, "ping -c 1 -w %d %s", timeout_ms / 1000 + (timeout_ms % 1000) != 0, inet_ntoa(host_ip));
++
++  int status = system (cmd_line);
++
++  int result = WIFEXITED(status) ? WEXITSTATUS(status) : -1;
++
++  // http://linux.about.com/od/commands/l/blcmdl8_ping.htm ;
++  // 0 reply
++  // 1 no reply
++  // else some error
++
++  if (result < 0 || result > 1)
++    CLog::Log(LOGERROR, "Ping fail : status = %d, errno = %d : '%s'", status, errno, cmd_line);
++
++  return result == 0;
++}
++
++bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, CStdString& mac)
++{
++  struct arpreq areq;
++  struct sockaddr_in* sin;
++
++  memset(&areq, 0x0, sizeof(areq));
++
++  sin = (struct sockaddr_in *) &areq.arp_pa;
++  sin->sin_family = AF_INET;
++  sin->sin_addr.s_addr = host_ip;
++
++  sin = (struct sockaddr_in *) &areq.arp_ha;
++  sin->sin_family = ARPHRD_ETHER;
++
++  strncpy(areq.arp_dev, m_interfaceName.c_str(), sizeof(areq.arp_dev));
++  areq.arp_dev[sizeof(areq.arp_dev)-1] = '\0';
++
++  int result = ioctl (m_network->GetSocket(), SIOCGARP, (caddr_t) &areq);
++
++  if (result != 0)
++  {
++//  CLog::Log(LOGERROR, "%s - GetHostMacAddress/ioctl failed with errno (%d)", __FUNCTION__, errno);
++    return false;
++  }
++
++  struct sockaddr* res = &areq.arp_ha;
++  mac.Format("%02X:%02X:%02X:%02X:%02X:%02X", 
++    (uint8_t) res->sa_data[0], (uint8_t) res->sa_data[1], (uint8_t) res->sa_data[2], 
++    (uint8_t) res->sa_data[3], (uint8_t) res->sa_data[4], (uint8_t) res->sa_data[5]);
++
++  return true;
++}
++
+ std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
+ {
+    std::vector<NetworkAccessPoint> result;
+
+--- a/xbmc/network/linux/NetworkLinux.h
++++ b/xbmc/network/linux/NetworkLinux.h
+@@ -42,6 +42,8 @@ class CNetworkInterfaceLinux : public CNetworkInterface
+    virtual CStdString GetMacAddress(void);
+    virtual void GetMacAddressRaw(char rawMac[6]);
+ 
++   virtual bool GetHostMacAddress(unsigned long host, CStdString& mac);
++
+    virtual CStdString GetCurrentIPAddress();
+    virtual CStdString GetCurrentNetmask();
+    virtual CStdString GetCurrentDefaultGateway(void);
+@@ -71,6 +73,9 @@ class CNetworkLinux : public CNetwork
+    virtual std::vector<CNetworkInterface*>& GetInterfaceList(void);
+    virtual CNetworkInterface* GetFirstConnectedInterface(void);        
+     
++   // Ping remote host
++   virtual bool PingHost(unsigned long host, unsigned int timeout_ms = 2000);
++
+    // Get/set the nameserver(s)
+    virtual std::vector<CStdString> GetNameServers(void);
+    virtual void SetNameServers(std::vector<CStdString> nameServers);
+
+--- a/xbmc/settings/GUISettings.cpp
++++ b/xbmc/settings/GUISettings.cpp
+@@ -612,6 +612,7 @@ void CGUISettings::Initialize()
+     shutdown.insert(make_pair(13014,POWERSTATE_MINIMIZE));
+     AddInt(pwm, "powermanagement.shutdownstate", 13008, POWERSTATE_QUIT, shutdown, SPIN_CONTROL_TEXT);
+   }
++  AddBool(pwm, "powermanagement.wakeonaccess", 13026, false);
+ 
+   CSettingsCategory* dbg = AddCategory(SETTINGS_SYSTEM, "debug", 14092);
+   AddBool(dbg, "debug.showloginfo", 20191, false);
+diff --git a/xbmc/settings/GUIWindowSettingsCategory.cpp b/xbmc/settings/GUIWindowSettingsCategory.cpp
+index b4cee69..1b5efe9 100644
+--- a/xbmc/settings/GUIWindowSettingsCategory.cpp
++++ b/xbmc/settings/GUIWindowSettingsCategory.cpp
+@@ -82,6 +82,7 @@
+ #include "filesystem/SpecialProtocol.h"
+ 
+ #include "network/Zeroconf.h"
++#include "network/WakeOnAccess.h"
+ #include "peripherals/Peripherals.h"
+ #include "peripherals/dialogs/GUIDialogPeripheralManager.h"
+ #include "peripherals/devices/PeripheralImon.h"
+@@ -2004,6 +2005,12 @@ void CGUIWindowSettingsCategory::OnSettingChanged(CBaseSettingControl *pSettingC
+       }
+     }
+   }
++  else if (strSetting.Equals("powermanagement.wakeonaccess"))
++  {
++    CWakeOnAccess& woa = CWakeOnAccess::Get();
++    woa.SetEnabled (g_guiSettings.GetBool("powermanagement.wakeonaccess"));
++    woa.QueueMACDiscoveryForAllRemotes();
++  }
+ 
+   UpdateSettings();
+ }
+
+--- a/xbmc/settings/Settings.cpp
++++ b/xbmc/settings/Settings.cpp
+@@ -55,6 +55,7 @@
+ #include "filesystem/File.h"
+ #include "filesystem/DirectoryCache.h"
+ #include "DatabaseManager.h"
++#include "network/WakeOnAccess.h"
+ 
+ using namespace std;
+ using namespace XFILE;
+@@ -179,6 +180,7 @@ bool CSettings::Load()
+   LoadSources();
+   LoadRSSFeeds();
+   LoadUserFolderLayout();
++  CWakeOnAccess::Get().LoadFromXML();
+ 
+   return true;
+ }
+@@ -1226,6 +1228,8 @@ bool CSettings::UpdateShare(const CStdString &type, const CStdString oldName, co
+   if (!pShare)
+     return false;
+ 
++  CWakeOnAccess::Get().QueueMACDiscoveryForShare(*pShare);
++
+   // Update our XML file as well
+   return SaveSources();
+ }
+@@ -1317,6 +1321,8 @@ bool CSettings::AddShare(const CStdString &type, const CMediaSource &share)
+   }
+   pShares->push_back(shareToAdd);
+ 
++  CWakeOnAccess::Get().QueueMACDiscoveryForShare(shareToAdd);
++
+   if (!share.m_ignore)
+   {
+     return SaveSources();
+
+--- a/xbmc/network/linux/NetworkLinux.cpp
++++ b/xbmc/network/linux/NetworkLinux.cpp
+@@ -37,6 +37,13 @@
+   #include <sys/sockio.h>
+   #include <net/if.h>
+   #include <net/if_dl.h>
++#if defined(TARGET_DARWIN_OSX)
++  #include <net/if_types.h>
++  #include <net/route.h>
++  #include <netinet/if_ether.h>
++#else //IOS
++  #include "network/osx/ioshacks.h"
++#endif
+   #include <ifaddrs.h>
+ #elif defined(TARGET_FREEBSD)
+   #include <sys/sockio.h>
+@@ -544,6 +551,56 @@ bool CNetworkLinux::PingHost(unsigned long remote_ip, unsigned int timeout_ms)
+   return result == 0;
+ }
+ 
++#if defined TARGET_DARWIN
++bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, CStdString& mac)
++{
++  bool ret = false;
++  size_t needed;
++  char *buf, *next;
++  struct rt_msghdr *rtm;
++  struct sockaddr_inarp *sin;
++  struct sockaddr_dl *sdl;
++  int mib[6];
++  
++  mac = "";
++  
++  mib[0] = CTL_NET;
++  mib[1] = PF_ROUTE;
++  mib[2] = 0;
++  mib[3] = AF_INET;
++  mib[4] = NET_RT_FLAGS;
++  mib[5] = RTF_LLINFO;
++  
++  if (sysctl(mib, sizeof(mib) / sizeof(mib[0]), NULL, &needed, NULL, 0) == 0)
++  {   
++    if (buf = (char*)malloc(needed))
++    {      
++      if (sysctl(mib, sizeof(mib) / sizeof(mib[0]), buf, &needed, NULL, 0) == 0)
++      {        
++        for (next = buf; next < buf + needed; next += rtm->rtm_msglen) 
++        {
++          
++          rtm = (struct rt_msghdr *)next;
++          sin = (struct sockaddr_inarp *)(rtm + 1);
++          sdl = (struct sockaddr_dl *)(sin + 1);
++          
++          if (host_ip != sin->sin_addr.s_addr || sdl->sdl_alen < 6)
++            continue;
++          
++          u_char *cp = (u_char*)LLADDR(sdl);
++          
++          mac.Format("%02X:%02X:%02X:%02X:%02X:%02X",
++                     cp[0], cp[1], cp[2], cp[3], cp[4], cp[5]);
++          ret = true;
++          break;
++        }
++      }
++      free(buf);
++    }
++  }
++  return ret;
++}
++#else
+ bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, CStdString& mac)
+ {
+   struct arpreq areq;
+@@ -576,6 +633,7 @@ bool CNetworkInterfaceLinux::GetHostMacAddress(unsigned long host_ip, CStdString
+ 
+   return true;
+ }
++#endif
+ 
+ std::vector<NetworkAccessPoint> CNetworkInterfaceLinux::GetAccessPoints(void)
+ {
+@@ -984,4 +1042,3 @@ void CNetworkInterfaceLinux::WriteSettings(FILE* fw, NetworkAssignment assignmen
+       fprintf(fw, "auto %s\n\n", GetName().c_str());
+ }
+ 
+-
