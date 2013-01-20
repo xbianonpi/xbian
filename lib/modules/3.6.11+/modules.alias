@@ -25,6 +25,7 @@ alias i2c:lp8552 lp855x_bl
 alias i2c:lp8551 lp855x_bl
 alias i2c:lp8550 lp855x_bl
 alias platform:pwm-backlight pwm_bl
+alias usb:v17E9p*d*dc*dsc*dp*icFFisc00ip00in* udlfb
 alias block-major-147-* drbd
 alias of:N*T*Cbosch,bmp085* bmp085_i2c
 alias i2c:bmp180 bmp085_i2c
