@@ -134,6 +134,8 @@
         wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/NetworkCachingRedux.patch
     	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/RemoveGUISoundSettings.patch
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/WOL.patch
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/Splash.patch
+	patch -p1 < Splash.patch
 	patch -p1 < WOL.patch
    	patch -p1 < TPNno.patch
     	patch -p1 < EGLRes.patch
