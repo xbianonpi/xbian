@@ -133,6 +133,8 @@
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/XBianSysSum.patch
         wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/NetworkCachingRedux.patch
     	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/RemoveGUISoundSettings.patch
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/WOL.patch
+	patch -p1 < WOL.patch
    	patch -p1 < TPNno.patch
     	patch -p1 < EGLRes.patch
 	patch -p1 < XBianSysSum.patch
