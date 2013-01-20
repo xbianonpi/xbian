@@ -215,4 +215,11 @@ echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 #Resize SD upon next boot
 update-rc.d firstrun defaults
 
+#This will reboot your Pi automatically after a few seconds if it crashes for any reason
+sudo modprobe bcm2708_wdog
+sudo echo "bcm2708_wdog" >> /etc/modules
+sudo apt-get install watchdog
+sudo /etc/init.d/watchdog start
+sudo sed -re '21 s/^#//' /etc/watchdog.conf
+
 history -c
