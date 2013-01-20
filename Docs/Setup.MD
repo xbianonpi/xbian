@@ -55,7 +55,7 @@ apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog li
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev libass-dev fbset libplist1 pv exfat-fuse bc network-manager libbluray-dev \
-python-dbus usbutils console-tools libcurl3 --fix-missing
+python-dbus usbutils console-tools watchdog libcurl3 --fix-missing
 
 apt-get autoremove -y
 
@@ -186,9 +186,9 @@ echo "/dev/sdb {
 #This will reboot your Pi automatically after a few seconds if it crashes for any reason
 modprobe bcm2708_wdog
 echo "bcm2708_wdog" >> /etc/modules
-apt-get install watchdog
 /etc/init.d/watchdog start
-sed -re '21 s/^#//' /etc/watchdog.conf
+sed -re '10 s/^#//' /etc/watchdog.conf
+sed -re '23 s/^#//' /etc/watchdog.conf
 update-rc.d watchdog defaults
 
 #After the reboot execute this command
