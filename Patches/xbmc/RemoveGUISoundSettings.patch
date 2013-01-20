@@ -9,3 +9,15 @@
    AddSeparator(laf, "lookandfeel.sep2");
    AddBool(laf, "lookandfeel.enablerssfeeds",13305,  true);
    AddString(laf, "lookandfeel.rssedit", 21450, "", BUTTON_CONTROL_STANDARD);
+
+--- a/xbmc/Application.cpp	
++++ b/xbmc/Application.cpp	
+@@ -742,7 +742,7 @@
+   // restore AE's previous volume state
+   SetHardwareVolume(g_settings.m_fVolumeLevel);
+   CAEFactory::SetMute     (g_settings.m_bMute);
+-  CAEFactory::SetSoundMode(g_guiSettings.GetInt("audiooutput.guisoundmode"));
++  // CAEFactory::SetSoundMode(g_guiSettings.GetInt("audiooutput.guisoundmode"));
+ 
+   // initialize the addon database (must be before the addon manager is init'd)
+   CDatabaseManager::Get().Initialize(true);
