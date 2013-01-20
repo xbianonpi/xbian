@@ -183,6 +183,14 @@ echo "/dev/sdb {
     spindown_time = 60
 }" >> /etc/hdparm.conf
 
+#This will reboot your Pi automatically after a few seconds if it crashes for any reason
+modprobe bcm2708_wdog
+echo "bcm2708_wdog" >> /etc/modules
+apt-get install watchdog
+/etc/init.d/watchdog start
+sed -re '21 s/^#//' /etc/watchdog.conf
+update-rc.d watchdog defaults
+
 #After the reboot execute this command
 sudo su
 depmod -a
@@ -214,12 +222,5 @@ echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
 #Resize SD upon next boot
 update-rc.d firstrun defaults
-
-#This will reboot your Pi automatically after a few seconds if it crashes for any reason
-sudo modprobe bcm2708_wdog
-sudo echo "bcm2708_wdog" >> /etc/modules
-sudo apt-get install watchdog
-sudo /etc/init.d/watchdog start
-sudo sed -re '21 s/^#//' /etc/watchdog.conf
 
 history -c
