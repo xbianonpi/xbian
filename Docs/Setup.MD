@@ -184,9 +184,6 @@ echo "/dev/sdb {
 }" >> /etc/hdparm.conf
 
 #This will reboot your Pi automatically after a few seconds if it crashes for any reason
-modprobe bcm2708_wdog
-echo "bcm2708_wdog" >> /etc/modules
-/etc/init.d/watchdog start
 sed -ri '10 s/^#//' /etc/watchdog.conf
 sed -ri '23 s/^#//' /etc/watchdog.conf
 update-rc.d watchdog defaults
@@ -217,6 +214,7 @@ apt-get install -y xbian-update
 apt-get autoremove -y
 
 echo "evdev" >> /etc/modules
+echo "bcm2708_wdog" >> /etc/modules
 
 echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
