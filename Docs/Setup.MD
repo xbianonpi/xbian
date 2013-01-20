@@ -187,8 +187,8 @@ echo "/dev/sdb {
 modprobe bcm2708_wdog
 echo "bcm2708_wdog" >> /etc/modules
 /etc/init.d/watchdog start
-sed -i '10 s/^#//' /etc/watchdog.conf
-sed -i '23 s/^#//' /etc/watchdog.conf
+sed -ri '10 s/^#//' /etc/watchdog.conf
+sed -ri '23 s/^#//' /etc/watchdog.conf
 update-rc.d watchdog defaults
 
 #After the reboot execute this command
