@@ -53,7 +53,7 @@
 +  struct stat buf;
 +  if (stat(filename.c_str(), &buf) != -1)
 +  {
-+    system("exec /usr/bin/splash --infinitebar --msgtxt='starting xbmc...'");
++    system("cd /usr/bin && ./splash --infinitebar --msgtxt='starting xbmc...'");
 +    showXBMCSplash = false;
 +  }
  
@@ -74,7 +74,7 @@
    }
 +    
 +  if (!showXBMCSplash) {
-+    system("exec /usr/bin/splash --black");
++    system("cd /usr/bin && ./splash --black");
 +  }
  
    try
