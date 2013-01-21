@@ -186,7 +186,6 @@ echo "/dev/sdb {
 #This will reboot your Pi automatically after a few seconds if it crashes for any reason
 sed -ri '10 s/^#//' /etc/watchdog.conf
 sed -ri '23 s/^#//' /etc/watchdog.conf
-update-rc.d watchdog defaults
 
 #After the reboot execute this command
 sudo su
@@ -220,5 +219,6 @@ echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
 #Resize SD upon next boot
 update-rc.d firstrun defaults
+update-rc.d watchdog defaults
 
 history -c
