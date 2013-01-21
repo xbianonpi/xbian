@@ -148,6 +148,7 @@ update-rc.d bootlocal defaults
 update-rc.d xbmc defaults
 update-rc.d lirc defaults
 update-rc.d rpcbind defaults
+update-rc.d watchdog defaults
 
 #Fixing broken symbolic links
 rm /usr/local/lib/libtag_c.so.0
@@ -219,6 +220,5 @@ echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
 #Resize SD upon next boot
 update-rc.d firstrun defaults
-update-rc.d watchdog defaults
 
 history -c
