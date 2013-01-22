@@ -55,7 +55,7 @@ apt-get install -y libtiff-dev liblockdev1-dev wget rpcbind screen git dialog li
 libmysqlclient18 libsmbclient libssh-4 libavahi-client-dev libmicrohttpd-dev libtinyxml-dev libyajl-dev liblzo2-dev \
 libjpeg-dev libfribidi-dev libpcre3-dev libcdio-dev libfreetype6 libpython2.7 libnfs-dev nfs-common samba-common-bin avahi-daemon \
 udisks usbmount git-core ntfs-3g wireless-tools libjasper-dev libass-dev fbset libplist1 pv exfat-fuse bc network-manager libbluray-dev \
-python-dbus usbutils console-tools libcurl3 --fix-missing
+python-dbus usbutils console-tools watchdog libcurl3 --fix-missing
 
 apt-get autoremove -y
 
@@ -148,6 +148,7 @@ update-rc.d bootlocal defaults
 update-rc.d xbmc defaults
 update-rc.d lirc defaults
 update-rc.d rpcbind defaults
+update-rc.d watchdog defaults
 
 #Fixing broken symbolic links
 rm /usr/local/lib/libtag_c.so.0
@@ -183,6 +184,10 @@ echo "/dev/sdb {
     spindown_time = 60
 }" >> /etc/hdparm.conf
 
+#This will reboot your Pi automatically after a few seconds if it crashes for any reason
+sed -ri '10 s/^#//' /etc/watchdog.conf
+sed -ri '23 s/^#//' /etc/watchdog.conf
+
 #After the reboot execute this command
 sudo su
 depmod -a
@@ -209,6 +214,7 @@ apt-get install -y xbian-update
 apt-get autoremove -y
 
 echo "evdev" >> /etc/modules
+echo "bcm2708_wdog" >> /etc/modules
 
 echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
