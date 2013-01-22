@@ -94,7 +94,7 @@
  
  void CApplicationMessenger::Quit()
  {
-+  system("sudo /usr/bin/pkill splash");
++  system("sudo /usr/bin/splash --exit")
    ThreadMessage tMsg = {TMSG_QUIT};
    SendMessage(tMsg);
  }
