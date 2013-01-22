@@ -53,7 +53,7 @@
 +  struct stat buf;
 +  if (stat(filename.c_str(), &buf) != -1)
 +  {
-+    system("cd /usr/bin && ./splash --infinitebar --msgtxt='starting xbmc...'");
++    system("sudo /usr/bin/splash --infinitebar --msgtxt='starting xbmc...'");
 +    showXBMCSplash = false;
 +  }
  
@@ -74,9 +74,28 @@
    }
 +    
 +  if (!showXBMCSplash) {
-+    system("cd /usr/bin && ./splash --black");
++    system("sudo /usr/bin/splash --black");
 +  }
  
    try
    {
+
+--- a/xbmc/ApplicationMessenger.cpp	
++++ b/xbmc/ApplicationMessenger.cpp	
+@@ -21,6 +21,7 @@
+ #include "system.h"
+ #include "ApplicationMessenger.h"
+ #include "Application.h"
++#include "stdlib.h"
+ 
+ #include "PlayListPlayer.h"
+ #include "Util.h"
+@@ -1073,6 +1074,7 @@
+ 
+ void CApplicationMessenger::Quit()
+ {
++  system("sudo /usr/bin/pkill splash");
+   ThreadMessage tMsg = {TMSG_QUIT};
+   SendMessage(tMsg);
+ }
 
