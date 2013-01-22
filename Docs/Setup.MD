@@ -94,7 +94,7 @@ rm /etc/ssh/ssh_host_* && dpkg-reconfigure openssh-server
 
 #Remove user pi from sudoers and add xbian user
 sed -i 's/pi ALL=(ALL) NOPASSWD: ALL//g' /etc/sudoers
-echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot, /bin/fbset" >> /etc/sudoers
+echo "xbian ALL=(ALL) NOPASSWD: /usr/local/sbin/xbian-config, /sbin/halt, /sbin/reboot, /bin/fbset, /usr/bin/splash, /usr/bin/pkill" >> /etc/sudoers
 
 # Relogin with ssh; user:xbian pass:raspberry
 
