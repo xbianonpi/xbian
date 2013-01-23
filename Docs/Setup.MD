@@ -218,6 +218,9 @@ echo "bcm2708_wdog" >> /etc/modules
 
 echo 'man-db man-db/auto-update boolean false' |sudo debconf-set-selections
 
+echo 'APT::Update::Post-Invoke-Success {"touch /var/lib/apt/periodic/update-success-stamp 2>/dev/null || true";};' > /etc/apt/apt.conf.d/15update-stamp
+echo 'Acquire::http::Timeout "10"' > /etc/apt/apt.conf.d/10AptTimeout
+
 #Resize SD upon next boot
 update-rc.d firstrun defaults
 
