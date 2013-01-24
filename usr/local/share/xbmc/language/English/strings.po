@@ -4283,7 +4283,55 @@ msgctxt "#13025"
 msgid "Joystick unplugged"
 msgstr ""
 
-#empty strings from id 13026 to 13049
+msgctxt "#13026"
+msgid "Try to wake remote servers on access"
+msgstr ""
+
+msgctxt "#13027"
+msgid "Wake on Lan (%s)"
+msgstr ""
+
+msgctxt "#13028"
+msgid "Server already running"
+msgstr ""
+
+msgctxt "#13029"
+msgid "Failed to execute Wake on Lan!"
+msgstr ""
+
+msgctxt "#13030"
+msgid "Waiting for network to connect..."
+msgstr ""
+
+msgctxt "#13031"
+msgid "Waiting for server to wake up..."
+msgstr ""
+
+msgctxt "#13032"
+msgid "Extended wait for server to wake up..."
+msgstr ""
+
+msgctxt "#13033"
+msgid "Waiting for services to launch..."
+msgstr ""
+
+msgctxt "#13034"
+msgid "MAC Discovery"
+msgstr ""
+
+msgctxt "#13035"
+msgid "Updated for %s"
+msgstr ""
+
+msgctxt "#13036"
+msgid "Found for %s"
+msgstr ""
+
+msgctxt "#13037"
+msgid "Failed for %s"
+msgstr ""
+
+#empty strings from id 13038 to 13049
 
 msgctxt "#13050"
 msgid "Running low on battery"

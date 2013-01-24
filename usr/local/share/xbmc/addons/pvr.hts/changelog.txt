@@ -1,3 +1,14 @@
+1.6.18
+
+- ensure channel count is not cleared after succesful sub
+- fix default webroot param
+- remove missing files from recordings list
+- expand dvr directories to full hierarchy
+
+1.6.17
+
+- fixed possible crash after reconnecting
+
 1.6.16
 
 - correct some signed/unsigned mixups

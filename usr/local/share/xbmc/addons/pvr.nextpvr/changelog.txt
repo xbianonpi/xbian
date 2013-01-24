@@ -1,3 +1,7 @@
+v1.6.4
+
+- small change to improve the performance of radio channels
+
 v1.6.3
 - updated language files from Transifex
 
