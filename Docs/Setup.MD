@@ -168,6 +168,8 @@ dpkg-reconfigure locales
 #Second window select en_GB.UTF-8
 
 #Login as user xbian and set locates and as user root
+sed -i 's/    SendEnv LANG LC_\*/#   SendEnv LANG LC_\*/g' /etc/ssh/ssh_config
+
 export LANG=C
 export LC_ALL=C
 export LANGUAGE=C
