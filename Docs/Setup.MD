@@ -163,9 +163,8 @@ ln -s /usr/local/lib/liblirc_client.so.0.2.1 /usr/local/lib/liblirc_client.so
 ldconfig
 
 # Set locale to c to prevent weird characters in xbian-config and c compiling
-dpkg-reconfigure locales
-#First window select ok
-#Second window select en_GB.UTF-8
+sed -i 's/# en_GB.UTF-8 UTF-8/en_GB.UTF-8 UTF-8/g' /etc/locale.gen
+locale-gen
 
 #Login as user xbian and set locates and as user root
 sed -i 's/    SendEnv LANG LC_\*/#   SendEnv LANG LC_\*/g' /etc/ssh/ssh_config
