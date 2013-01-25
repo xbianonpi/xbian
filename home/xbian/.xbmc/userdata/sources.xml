@@ -5,6 +5,10 @@
         <name>XBMC HUB Fusion</name>
         <path pathversion="1">http://fusion.xbmchub.com/</path>
     </source>
+    <source>
+        <name>Root filesystem</name>
+        <path pathversion="1">/</path>
+    </source>
 </files>
 </sources>
 
