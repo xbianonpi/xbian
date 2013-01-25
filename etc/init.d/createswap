@@ -44,9 +44,9 @@ echo '
  | |___| | |  __/ (_| | |_| | | | | (_| | \__ \\ V  V / (_| | |_) |
   \____|_|  \___|\__,_|\__|_|_| |_|\__, | |___/ \_/\_/ \__,_| .__/ 
                                    |___/                    |_|    ';
-	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 >/dev/null
-	mkswap /var/swapfile >/dev/null
-	swapon /var/swapfile >/dev/null
+	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 &>/dev/null
+	mkswap /var/swapfile &>/dev/null
+	swapon /var/swapfile &>/dev/null
 	echo '/var/swapfile swap swap defaults 0 0' >> /etc/fstab 
 	update-rc.d createswap remove >/dev/null
 	rm /etc/init.d/createswap >/dev/null
