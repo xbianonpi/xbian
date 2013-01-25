@@ -169,12 +169,12 @@ locale-gen
 #Login as user xbian and set locates and as user root
 sed -i 's/    SendEnv LANG LC_\*/#   SendEnv LANG LC_\*/g' /etc/ssh/ssh_config
 
-export LANG=C
-export LC_ALL=C
-export LANGUAGE=C
+export LANG=C.UTF-8
+export LC_ALL=C.UTF-8
+export LANGUAGE=C.UTF-8
 
 #Make locale settings permanent
-sed -i 's/export PATH/export PATH\nexport LANG=C\nexport LC_ALL=C\nexport LANGUAGE=C/g' /etc/profile
+sed -i 's/export PATH/export PATH\nexport LANG=C.UTF-8\nexport LC_ALL=C.UTF-8\nexport LANGUAGE=C.UTF-8/g' /etc/profile
 
 #Enable external HDD spindown (5 minutes)
 echo "/dev/sda {
