@@ -59,6 +59,7 @@ echo '
 	resizesd >/dev/null
 	update-rc.d firstrun remove >/dev/null
 	rm /etc/init.d/firstrun >/dev/null
+	update-rc.d createswap defaults
 echo '
 8888888b.  8888888888 888888b.    .d88888b.   .d88888b.  88888888888
 888   Y88b 888        888  "88b  d88P" "Y88b d88P" "Y88b     888

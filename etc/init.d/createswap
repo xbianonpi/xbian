@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+#Copyright 2012 Koenkk <development@xbian.org>
+#
+#This file is part of Xbian - XBMC on the Raspberry Pi.
+#
+#Xbian is free software: you can redistribute it and/or modify it under the
+#terms of the GNU General Public License as published by the Free Software
+#Foundation, either version 3 of the License, or (at your option) any later
+#version.
+#
+#Xbian is distributed in the hope that it will be useful, but WITHOUT ANY
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+#details.
+#
+#You should have received a copy of the GNU General Public License along
+#with Xbian. If not, see <http://www.gnu.org/licenses/>
+#
+### BEGIN INIT INFO
+# Provides:          createswap
+# Required-Start:
+# Required-Stop:
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Creates a 128 MB swapfile
+# Description:
+#
+### END INIT INFO
+
+NAME=createswap
+DESC="Creates a 128 MB swapfile"
+VERBOSE=no
+SCRIPTNAME=/etc/init.d/createswap
+DEBUG=0;
+
+case "$1" in
+  start)
+        [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
+echo '
+   ____                _   _                                       
+  / ___|_ __ ___  __ _| |_(_)_ __   __ _   _____      ____ _ _ __  
+ | |   | '__/ _ \/ _` | __| | '_ \ / _` | / __\ \ /\ / / _` | '_ \ 
+ | |___| | |  __/ (_| | |_| | | | | (_| | \__ \\ V  V / (_| | |_) |
+  \____|_|  \___|\__,_|\__|_|_| |_|\__, | |___/ \_/\_/ \__,_| .__/ 
+                                   |___/                    |_|    ';
+	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 >/dev/null
+	mkswap /var/swapfile >/dev/null
+	swapon /var/swapfile >/dev/null
+	echo '/var/swapfile swap swap defaults 0 0' >> /etc/fstab 
+	update-rc.d createswap remove >/dev/null
+	rm /etc/init.d/createswap >/dev/null
+
+        case "$?" in
+                0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+                2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+        esac
+        ;;
+  stop)
+	sync;
+        ;;
+  *)
+        echo "Usage: $SCRIPTNAME {start|stop}" >&2
+        exit 3
+        ;;
+esac
+
+:
