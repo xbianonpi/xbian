@@ -89,6 +89,9 @@
    	cd /opt/
    	git clone --depth 5  git://github.com/xbmc/xbmc.git
 
+	# Make sure kernel environment are unset
+	unset TARGET_SUBARCH TARGET_CPU TARGET_FLOAT TARGET_FPU TARGET_FPU_FLAGS TARGET_EXTRA_FLAGS TARGET_COPT TARGET_LOPT TARGET_INCLUDES CFLAGS CXXFLAGS LDFLAGS
+
 # 2. Compiling taglib (XBMC dependency)
 	cd /opt/xbmc
 	make -C lib/taglib
