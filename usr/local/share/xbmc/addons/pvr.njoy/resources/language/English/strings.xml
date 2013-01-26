@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<strings>
-    <!-- settings labels -->
-    <string id="30000">N7 IP</string>
-    <string id="30001">N7 Port</string>
-</strings>
-
