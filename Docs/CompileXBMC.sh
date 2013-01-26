@@ -114,7 +114,7 @@
 	git clone --depth 5 https://github.com/Pulse-Eight/libcec.git
 	cd libcec
 	./bootstrap 
-	./configure --prefix=/usr/local --enable-rpi --with-rpi-include-path="/opt/vc/include" --with-rpi-lib-path="/opt/vc/lib/libbcm_host.so" 
+	./configure --prefix=/usr/local --enable-rpi --with-rpi-include-path="/opt/vc/include" --with-rpi-lib-path="/opt/vc/lib/libbcm_host.so" --enable-static=no
 	make
 	make install
 
