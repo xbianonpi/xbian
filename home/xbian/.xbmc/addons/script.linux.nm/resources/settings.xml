@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<settings>
-    <category label="32100">
-       <setting id="disable_ipv6" type="bool" label="32101" default="true"/>
-    </category>
-</settings>
