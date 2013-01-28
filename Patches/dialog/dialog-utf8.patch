@@ -1,0 +1,362 @@
+/*
+Copyright 2013 CurlyMo <development@xbian.org>
+
+This file is part of XBian - XBMC on the Raspberry Pi.
+
+XBian is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with XBian. If not, see <http://www.gnu.org/licenses/>
+*/
+--- a/arrows.c
++++ b/arrows.c
+@@ -128,8 +128,8 @@
+ 	    (void) add_acs(win, ACS_UARROW);
+ 	    (void) waddstr(win, "(-)");
+ 	} else {
+-	    (void) wattrset(win, attr);
+-	    (void) whline(win, dlg_boxchar(ACS_HLINE), ON_LEFT);
++	    (void) wattrset(win, dialog_attr);
++		(void) wadd_wch(win, WACS_HLINE);
+ 	}
+     }
+     mouse_mkbutton(top, x - 1, 6, KEY_PPAGE);
+@@ -140,8 +140,8 @@
+ 	(void) add_acs(win, ACS_DARROW);
+ 	(void) waddstr(win, "(+)");
+     } else {
+-	(void) wattrset(win, borderattr);
+-	(void) whline(win, dlg_boxchar(ACS_HLINE), ON_LEFT);
++	    (void) wattrset(win, border_attr);
++		(void) wadd_wch(win, WACS_HLINE);
+     }
+     mouse_mkbutton(bottom, x - 1, 6, KEY_NPAGE);
+ 
+@@ -192,8 +192,8 @@
+ 	(void) wmove(win, bottom, right - 7);
+ 	(void) waddstr(win, buffer);
+ 	if ((len = dlg_count_columns(buffer)) < 4) {
+-	    (void) wattrset(win, border_attr);
+-	    whline(win, dlg_boxchar(ACS_HLINE), 4 - len);
++		(void) wattrset(win, border_attr);
++		(void) wadd_wch(win, WACS_HLINE);
+ 	}
+     }
+ #define BARSIZE(num) (int) (((all_high * (num)) + all_high - 1) / total_data)
+--- a/columns.c
++++ b/columns.c
+@@ -22,6 +22,7 @@
+  */
+ 
+ #include <dialog.h>
++#include <inputstr.c>
+ 
+ #define each(row, data) \
+  		row = 0, data = target; \
+@@ -48,8 +49,27 @@
+     return (char **) (void *) result;
+ }
+ 
++static wchar_t *
++next_col(wchar_t *source, unsigned offset) {
++    const char *mark = column_separator();
++	
++	size_t len = strlen(mark);
++	mbstate_t state;
++	int part = dlg_count_wcbytes(mark, len);
++	size_t code;
++	wchar_t *temp = dlg_calloc(wchar_t, len + 1);
++
++	memset(&state, 0, sizeof(state));
++	code = mbsrtowcs(temp, &mark, (size_t) part, &state);
++	
++    wchar_t *result = source + offset;
++    if (offset)
++	result += wcslen(temp);
++    return wcsstr(result, temp);
++}
++
+ static char *
+-next_col(char *source, unsigned offset)
++next_col1(char *source, unsigned offset)
+ {
+     char *mark = column_separator();
+     char *result = source + offset;
+@@ -66,22 +86,36 @@
+ split_row(char *source, unsigned *offsets, unsigned *widths)
+ {
+     int mark = (int) strlen(column_separator());
+-    char *next = 0;
++    wchar_t *next = 0;
++    char *next1 = 0;
+     unsigned result = 0;
+     unsigned offset = 0;
++    unsigned offset1 = 0;
+ 
++	const char *src = source;
++	size_t len = strlen(source);
++	mbstate_t state;
++	int part = dlg_count_wcbytes(source, len);
++	size_t code;
++	wchar_t *temp = dlg_calloc(wchar_t, len + 1);
++
++	memset(&state, 0, sizeof(state));
++	code = mbsrtowcs(temp, &src, (size_t) part, &state);	
++	
+     do {
+ 	if (result) {
+-	    offset = (unsigned) (mark + next - source);
+-	    widths[result - 1] = offset - offsets[result - 1] - (unsigned) mark;
++	    offset = (unsigned) (mark + next - temp);
++		offset1 = (unsigned) (mark + next1 - source);
++		
++	    widths[result - 1] = (offset - offsets[result - 1] - (unsigned) mark) - (offset-offset1);
+ 	}
+-	offsets[result] = offset;
++	offsets[result] = offset - (offset-offset1);
+ 	++result;
+-    } while ((next = next_col(source, offset)) != 0);
++	next1 = next_col1(source, offset1);
++	} while ((next = next_col(temp, offset)) != 0);
+ 
+-    offset = (unsigned) strlen(source);
++    offset = (unsigned) wcslen(temp) + (strlen(source)-wcslen(temp));
+     widths[result - 1] = offset - offsets[result - 1];
+-
+     return result;
+ }
+ 
+@@ -102,12 +136,29 @@
+ 	unsigned *widths;
+ 	unsigned *offsets;
+ 	unsigned *maxwidth;
++	unsigned *maxwidthutf;
+ 	unsigned realwidth;
+ 	unsigned n;
++	unsigned i;
++	unsigned x;
++	const char *src;
++	size_t len;
++	mbstate_t state;
++	int part;
++	size_t code;
++	wchar_t *temp;
+ 
+ 	/* first allocate arrays for workspace */
+ 	for (each(row, value)) {
+-	    size_t len = strlen(*value);
++		src = *value;
++		len = strlen(src);
++		part = dlg_count_wcbytes(src, len);
++		temp = dlg_calloc(wchar_t, len + 1);
++
++		memset(&state, 0, sizeof(state));
++		code = mbsrtowcs(temp, &src, (size_t) part, &state);
++	
++	    size_t len = wcslen(temp);
+ 	    if (maxcols < len)
+ 		maxcols = len;
+ 	}
+@@ -115,13 +166,22 @@
+ 	widths = dlg_calloc(unsigned, maxcols);
+ 	offsets = dlg_calloc(unsigned, maxcols);
+ 	maxwidth = dlg_calloc(unsigned, maxcols);
++	maxwidthutf = dlg_calloc(unsigned, maxcols);
+ 
+ 	assert_ptr(widths, "dlg_align_columns");
+ 	assert_ptr(offsets, "dlg_align_columns");
+ 	assert_ptr(maxwidth, "dlg_align_columns");
+-
++	assert_ptr(maxwidthutf, "dlg_align_columns");
+ 	/* now, determine the number of columns and the column-widths */
+ 	for (each(row, value)) {
++		src = *value;
++		len = strlen(src);
++		part = dlg_count_wcbytes(src, len);
++		temp = dlg_calloc(wchar_t, len + 1);
++
++		memset(&state, 0, sizeof(state));
++		code = mbsrtowcs(temp, &src, (size_t) part, &state);
++	
+ 	    unsigned cols = split_row(*value, offsets, widths);
+ 	    if (numcols < cols)
+ 		numcols = cols;
+@@ -135,20 +195,83 @@
+ 	    realwidth += maxwidth[n];
+ 	}
+ 
+-	/* finally, construct reformatted strings */
+ 	for (each(row, value)) {
++		src = *value;
++		len = strlen(src);
++		part = dlg_count_wcbytes(src, len);
++		temp = dlg_calloc(wchar_t, len + 1);
++	
+ 	    unsigned cols = split_row(*value, offsets, widths);
+ 	    unsigned offset = 0;
+-	    char *text = dlg_malloc(char, realwidth + 1);
++		
++	    char *text = dlg_malloc(char, realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++	    char *subval = dlg_malloc(char, realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++		wchar_t *newtext;
++	    assert_ptr(text, "dlg_align_columns");
+ 
++		memset(&state, 0, sizeof(state));
++		code = mbsrtowcs(temp, &src, (size_t) part, &state);
++	
++	    memset(text, ' ', (size_t) realwidth + ((strlen(*value)-wcslen(temp))));
++
++	    for (n = 0; n < cols; ++n) {
++			memset(subval, sizeof(char), realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++			memcpy(text + offset, *value + offsets[n], (size_t) widths[n]);
++			memcpy(subval,text + offset,(size_t) widths[n]);
++				
++			src = subval;
++			len = strlen(src);
++			part = dlg_count_wcbytes(src, len);
++			newtext = dlg_calloc(wchar_t, len + 1);
++			memset(&state, 0, sizeof(state));
++			code = mbsrtowcs(newtext, &src, (size_t) part, &state);
++			
++			offset += maxwidth[n] + 1 + (len-code);
++			if (maxwidthutf[n] < widths[n]-(len-code))
++				maxwidthutf[n] = widths[n]-(len-code);
++	    }
++	    text[realwidth + ((strlen(*value)-wcslen(temp)))] = 0;
++	}
++	realwidth = numcols - 1;
++	for (n = 0; n < numcols; ++n) {
++	    realwidth += maxwidthutf[n];
++	}	
++	
++	/* finally, construct reformatted strings */
++	for (each(row, value)) {
++		src = *value;
++		len = strlen(src);
++		part = dlg_count_wcbytes(src, len);
++		temp = dlg_calloc(wchar_t, len + 1);
++	
++	    unsigned cols = split_row(*value, offsets, widths);
++	    unsigned offset = 0;
++		
++	    char *text = dlg_malloc(char, realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++	    char *subval = dlg_malloc(char, realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++		wchar_t *newtext;
+ 	    assert_ptr(text, "dlg_align_columns");
+ 
+-	    memset(text, ' ', (size_t) realwidth);
++		memset(&state, 0, sizeof(state));
++		code = mbsrtowcs(temp, &src, (size_t) part, &state);
++	
++	    memset(text, ' ', (size_t) realwidth + ((strlen(*value)-wcslen(temp))));
++
+ 	    for (n = 0; n < cols; ++n) {
+-		memcpy(text + offset, *value + offsets[n], (size_t) widths[n]);
+-		offset += maxwidth[n] + 1;
++			memset(subval, sizeof(char), realwidth + 1 + ((strlen(*value)-wcslen(temp))));
++			memcpy(text + offset, *value + offsets[n], (size_t) widths[n]);
++			memcpy(subval,text + offset,(size_t) widths[n]);
++				
++			src = subval;
++			len = strlen(src);
++			part = dlg_count_wcbytes(src, len);
++			newtext = dlg_calloc(wchar_t, len + 1);
++			memset(&state, 0, sizeof(state));
++			code = mbsrtowcs(newtext, &src, (size_t) part, &state);
++			
++			offset += maxwidthutf[n] + 1 + (len-code);
+ 	    }
+-	    text[realwidth] = 0;
++	    text[realwidth + ((strlen(*value)-wcslen(temp)))] = 0;
+ 	    *value = text;
+ 	}
+ 
+--- a/util.c
++++ b/util.c
+@@ -200,7 +200,7 @@
+ 	    (void) waddch(stdscr, ' ');
+ 	(void) wmove(stdscr, 1, 1);
+ 	for (i = 0; i < COLS - 2; i++)
+-	    (void) waddch(stdscr, dlg_boxchar(ACS_HLINE));
++	    (void) wadd_wch(stdscr, WACS_HLINE);
+     }
+ 
+     (void) wnoutrefresh(stdscr);
+@@ -1359,24 +1359,34 @@
+     for (i = 0; i < height; i++) {
+ 	(void) wmove(win, y + i, x);
+ 	for (j = 0; j < width; j++)
+-	    if (!i && !j)
+-		(void) waddch(win, borderchar | dlg_boxchar(ACS_ULCORNER));
+-	    else if (i == height - 1 && !j)
+-		(void) waddch(win, borderchar | dlg_boxchar(ACS_LLCORNER));
+-	    else if (!i && j == width - 1)
+-		(void) waddch(win, borderchar2 | dlg_boxchar(ACS_URCORNER));
+-	    else if (i == height - 1 && j == width - 1)
+-		(void) waddch(win, borderchar2 | dlg_boxchar(ACS_LRCORNER));
+-	    else if (!i)
+-		(void) waddch(win, borderchar | dlg_boxchar(ACS_HLINE));
+-	    else if (i == height - 1)
+-		(void) waddch(win, borderchar2 | dlg_boxchar(ACS_HLINE));
+-	    else if (!j)
+-		(void) waddch(win, borderchar | dlg_boxchar(ACS_VLINE));
+-	    else if (j == width - 1)
+-		(void) waddch(win, borderchar2 | dlg_boxchar(ACS_VLINE));
+-	    else
+-		(void) waddch(win, boxchar | ' ');
++	    if (!i && !j) {
++		wattrset(win, borderchar);
++		(void) wadd_wch(win, WACS_ULCORNER);
++	    } else if (i == height - 1 && !j) {
++		wattrset(win, borderchar);
++		(void) wadd_wch(win, WACS_LLCORNER);
++	    } else if (!i && j == width - 1) {
++		wattrset(win, boxchar);
++		(void) wadd_wch(win, WACS_URCORNER);
++		}
++	    else if (i == height - 1 && j == width - 1) {
++		wattrset(win, boxchar);
++		(void) wadd_wch(win, WACS_LRCORNER);
++	    } else if (!i) {
++		wattrset(win, borderchar);
++		(void) wadd_wch(win, WACS_HLINE);
++	    } else if (i == height - 1) {
++		wattrset(win, boxchar);
++		(void) wadd_wch(win, WACS_HLINE);
++	    } else if (!j) {
++		wattrset(win, borderchar);
++		(void) wadd_wch(win, WACS_VLINE);
++	    } else if (j == width - 1) {
++		wattrset(win, boxchar);
++		(void) wadd_wch(win, WACS_VLINE);
++	    } else {
++		(void) waddch(win, ' ');
++		}
+     }
+     wattrset(win, save);
+ }
+@@ -1917,11 +1927,12 @@
+ 
+     wattrset(win, on_left);
+     (void) wmove(win, height - 3, 0);
+-    (void) waddch(win, dlg_boxchar(ACS_LTEE));
+-    for (i = 0; i < width - 2; i++)
+-	(void) waddch(win, dlg_boxchar(ACS_HLINE));
++    (void) wadd_wch(win, WACS_LTEE);
++    for (i = 0; i < width - 2; i++) {
++		(void) wadd_wch(win, WACS_HLINE);
++	}
+     wattrset(win, on_right);
+-    (void) waddch(win, dlg_boxchar(ACS_RTEE));
++    (void) wadd_wch(win, WACS_RTEE);
+     wattrset(win, on_inside);
+     (void) wmove(win, height - 2, 1);
+     for (i = 0; i < width - 2; i++)
