@@ -1,0 +1,283 @@
+/*
+Copyright 2013 CurlyMo <development@xbian.org>
+
+This file is part of XBian - XBMC on the Raspberry Pi.
+
+XBian is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with XBian. If not, see <http://www.gnu.org/licenses/>
+*/
+--- a/data/interfaces/default/config_search.tmpl
++++ b/data/interfaces/default/config_search.tmpl
+@@ -189,6 +189,17 @@
+                                     <span class="component-desc">(eg. localhost:6789)</span>
+                                 </label>
+                             </div>
++
++                            <div class="field-pair">
++                                <label class="nocheck clearfix">
++                                    <span class="component-title">NZBget Username</span>
++                                    <input type="text" name="nzbget_username" value="$sickbeard.NZBGET_USERNAME" size="20" />
++                                </label>
++                                <label class="nocheck clearfix">
++                                    <span class="component-title">&nbsp;</span>
++                                    <span class="component-desc">Username found in nzbget.conf (by default xbian)</span>
++                                </label>
++                            </div>
+                             
+                             <div class="field-pair">
+                                 <label class="nocheck clearfix">
+@@ -197,7 +208,7 @@
+                                 </label>
+                                 <label class="nocheck clearfix">
+                                     <span class="component-title">&nbsp;</span>
+-                                    <span class="component-desc">Password found in nzbget.conf (by default tegbzn6789)</span>
++                                    <span class="component-desc">Password found in nzbget.conf (by default raspberry)</span>
+                                 </label>
+                             </div>
+ 
+--- a/sickbeard/__init__.py
++++ b/sickbeard/__init__.py
+@@ -194,6 +194,7 @@ SAB_APIKEY = None
+ SAB_CATEGORY = None
+ SAB_HOST = ''
+ 
++NZBGET_USERNAME = None
+ NZBGET_PASSWORD = None
+ NZBGET_CATEGORY = None
+ NZBGET_HOST = None
+@@ -309,7 +310,7 @@ def initialize(consoleLogging=True):
+         global LOG_DIR, WEB_PORT, WEB_LOG, WEB_ROOT, WEB_USERNAME, WEB_PASSWORD, WEB_HOST, WEB_IPV6, USE_API, API_KEY, ENABLE_HTTPS, HTTPS_CERT, HTTPS_KEY, \
+                 USE_NZBS, USE_TORRENTS, NZB_METHOD, NZB_DIR, DOWNLOAD_PROPERS, \
+                 SAB_USERNAME, SAB_PASSWORD, SAB_APIKEY, SAB_CATEGORY, SAB_HOST, \
+-                NZBGET_PASSWORD, NZBGET_CATEGORY, NZBGET_HOST, currentSearchScheduler, backlogSearchScheduler, \
++                NZBGET_USERNAME, NZBGET_PASSWORD, NZBGET_CATEGORY, NZBGET_HOST, currentSearchScheduler, backlogSearchScheduler, \
+                 USE_XBMC, XBMC_NOTIFY_ONSNATCH, XBMC_NOTIFY_ONDOWNLOAD, XBMC_UPDATE_FULL, \
+                 XBMC_UPDATE_LIBRARY, XBMC_HOST, XBMC_USERNAME, XBMC_PASSWORD, \
+                 USE_TRAKT, TRAKT_USERNAME, TRAKT_PASSWORD, TRAKT_API, \
+@@ -564,7 +565,8 @@ def initialize(consoleLogging=True):
+         SAB_HOST = check_setting_str(CFG, 'SABnzbd', 'sab_host', '')
+ 
+         CheckSection(CFG, 'NZBget')
+-        NZBGET_PASSWORD = check_setting_str(CFG, 'NZBget', 'nzbget_password', 'tegbzn6789')
++        NZBGET_USERNAME = check_setting_str(CFG, 'NZBget', 'nzbget_username', 'xbian')
++        NZBGET_PASSWORD = check_setting_str(CFG, 'NZBget', 'nzbget_password', 'raspberry')
+         NZBGET_CATEGORY = check_setting_str(CFG, 'NZBget', 'nzbget_category', 'tv')
+         NZBGET_HOST = check_setting_str(CFG, 'NZBget', 'nzbget_host', '')
+ 
+@@ -1037,6 +1039,7 @@ def save_config():
+     new_config['SABnzbd']['sab_host'] = SAB_HOST
+ 
+     new_config['NZBget'] = {}
++    new_config['NZBget']['nzbget_username'] = NZBGET_USERNAME
+     new_config['NZBget']['nzbget_password'] = NZBGET_PASSWORD
+     new_config['NZBget']['nzbget_category'] = NZBGET_CATEGORY
+     new_config['NZBget']['nzbget_host'] = NZBGET_HOST
+--- a/sickbeard/nzbget.py
++++ b/sickbeard/nzbget.py
+@@ -1,88 +1,88 @@
+-# Author: Nic Wolfe <nic@wolfeden.ca>
+-# URL: http://code.google.com/p/sickbeard/
+-#
+-# This file is part of Sick Beard.
+-#
+-# Sick Beard is free software: you can redistribute it and/or modify
+-# it under the terms of the GNU General Public License as published by
+-# the Free Software Foundation, either version 3 of the License, or
+-# (at your option) any later version.
+-#
+-# Sick Beard is distributed in the hope that it will be useful,
+-# but WITHOUT ANY WARRANTY; without even the implied warranty of
+-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-# GNU General Public License for more details.
+-#
+-# You should have received a copy of the GNU General Public License
+-# along with Sick Beard.  If not, see <http://www.gnu.org/licenses/>.
+-
+-
+-
+-import httplib
+-import datetime
+-
+-import sickbeard
+-
+-from base64 import standard_b64encode
+-import xmlrpclib
+-
+-from sickbeard.providers.generic import GenericProvider
+-
+-from sickbeard import logger
+-
+-def sendNZB(nzb):
+-
+-    addToTop = False
+-    nzbgetXMLrpc = "http://nzbget:%(password)s@%(host)s/xmlrpc"
+-
+-    if sickbeard.NZBGET_HOST == None:
+-        logger.log(u"No NZBget host found in configuration. Please configure it.", logger.ERROR)
+-        return False
+-
+-    url = nzbgetXMLrpc % {"host": sickbeard.NZBGET_HOST, "password": sickbeard.NZBGET_PASSWORD}
+-
+-    nzbGetRPC = xmlrpclib.ServerProxy(url)
+-    try:
+-        if nzbGetRPC.writelog("INFO", "Sickbeard connected to drop of %s any moment now." % (nzb.name + ".nzb")):
+-            logger.log(u"Successful connected to NZBget", logger.DEBUG)
+-        else:
+-            logger.log(u"Successful connected to NZBget, but unable to send a message" % (nzb.name + ".nzb"), logger.ERROR)
+-
+-    except httplib.socket.error:
+-        logger.log(u"Please check your NZBget host and port (if it is running). NZBget is not responding to this combination", logger.ERROR)
+-        return False
+-
+-    except xmlrpclib.ProtocolError, e:
+-        if (e.errmsg == "Unauthorized"):
+-            logger.log(u"NZBget password is incorrect.", logger.ERROR)
+-        else:
+-            logger.log(u"Protocol Error: " + e.errmsg, logger.ERROR)
+-        return False
+-
+-    # if it aired recently make it high priority
+-    for curEp in nzb.episodes:
+-        if datetime.date.today() - curEp.airdate <= datetime.timedelta(days=7):
+-            addToTop = True
+-
+-    # if it's a normal result need to download the NZB content
+-    if nzb.resultType == "nzb":
+-        genProvider = GenericProvider("")
+-        data = genProvider.getURL(nzb.url)
+-        if (data == None):
+-            return False
+-
+-    # if we get a raw data result thats even better
+-    elif nzb.resultType == "nzbdata":
+-        data = nzb.extraInfo[0]
+-
+-    nzbcontent64 = standard_b64encode(data)
+-
+-    logger.log(u"Sending NZB to NZBget")
+-    logger.log(u"URL: " + url, logger.DEBUG)
+-
+-    if nzbGetRPC.append(nzb.name + ".nzb", sickbeard.NZBGET_CATEGORY, addToTop, nzbcontent64):
+-        logger.log(u"NZB sent to NZBget successfully", logger.DEBUG)
+-        return True
+-    else:
+-        logger.log(u"NZBget could not add %s to the queue" % (nzb.name + ".nzb"), logger.ERROR)
+-        return False
+\ No newline at end of file
++# Author: Nic Wolfe <nic@wolfeden.ca>
++# URL: http://code.google.com/p/sickbeard/
++#
++# This file is part of Sick Beard.
++#
++# Sick Beard is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# Sick Beard is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with Sick Beard.  If not, see <http://www.gnu.org/licenses/>.
++
++
++
++import httplib
++import datetime
++
++import sickbeard
++
++from base64 import standard_b64encode
++import xmlrpclib
++
++from sickbeard.providers.generic import GenericProvider
++
++from sickbeard import logger
++
++def sendNZB(nzb):
++
++    addToTop = False
++    nzbgetXMLrpc = "http://%(username):%(password)s@%(host)s/xmlrpc"
++
++    if sickbeard.NZBGET_HOST == None:
++        logger.log(u"No NZBget host found in configuration. Please configure it.", logger.ERROR)
++        return False
++
++    url = nzbgetXMLrpc % {"host": sickbeard.NZBGET_HOST, "password": sickbeard.NZBGET_PASSWORD}
++
++    nzbGetRPC = xmlrpclib.ServerProxy(url)
++    try:
++        if nzbGetRPC.writelog("INFO", "Sickbeard connected to drop of %s any moment now." % (nzb.name + ".nzb")):
++            logger.log(u"Successful connected to NZBget", logger.DEBUG)
++        else:
++            logger.log(u"Successful connected to NZBget, but unable to send a message" % (nzb.name + ".nzb"), logger.ERROR)
++
++    except httplib.socket.error:
++        logger.log(u"Please check your NZBget host and port (if it is running). NZBget is not responding to this combination", logger.ERROR)
++        return False
++
++    except xmlrpclib.ProtocolError, e:
++        if (e.errmsg == "Unauthorized"):
++            logger.log(u"NZBget password is incorrect.", logger.ERROR)
++        else:
++            logger.log(u"Protocol Error: " + e.errmsg, logger.ERROR)
++        return False
++
++    # if it aired recently make it high priority
++    for curEp in nzb.episodes:
++        if datetime.date.today() - curEp.airdate <= datetime.timedelta(days=7):
++            addToTop = True
++
++    # if it's a normal result need to download the NZB content
++    if nzb.resultType == "nzb":
++        genProvider = GenericProvider("")
++        data = genProvider.getURL(nzb.url)
++        if (data == None):
++            return False
++
++    # if we get a raw data result thats even better
++    elif nzb.resultType == "nzbdata":
++        data = nzb.extraInfo[0]
++
++    nzbcontent64 = standard_b64encode(data)
++
++    logger.log(u"Sending NZB to NZBget")
++    logger.log(u"URL: " + url, logger.DEBUG)
++
++    if nzbGetRPC.append(nzb.name + ".nzb", sickbeard.NZBGET_CATEGORY, addToTop, nzbcontent64):
++        logger.log(u"NZB sent to NZBget successfully", logger.DEBUG)
++        return True
++    else:
++        logger.log(u"NZBget could not add %s to the queue" % (nzb.name + ".nzb"), logger.ERROR)
++        return False
+--- a/sickbeard/webserve.py
++++ b/sickbeard/webserve.py
+@@ -763,7 +763,7 @@ class ConfigSearch:
+ 
+     @cherrypy.expose
+     def saveSearch(self, use_nzbs=None, use_torrents=None, nzb_dir=None, sab_username=None, sab_password=None,
+-                       sab_apikey=None, sab_category=None, sab_host=None, nzbget_password=None, nzbget_category=None, nzbget_host=None,
++                       sab_apikey=None, sab_category=None, sab_host=None, nzbget_username=None, nzbget_password=None, nzbget_category=None, nzbget_host=None,
+                        torrent_dir=None, nzb_method=None, usenet_retention=None, search_frequency=None, download_propers=None):
+ 
+         results = []
+@@ -815,6 +815,7 @@ class ConfigSearch:
+ 
+         sickbeard.SAB_HOST = sab_host
+ 
++	     sickbeard.NZBGET_USERNAME = nzbget_username
+         sickbeard.NZBGET_PASSWORD = nzbget_password
+         sickbeard.NZBGET_CATEGORY = nzbget_category
+         sickbeard.NZBGET_HOST = nzbget_host
