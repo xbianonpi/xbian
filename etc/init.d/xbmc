@@ -43,7 +43,7 @@ SCRIPTNAME=/etc/init.d/xbmc
 
 do_start()
 {
-	if [ $(($(ps -A | grep xbmc.bin | wc -l))) -eq 0 ]; then
+	if [ $(ps -A | grep xbmc.bin | wc -l) -eq 0 ]; then
 		/usr/bin/black;
 		start-stop-daemon -c xbian -u xbian --start --quiet --pidfile $PIDFILE --exec $DAEMON --test || return 1;
 		echo $(start-stop-daemon -c xbian -u xbian -m --start --quiet --pidfile $PIDFILE --exec $DAEMON -- $DAEMON_ARGS; RETURN=$?; case $RETURN in 0 ) pkill black; ;; 64 ) sudo halt ;; 66 ) sudo reboot; ;; esac || return 2) &exit
