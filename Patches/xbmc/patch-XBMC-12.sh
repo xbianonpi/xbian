@@ -21,7 +21,8 @@ XBianSysSum.patch
 NetworkCachingRedux.patch
 RemoveGUISoundSettings.patch
 WOL.patch
-Splash.patch"
+Splash.patch
+omxcodecs.patch"
 for patch in $PATCHES
 do
   wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/$patch -O $patch
