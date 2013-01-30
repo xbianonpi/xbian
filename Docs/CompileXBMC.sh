@@ -87,8 +87,13 @@
    	# Cloning xbmc
 	mkdir /opt
    	cd /opt/
-   	git clone --depth 5  git://github.com/xbmc/xbmc.git
 
+	# If you want to compile XBMC Frodo 12.0 Final
+   	git clone --depth 5 -b Frodo git://github.com/xbmc/xbmc.git
+
+	# If you want to compile the current XBMC Git 
+	git clone --depth 5 git://github.com/xbmc/xbmc.git
+	
 	# Make sure kernel environment are unset
 	unset TARGET_SUBARCH TARGET_CPU TARGET_FLOAT TARGET_FPU TARGET_FPU_FLAGS TARGET_EXTRA_FLAGS TARGET_COPT TARGET_LOPT TARGET_INCLUDES CFLAGS CXXFLAGS LDFLAGS
 
@@ -131,20 +136,15 @@
 	cd /opt/xbmc/
 
     	# Applying patches
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/TPNno.patch
-    	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/EGLRes.patch
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/XBianSysSum.patch
-        wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/NetworkCachingRedux.patch
-    	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/RemoveGUISoundSettings.patch
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/WOL.patch
-	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/Splash.patch
-	patch -p1 < Splash.patch
-	patch -p1 < WOL.patch
-   	patch -p1 < TPNno.patch
-    	patch -p1 < EGLRes.patch
-	patch -p1 < XBianSysSum.patch
-        patch -p1 < NetworkCachingRedux.patch
-	patch -p1 < RemoveGUISoundSettings.patch
+	# If you haven chosen for XBMC 12.0 Final at step 1 
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/patch-XBMC-12.sh
+	chmod +x patch-XBMC-12.sh
+ 	sh patch-XBMC-12.sh
+	
+	# If you have chosen for the current XBMC Git 
+	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/Patches/xbmc/patch-XBMC-Current.sh
+	chmod +x patch-XBMC-Current.sh
+ 	sh patch-XBMC-Current.sh
 
 	# Replacing the default splash screen
 	wget https://raw.github.com/xbianonpi/xbian/xbian-alpha5/usr/local/share/xbmc/media/Splash.png
