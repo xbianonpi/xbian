@@ -1,0 +1,14 @@
+# DVB-T Sachsen
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 482000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH22: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 498000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH24: Das Erste, arte, Phoenix, EinsFestival
+T 506000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH25: Das Erste, arte, Phoenix, EinsFestival
+T 522000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH27: MDR-SN, rbb, Bayerisches Fernsehen, WDR
+T 530000000 8MHz 3/4 NONE QAM16 8k 1/8 NONE # CH28: RTL, RTL2, Super RTL, VOX, RTL Crime, Passion [Sendenorm: MPEG-4]
+T 538000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH29: MDR-SN, rbb, Bayerisches Fernsehen, WDR
+T 554000000 8MHz 2/3 NONE QAM16 8k 1/16 NONE # CH31: LF Leipzg.Ferns., InfoTVLeipzig, BBCWorld, Bibel.TV, RadioLeipzig, RadioHoreb
+T 562000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH32: MDR-SN, rbb, Bayerisches Fernsehen, WDR
+T 594000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH36: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 602000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH37: MDR-SN, rbb, Bayerisches Fernsehen, WDR
+T 618000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH39: Das Erste, arte, Phoenix, EinsFestival

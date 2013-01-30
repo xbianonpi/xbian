@@ -1,0 +1,10 @@
+# location      : PL Warszawa mazowieckie
+# date scanned  : 2011-11-17
+#
+# T[2] <freq> <bw> <fec_hi> <fec_lo> <mod> <tm> <guard> <hi> [# comment]
+#T 538000000 8MHz AUTO AUTO     AUTO AUTO AUTO AUTO	# Polsat HD
+T 548000000 8MHz  2/3 NONE    QAM16   8k  1/4 NONE      # 
+T 690000000 8MHz  2/3 NONE    QAM16   8k  1/4 NONE      # MUX2 (dotych. naziemne bez TVP)
+T 730000000 8MHz  2/3 NONE    QAM16   8k  1/4 NONE	# TVN ND
+T 746000000 8MHz  3/4 NONE    QAM64   8k  1/8 NONE	# MUX3 (TVP)
+T 770000000 8MHz  3/4 NONE    QAM64   8k  1/8 NONE	# 

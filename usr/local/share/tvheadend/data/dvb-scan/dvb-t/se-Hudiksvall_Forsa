@@ -1,0 +1,6 @@
+# Sweden - Hudiksvall/Forsa
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 554000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 658000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 578000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE
+T 618000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE

@@ -1,0 +1,14 @@
+# Australia / Brisbane (Mt Coot-tha transmitters)
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC
+T 226500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Seven
+T 177500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Nine
+T 191625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten
+T 219500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS
+T 585625000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# 31 Digital
+T 599500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE

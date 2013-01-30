@@ -1,0 +1,9 @@
+# DVB-T Detva (Detva, Slovak Republic)
+# Created from http://www.dvbt.towercom.sk/odbornici.php
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+
+# 2.st multiplex (commercial) - on channel 60
+T 786000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE
+
+# 3.st multiplex (public) - on channel 33
+T 570000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE

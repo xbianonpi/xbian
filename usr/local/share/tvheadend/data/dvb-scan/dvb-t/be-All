@@ -1,0 +1,8 @@
+# Belgium, whole country
+# Created from http://nl.wikipedia.org/wiki/DVB-T-frequenties
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 482000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE
+T 506000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE
+T 666000000 8MHz 3/4 NONE QAM16 8k 1/4 NONE
+T 754000000 8MHz 3/4 NONE QAM16 8k 1/4 NONE
+T 834000000 8MHz 3/4 NONE QAM16 8k 1/4 NONE

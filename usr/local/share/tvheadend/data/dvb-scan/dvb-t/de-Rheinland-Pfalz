@@ -1,0 +1,11 @@
+# DVB-T Rheinland-Pfalz
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 530000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH28: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 546000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH30: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 570000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH33: SWR-RP, Bayerisches Fernsehen, hr, WDR
+T 658000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH44: SWR-RP, Bayerisches Fernsehen, hr, WDR
+T 674000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH46: Das Erste, arte, Phoenix, EinsPlus
+T 690000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH48: SWR-RP, Bayerisches Fernsehen, hr, WDR
+T 754000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH56: Das Erste, arte, Phoenix, EinsPlus
+T 762000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH57: Das Erste, arte, Phoenix, EinsPlus

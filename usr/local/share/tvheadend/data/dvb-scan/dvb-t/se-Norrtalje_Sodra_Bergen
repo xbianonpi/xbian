@@ -1,0 +1,7 @@
+# Sweden - Norrtälje/Södra Bergen
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 730000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 754000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 778000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 706000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 746000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE

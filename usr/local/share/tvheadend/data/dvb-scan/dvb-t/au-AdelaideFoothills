@@ -1,0 +1,12 @@
+# Australia / Adelaide / Grenfell Street
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC
+T 781625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Seven
+T 711500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Nine
+T 795500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten
+T 732500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS
+T 760500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE

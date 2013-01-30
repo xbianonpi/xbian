@@ -1,0 +1,14 @@
+# DVB-T Tenerife, Spain (03/04/2011)
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 490000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 23: laSexta 2, laSexta 3, laSexta HD, C+ 2, Cuatro
+T 498000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 24: Canal 7, Mírame, Canal 4 Tenerife
+T 514000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 26: Nitro, Antena 3, Marca, 13
+T 538000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 29: Boing, Tele5 HD, MTV, La 10
+T 666000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 45: TVE HD, tdp
+T 754000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 56: Canal 6 TeideVisión, ElDía
+T 778000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 59: TV Canaria, TV Canaria 2, Antena 3 Canaria
+T 786000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 60: La 1, La 2, 24h, Clan
+T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 66: Teledeporte, Canal Ingeniería, Veo7, Intereconomía
+T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 67: laSexta, laSexta 3, Gol Televisión, Cuatro, Divinity, La Tienda en Casa
+T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 68: Tele5, FDF, laSiete, Disney Channel, Intereconomía
+T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE   # Canal 69: Antena 3, Neox, Nova, Veo7, AXN

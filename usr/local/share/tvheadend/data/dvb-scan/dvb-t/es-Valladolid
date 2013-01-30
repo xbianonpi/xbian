@@ -1,0 +1,7 @@
+# DVB-T Valladolid
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 762000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE    # Canal 57: Clan TVE, 24H TVE, La 2, TVE 1, RNE1, RNE3, RNC
+T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE    # Canal 66: Veo, Veo 2, Net TV, Teledeporte
+T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE    # Canal 67: Cuatro, CNN+, 40 Latino, La Sexta 1
+T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE    # Canal 68: Telecinco, Telecinco Sport, Telecinco Estrellas, Fly Music
+T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE    # Canal 69: Antena 3, Antena Neox, Antena Nova, La Sexta 2

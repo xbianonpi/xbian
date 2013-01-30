@@ -1,0 +1,38 @@
+# Australia / NSW / New England / Tamworth / Mt.Soma
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# SBS
+T 690500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# NBN
+T 753500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime
+T 732500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# ABC
+T 711500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SC10
+T 774500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+
+# Australia / NSW / New England / Upper Namoi / Mt.Dowe
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# SBS
+T 585500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# NBN
+T 592500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime
+T 205625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# ABC
+T 191625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SC10
+T 613500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+
+# Australia / NSW / Western Districts / Central Western Slopes / Mt. Cenn Cruaich
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# SBS
+T 641500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# WIN
+T 648500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime
+T 620500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# ABC
+T 226625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SC10
+T 641500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE

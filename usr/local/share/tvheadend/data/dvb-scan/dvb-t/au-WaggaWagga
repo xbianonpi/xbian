@@ -1,0 +1,12 @@
+# Australia / Wagga Wagga (Mt Ulundra)
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC
+T 655500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS
+T 669500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# Prime
+T 662500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Southern Cross Ten
+T 690500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# WIN
+T 683500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE

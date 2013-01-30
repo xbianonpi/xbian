@@ -1,0 +1,5 @@
+# Israel, Israel Broadcasting Authority's transmitters
+# Generated from list in http://www.iba.org.il/reception/
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 514000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE
+T 538000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE

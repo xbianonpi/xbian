@@ -1,0 +1,24 @@
+# DVB-C Moravianet (http://www.moravia.net/)
+# Available in villages and cities around Brno:
+# Bohuslavice, Bukovany, Hrusovany u Brna, Hustopece, Ivancice, Jirikovice,
+# Kyjov, Moravsky Krumlov, Mutenice, Neslovice, Nove Branice, Oslavany,
+# Popuvky, Padochov, Troubsko, Rosice, Tisnov, Vojkovice, Svatoborice,
+# Slapanice, Zabcice, Zidlochovice
+# The same content is available also from NejTV where they provide DVB-C.
+# Currently it is in Havlickuv Brod, Breclav, Velke Mezirici
+#
+# 2008-12-03
+#
+# freq      sr      fec  mod
+C 218000000 6900000 NONE QAM64
+C 226000000 6900000 NONE QAM64
+C 234000000 6900000 NONE QAM64
+C 242000000 6900000 NONE QAM64
+C 250000000 6900000 NONE QAM64
+C 258000000 6900000 NONE QAM64
+C 266000000 6900000 NONE QAM64
+C 274000000 6900000 NONE QAM64
+C 282000000 6900000 NONE QAM64
+C 290000000 6900000 NONE QAM64
+C 298000000 6900000 NONE QAM64
+C 306000000 6900000 NONE QAM64

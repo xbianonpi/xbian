@@ -1,0 +1,6 @@
+# Net Digital
+# Just the initial transponder is enough
+
+# freq sr fec mod
+# Found on Sao Jose dos Campos, SP
+C 573000000 5217000 NONE QAM256

@@ -1,0 +1,10 @@
+# UK, Idle
+# Auto-generated from http://www.dtg.org.uk/retailer/dtt_channels.html
+# and http://www.ofcom.org.uk/static/reception_advice/index.asp.html
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 666000000 8MHz 3/4 NONE QAM16 2k 1/32 NONE
+T 730000000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 578000000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 754000000 8MHz 3/4 NONE QAM16 2k 1/32 NONE
+T 545833000 8MHz 3/4 NONE QAM16 2k 1/32 NONE
+T 642000000 8MHz 3/4 NONE QAM16 2k 1/32 NONE

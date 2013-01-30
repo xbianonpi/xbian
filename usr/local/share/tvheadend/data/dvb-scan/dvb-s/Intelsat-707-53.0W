@@ -1,0 +1,5 @@
+# Intelsat 707 @ 53.0W
+# freq pol sr fec
+
+S 3820000 V 03255000 AUTO
+S 11483000 V 05333000 AUTO

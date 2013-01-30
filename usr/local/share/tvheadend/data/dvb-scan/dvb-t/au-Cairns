@@ -1,0 +1,12 @@
+# Australia / Cairns (Mt Bellenden-Ker transmitters)
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC VHF 8
+T 191500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SEVEN VHF 11
+T 219500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# WIN VHF 12
+T 226500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# TEN VHF 6 (Expected Start Date Dec 2006)
+T 177500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS UHF 29
+T 536500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE

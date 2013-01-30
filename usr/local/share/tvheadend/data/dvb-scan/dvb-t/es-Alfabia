@@ -1,0 +1,11 @@
+# DVB-T Alfabia, Mallorca, Balearic Islands, Spain.
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 514000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # TV3 Cat, 3/24, 33, Super3/300
+T 602000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # TV Mallorca, Canal 4
+T 634000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # Popular TV, TEVEi
+T 810000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.63: 24h, 50 aniv., ClanTV, La 2, TVE1; RNE 1, RNE 3, RNE C; Digitext, EPG, Lanzadera.
+T 826000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.65: IB3, Aprenda Ingles TV
+T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.66: NetTV, Teledeporte, VeoTV1, VeoTV2.
+T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.67: 40 Latino TV, CNN+, Cuatro, La Sexta 1.
+T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.68: Fly Music, Tele 5, Tele 5 Estrellas, Tele 5 Sport.
+T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C.69: Antena 3, La Sexta 2, Neox, Nova.

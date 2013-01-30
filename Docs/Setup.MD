@@ -151,6 +151,7 @@ update-rc.d rpcbind defaults
 update-rc.d watchdog defaults
 update-rc.d klogd remove
 update-rc.d sysklogd remove
+update-rc.d tvheadend remove
 
 #Fixing broken symbolic links
 rm /usr/local/lib/libtag_c.so.0

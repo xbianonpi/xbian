@@ -1,0 +1,7 @@
+# Initial Tuning file for nl-UPC
+# This file only lists the main
+# frequencies. You still need to do
+# a network scan to find other
+# transponders.
+
+C 164000000 6900000 NONE QAM64

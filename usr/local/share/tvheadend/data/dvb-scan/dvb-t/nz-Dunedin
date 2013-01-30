@@ -1,0 +1,10 @@
+# Mt Cargill, Dunedin NZ
+#
+# Channel allocation details for NZ can be found at
+# http://en.wikipedia.org/wiki/Freeview_(New_Zealand)
+#
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+
+T 650000000 8MHz 3/4 NONE QAM64 8k 1/16 NONE
+T 666000000 8MHz 3/4 NONE QAM64 8k 1/16 NONE
+T 730000000 8MHz 3/4 NONE QAM64 8k 1/16 NONE

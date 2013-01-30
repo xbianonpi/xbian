@@ -1,0 +1,22 @@
+# Australia ABC Mid North Coast
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC middle brother
+T 184625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime Middle Brother
+T 198500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# NBN Middle Brother
+T 226500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten Middle Brother
+T 641500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS middle brother
+T 205500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# ABC Moombil
+T 585500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime Moombil
+T 543500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# NBN Moombil
+T 564500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten Moombil
+T 599500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS Moombil
+T 606500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE

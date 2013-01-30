@@ -1,0 +1,12 @@
+# Australia / Newcastle
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# SBS
+T 599500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+# NBN
+T 585500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime
+T 704500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# ABC
+T 592500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SC10
+T 690500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE

@@ -1,0 +1,40 @@
+# Australia / Wollongong
+#
+# Australia modulation params:
+# - http://www.dba.org.au/index.asp?sectionID=120
+#
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+#
+# North (Broadcast Site Escarpment Road BROKERS NOSE)
+# - http://www.dba.org.au/index.asp?query=true&sectionID=22&recLocation=Wollongong+%2D+North
+#
+# ABC UHF52
+T 697500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime UHF46
+T 655500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# WIN UHF40
+T 613500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten UHF43
+T 634500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS UHF54
+T 711625000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+#
+# Illawarra (Broadcast Australia Digital Television Tower KNIGHTS HILL)
+# - http://www.dba.org.au/index.asp?query=true&sectionID=22&recLocation=Wollongong+%2D+Illawarra
+#
+# ABC UHF51
+T 690500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Prime UHF38
+T 599500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# WIN UHF36
+T 585500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# Ten UHF37
+T 592500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+# SBS - same as North
+#
+# Stanwell Park (Bald Hill STANWELL TOPS)
+# - http://www.dba.org.au/index.asp?query=true&sectionID=22&recLocation=Wollongong+%2D+Stanwell%20Park
+#
+# ABC, Prime, WIN, Ten are identical to Wollongong / North
+# SBS UHF49
+T 676500000 7MHz 2/3 NONE QAM64 8k 1/8 NONE

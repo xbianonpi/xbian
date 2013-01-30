@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+#Copyright 2012 CurlyMo <development@xbian.org>
+#
+#This file is part of Xbian - XBMC on the Raspberry Pi.
+#
+#Xbian is free software: you can redistribute it and/or modify it under the 
+#terms of the GNU General Public License as published by the Free Software 
+#Foundation, either version 3 of the License, or (at your option) any later 
+#version.
+#
+#Xbian is distributed in the hope that it will be useful, but WITHOUT ANY 
+#WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+#FOR A PARTICULAR PURPOSE. See the GNU General Public License for more 
+#details.
+#
+#You should have received a copy of the GNU General Public License along 
+#with Xbian. If not, see <http://www.gnu.org/licenses/>
+#
+### BEGIN INIT INFO
+# Provides:          tvheadend
+	# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog 
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: XBian boot scripts
+# Description:
+#
+### END INIT INFO
+
+NAME=tvheadend
+DESC="XBian boot scripts"
+VERBOSE=no
+SCRIPTNAME=/etc/init.d/tvheadend
+
+case "$1" in
+  start)
+	su - xbian -c "/usr/local/bin/tvheadend -C"
+        ;;
+  stop)
+        pkill tvheadend
+        ;;
+  *)
+        echo "Usage: $SCRIPTNAME {start|stop}" >&2
+        exit 3
+        ;;
+esac
+
+:

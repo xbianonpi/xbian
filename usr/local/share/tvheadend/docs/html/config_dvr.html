@@ -1,0 +1,107 @@
+<div class="hts-doc-text">
+
+ <img src="docresources/configdvrtab.png">
+
+ <p>
+ This tab is used to configure operation of the Digital Video Recorder.
+ It is not used for scheduling or administration of individual recordings.
+
+ <p>
+ Configuration options:
+ <dl>
+  <dt>Recording system path
+  <dd>Path to where Tvheadend will write recorded events. If components of
+      the path does not exist, Tvheadend will try to create them.
+
+  <dt>Media container
+  <dd>Select the container format used to store recordings.
+
+  <dt>DVR Log retention time (days)
+  <dd>Time that Tvheadend will keep information about the recording in
+      its internal database. Notice that the actual recorded file will not
+      be deleted when the log entry is deleted.
+
+  <dt>Extra time before recordings (minutes)
+  <dd>Specify the number of minutes to record before the events scheduled
+      start time. Used to cope with small scheduling errors.
+
+  <dt>Extra time after recordings (minutes)
+  <dd>Specify the number of minutes to record after the events scheduled
+      stop time. Used to cope with small scheduling errors.
+
+  <dt>Make sub-directories per day
+  <dd>If checked, Tvheadend will create a new directory per day in the
+      recording system path. Only days when anything is recorded will be 
+      created. The format of the directory will be 'YYYY-MM-DD' (ISO standard)
+
+  <dt>Make sub-directories per channel
+  <dd>If checked, Tvheadend will create a directory per channel when storing
+      events. If both this and the 'directory per day' checkbox is enabled,
+      the date-directory will be parent to the per-channel directory.
+
+  <dt>Make sub-directories per title
+  <dd>If checked, Tvheadend will create a directory per title when storing
+      events. If the day/channel directory checkboxes are also enabled, those
+      directories will be parents of this directory.
+
+  <dt>Include channel name in title
+  <dd>If checked, Tvheadend will include the name of the channel in the
+      event title. This applies to both the titled stored in the file
+      and to the file name itself.
+
+  <dt>Include date in title
+  <dd>If checked, Tvheadend will include the date for the recording in the
+      event title. This applies to both the titled stored in the file
+      and to the file name itself.
+
+  <dt>Include time in title
+  <dd>If checked, Tvheadend will include the time for the recording in the
+      event title. This applies to both the titled stored in the file
+      and to the file name itself.
+
+  <dt>Include episode in title
+  <dd>If checked, Tvheadend will include the season and episode in the
+      title (if such info is available).
+
+  <dt>Remove all unsafe characters from filename
+  <dd>If checked, all characters that could possibly cause problems for
+      filenaming will be removed.
+  
+  <dt>Replace whitespace in title with '-'
+  <dd>If checked, all whitespace characters will be replaced with '-'.
+  
+  <dt>Tag files with metadata
+  <dd>If checked, media containers that support metadata will be tagged with
+      the metadata associated with the event being recorded.
+
+  <dt>Skip commercials
+  <dd>If checked, commercials will be dropped from the recordings. At the 
+    moment, commercial detection only works for the swedish channel TV4.
+
+  <dt>Post-processor command
+  <dd>Command to run after finishing a recording. The command will be
+      run in background and is executed even if a recording is aborted
+      or an error occurred. Use the %e error formatting string to check
+      for errors, the error string is empty if recording finished
+      successfully.
+      <br><br>
+      Support format strings:<br>
+      <table class="hts-doc-text" border="0">
+        <tr><th>Format</th><th>Description</th><th>Example value</th></tr>
+        <tr><td>%f</td><td>Full path to recording</td><td>/home/user/Videos/News.mkv</td></tr>
+        <tr><td>%b</td><td>Basename of recording</td><td>News.mkv</td></tr>
+        <tr><td>%c</td><td>Channel name</td><td>BBC world</td></tr>
+        <tr><td>%C</td><td>Who created this recording</td><td>user</td></tr>
+        <tr><td>%t</td><td>Program title</td><td>News</td></tr>
+        <tr><td>%d</td><td>Program description</td><td>News and stories...</td></tr>
+        <tr><td>%e</td><td>Error message</td><td>Aborted by user</td></tr>
+        <tr><td>%S</td><td>Start time stamp of recording, UNIX epoch</td><td>1224421200</td></tr>
+        <tr><td>%E</td><td>Stop time stamp of recording, UNIX epoch</td><td>1224426600</td></tr>
+      </table>
+      <br>
+      Example usage: /path/to/ffmpeg -i %f -vcodec libx264 -acodec copy "/path/with white space/%b"<br>
+      You need to use quotes or escape white spaces if you want white spaces in an argument.
+ </dl>
+ Changes to any of these settings must be confirmed by pressing the
+ 'Save configuration' button before taking effect.
+</div>

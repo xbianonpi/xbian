@@ -1,0 +1,4 @@
+# REKAM / Caiway, Gouda, Netherlands
+# freq sr fec mod
+C 163000000 6875000 NONE QAM64
+C 770000000 6900000 NONE QAM64

@@ -1,0 +1,21 @@
+# Hungary / Sopron-Koszeg
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+#
+# A.multiplex UHF-42:
+# FREE -----------------------------------------------------------------------------------
+# m1 HD, m2 HD, Duna World, Duna HD, MR1 Kossuth Radio, MR2 Petofi Radio, MR3 Bartok Radio
+T 642000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE
+#
+# B.multiplex UHF-40:
+# NON-FREE --------------------------------------------------------------------------------
+# PRO4, VIASAT3, Prizma TV, Muzsika TV, Universal Channel, Comedy Central, Minimax,
+# Cartoon Network, Spektrum, History, Sport1, Sport2, Dorcel TV
+T 626000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE
+#
+# C.multiplex UHF-68:
+# FREE --------------------------------------------------------------------------------
+# RTL Klub, TV2, Euronews Test, Info csatorna, Neo FM
+# NON-FREE ----------------------------------------------------------------------------
+# Cool, Film+, HBO, National Geographic, Disney Channel, AXN, FEM3, Private spice, ATV,
+# HirTV, Sportklub
+T 850000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE

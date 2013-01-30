@@ -1,0 +1,9 @@
+# DVB-T Bremen
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 482000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH22: Das Erste (RB), RB TV (NDR NDS), arte, Phoenix
+T 538000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH29: NDR NDS, WDR/NDR SH, MDR/NDR MVP, HR/NDR HH
+T 562000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH32: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 642000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH42: RTL, RTL2, Super RTL, VOX
+T 666000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH45: Tele 5, SIXX, QVC, Mona / Bibel TV / Das Vierte
+T 698000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH49: ProSieben, Sat.1, Kabel1, N24

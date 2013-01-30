@@ -1,0 +1,5 @@
+# DVB-T Luxembourg [2007-11-18]
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 191500000 7MHz 2/3 NONE QAM16 8k 1/8 NONE  # Kanal 7   M6, RTL 8, LUXE.TV
+T 498000000 8MHz 2/3 NONE QAM64 8k 1/16 NONE # Kanal 24  club RTL, RTL TVI, plug TV, RTL 4, RTL 5, RTL 7
+T 522000000 8MHz 2/3 NONE QAM64 8k 1/16 NONE # Kanal 27  RTL TeleLetz, 2 ten RTL

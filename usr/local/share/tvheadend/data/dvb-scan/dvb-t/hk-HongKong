@@ -1,0 +1,18 @@
+# Hong Kong (DMB-TH)
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+
+# TVB (band 35)
+T 586000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+# ATV (band 37)
+T 602000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+
+# Simulcast (band 22)
+T 482000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+# Simulcast (band 30)
+T 546000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+# Simulcast (band 32)
+T 562000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+# Simulcast (band 40)
+T 628000000 8MHz AUTO NONE QAM64 8k 1/32 NONE
+# Simulcast (band 43)
+T 650000000 8MHz AUTO NONE QAM64 8k 1/32 NONE

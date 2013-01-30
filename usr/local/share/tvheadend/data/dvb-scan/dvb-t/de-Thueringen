@@ -1,0 +1,10 @@
+# DVB-T Thüringen
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 474000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH21: Das Erste, arte, Phoenix, EinsFestival
+T 482000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH22: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 506000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH25: Das Erste, arte, Phoenix, EinsFestival
+T 522000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH27: MDR-TH, rbb, hr, Bayerisches Fernsehen
+T 690000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH48: MDR-TH, rbb, hr, Bayerisches Fernsehen
+T 706000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH50: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 730000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # CH53: Das Erste, arte, Phoenix, EinsFestival

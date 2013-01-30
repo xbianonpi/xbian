@@ -1,0 +1,9 @@
+# DVB-T Malaga (Andalucia)                   by Pedro Leon 4 Mayo 2007
+# T freq bw fec_hi fec_lo mod transm-mode guard-interval hierarchy
+T 762000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C57 La Primera, La 2, Canal 24H, Clan/TVE 50, RNE1, RNE Clásica, RNE 3
+T 810000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C63 Canal Sur, Canal 2 Andalucia
+T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C66 TELEDEPORTE, VEO, *Canal Ingenieria, SETenVEO, Tienda en VEO, NET TV, Radio Intereconomia
+T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C67 CUATRO, CNN+, 40 LATINO, laSexta
+T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C68 Telecinco, T5 Estrellas, T5 Sport, FLYMUSIC, PUNTO RADIO
+T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # C69 ANTENA 3, ANTENA.NEOX, ANTENA.NOVA, *tvtv DIGITAL, ONDA CERO, EUROPA FM, ONDA MELODIA, Telehit
+# * Canales de datos o MHT

@@ -1,0 +1,23 @@
+# DVB-T Nordrhein-Westfalen
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 506000000 8MHz 2/3 NONE QAM16 8k 1/8 NONE # CH25: WDR-Dortmund, NDR/WDR-Ruhr, MDR, SWR
+T 514000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH26: Das Erste, arte, Phoenix, EinsFestival
+                                            # CH26: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 522000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE # CH27: WDR-Südwestfalen, NDR, MDR, SWR
+T 538000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH29: RTL, RTL2, Super RTL, VOX
+T 546000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH30: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 554000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE # CH31: WDR-OWL_aktuell, NDR/WDR-Südwestfalen, MDR, SWR
+T 570000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH33: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 586000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH35: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 594000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH36: Tele5, CNN, Eurosport, VIVA
+T 602000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE # CH37: WDR-Aachen, NDR/WDR-Köln, MDR, SWR
+T 674000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE # CH46: WDR-Düsseldorf, MDR/WDR-Duisburg, NDR/WDR-Berg.Land, SWR
+T 690000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH48: Das Erste, arte, Phoenix, EinsFestival
+T 698000000 8MHz 1/2 NONE QAM64 8k 1/4 NONE # CH49: WDR-Köln, MDR/WDR-Bonn, NDR/WDR-Aachen, SWR
+T 706000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH50: Das Erste, arte, Phoenix, EinsFestival
+T 722000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH52: Tele5, CNN, Eurosport, VIVA
+T 730000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH53: ProSieben, Sat.1, Kabel1, N24
+T 746000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH55: ProSieben, Sat.1, Kabel1, N24
+T 762000000 8MHz 2/3 NONE QAM16 8k 1/8 NONE # CH57: WDR-Ruhr, NDR/WDR-Dortmund, MDR, SWR
+T 786000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH60: Das Erste, arte, Phoenix, EinsFestival

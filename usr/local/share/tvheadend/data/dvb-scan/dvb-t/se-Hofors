@@ -1,0 +1,6 @@
+# Sweden - Hofors
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 506000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 586000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 658000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
+T 690000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE

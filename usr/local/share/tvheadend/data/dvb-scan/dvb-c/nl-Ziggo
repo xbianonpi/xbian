@@ -1,0 +1,14 @@
+# Initial Tuning file for nl-Ziggo
+# This file only lists the main
+# frequencies. You still need to do
+# a network scan to find other
+# transponders.
+#
+# based on:
+# http://blob.ziggo.nl/dynamic/NL_HOME/PDF-UPLOAD/Gebruikers-Handleiding-DigitaleTV.pdf
+# Chapter 4
+#
+C 372000000 6875000 NONE QAM64 # Main Frequency Ziggo/Casema
+C 514000000 6875000 NONE QAM64 # Main Frequency Ziggo/Multikabel
+C 356000000 6875000 NONE QAM64 # Main Frequency Ziggo/@Home Zuid
+C 369000000 6875000 NONE QAM64 # Main Frequency Ziggo/@Home Noord

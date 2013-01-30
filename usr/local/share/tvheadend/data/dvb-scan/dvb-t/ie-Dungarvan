@@ -1,0 +1,5 @@
+# Ireland, Dungarvan
+# Generated from http://www.comreg.ie/_fileupload/Broadcast_Technical_Parameters.xlsx
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 746000000 8MHz 3/4 NONE QAM64 8k 1/32 NONE # CH55: Saorview MUX1
+T 778000000 8MHz 3/4 NONE QAM64 8k 1/32 NONE # CH59: Saorview MUX2

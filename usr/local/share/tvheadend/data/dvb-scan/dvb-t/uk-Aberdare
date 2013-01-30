@@ -1,0 +1,15 @@
+# UK, Aberdare
+# Auto-generated from http://www.dtg.org.uk/retailer/dtt_channels.html
+# and http://www.ofcom.org.uk/static/reception_advice/index.asp.html
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+
+T 474167000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 482167000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 497833000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 506167000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 521833000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+T 530167000 8MHz 2/3 NONE QAM64 2k 1/32 NONE
+
+
+#C21+	C22+	C24-	C25+	C27-	C28+
+

@@ -1,0 +1,8 @@
+# Initial Tuning file for nl-DELTA
+# This file only lists the main
+# frequency. You still need to do
+# a network scan to find other
+# transponders.
+#
+#
+C 402000000 6875000 NONE QAM64 # Main Frequency

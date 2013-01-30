@@ -1,0 +1,8 @@
+# DVB-T Cadiz (Andalucia)                      by terrex  Feb 2009
+# T freq bw fec_hi fec_lo mod transm-mode guard-interval hierarchy
+T 778000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C59
+T 818000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C64
+T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C66
+T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C67
+T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C68
+T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE                  # C69

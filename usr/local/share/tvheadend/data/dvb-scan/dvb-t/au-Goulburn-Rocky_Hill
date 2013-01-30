@@ -1,0 +1,19 @@
+# Australia / Goulburn / Rocky Hill
+#
+# Scanned 17/10/2009 - Alex Ferrara (alex@receptiveit.com.au)
+
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+# ABC - netid (4112) tid (547) offset (+125Khz)
+T 725625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+
+# SBS - netid (12802) tid (848) offset (+125Khz)
+T 746625000 7MHz 2/3 NONE QAM64 8k 1/8 NONE
+
+# WIN - netid (12915) tid (12922) offset (+125Khz)
+T 767625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+
+# Prime - netid (12929) tid (2462) offset (+125Khz)
+T 788625000 7MHz 3/4 NONE QAM64 8k 1/16 NONE
+
+# TEN - netid (12812) tid (2055) offset (0Khz)
+T 809500000 7MHz 3/4 NONE QAM64 8k 1/16 NONE

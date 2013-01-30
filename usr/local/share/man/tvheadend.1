@@ -1,0 +1,78 @@
+.TH "tvheadend" 1
+.SH NAME
+tvheadend \ - Advanced TV streaming server/relay
+.SH SYNOPSIS
+.B tvheadend
+[\fIOPTIONS\fR]
+.SH DESCRIPTION
+.B Tvheadend
+is a streaming server/relay supporing a variety of sources and multiple
+output formats. It is primarily inteded to be used in together with the
+.B Showtime
+Media player.
+.SH OPTIONS
+All arguments are optional.
+.TP
+\fB\-f
+Fork and become a background process (deamon). Default no.
+.TP
+\fB\-u \fR\fIusername\fR
+Run as user \fIusername\fR. Only applicable if daemonizing. Default is to
+use the uid of 1 (daemon on most systems).
+.TP
+\fB\-g \fR\fIgroupname\fR
+Run as group \fR\fIgroupname\fR. Only applicable if daemonizing. Default is to use the 'video' group. If the 'video' group does not exist, gid 1 (daemon) will be used.
+.TP
+\fB\-C 
+If no useraccount exist then create one with no username and no
+password. Use with care as it will allow world-wide administrative
+access to your Tvheadend installation until you edit the
+access-control from within the Tvheadend UI.
+.SH "LOGGING"
+All activity inside tvheadend is logged to syslog using log facility
+\fBLOG_DAEMON\fR.
+.SH "SETUP"
+.SS "Access to video adapters"
+In order for Tvheadend to control the video adapters on the system it
+must be granted access to those devices. Most systems have a 'video'
+group with write access to the video adapter devices. When Tvheadend
+is started as a daemon it will automatcially change its primary group
+to 'video' in order to access these groups. If your system is configured
+in a different way you can either change the group membership of the
+video adapters (/dev/dvb, etc) or reconfigure the Tvheadend startup
+parameters. This is most likely the behaviour if you have installed
+Tvheadend from a distribution package.
+.PP
+If Tvheadend is started without the '-f' argument it will not daemonize
+nor change its primary userid/groupid. Rather it will run with the permissions
+granted to the user executing the binary. If that's the case you must make
+sure the current user is granted with access to the video devices.
+.SS "Configuration"
+All configuration in Tvheadend is maintained via its embedded web server running on port 9981. Just point your browser to:
+.PP
+.nf
+   http://hostname:9981/
+.fi
+.PP
+By default \fIeveryone (also from remote hosts)\fR is allowed \fIfull\fR
+access to \fIall\fR features / settings in the web user interface. If
+this is the first time you setup Tvheadend you are most encouraged to
+enter the web user interface, selected the 'Configuration' + 'Access Control'
+tab and make reasonable changes. Futher help / documentationcan be obtained
+inside the web interface.
+.SS "Settings"
+Settings are stored in the current users home directory. Thus, if Tvheadend
+is run as a system daemon a dedicated user needs to be created and Tvheadend
+should be launched with the '-u' argument. Also notice that XMLTV will read
+store cache and configuration from the user home directory.
+.PP
+If daemonizing, tvheadend will writes it pid in /var/run/tvheadend.pid
+.SH "AUTHOR"
+.B Tvheadend
+and this man page is maintained by Andreas Oeman
+.PP
+(andreas a lonelycoder d com)
+.PP
+You may also visit #hts at irc.freenode.net
+.SH "SEE ALSO"
+.BR http://www.lonelycoder.com/hts/

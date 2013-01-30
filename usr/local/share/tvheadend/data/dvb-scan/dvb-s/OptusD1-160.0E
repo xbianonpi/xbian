@@ -1,0 +1,4 @@
+# Optus D1 satellite 160.0E
+# freq pol sr fec
+S 12456000 H 22500000 3/4
+S 12483000 H 22500000 3/4

@@ -1,0 +1,186 @@
+# Astra 28.2E SDT info service transponder
+# freq pol sr fec
+
+## Astra 2A
+# Transponder 1
+S 11720000 H 29500000 3/4
+# Transponder 2
+S 11740000 V 27500000 2/3
+# Transponder 3
+S 11758000 H 27500000 2/3
+# Transponder 4
+S 11778000 V 27500000 2/3
+# Transponder 5
+S 11798000 H 29500000 3/4
+# Transponder 6
+S 11817000 V 27500000 2/3
+# Transponder 7
+S 11836000 H 27500000 2/3
+# Transponder 8
+S 11856000 V 27500000 2/3
+# Transponder 9
+S 11876000 H 27500000 2/3
+# Transponder 10
+S 11895000 V 27500000 2/3
+# Transponder 11
+S 11914000 H 27500000 2/3
+# Transponder 12
+S 11934000 V 27500000 2/3
+# Transponder 13
+S 11954000 H 27500000 2/3
+# Transponder 18
+S 12051000 V 27500000 2/3
+# Transponder 22
+S 12129000 V 27500000 2/3
+# Transponder 23
+S 12148000 H 27500000 2/3
+# Transponder 24
+S 12168000 V 27500000 2/3
+# Transponder 27
+S 12226000 H 27500000 2/3
+# Transponder 28
+S 12246000 V 27500000 2/3
+# Transponder 37
+S 12422000 H 27500000 2/3
+# Transponder 40
+S 12480000 V 27500000 2/3
+
+## Astra 2B
+# Transponder 14
+S 11973000 V 27500000 2/3
+# Transponder 15
+S 11992000 H 27500000 2/3
+# Transponder 16
+S 12012000 V 27500000 2/3
+# Transponder 17
+S 12032000 H 27500000 2/3
+# Transponder 19
+S 12070000 H 27500000 2/3
+# Transponder 20
+S 12090000 V 27500000 2/3
+# Transponder 21
+S 12110000 H 27500000 2/3
+# Transponder 25
+S 12188000 H 27500000 2/3
+# Transponder 26
+S 12207000 V 27500000 2/3
+# Transponder 29
+S 12266000 H 27500000 2/3
+# Transponder 30
+S 12285000 V 27500000 2/3
+# Transponder 31
+S 12304000 H 27500000 2/3
+# Transponder 32
+S 12324000 V 29500000 3/4
+# Transponder 33
+S 12344000 H 29500000 3/4
+# Transponder 34
+S 12363000 V 29500000 3/4
+# Transponder 35
+S 12382000 H 27500000 2/3
+# Transponder 36
+S 12402000 V 27500000 2/3
+# Transponder 38
+S 12441000 V 27500000 2/3
+# Transponder 39
+S 12460000 H 27500000 2/3
+
+## Astra 2D
+# Transponder 41
+S 10714000 H 22000000 5/6
+# Transponder 42
+S 10729000 V 22000000 5/6
+# Transponder 43
+S 10744000 H 22000000 5/6
+# Transponder 44
+S 10758000 V 22000000 5/6
+# Transponder 45
+S 10773000 H 22000000 5/6
+# Transponder 46
+S 10788000 V 22000000 5/6
+# Transponder 47
+S 10803000 H 22000000 5/6
+# Transponder 48
+S 10818000 V 22000000 5/6
+# Transponder 49
+S 10832000 H 22000000 5/6
+# Transponder 50
+S 10847000 V 22000000 5/6
+# Transponder 51
+S 10862000 H 22000000 5/6
+# Transponder 52
+S 10876000 V 22000000 5/6
+# Transponder 53
+S 10891000 H 22000000 5/6
+# Transponder 54
+S 10906000 V 22000000 5/6
+# Transponder 55
+S 10921000 H 22000000 5/6
+# Transponder 56
+S 10936000 V 22000000 5/6
+
+## Eurobird 1
+# Transponder C1
+S 11222170 H 27500000 2/3
+# Transponder C2
+S 11223670 V 27500000 2/3
+# Transponder C2
+S 11259000 V 27500000 2/3
+# Transponder C1
+S 11261000 H 27500000 2/3
+# Transponder C3
+S 11307000 H 27500000 2/3
+# Transponder C4
+S 11307000 V 27500000 2/3
+# Transponder C4
+S 11343000 V 27500000 2/3
+# Transponder C3
+S 11344000 H 27500000 2/3
+# Transponder C5
+S 11390000 H 27500000 2/3
+# Transponder C6
+S 11390000 V 27500000 2/3
+# Transponder C5
+S 11426000 H 27500000 2/3
+# Transponder C6
+S 11426000 V 27500000 2/3
+# Transponder D1
+S 11469000 H 27500000 2/3
+# Transponder D2S
+S 11488000 V 27500000 2/3
+# Transponder D3S
+S 11508000 H 27500000 2/3
+# Transponder D4S
+S 11527000 V 27500000 2/3
+# Transponder D5
+S 11546000 H 27500000 2/3
+# Transponder D6
+S 11565000 V 27500000 2/3
+# Transponder D7
+S 11585000 H 27500000 2/3
+# Transponder D8
+S 11603850 V 27500000 2/3
+# Transponder D9
+S 11623000 H 27500000 2/3
+# Transponder D10
+S 11642000 V 27500000 2/3
+# Transponder D11
+S 11661540 H 27500000 2/3
+# Transponder D12
+S 11680770 V 27500000 2/3
+# Transponder F1
+S 12524000 H 27500000 2/3
+# Transponder F2
+S 12524000 V 27500000 2/3
+# Transponder F1
+S 12560000 H 27500000 2/3
+# Transponder F2
+S 12560000 V 27500000 2/3
+# Transponder F4
+S 12596000 V 27500000 2/3
+# Transponder F3
+S 12607000 H 27500000 3/4
+# Transponder F4
+S 12629000 V 6111000 3/4
+# Transponder F5
+S 12692000 V 19532000 1/2

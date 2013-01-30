@@ -1,0 +1,4 @@
+# DVB-T Tehran
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 602000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE # IRIB-TV1/2/3/4/5, IRINN, AMOUZESH, QURAN-TV
+T 650000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE # PRESS TV, AL-ALAM, AL-KOUSAR, JAAMEJAM 1, IRIB MOSTANAD, IRIB OSTANI

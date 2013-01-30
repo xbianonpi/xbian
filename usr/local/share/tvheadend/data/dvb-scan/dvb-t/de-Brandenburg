@@ -1,0 +1,7 @@
+# DVB-T Brandenburg
+# Created from http://www.ueberallfernsehen.de/data/senderliste.pdf
+# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
+T 570000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH33: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 594000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH36: ZDF, 3sat, KiKa / ZDFneo, ZDFinfo
+T 730000000 8MHz 3/4 NONE QAM16 8k 1/4 NONE # CH53: Das Erste, RBB, Phoenix, EinsExtra
+T 762000000 8MHz 2/3 NONE QAM16 8k 1/4 NONE # CH57: MDR, NDR, arte
