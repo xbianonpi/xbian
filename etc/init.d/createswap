@@ -49,7 +49,7 @@ d88P     888 8888888P"  8888888P"     "Y8888P"  888P     Y888 d88P     888 888';
 	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 &>/dev/null
 	mkswap /var/swapfile &>/dev/null
 	swapon /var/swapfile &>/dev/null
-	echo '/var/swapfile swap swap defaults 0 0' >> /etc/fstab 
+	echo -e '/var/swapfile\t\t\t\tswap\t\tswap\tdefaults\t\t\t0\t0' >> /etc/fstab 
 	update-rc.d createswap remove >/dev/null
 	rm /etc/init.d/createswap >/dev/null
 
