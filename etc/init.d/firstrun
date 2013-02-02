@@ -70,7 +70,7 @@ echo '
 888 T88b   888        888    888 888     888 888     888     888
 888  T88b  888        888   d88P Y88b. .d88P Y88b. .d88P     888
 888   T88b 8888888888 8888888P"   "Y88888P"   "Y88888P"      888';
-	/usr/bin/splash --infinitebar --msgtxt='Rebooting...'
+	/usr/bin/splash --msgtxt='Rebooting...'
 	reboot
 
         case "$?" in

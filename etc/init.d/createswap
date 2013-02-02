@@ -48,7 +48,7 @@ echo '
  d8888888888 888  .d88P 888  .d88P   Y88b  d88P 8888P   Y8888  d8888888888 888        
 d88P     888 8888888P"  8888888P"     "Y8888P"  888P     Y888 d88P     888 888';
 	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 &>/dev/null
-	/usr/bin/splash --infinitebar --msgtxt='Setup completed...'
+	/usr/bin/splash --msgtxt='Setup completed...'
 	mkswap /var/swapfile &>/dev/null
 	swapon /var/swapfile &>/dev/null
 	echo -e '/var/swapfile\t\t\t\tswap\t\tswap\tdefaults\t\t\t0\t0' >> /etc/fstab 
