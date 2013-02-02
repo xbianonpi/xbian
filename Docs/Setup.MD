@@ -208,8 +208,8 @@ rm /var/swap
 rm -rf /home/xbian/source
 
 #Add apt sources
-echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
-wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
+echo "deb mirror://apt.xbian.org/mirror.txt wheezy main" >> /etc/apt/sources.list
+wget -O - http://apt.xbian.org/xbian.gpg.key | apt-key add -
 apt-get update 
 apt-get install -y xbian-update
 apt-get autoremove -y
