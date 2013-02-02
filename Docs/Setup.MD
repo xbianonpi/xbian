@@ -207,9 +207,6 @@ echo "" > /home/xbian/.bash_history
 rm /var/swap
 rm -rf /home/xbian/source
 
-#Removing man pages
-rm -rf /usr/local/man /usr/local/share/man /usr/share/man
-
 #Add apt sources
 echo "deb http://[aptsource]/ wheezy main" >> /etc/apt/sources.list
 wget -O - http://[aptsource]/xbian.gpg.key | apt-key add -
