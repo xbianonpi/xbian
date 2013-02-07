@@ -53,6 +53,7 @@ Fixed the black screen on XBMC shutdown
 ==================================
 - Issue #99: [xbian-config] More standard dialogs
 - Issue #110: [xbian-config] Make overclocking a radio dialog and show current settings
+- Issue #114: [xbian-config] Make a port for inside XBMC
 - Issue #126: Command line control of xbian-config modules
 - Issue #142: [xbian-config] All ports XBMC resolution setting
 - Issue #143: [xbian-config] Bash Settings like language override and disable autostart
