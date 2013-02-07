@@ -1,66 +1,48 @@
-#XBian 1.0 Alpha 5 Changelog (Preview)
+#XBian 1.0 Alpha 4 Changelog
 ==================================
-From the development point of view 
-XBian 1.0 Alpha 5 took the most man
-hours (we're awaiting feminine team
-members). We've completely rewritten
-xbian-config and created a custom
-implementation for an animated splash.
-We also welcomed a new team member 
-specialized in python under the name
-of belese (and sadly had to say 
-goodbye to Hexagon). Belese worked
-hard on a xbian-config port inside
-XBMC. XBian can now be fully
-customized inside XBMC. Last but not
-least, we've finally included XBMC
-v12 final.
+XBian 1.0 Alpha 4 mostly contains bugfixes.
+We've also added RC1 of XBMC v12 - Frodo. 
+And as you can expect from us, the latest kernel.
 
 ##Bugfixes
 ==================================
-- Issue #88: Make advancedsettings.xml Frodo-proof
-- Issue #182: XVID playback stops
-- Issue #189: [xbian-config] 4 Packages - mislabelled
-- Issue #204: Fix grey blocks in video when skipping/forwarding movie
-- Issue #206: Choppy xvid playback - timestamp issue with packed B frames
-- Issue #217: Fix problem with 8192cu wireless chip (solution included)
-- Issue #222: Switching to next video results in just sound (black screen)
-- Issue #225: Out of memory while playing Youtube
-- Issue #228: Error: Requested setting (audiooutput.guisoundmode) not found
-- Issue #234: Cannot troubleshoot /var/log/messages and kernel not used
-- Issue #242: Add swap file (128 MB static size)
-- Issue #246: [xbian-config] wlan settings problems with special characters ($)
-- Issue #248: Fix (auto)mount issues
-- Issue #252: Root not available as source in XBMC (only Fusion available)
+- Issue #112: Attempt to fix corrupt sdcard issues using double sync 
+- Issue #116: cmyth MythTV PVR addon fails to load
+- Issue #117: Black screen when exiting XBMC
+- Issue #122: AirPlay video isn't working in Alpha3
+- Issue #153: USB Soundcard not detected 
+- Issue #170: Modular Lirc
+- Issue #169: Can't play AVCHD Blu-ray io's
+
+USB automount permissions, Moved tty0 udev permissions out of 99-input.rules, Fixed dirty vchiq permission hack
 
 ##Improvements
 ==================================
-- Issue #10: XBMC Frodo stable
-- Issue #125: Splash screen on boot
-- Issue #159: Delay when setting audo / Mute doesn't work
-- Issue #181: Change <cachemembuffersize>
-- Issue #193: Terratec Cinergy DVB-T Stick Dual Rev 2 recognized as Rev 1
-- Issue #195: Update Raspberry Pi firmware
-- Issue #212: External HDD Spin down after 5 minutes
-- Issue #235: RaspberryPi Crash, have watcher automatically restart PI
-- Issue #238 and #243: Remove skin audio settings in confluence
-- Issue #239: Add ondemand WOL capability to XBian
-- Issue #251: Add TL-WN821N firmware
+- Issue #81 : Enable netwerk caching redux #1388 on XBian
+- Issue #96 : Kernel 3.6.11
+- Issue #111: XBMC: Toggle between 1080p,720p,540p & 480p GUI
+- Issue #129: Remove battery level from System -> System info
+- Issue #130: Show GPU Temperature in System -> System info -> Video
+- Issue #131: Show XBian version in System -> System info
+- Issue #151: Libcec 2.0.5 
+- Issue #154: Removing raspberry pi packages 
+- Issue #157: exFAT support & automount 
+- Issue #162: MCE Remote Lircmap.xml + lircd.conf
+- Issue #163: [IDEA] Add Fusion 
+- Issue #164: XBMC Frodo RC2
+- Issue #166: [XBMC Addon] Network manager
+- Issue #168: Remove swap partition 
 
-Fixed the black screen on XBMC shutdown
+Better remote key actions within XBMC, SMT1000T and SRM7500 full remote support, Better MCEUSB remote support, XBMC GUI resolution setting
 
 ##XBian-config additions
 ==================================
-- Issue #99: [xbian-config] More standard dialogs
-- Issue #110: [xbian-config] Make overclocking a radio dialog and show current settings
-- Issue #114: [xbian-config] Make a port for inside XBMC
-- Issue #126: Command line control of xbian-config modules
-- Issue #142: [xbian-config] All ports XBMC resolution setting
-- Issue #143: [xbian-config] Bash Settings like language override and disable autostart
-- Issue #144: Integrating xbian-config in the confuence skin
-- Issue #194: xbian-config suppresses error messages
-- Issue #249: [xbian-config-bash] UTF-8 support for multi-lingual support
+- Issue #168: Remove swap partition
+
+##Additional
+==================================
+We've created a linux, FreeBSD, MAC OSX and Windows installer
 
 ##Special thanks to
-==================================
-deanmv, sraue, flangefrog, ganchito55, namith, mcaptur, s2108312, Kimkos
+==============================
+BartOtten, Brantje, K4N3, DraZtiK, JohnHoek
