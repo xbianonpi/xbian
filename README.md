@@ -62,5 +62,5 @@ Fixed the black screen on XBMC shutdown
 - Issue #249: [xbian-config-bash] UTF-8 support for multi-lingual support
 
 ##Special thanks to
-==============================
-[Please add]
+==================================
+deanmv, sraue, flangefrog, ganchito55, namith, mcaptur, s2108312, Kimkos
