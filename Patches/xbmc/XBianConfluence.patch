@@ -27,3 +27,20 @@
  				<control type="label">
  					<description>Memory Text</description>
  					<posx>420</posx>
+
+
+--- a/usr/local/share/xbmc/addons/skin.confluence/720p/Settings.xml
++++ b/usr/local/share/xbmc/addons/skin.confluence/720p/Settings.xml
+@@ -169,6 +169,12 @@
+ 						<onclick>ActivateWindow(SystemSettings)</onclick>
+ 						<icon>-</icon>
+ 					</item>
++					<item id="10">
++						<label>XBian</label>
++						<label2>[B]CONFIGURE XBIAN SYSTEM[/B][CR][CR]If you have any questions,[CR]feel free to ask them on www.xbian.org</label2>
++						<onclick>RunAddon(plugin.xbianconfig)</onclick>
++						<icon>-</icon>
++					</item>
+ 				</content>
+ 			</control>
+ 			<control type="image">
