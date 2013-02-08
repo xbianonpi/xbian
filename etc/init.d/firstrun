@@ -46,6 +46,7 @@ source /usr/local/include/xbian-config/scripts/resizesd;
 
 case "$1" in
   start)
+	/usr/bin/splash --infinitebar --msgtxt='first-time setup...'
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
 echo '
 8888888b.  8888888888  .d8888b.  8888888 8888888888P 8888888 888b    888  .d8888b.
@@ -69,6 +70,7 @@ echo '
 888 T88b   888        888    888 888     888 888     888     888
 888  T88b  888        888   d88P Y88b. .d88P Y88b. .d88P     888
 888   T88b 8888888888 8888888P"   "Y88888P"   "Y88888P"      888';
+	/usr/bin/splash --infinitebar --msgtxt='rebooting...'
 	reboot
 
         case "$?" in

@@ -189,8 +189,8 @@ echo "/dev/sdb {
 }" >> /etc/hdparm.conf
 
 #This will reboot your Pi automatically after a few seconds if it crashes for any reason
-sed -ri '10 s/^#//' /etc/watchdog.conf
-sed -ri '23 s/^#//' /etc/watchdog.conf
+sed -i 's/#max-load-1\t\t= 24/max-load-1\t\t= 75\t/' /etc/watchdog.conf
+sed -i 's/^#watchdog-device/watchdog-device/' /etc/watchdog.conf
 
 #After the reboot execute this command
 sudo su
