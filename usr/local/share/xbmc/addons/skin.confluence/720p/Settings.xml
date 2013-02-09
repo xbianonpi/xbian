@@ -169,6 +169,12 @@
 						<onclick>ActivateWindow(SystemSettings)</onclick>
 						<icon>-</icon>
 					</item>
+					<item id="10">
+						<label>XBian</label>
+						<label2>[B]CONFIGURE XBIAN[/B][CR][CR]If you have any questions,[CR]feel free to ask them on www.xbian.org</label2>
+						<onclick>RunAddon(plugin.xbianconfig)</onclick>
+						<icon>-</icon>
+					</item>
 				</content>
 			</control>
 			<control type="image">
