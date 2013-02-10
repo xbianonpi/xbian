@@ -47,7 +47,7 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
  
 --- a/sickbeard/__init__.py
 +++ b/sickbeard/__init__.py
-@@ -194,6 +194,7 @@ SAB_APIKEY = None
+@@ -194,6 +194,7 @@
  SAB_CATEGORY = None
  SAB_HOST = ''
  
@@ -55,7 +55,7 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
  NZBGET_PASSWORD = None
  NZBGET_CATEGORY = None
  NZBGET_HOST = None
-@@ -309,7 +310,7 @@ def initialize(consoleLogging=True):
+@@ -309,7 +310,7 @@
          global LOG_DIR, WEB_PORT, WEB_LOG, WEB_ROOT, WEB_USERNAME, WEB_PASSWORD, WEB_HOST, WEB_IPV6, USE_API, API_KEY, ENABLE_HTTPS, HTTPS_CERT, HTTPS_KEY, \
                  USE_NZBS, USE_TORRENTS, NZB_METHOD, NZB_DIR, DOWNLOAD_PROPERS, \
                  SAB_USERNAME, SAB_PASSWORD, SAB_APIKEY, SAB_CATEGORY, SAB_HOST, \
@@ -64,7 +64,7 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
                  USE_XBMC, XBMC_NOTIFY_ONSNATCH, XBMC_NOTIFY_ONDOWNLOAD, XBMC_UPDATE_FULL, \
                  XBMC_UPDATE_LIBRARY, XBMC_HOST, XBMC_USERNAME, XBMC_PASSWORD, \
                  USE_TRAKT, TRAKT_USERNAME, TRAKT_PASSWORD, TRAKT_API, \
-@@ -564,7 +565,8 @@ def initialize(consoleLogging=True):
+@@ -564,7 +565,8 @@
          SAB_HOST = check_setting_str(CFG, 'SABnzbd', 'sab_host', '')
  
          CheckSection(CFG, 'NZBget')
@@ -74,7 +74,7 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
          NZBGET_CATEGORY = check_setting_str(CFG, 'NZBget', 'nzbget_category', 'tv')
          NZBGET_HOST = check_setting_str(CFG, 'NZBget', 'nzbget_host', '')
  
-@@ -1037,6 +1039,7 @@ def save_config():
+@@ -1037,6 +1039,7 @@
      new_config['SABnzbd']['sab_host'] = SAB_HOST
  
      new_config['NZBget'] = {}
@@ -209,13 +209,13 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
 +def sendNZB(nzb):
 +
 +    addToTop = False
-+    nzbgetXMLrpc = "http://%(username):%(password)s@%(host)s/xmlrpc"
++    nzbgetXMLrpc = "http://%(username)s:%(password)s@%(host)s/xmlrpc"
 +
 +    if sickbeard.NZBGET_HOST == None:
 +        logger.log(u"No NZBget host found in configuration. Please configure it.", logger.ERROR)
 +        return False
 +
-+    url = nzbgetXMLrpc % {"host": sickbeard.NZBGET_HOST, "password": sickbeard.NZBGET_PASSWORD}
++    url = nzbgetXMLrpc % {"host": sickbeard.NZBGET_HOST, "username": sickbeard.NZBGET_USERNAME, "password": sickbeard.NZBGET_PASSWORD}
 +
 +    nzbGetRPC = xmlrpclib.ServerProxy(url)
 +    try:
@@ -264,7 +264,7 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
 +        return False
 --- a/sickbeard/webserve.py
 +++ b/sickbeard/webserve.py
-@@ -763,7 +763,7 @@ class ConfigSearch:
+@@ -763,7 +763,7 @@
  
      @cherrypy.expose
      def saveSearch(self, use_nzbs=None, use_torrents=None, nzb_dir=None, sab_username=None, sab_password=None,
@@ -273,11 +273,11 @@ with XBian. If not, see <http://www.gnu.org/licenses/>
                         torrent_dir=None, nzb_method=None, usenet_retention=None, search_frequency=None, download_propers=None):
  
          results = []
-@@ -815,6 +815,7 @@ class ConfigSearch:
+@@ -815,6 +815,7 @@
  
          sickbeard.SAB_HOST = sab_host
  
-+	     sickbeard.NZBGET_USERNAME = nzbget_username
++        sickbeard.NZBGET_USERNAME = nzbget_username
          sickbeard.NZBGET_PASSWORD = nzbget_password
          sickbeard.NZBGET_CATEGORY = nzbget_category
          sickbeard.NZBGET_HOST = nzbget_host
