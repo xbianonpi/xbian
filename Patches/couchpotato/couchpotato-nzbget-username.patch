@@ -1,0 +1,61 @@
+/*
+Copyright 2013 CurlyMo <development@xbian.org>
+
+This file is part of XBian - XBMC on the Raspberry Pi.
+
+XBian is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with XBian. If not, see <http://www.gnu.org/licenses/>
+*/
+--- a/couchpotato/core/downloaders/nzbget/__init__.py
++++ b/couchpotato/core/downloaders/nzbget/__init__.py
+@@ -21,13 +21,17 @@
+                 },
+                 {
+                     'name': 'host',
+-                    'default': 'localhost:6789',
+-                    'description': 'Hostname with port. Usually <strong>localhost:6789</strong>',
++                    'default': 'localhost:9092',
++                    'description': 'Hostname with port. Usually <strong>localhost:9092</strong>',
++                },
++                {
++                    'name': 'username',
++                    'description': 'Default NZBGet username is <i>xbian</i>',
+                 },
+                 {
+                     'name': 'password',
+                     'type': 'password',
+-                    'description': 'Default NZBGet password is <i>tegbzn6789</i>',
++                    'description': 'Default NZBGet password is <i>raspberry</i>',
+                 },
+                 {
+                     'name': 'category',
+--- a/couchpotato/core/downloaders/nzbget/main.py
++++ b/couchpotato/core/downloaders/nzbget/main.py
+@@ -14,7 +14,7 @@
+ 
+     type = ['nzb']
+ 
+-    url = 'http://nzbget:%(password)s@%(host)s/xmlrpc'
++    url = 'http://%(username)s:%(password)s@%(host)s/xmlrpc'
+ 
+     def download(self, data = {}, movie = {}, filedata = None):
+ 
+@@ -24,7 +24,7 @@
+ 
+         log.info('Sending "%s" to NZBGet.', data.get('name'))
+ 
+-        url = self.url % {'host': self.conf('host'), 'password': self.conf('password')}
++        url = self.url % {'host': self.conf('host'), 'username': self.conf('username'), 'password': self.conf('password')}
+         nzb_name = ss('%s.nzb' % self.createNzbName(data, movie))
+ 
+         rpc = xmlrpclib.ServerProxy(url)
