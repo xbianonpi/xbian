@@ -1,3 +1,0 @@
-A	etc/motd
-A	etc/xbian_copying
-A	var/lib/polkit-1/localauthority/50-local.d/custom-actions.pkla

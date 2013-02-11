@@ -1,7 +1,0 @@
-#!/bin/bash
-
-if [ $1 == "upgrade" ]; then
-	if [ -f /home/xbian/update.log ]; then
-		rm /home/xbian/update.log;
-	fi
-fi

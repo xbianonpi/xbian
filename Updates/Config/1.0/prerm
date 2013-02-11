@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ $1 == "remove" ]; then
-	
-	if [ -f /usr/local/sbin/xbian-config ]; then
-		rm /usr/local/sbin/xbian-config
-	fi
-	
-fi

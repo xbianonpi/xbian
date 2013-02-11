@@ -1,5 +1,0 @@
-#!/bin/bash
-
-if [ $1 == "configure" ]; then
-	/etc/init.d/xbmc start 1>/dev/null 2>/dev/null >/dev/null
-fi

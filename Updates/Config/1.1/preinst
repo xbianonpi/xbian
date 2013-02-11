@@ -1,9 +1,0 @@
-#!/bin/bash
-
-if [ $1 == "upgrade" -o $1 == "install" ]; then
-
-	if [ ! -d "/usr/local/include/xbian-config/scripts" ]; then
-		mkdir -p "/usr/local/include/xbian-config/scripts";
-	fi
-
-fi
