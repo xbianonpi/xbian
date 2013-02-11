@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 Koenkk <development@xbian.org>
+#Copyright 2012 Koenkk & CurlyMo <development@xbian.org>
 #
 #This file is part of Xbian - XBMC on the Raspberry Pi.
 #
@@ -34,9 +34,44 @@ VERBOSE=no
 SCRIPTNAME=/etc/init.d/createswap
 DEBUG=0;
 
+function createSwap() {
+	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 2>/tmp/process &
+	PROCESSID=$!
+	sleep 1;
+	PERCENT=0;
+	TARGETSIZE=131072000;
+	
+	while [ $(kill -0 $PROCESSID 2>/dev/null; echo $?) -eq 0 ]; do
+	
+		if [ -x $PASSEDTIME ]; then
+			PASSEDTIME=0;
+		fi
+
+		PASSEDTIME=$(($PASSEDTIME+1));
+
+		nohup kill -USR1 $PROCESSID 2>/tmp/process 1>/dev/null;
+
+		NEWCOPIED=$(grep -a bytes /tmp/process | awk '{print $1}');
+		NRVALUES=($NEWCOPIED);
+
+		if [[ ${#NRVALUES[@]} -eq 1 ]] && [[ ! -z $NEWCOPIED ]] && [[ $NEWCOPIED =~ [0-9]* ]]; then
+			SPEED=$(echo "$NEWCOPIED/$PASSEDTIME" | bc);
+
+			NEWPERCENT=$(($(echo "$(echo "$NEWCOPIED*100/$TARGETSIZE" | bc)/10" | bc -l | xargs printf "%.0f\n")*10));
+			if [ $PERCENT -lt $NEWPERCENT ]; then
+				/usr/bin/splash --percentage=$PERCENT
+				PERCENT=$NEWPERCENT;
+			fi
+		fi
+	done;
+	/usr/bin/splash --percentage=100
+}
+
+
 case "$1" in
   start)
 	/usr/bin/splash --infinitebar --msgtxt='continuing setup...'
+	sleep 1;
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
 echo '
        d8888 8888888b.  8888888b.     .d8888b.  888       888        d8888 8888888b.  
@@ -47,14 +82,15 @@ echo '
   d88P   888 888    888 888    888         "888 88888P Y88888   d88P   888 888        
  d8888888888 888  .d88P 888  .d88P   Y88b  d88P 8888P   Y8888  d8888888888 888        
 d88P     888 8888888P"  8888888P"     "Y8888P"  888P     Y888 d88P     888 888';
-	dd if=/dev/zero of=/var/swapfile bs=1024 count=128000 &>/dev/null
-	/usr/bin/splash --infinitebar --msgtxt='setup completed...'
+	/usr/bin/splash --percentagebar --percentage=0 --msgtxt='creating swap file...'
+	createSwap;
 	mkswap /var/swapfile &>/dev/null
 	swapon /var/swapfile &>/dev/null
 	echo -e '/var/swapfile\t\t\t\tswap\t\tswap\tdefaults\t\t\t0\t0' >> /etc/fstab 
 	update-rc.d createswap remove >/dev/null
 	rm /etc/init.d/createswap >/dev/null
-
+	/usr/bin/splash --msgtxt='setup completed...'
+	sleep 1;
         case "$?" in
                 0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
                 2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
