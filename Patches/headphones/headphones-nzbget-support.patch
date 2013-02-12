@@ -1,0 +1,410 @@
+/*
+Copyright 2013 CurlyMo <development@xbian.org>
+
+This file is part of XBian - XBMC on the Raspberry Pi.
+
+XBian is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+XBian is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with XBian. If not, see <http://www.gnu.org/licenses/>
+*/
+--- a/data/interfaces/brink/config.html
++++ b/data/interfaces/brink/config.html
+@@ -187,7 +187,7 @@
+ 			<!--Download Settings-->
+ 			<div id="DownloadSettings">
+ 				<h1><span class="wsr">u</span>Download Settings</h1>
+-				<small>Setup SABnzbd or BitTorrent</small>
++				<small>Setup SABnzbd, NZBGET or BitTorrent</small>
+ 				
+ 				<!--Sabnzdb-->
+ 				<div>
+@@ -230,7 +230,7 @@
+ 						<tr>
+ 							<td>
+ 								<label for="download_dir">Download Directory:</label>
+-								<br /><small>Full path to the directory where SAB downloads your music.</small>
++								<br /><small>Full path to the directory where SAB or NZBget downloads your music.</small>
+ 							</td>
+ 							<td><input type="text" name="download_dir" value="${config['download_dir']}" size="40" /></td>
+ 						</tr>
+@@ -238,6 +238,44 @@
+ 				</div>
+ 				<!--end Sabnzdb-->
+ 				
++				<!--NZBget-->
++				<div>
++					<table>
++						<tr>
++							<td>
++								<h2>NZBget</h2>
++								<small></small>
++							</td>
++							<td></td>
++						</tr>
++						<tr>
++							<td><label for="nzbget_host">Host:</label>
++								<br /><small>Usually http://localhost:9092</small>
++							</td>
++							<td><input type="text" name="nzbget_host" value="${config['nzbget_host']}" size="30" maxlength="40" /></td>
++						</tr>
++						<tr>
++							<td><label for="nzbget_username">Username:</label>
++								<br /><small>Type the user name for NZBget</small>
++							</td>
++							<td><input type="text" name="nzbget_username" value="${config['nzbget_user']}" size="20" maxlength="40" /></td>
++						</tr>
++						<tr>
++							<td><label for="nzbget_password">Password:</label>
++								<br /><small>Enter the password for NZBget</small>
++							</td>
++							<td><input type="password" name="nzbget_password" value="${config['nzbget_pass']}" size="20" maxlength="40" /></td>
++						</tr>
++						<tr>
++							<td><label for="nzbget_category">Category:</label>
++								<small>Write the category label name from NZBget</small>
++							</td>
++							<td><input type="text" name="nzbget_category" value="${config['nzbget_cat']}" size="20" maxlength="40" /></td>
++						</tr>
++					</table>
++				</div>
++				<!--end NZBget-->				
++				
+ 				<!--Torrents-->
+ 				<div>
+ 					<table>	
+@@ -317,7 +355,7 @@
+ 					</table>
+ 				</div>
+ 				</div>
+-				<!--end NZB Matrix-->
++				<!--end NZB Matrix-->				
+ 
+ 				<!--Newznab-->
+ 				<div class="group">
+--- a/data/interfaces/classic/config.html
++++ b/data/interfaces/classic/config.html
+@@ -116,10 +116,36 @@
+                 <td>
+                     <h3>Music Download Directory:</h3><input type="text" name="download_dir" value="${config['download_dir']}" size="50"><br>
+ 
+-                    <i class="smalltext">Full path to the directory where SAB downloads your music<br>
++                    <i class="smalltext">Full path to the directory where SAB or NZBget downloads your music<br>
+                     e.g. /Users/name/Downloads/music</i>
+                 </td>
+             </tr>
++			
++	    <tr>
++                <td>
++                    <h2>NZBget:</h2>
++                </td>
++            </tr>
++            <tr>
++                <td>
++                    <h3>NZBget Host:</h3><input type="text" name="nzbget_host" value="${config['nzbget_host']}" size="30" maxlength="40"><br>
++
++                    <i class="smalltext">usually http://localhost:9092</i>
++                </td>
++
++                <td>
++                    <h3>NZBget Username:</h3><input type="text" name="nzbget_username" value="${config['nzbget_user']}" size="20" maxlength="40">
++                </td>
++            </tr>
++
++            <tr>
++                <td>
++                    <h3>NZBget Password:</h3><input type="password" name="nzbget_password" value="${config['nzbget_pass']}" size="20" maxlength="40">
++                </td>
++                <td>
++                    <h3>NZBget Category:</h3><input type="text" name="nzbget_category" value="${config['nzbget_cat']}" size="20" maxlength="40">
++                </td>
++            </tr>			
+ 
+             <tr>
+                 <td>
+--- a/data/interfaces/default/config.html
++++ b/data/interfaces/default/config.html
+@@ -134,10 +134,33 @@
+                        	<div class="row">
+                             <label>Music Download Directory:</label>
+                             <input type="text" name="download_dir" value="${config['download_dir']}" size="50">
+-                            <small>Full path where SAB downloads your music. e.g. /Users/name/Downloads/music</small>
++                            <small>Full path where SAB or NZBget downloads your music. e.g. /Users/name/Downloads/music</small>
+                         </div>
+                     </fieldset>                    
+                 </td>
++				
++                <td>
++                	<fieldset>
++                		<legend>NZBget</legend>
++	                	<div class="row">
++		                    <label>NZBget Host:</label>
++		                    <input type="text" name="nzbget_host" value="${config['nzbget_host']}" size="30">
++		                    <small>usually http://localhost:9092</small>
++	                    </div>
++	                   	<div class="row">
++		                    <label>NZBget Username</label>
++		                    <input type="text" name="nzbget_username" value="${config['nzbget_user']}" size="20">
++	                    </div>
++				<div class="row">
++		                    <label>NZBget Password:</label>
++		                    <input type="password" name="nzbget_password" value="${config['nzbget_pass']}" size="20">
++	                    </div>               
++	                    <div class="row">
++	                        <label>NZBget Category:</label>
++	                        <input type="text" name="nzbget_category" value="${config['nzbget_cat']}" size="20">
++	                    </div>
++                    </fieldset>
++                </td>
+            
+                 <td>
+                    	<fieldset>
+--- a/data/interfaces/remix/config.html
++++ b/data/interfaces/remix/config.html
+@@ -116,10 +116,36 @@
+                 <td>
+                     <h3>Music Download Directory:</h3><input type="text" name="download_dir" value="${config['download_dir']}" size="50"><br>
+ 
+-                    <i class="smalltext">Full path to the directory where SAB downloads your music<br>
++                    <i class="smalltext">Full path to the directory where SAB or NZBget downloads your music<br>
+                     e.g. /Users/name/Downloads/music</i>
+                 </td>
+             </tr>
++			
++			<tr>
++                <td>
++                    <h2>NZBget:</h2>
++                </td>
++            </tr>
++            <tr>
++                <td>
++                    <h3>NZBget Host:</h3><input type="text" name="nzbget_host" value="${config['nzbget_host']}" size="30" maxlength="40"><br>
++
++                    <i class="smalltext">usually http://localhost:9092</i>
++                </td>
++
++                <td>
++                    <h3>NZBget Username:</h3><input type="text" name="nzbget_username" value="${config['nzbget_user']}" size="20" maxlength="40">
++                </td>
++            </tr>
++
++            <tr>
++                <td colspan="2">
++                    <h3>NZBget Password:</h3><input type="password" name="nzbget_password" value="${config['nzbget_pass']}" size="20" maxlength="40">
++                </td>
++                <td>
++                    <h3>NZBget Category:</h3><input type="text" name="nzbget_category" value="${config['nzbget_cat']}" size="20" maxlength="40">
++                </td>
++            </tr>			
+ 
+             <tr>
+                 <td>
+--- a/headphones/__init__.py
++++ b/headphones/__init__.py
+@@ -128,6 +128,11 @@ SAB_PASSWORD = None
+ SAB_APIKEY = None
+ SAB_CATEGORY = None
+ 
++NZBGET_USERNAME = None
++NZBGET_PASSWORD = None
++NZBGET_CATEGORY = None
++NZBGET_HOST = None
++
+ NZBMATRIX = False
+ NZBMATRIX_USERNAME = None
+ NZBMATRIX_APIKEY = None
+@@ -279,7 +284,7 @@ def initialize():
+                 TORRENTBLACKHOLE_DIR, NUMBEROFSEEDERS, ISOHUNT, KAT, MININOVA, WAFFLES, WAFFLES_UID, WAFFLES_PASSKEY, \
+                 RUTRACKER, RUTRACKER_USER, RUTRACKER_PASSWORD, WHATCD, WHATCD_USERNAME, WHATCD_PASSWORD, DOWNLOAD_TORRENT_DIR, \
+                 LIBRARYSCAN, LIBRARYSCAN_INTERVAL, DOWNLOAD_SCAN_INTERVAL, SAB_HOST, SAB_USERNAME, SAB_PASSWORD, SAB_APIKEY, SAB_CATEGORY, \
+-                NZBMATRIX, NZBMATRIX_USERNAME, NZBMATRIX_APIKEY, NEWZNAB, NEWZNAB_HOST, NEWZNAB_APIKEY, NEWZNAB_ENABLED, EXTRA_NEWZNABS, \
++                NZBGET_USERNAME, NZBGET_PASSWORD, NZBGET_CATEGORY, NZBGET_HOST, NZBMATRIX, NZBMATRIX_USERNAME, NZBMATRIX_APIKEY, NEWZNAB, NEWZNAB_HOST, NEWZNAB_APIKEY, NEWZNAB_ENABLED, EXTRA_NEWZNABS, \
+                 NZBSORG, NZBSORG_UID, NZBSORG_HASH, NEWZBIN, NEWZBIN_UID, NEWZBIN_PASSWORD, NZBSRUS, NZBSRUS_UID, NZBSRUS_APIKEY, NZBX, \
+                 LASTFM_USERNAME, INTERFACE, FOLDER_PERMISSIONS, ENCODERFOLDER, ENCODER_PATH, ENCODER, XLDPROFILE, BITRATE, SAMPLINGFREQUENCY, \
+                 MUSIC_ENCODER, ADVANCEDENCODER, ENCODEROUTPUTFORMAT, ENCODERQUALITY, ENCODERVBRCBR, ENCODERLOSSLESS, DELETE_LOSSLESS_FILES, \
+@@ -294,6 +299,7 @@ def initialize():
+         # Make sure all the config sections exist
+         CheckSection('General')
+         CheckSection('SABnzbd')
++        CheckSection('NZBget')
+         CheckSection('NZBMatrix')
+         CheckSection('Newznab')
+         CheckSection('NZBsorg')
+@@ -399,6 +405,11 @@ def initialize():
+         SAB_APIKEY = check_setting_str(CFG, 'SABnzbd', 'sab_apikey', '')
+         SAB_CATEGORY = check_setting_str(CFG, 'SABnzbd', 'sab_category', '')
+ 
++        NZBGET_USERNAME = check_setting_str(CFG, 'NZBget', 'nzbget_username', 'xbian')
++        NZBGET_PASSWORD = check_setting_str(CFG, 'NZBget', 'nzbget_password', 'raspberry')
++        NZBGET_CATEGORY = check_setting_str(CFG, 'NZBget', 'nzbget_category', 'music')
++        NZBGET_HOST = check_setting_str(CFG, 'NZBget', 'nzbget_host', '')
++		
+         NZBMATRIX = bool(check_setting_int(CFG, 'NZBMatrix', 'nzbmatrix', 0))
+         NZBMATRIX_USERNAME = check_setting_str(CFG, 'NZBMatrix', 'nzbmatrix_username', '')
+         NZBMATRIX_APIKEY = check_setting_str(CFG, 'NZBMatrix', 'nzbmatrix_apikey', '')
+@@ -726,6 +737,12 @@ def config_write():
+     new_config['SABnzbd']['sab_password'] = SAB_PASSWORD
+     new_config['SABnzbd']['sab_apikey'] = SAB_APIKEY
+     new_config['SABnzbd']['sab_category'] = SAB_CATEGORY
++	
++    new_config['NZBget'] = {}
++    new_config['NZBget']['nzbget_username'] = NZBGET_USERNAME
++    new_config['NZBget']['nzbget_password'] = NZBGET_PASSWORD
++    new_config['NZBget']['nzbget_category'] = NZBGET_CATEGORY
++    new_config['NZBget']['nzbget_host'] = NZBGET_HOST
+ 
+     new_config['NZBMatrix'] = {}
+     new_config['NZBMatrix']['nzbmatrix'] = int(NZBMATRIX)
+--- a/dev/null
++++ b/headphones/nzbget.py
+@@ -0,0 +1,84 @@
++#  This file is part of Headphones.
++#
++#  Headphones is free software: you can redistribute it and/or modify
++#  it under the terms of the GNU General Public License as published by
++#  the Free Software Foundation, either version 3 of the License, or
++#  (at your option) any later version.
++#
++#  Headphones is distributed in the hope that it will be useful,
++#  but WITHOUT ANY WARRANTY; without even the implied warranty of
++#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++#  GNU General Public License for more details.
++#
++#  You should have received a copy of the GNU General Public License
++#  along with Headphones.  If not, see <http://www.gnu.org/licenses/>.
++
++#####################################
++## Stolen from Sick-Beard's nzbget.py ##
++#####################################
++
++
++
++import httplib
++import datetime
++
++import headphones
++
++from base64 import standard_b64encode
++import xmlrpclib
++
++#from headphones.providers.generic import GenericProvider
++
++from headphones import logger
++
++def sendNZB(nzb):
++
++    addToTop = False
++    nzbgetXMLrpc = "http://%(username)s:%(password)s@%(host)s/xmlrpc"
++
++    if headphones.NZBGET_HOST == None:
++        logger.error(u"No NZBget host found in configuration. Please configure it.")
++        return False
++
++    url = nzbgetXMLrpc % {"host": headphones.NZBGET_HOST, "username": headphones.NZBGET_USERNAME, "password": headphones.NZBGET_PASSWORD}
++
++    nzbGetRPC = xmlrpclib.ServerProxy(url)
++    try:
++        if nzbGetRPC.writelog("INFO", "headphones connected to drop of %s any moment now." % (nzb.name + ".nzb")):
++            logger.debug(u"Successful connected to NZBget")
++        else:
++            logger.error(u"Successful connected to NZBget, but unable to send a message" % (nzb.name + ".nzb"))
++
++    except httplib.socket.error:
++        logger.error(u"Please check your NZBget host and port (if it is running). NZBget is not responding to this combination")
++        return False
++
++    except xmlrpclib.ProtocolError, e:
++        if (e.errmsg == "Unauthorized"):
++            logger.error(u"NZBget password is incorrect.")
++        else:
++            logger.error(u"Protocol Error: " + e.errmsg)
++        return False
++
++    # if it's a normal result need to download the NZB content
++    if nzb.resultType == "nzb":
++        genProvider = GenericProvider("")
++        data = genProvider.getURL(nzb.url)
++        if (data == None):
++            return False
++
++    # if we get a raw data result thats even better
++    elif nzb.resultType == "nzbdata":
++        data = nzb.extraInfo[0]
++
++    nzbcontent64 = standard_b64encode(data)
++
++    logger.error(u"Sending NZB to NZBget")
++    logger.debug(u"URL: " + url)
++
++    if nzbGetRPC.append(nzb.name + ".nzb", headphones.NZBGET_CATEGORY, addToTop, nzbcontent64):
++        logger.debug(u"NZB sent to NZBget successfully")
++        return True
++    else:
++        logger.error(u"NZBget could not add %s to the queue" % (nzb.name + ".nzb"))
++        return False
+--- a/headphones/searcher.py
++++ b/headphones/searcher.py
+@@ -29,7 +29,7 @@ import os, re, time
+ import string
+ 
+ import headphones, exceptions
+-from headphones import logger, db, helpers, classes, sab
++from headphones import logger, db, helpers, classes, sab, nzbget
+ 
+ import lib.bencode as bencode
+ 
+@@ -109,7 +109,7 @@ def searchforalbum(albumid=None, new=Fal
+          
+         for result in results:
+             foundNZB = "none"
+-            if (headphones.NZBMATRIX or headphones.NEWZNAB or headphones.NZBSORG or headphones.NEWZBIN or headphones.NZBX or headphones.NZBSRUS) and (headphones.SAB_HOST or headphones.BLACKHOLE):
++            if (headphones.NZBMATRIX or headphones.NEWZNAB or headphones.NZBSORG or headphones.NEWZBIN or headphones.NZBX or headphones.NZBSRUS) and (headphones.SAB_HOST or headphones.BLACKHOLE or headphones.NZBGET_HOST):
+                 if result['Status'] == "Wanted Lossless":
+                     foundNZB = searchNZB(result['AlbumID'], new, losslessOnly=True)
+                 else:
+@@ -125,7 +125,7 @@ def searchforalbum(albumid=None, new=Fal
+     else:        
+     
+         foundNZB = "none"
+-        if (headphones.NZBMATRIX or headphones.NEWZNAB or headphones.NZBSORG or headphones.NEWZBIN) and (headphones.SAB_HOST or headphones.BLACKHOLE):
++        if (headphones.NZBMATRIX or headphones.NEWZNAB or headphones.NZBSORG or headphones.NEWZBIN) and (headphones.SAB_HOST or headphones.BLACKHOLE or headphones.NZBGET_HOST):
+             foundNZB = searchNZB(albumid, new, lossless)
+ 
+         if (headphones.KAT or headphones.ISOHUNT or headphones.MININOVA or headphones.WAFFLES or headphones.RUTRACKER or headphones.WHATCD) and foundNZB == "none":
+@@ -651,7 +651,14 @@ def searchNZB(albumid=None, new=False, l
+                 logger.info(u'Found best result: <a href="%s">%s</a> - %s' % (bestqual[2], bestqual[0], helpers.bytes_to_mb(bestqual[1])))
+                 # Get rid of any dodgy chars here so we can prevent sab from renaming our downloads
+                 nzb_folder_name = helpers.sab_sanitize_foldername(bestqual[0])
+-                if headphones.SAB_HOST and not headphones.BLACKHOLE:
++                if headphones.NZBGET_HOST and not headphones.BLACKHOLE and not headphones.SAB_HOST:
++
++                    nzb = classes.NZBDataSearchResult()
++                    nzb.extraInfo.append(data)
++                    nzb.name = nzb_folder_name
++                    nzbget.sendNZB(nzb)
++
++                elif headphones.SAB_HOST and not headphones.BLACKHOLE and not headphones.NZBGET_HOST:
+ 
+                     nzb = classes.NZBDataSearchResult()
+                     nzb.extraInfo.append(data)
+--- a/headphones/webserve.py
++++ b/headphones/webserve.py
+@@ -573,6 +573,10 @@ class WebInterface(object):
+                     "sab_api" : headphones.SAB_APIKEY,
+                     "sab_pass" : headphones.SAB_PASSWORD,
+                     "sab_cat" : headphones.SAB_CATEGORY,
++                    "nzbget_host" : headphones.NZBGET_HOST,
++                    "nzbget_user" : headphones.NZBGET_USERNAME,
++                    "nzbget_pass" : headphones.NZBGET_PASSWORD,
++                    "nzbget_cat" : headphones.NZBGET_CATEGORY,
+                     "download_dir" : headphones.DOWNLOAD_DIR,
+                     "use_blackhole" : checked(headphones.BLACKHOLE),
+                     "blackhole_dir" : headphones.BLACKHOLE_DIR,
