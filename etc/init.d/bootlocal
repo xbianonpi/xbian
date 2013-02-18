@@ -46,7 +46,7 @@ function resizesd() {
 
 		# resize root partition
 		if [ $TUNETOTALBLOCKS -lt $FDISKTOTALBLOCKS ]; then
-			/sbin/resize2fs ${ROOTDEV}
+			/sbin/resize2fs /dev/mmcblk0p2
 		fi
 		
 		FDISKBLOCKSIZE=$(/sbin/sfdisk -d /dev/mmcblk0 | grep Id=83 | awk '{printf "%d", $6}');
