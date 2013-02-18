@@ -1,4 +1,4 @@
-#XBian 1.0 Alpha 5 Changelog (Preview)
+#XBian 1.0 Alpha 5 Changelog
 ==================================
 From the development point of view 
 XBian 1.0 Alpha 5 took the most man
