@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #Copyright 2012 CurlyMo <development@xbian.org>
 #
@@ -33,11 +33,58 @@ DESC="XBian boot scripts"
 VERBOSE=no
 SCRIPTNAME=/etc/init.d/bootlocal
 
+function resizesd() {
+	if [ $(grep "/dev/mmcblk0p2[\ ]\{1,\}/" /etc/fstab | wc -l) -eq 1 ] && [ $(grep noresizesd /proc/cmdline | wc -l) -eq 0 ]; then
+		# check if the partition needs resizing
+		FDISKBLOCKSIZE=$(/sbin/sfdisk -d /dev/mmcblk0 | grep Id=83 | awk '{printf "%d", $6}');
+		FDISKBLOCKCOUNT=$(/sbin/fdisk -l /dev/mmcblk0 | grep Units | sed -ne 's/\(.*= \)\([0-9]\{1,\}\)\( bytes\)/\2/p');
+		TUNE2FS=$(/sbin/tune2fs -l /dev/mmcblk0p2);
+		TUNEBLOCKSIZE=$(echo -e "${TUNE2FS}" | grep "Block size" | awk '{printf "%d", $3}');
+		TUNEBLOCKCOUNT=$(echo -e "${TUNE2FS}" | grep "Block count" | awk '{printf "%d", $3}');
+		TUNETOTALBLOCKS=$(($(($TUNEBLOCKCOUNT*$TUNEBLOCKSIZE))/1024/1024));
+		FDISKTOTALBLOCKS=$(($(($FDISKBLOCKSIZE*$FDISKBLOCKCOUNT))/1024/1024));
+
+		# resize root partition
+		if [ $TUNETOTALBLOCKS -lt $FDISKTOTALBLOCKS ]; then
+			/sbin/resize2fs ${ROOTDEV}
+		fi
+		
+		FDISKBLOCKSIZE=$(/sbin/sfdisk -d /dev/mmcblk0 | grep Id=83 | awk '{printf "%d", $6}');
+		FDISKBLOCKCOUNT=$(/sbin/fdisk -l /dev/mmcblk0 | grep Units | sed -ne 's/\(.*= \)\([0-9]\{1,\}\)\( bytes\)/\2/p');
+		TUNE2FS=$(/sbin/tune2fs -l /dev/mmcblk0p2);
+		TUNEBLOCKSIZE=$(echo -e "${TUNE2FS}" | grep "Block size" | awk '{printf "%d", $3}');
+		TUNEBLOCKCOUNT=$(echo -e "${TUNE2FS}" | grep "Block count" | awk '{printf "%d", $3}');
+		TUNETOTALBLOCKS=$(($(($TUNEBLOCKCOUNT*$TUNEBLOCKSIZE))/1024/1024));
+		FDISKTOTALBLOCKS=$(($(($FDISKBLOCKSIZE*$FDISKBLOCKCOUNT))/1024/1024));
+		
+		if [ $TUNETOTALBLOCKS -eq $FDISKTOTALBLOCKS ]; then
+			return 1;
+		else
+			return 0;
+		fi
+	fi
+}
+
+function createswap() {
+	if [ ! -f /var/swapfile ] && [ $(grep noswapfile /proc/cmdline | wc -l) -eq 0 ]; then
+		dd if=/dev/zero of=/var/swapfile bs=1024 count=128000
+		/sbin/mkswap /var/swapfile &>/dev/null
+		/sbin/swapon /var/swapfile &>/dev/null
+	fi
+	if [ -f /var/swapfile ] && [ $(grep /var/swapfile /etc/fstab | wc -l) -eq 0 ]; then
+		echo -e '/var/swapfile\tswap\tswap\tdefaults\t0\t0' >> /etc/fstab
+	fi
+}
+
 case "$1" in
   start)
+		resizesd;
+		if [ $? -eq 1 ]; then
+			createswap;
+		fi
         [ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" ""
-         /etc/rc.local
-        echo 1 | sudo tee /proc/sys/vm/drop_caches >/dev/null
+        /etc/rc.local
+		echo 1 | sudo tee /proc/sys/vm/drop_caches >/dev/null
         case "$?" in
                 0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
                 2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
