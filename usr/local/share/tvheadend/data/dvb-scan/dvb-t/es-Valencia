@@ -1,9 +1,0 @@
-# DVB-T Valencia, Spain
-T 490000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 23: TMV, Tele 7, Aprende ingles TV, Ed. Prensa Val.,R.Mediamed
-T 746000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 55: TV3, 33, 3/24, K3/300
-T 762000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 57: Canal 9, Punt 2, Popular TV, LP Teva, Radio 9, Si Radio
-T 770000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 58: TVE 1, La 2, 24H TVE, Clan TVE, RNE 1, RNE C, RNE 3
-T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 66: Veo, Sony TV en Veo, Tienda en Veo, Intereconomia, Teledeporte, R. Interec., R. Marca
-T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 67: Cuatro, CNN+, 40 Latino, Promo, La Sexta, Ser, 40 Princ., Cad. Dial
-T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 68: Telecinco, Telecinco 2, FDF, Cinco Shop, Disney Channel, Punto Radio
-T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE     # Canal 69: Antena 3, Antena Neox, Antena Nova, Hogar 10, Onda Cero, Europa FM, Onda Melodia

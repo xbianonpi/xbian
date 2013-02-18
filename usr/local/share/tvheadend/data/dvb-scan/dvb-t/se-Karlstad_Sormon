@@ -1,9 +1,0 @@
-# Sweden - Karlstad Sörmon Valid from 2007 09 26. Ver. 2 Correct FEC
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-# Channels
-# Mux3=30
-T 546000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
-# Mux4=42
-T 642000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
-# Mux1=43
-T 650000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
