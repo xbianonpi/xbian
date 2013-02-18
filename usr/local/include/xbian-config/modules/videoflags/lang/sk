@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,12 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="Video výstupt"
+_DESC="Zmena HDMI, CEC a overscan nadstavení"
+_VIDEOFLAGS="Video flags"
+_VIDEOFLAGSSUCCESS="Video flags úspešne zaktualizované"
+_HDMIFORCEHOTPLUG="Vynútenie HDMI hotplug"
+_HDMIIGNOREHOTPLUG="Ignoruj HDMI hotplug"
+_HDMIIGNORECECINIT="Ignoruj HDMI CEC init"
+_HDMIIGNORECEC="Deaktivuj HDMI CEC"
+_DISABLEOVERSCAN="Deaktivuj overscan"

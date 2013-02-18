@@ -1,8 +1,0 @@
-xbmc:
-lirc:
-ssh:
-ifplugd:
-cron:
-dbus:pidfile=/var/run/dbus/pid
-apache2:
-samba:pidfile=/var/run/samba/smbd.pid

@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,9 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="SSH root login"
+_DESC="Activer/Descativer SSH root login"
+_SSHROOTENABLE="Voulez vous activer ou descativer root ssh login?"
+_NOSSHROOTPASS="Root n'a actuellement pas de mot de passe, et ne peut se conneter a SSH sans mot de passe. Veuiller en choisir un d'abord"
+_SSHROOTENABLED="SSH root login activé"
+_SSHROOTDISABLED="SSH root login désactivé"

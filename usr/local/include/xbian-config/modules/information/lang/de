@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,6 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="Informationen"
+_DESC="Allgemeine Informationen zum Tool"
+_INFORMATION="XBian ist eine freie Open-Source Media Anwendung für den Raspberry Pi und kann über http://www.xbian.org heruntergeladen werden. Unser Slogan ist \"XBMC on Raspberry Pi, bleeding edge\" und wir möchten die schnellste und beste Mediacenter Anwendung für den Raspberry Pi bereitstellen. Jeder kann helfen XBian weiter zu verbessern! Für weitere Fragen, Meinungen, Vorschläge oder Supportanfragen gehe bitte auf unsere Homepage und nutze das Forum, das Wiki oder die FAQ-Liste. Viel Spaß!"

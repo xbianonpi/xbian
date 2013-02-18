@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,15 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="XBMC"
+_DESC="Skift XBMC-indstillinger"
+_XBMCWEBSERVERSUCCESSENABLED="XBMC webserver er aktiveret"
+_XBMCWEBSERVERSUCCESSDISABLED="XBMC webserver er deaktiveret"
+_XBMCWEBSERVERFAILEDENABLE="Aktivering af XBMC webserver mislykkedes"
+_XBMCWEBSERVERFAILEDDISABLE="Deaktivering af XBMC webserver mislykkedes"
+_XBMCGUIRESSUCCESS="Ændring af opløsning for XBMC GUI lykkedes"
+_XBMCGUIRESFAILED="Ændring af opløsning for XBMC GUI mislykkedes"
+_XBMCGUIRES="GUI Opløsning"
+_XBMCWEBSERVER="Webserver"
+_XBMCACTIONS="Handlinger"
+_XBMCWEBSERVERENABLEDISABLE="Vil du de-/aktivere XBMC webserver?"

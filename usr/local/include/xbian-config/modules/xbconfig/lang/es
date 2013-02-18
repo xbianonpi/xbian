@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,12 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="Configuración XBian"
+_DESC="Ajustes de XBian"
+_XBLANGUAGE="Lenguaje"
+_XBAUTOSTART="Inicio automático"
+_XBACTIONS="Acciones"
+_XBAUTOMATIC="Automático"
+_XBCONFIGAUTOSTARTENABLEDISABLE="¿Quieres inciar automáticamente la configuración de XBian, cuando accedas como usuario de Xbian?"
+_XBSUCCESSDISABLEAUTOSTART="Desactivado con éxito el inicio automático de la configuración de XBian"
+_XBSUCCESSENABLEAUTOSTART="Activado con éxito el inicio automático de la configuración de XBian"

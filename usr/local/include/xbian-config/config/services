@@ -1,0 +1,13 @@
+xbmc:xbmc.bin
+samba:smbd,nmbd
+lirc:
+apache2:
+ssh:
+transmission:
+headphones:
+sickbeard:
+nzbget:
+couchpotato:
+sabnzbd:
+sysklogd:syslogd
+klogd:

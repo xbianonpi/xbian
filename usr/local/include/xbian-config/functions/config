@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -16,13 +16,25 @@
 #
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
+#
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
+# update/insert Raspberry PI config variable
+#  $1 [String] Key
+#  $2 [Mixed] Value
+updateConfigVarFn() {
+	sed -i "/$1=/d" /boot/config.txt
+	echo "$1=$2" >> /boot/config.txt
+	sed -i '/^$/d' /boot/config.txt
+}
 
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+# select Raspberry PI config variable
+#  $1 [String] Key
+selectConfigVarFn() {
+	RETURN=$(cat /boot/config.txt | grep $1= | cut -f 2 -d= | sed -e 's/\r//g');
+}
+
+# remove Raspberry PI config variable
+#  $1 [String] Key
+deleteConfigVarFn() {
+	sed -i "/$1=/d" /boot/config.txt
+}

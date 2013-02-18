@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,9 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="Resize SD"
+_DESC="Größe der root Partition erweitern"
+_SDCONFIRM="Soll die root Partition wirklich erweitert werden?"
+_SDRESIZENOTNEEDED="Die root Partition wurde bereits erweitert. Abbruch."
+_SDREBOOT="Die root Partition wurde erfolgreich erweitert. Das Filesystem wird beim nächsten Bootvorgang angepasst."
+_SDERROR="Ein Fehler ist aufgetreten und hat womöglich das Filesystem beschädigt. Das System könnte daher nicht mehr bootbar sein. Es wird dringend empfohlen eine Sicherung vor dem nächsten Bootvorgang zu erstellen."

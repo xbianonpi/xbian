@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#Copyright 2012 CurlyMo & Hexagon <development@xbian.org>
+#Copyright 2012 CurlyMo <development@xbian.org>
 #
 #This file is part of XBian - XBMC on the Raspberry Pi.
 #
@@ -17,12 +17,9 @@
 #You should have received a copy of the GNU General Public License along
 #with XBian. If not, see <http://www.gnu.org/licenses/>
 
-# Enable CTRL-C, doesn't clear caches, doesn't install/executes anything
-if [ $DEBUG -eq 0 ]; then
-	trap '' 2;
-fi
-
-if [ $(dpkg --get-selections | grep "^wget\|^dialog\|^screen\|^git\|^bc" | grep "[\ ]\{1,\}install"  | wc -l) -eq 5 ]; then
-	echo $_REQUIREDPACKAGES" apt-get install dialog wget screen git bc";
-	exit 0;
-fi
+_NAME="Expanzia SD karty"
+_DESC="Expanduj root na celú SD kartu"
+_SDCONFIRM="Si si istý, že chceš expandovať systém na celú SD kartu?"
+_SDRESIZENOTNEEDED="Táto karta už bola expandovaná. Operácia ukončená."
+_SDREBOOT="Partícia root bola expandovaná. Systém bude aktualizovaný a rozšírený pri ďalšom reštarte."
+_SDERROR="Vyskytla sa chyba. Môže sa stať že systém bude poškodený a nenaštartuje. Prosím zálohuj všetky dáta pred reštartom."
