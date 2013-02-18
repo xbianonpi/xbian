@@ -1,8 +1,0 @@
-# DVB-T Alpicat (Lleida)
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 770000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c58: TV3, K3/33, 3/24, 300, 3i
-T 818000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c64: TVE1, TVE2, Teledeporte, C24h
-T 834000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c66: TVE ClanTV, TVE 50a, Veo1, Veo2, Net
-T 842000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c67: Cuatro, 40Latino, CNN+, LaSexta 1
-T 850000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c68: T5, T5 Sports, T5 Estrellas, Net Fly Music
-T 858000000 8MHz 2/3 NONE QAM64 8k 1/4 NONE # c69: Antena3, Antena.Neox, Antena.Nova, La Sexta 2

@@ -1,6 +1,0 @@
-# Sweden - Pajala
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 490000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE #Teracom_Mux_2
-T 554000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE #Teracom_Mux_3
-T 578000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE #Teracom_Mux_1
-T 602000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE #Teracom_Mux_4

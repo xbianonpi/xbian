@@ -1,9 +1,0 @@
-# UK, Winter Hill
-# Populated by J. Hornsby from a scan of active multiplexes
-# UK, Winter Hill B Ceased broadcasting on 02 December 2009
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 746000000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
-T 770000000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
-T 778000000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
-T 794000000 8MHz 2/3 NONE QAM64 8k 1/32 NONE
-T 801833000 8MHz 2/3 NONE QAM64 8k 1/32 NONE

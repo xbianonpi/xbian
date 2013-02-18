@@ -1,7 +1,0 @@
-# Sweden - Mölndal/Västerberget
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 626000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
-T 522000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
-T 778000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE
-T 594000000 8MHz 3/4 NONE QAM64 8k 1/4 NONE
-T 818000000 8MHz 2/3 NONE QAM64 8k 1/8 NONE

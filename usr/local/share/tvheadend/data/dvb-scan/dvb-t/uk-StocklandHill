@@ -1,9 +1,0 @@
-# UK, Stockland Hill
-# http://www.ukfree.tv/txdetail.php?a=ST222014
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 514167000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # PSB1
-T 490167000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # PSB2
-#T 538167000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # PSB3 (DVB-T2)
-T 505833000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # COM4
-T 481833000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # COM5
-T 529833000 8MHz 2/3 NONE QAM64 8k 1/32 NONE     # COM6

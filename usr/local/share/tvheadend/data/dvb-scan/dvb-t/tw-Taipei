@@ -1,7 +1,0 @@
-# Taiwan - Taipei, northern Taiwan
-# T freq bw fec_hi fec_lo mod transmission-mode guard-interval hierarchy
-T 533000000 6MHz 1/2 NONE QAM16 8k 1/8 NONE
-T 545000000 6MHz 2/3 NONE QAM16 8k 1/8 NONE
-T 557000000 6MHz 2/3 NONE QAM16 8k 1/4 NONE
-T 581000000 6MHz 2/3 NONE QAM16 8k 1/4 NONE
-T 593000000 6MHz 2/3 NONE QAM16 8k 1/4 NONE
