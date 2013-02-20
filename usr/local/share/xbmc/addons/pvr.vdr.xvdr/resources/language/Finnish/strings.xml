@@ -8,9 +8,7 @@
     <string id="30005">Salli VDR-palvelimen viestit</string>
     <string id="30006">Lue nauhoitukset kansiosta</string>
     <string id="30007">VDR-nauhoitusten kansio</string>
-    <string id="30008">Kanavahaku</string>
-    <string id="30009">Kanavahaun asetukset</string>
-    <string id="30010">Aloita kanavahaku</string>
+    <string id="30008">XVDR Kanavahaku</string>
     <string id="30011">Lähteen tyyppi</string>
     <string id="30012">TV-kanavat</string>
     <string id="30013">Radiokanavat</string>
@@ -18,9 +16,9 @@
     <string id="30015">Salatut kanavat</string>
     <string id="30016">HD-kanavat</string>
     <string id="30017">Maa</string>
-    <string id="30018">Kaapeliverkon inversio</string>
-    <string id="30019">Kaapeliverkon symbolinopeus</string>
-    <string id="30020">Kaapeliverkon modulointi</string>
+    <string id="30018">Inversio</string>
+    <string id="30019">symbolinopeus</string>
+    <string id="30020">Modulointi</string>
     <string id="30021">Antenniverkon inversio</string>
     <string id="30022">Satelliitti</string>
     <string id="30023">ATSC tyyppi</string>
@@ -38,7 +36,6 @@
     <string id="30035">Uudet kanavat</string>
     <string id="30036">Kanavahaku valmis</string>
     <string id="30037">Ei laitetta saatavilla - lopetetaan</string>
-    <string id="30038">Ei DVB-S2 laitetta saatavilla - kokeillaan DVB-S</string>
     <string id="30039">Käynnissä</string>
     <string id="30040">Pysäytetty</string>
     <string id="30041">Valmis</string>

@@ -117,7 +117,11 @@ msgctxt "#30026"
 msgid "TV-Bouquet"
 msgstr ""
 
-#empty strings from id 30027 to 30499
+msgctxt "#30027"
+imsgid "Fetch picons from webinterface"
+msgstr ""
+
+#empty strings from id 30028 to 30499
 #notifications
 
 msgctxt "#30500"
@@ -127,3 +131,5 @@ msgstr ""
 msgctxt "#30501"
 msgid "Reconnected to '%s'"
 msgstr ""
+
+

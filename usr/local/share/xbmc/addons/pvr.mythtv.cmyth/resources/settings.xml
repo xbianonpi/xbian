@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-  <setting id="host" type="text" label="30000" default="127.0.0.1" />
-  <setting id="port" type="number" label="30001" default="6543" />
-  <setting id="db_user" type="text" label="30002" default="mythtv" />
-  <setting id="db_password" type="text" label="30003" default="mythtv" />
-  <setting id="db_name" type="text" label="30004" default="mythconverg" />
-  <setting id="extradebug" type="bool" label="30005" default="false" />
-  <setting id="livetv" type="bool" label="30006" default="true" />
-  <setting id="livetv_priority" type="bool" label="30007" default="false" />
+  <category label="30019">
+    <setting id="host" type="text" label="30000" default="127.0.0.1" />
+    <setting id="port" type="number" label="30001" default="6543" />
+    <setting id="db_user" type="text" label="30002" default="mythtv" />
+    <setting id="db_password" type="text" label="30003" default="mythtv" />
+    <setting id="db_name" type="text" label="30004" default="mythconverg" />
+    <setting id="db_host" type="text" visible="false" />
+    <setting id="db_port" type="number" visible="false" default="3306" />
+    <setting id="extradebug" type="bool" label="30005" default="false" />
+    <setting id="livetv" type="bool" label="30006" default="true" />
+    <setting id="livetv_priority" type="bool" label="30007" default="false" />
+  </category>
+  <category label="30049">
+    <setting id="rec_template_provider" type="enum" label="30020" lvalues="30021|30022" default="1" />
+    <setting id="rec_separator1" label="30025" type="lsep" />
+    <setting id="rec_autometadata" type="bool" label="30026" enable="eq(-2,0)" default="true" />
+    <setting id="rec_autocommflag" type="bool" label="30027" enable="eq(-3,0)" default="true" />
+    <setting id="rec_autoexpire" type="bool" label="30034" enable="eq(-4,0)" default="true" />
+    <setting id="rec_autotranscode" type="bool" label="30028" enable="eq(-5,0)" default="false" />
+    <setting id="rec_transcoder" type="number" label="30033" enable="eq(-6,0)" default="0" />
+    <setting id="rec_autorunjob1" type="bool" label="30029" enable="eq(-7,0)" default="false" />
+    <setting id="rec_autorunjob2" type="bool" label="30030" enable="eq(-8,0)" default="false" />
+    <setting id="rec_autorunjob3" type="bool" label="30031" enable="eq(-9,0)" default="false" />
+    <setting id="rec_autorunjob4" type="bool" label="30032" enable="eq(-10,0)" default="false" />
+  </category>
 </settings>

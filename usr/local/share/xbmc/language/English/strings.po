@@ -4292,7 +4292,7 @@ msgid "Wake on Lan (%s)"
 msgstr ""
 
 msgctxt "#13028"
-msgid "Server already running"
+msgid "Waiting for network to connect..."
 msgstr ""
 
 msgctxt "#13029"
@@ -4300,38 +4300,34 @@ msgid "Failed to execute Wake on Lan!"
 msgstr ""
 
 msgctxt "#13030"
-msgid "Waiting for network to connect..."
-msgstr ""
-
-msgctxt "#13031"
 msgid "Waiting for server to wake up..."
 msgstr ""
 
-msgctxt "#13032"
+msgctxt "#13031"
 msgid "Extended wait for server to wake up..."
 msgstr ""
 
-msgctxt "#13033"
+msgctxt "#13032"
 msgid "Waiting for services to launch..."
 msgstr ""
 
-msgctxt "#13034"
+msgctxt "#13033"
 msgid "MAC Discovery"
 msgstr ""
 
-msgctxt "#13035"
+msgctxt "#13034"
 msgid "Updated for %s"
 msgstr ""
 
-msgctxt "#13036"
+msgctxt "#13035"
 msgid "Found for %s"
 msgstr ""
 
-msgctxt "#13037"
+msgctxt "#13036"
 msgid "Failed for %s"
 msgstr ""
 
-#empty strings from id 13038 to 13049
+#empty strings from id 13037 to 13049
 
 msgctxt "#13050"
 msgid "Running low on battery"

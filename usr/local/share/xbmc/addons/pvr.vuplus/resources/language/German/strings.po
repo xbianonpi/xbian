@@ -109,6 +109,13 @@ msgctxt "#30026"
 msgid "TV-Bouquet"
 msgstr "TV-Bouquet"
 
+msgctxt "#30027"
+imsgid "Fetch picons from webinterface"
+msgstr "Lade Picons vom Web-Interface"
+
+#empty strings from id 30028 to 30499
+#notifications
+
 msgctxt "#30500"
 msgid "Disconnected from '%s'"
 msgstr "Verbindung '%s' unterbrochen"
