@@ -1,0 +1,290 @@
+<window>
+	<defaultcontrol always="true">20</defaultcontrol>
+	<coordinates>
+		<system>1</system>
+		<posx>335</posx>
+		<posy>100</posy>
+	</coordinates>
+	<include>dialogeffect</include>
+	<controls>
+		<control type="image">
+			<posx>0</posx>
+			<posy>0</posy>
+			<width>610</width>
+			<height>500</height>
+			<texture border="40">DialogBack.png</texture>
+		</control>
+		<control type="image">
+			<description>Dialog Header image</description>
+			<posx>40</posx>
+			<posy>16</posy>
+			<width>530</width>
+			<height>40</height>
+			<texture>dialogheader.png</texture>
+		</control>
+		<control type="label" id="1">
+			<description>header label</description>
+			<posx>40</posx>
+			<posy>20</posy>
+			<width>530</width>
+			<height>30</height>
+			<font>font13_title</font>
+			<label>$ADDON[pvr.vdr.xvdr 30008]</label>
+			<align>center</align>
+			<aligny>center</aligny>
+			<textcolor>selected</textcolor>
+			<shadowcolor>black</shadowcolor>
+		</control>
+		<control type="spincontrolex" id="2">
+			<description>DVB Type (all)</description>
+			<posx>30</posx>
+			<posy>60</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30011]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>2</onup>
+			<ondown>3</ondown>
+		</control>
+		<control type="spincontrolex" id="3">
+			<description>Country (all)</description>
+			<posx>30</posx>
+			<posy>95</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30017]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>2</onup>
+			<ondown>5</ondown>
+		</control>
+
+		<control type="group" id="4">
+		<visible>true</visible>
+			<control type="spincontrolex" id="5">
+				<description>DVB Inversion (DVB-T)</description>
+				<posx>30</posx>
+				<posy>130</posy>
+				<width>550</width>
+				<height>30</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$ADDON[pvr.vdr.xvdr 30018]</label>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+				<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+				<onup>3</onup>
+				<ondown>7</ondown>
+			</control>
+		</control>
+
+
+		<control type="group" id="6">
+		<visible>true</visible>
+			<control type="spincontrolex" id="7">
+				<description>DVB Inversion (DVB-C)</description>
+				<posx>30</posx>
+				<posy>130</posy>
+				<width>550</width>
+				<height>30</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$ADDON[pvr.vdr.xvdr 30018]</label>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+				<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+				<onup>5</onup>
+				<ondown>8</ondown>
+			</control>
+			<control type="spincontrolex" id="8">
+				<description>Symbolrate (DVB-C)</description>
+				<posx>30</posx>
+				<posy>165</posy>
+				<width>550</width>
+				<height>30</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$ADDON[pvr.vdr.xvdr 30019]</label>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+				<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+				<onup>7</onup>
+				<ondown>9</ondown>
+			</control>
+			<control type="spincontrolex" id="9">
+				<description>QAM (DVB-C)</description>
+				<posx>30</posx>
+				<posy>200</posy>
+				<width>550</width>
+				<height>30</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$ADDON[pvr.vdr.xvdr 30020]</label>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+				<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+				<onup>8</onup>
+				<ondown>11</ondown>
+			</control>
+		</control>
+		
+		<control type="group" id="10">
+		<visible>true</visible>
+			<control type="spincontrolex" id="11">
+				<description>Satellite (DVB-S)</description>
+				<posx>30</posx>
+				<posy>130</posy>
+				<width>550</width>
+				<height>30</height>
+				<align>left</align>
+				<aligny>center</aligny>
+				<label>$ADDON[pvr.vdr.xvdr 30022]</label>
+				<font>font13</font>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+				<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+				<onup>9</onup>
+				<ondown>32</ondown>
+			</control>
+		</control>
+
+		<control type="radiobutton" id="32">
+			<description>tv flag</description>
+			<posx>30</posx>
+			<posy>235</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30012]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>11</onup>
+			<ondown>13</ondown>
+		</control>
+		<control type="radiobutton" id="13">
+			<description>radio flag</description>
+			<posx>30</posx>
+			<posy>270</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30013]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>32</onup>
+			<ondown>14</ondown>
+		</control>
+		<control type="radiobutton" id="14">
+			<description>fta flag</description>
+			<posx>30</posx>
+			<posy>305</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30014]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>13</onup>
+			<ondown>15</ondown>
+		</control>
+		<control type="radiobutton" id="15">
+			<description>encrypted flag</description>
+			<posx>30</posx>
+			<posy>340</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30015]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>14</onup>
+			<ondown>16</ondown>
+		</control>
+		<control type="radiobutton" id="16">
+			<description>hd flag</description>
+			<posx>30</posx>
+			<posy>375</posy>
+			<width>550</width>
+			<height>30</height>
+			<align>left</align>
+			<aligny>center</aligny>
+			<label>$ADDON[pvr.vdr.xvdr 30016]</label>
+			<font>font13</font>
+			<textcolor>grey2</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<texturefocus border="0,0,0,2">MenuItemFO.png</texturefocus>
+			<texturenofocus border="0,0,0,2">MenuItemNF.png</texturenofocus>
+			<onup>15</onup>
+			<ondown>20</ondown>
+		</control>
+											
+		<control type="button" id="20">
+			<description>OK button</description>
+			<posx>100</posx>
+			<posy>420</posy>
+			<width>200</width>
+			<height>40</height>
+			<label>$ADDON[pvr.vdr.xvdr 30010]</label>
+			<font>font12_title</font>
+			<textcolor>white</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<align>center</align>
+			<onleft>20</onleft>
+			<onright>21</onright>
+			<onup>16</onup>
+			<ondown>20</ondown>
+		</control>
+		<control type="button" id="21">
+			<description>Cancel button</description>
+			<posx>305</posx>
+			<posy>420</posy>
+			<width>200</width>
+			<height>40</height>
+			<label>$ADDON[pvr.vdr.xvdr 30024]</label>
+			<font>font12_title</font>
+			<textcolor>white</textcolor>
+			<focusedcolor>white</focusedcolor>
+			<align>center</align>
+			<onleft>20</onleft>
+			<onright>21</onright>
+			<onup>16</onup>
+			<ondown>21</ondown>
+		</control>
+	</controls>
+</window>

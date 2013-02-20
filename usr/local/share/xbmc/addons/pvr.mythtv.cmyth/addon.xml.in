@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="pvr.mythtv.cmyth"
-  version="1.6.7"
+  version="1.6.8"
   name="MythTV cmyth PVR Client"
   provider-name="Christian Fetzer, Jean-Luc Barrière, Tonny Petersen">
   <requires>

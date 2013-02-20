@@ -1,3 +1,28 @@
+v1.6.8
+- Performance improvements
+    - Reduced startup time (Faster loading of EPG, channels, recordings and images)
+    - Reduced resource usage for image caching
+    - Cache recording data (event triggered updates from backend)
+    - Fixed lock when stopping recording playback
+    - Improved general response time
+- Live TV improvements
+    - Better handling of connection problems
+    - Playback does not stop anymore between program breaks
+    - Fixed seek problems
+- Timer improvements
+    - Add optional internal recording rule template
+    - Correctly apply backend recording rule settings
+    - Properly add title and subtitle
+    - Fixed Timer deletion
+- Added advanced option for specifying database host/port
+- Fixed crash when loading invisibile recordings
+- Improved Art-work loading
+- Combine channels with same channum and callsign
+- Fixed IPv6 support
+- Fixed Windows XP support
+- Improved logging, notifications and system labels
+- Refactored & cleaned up libcmyth (inttypes, names, docs)
+
 v1.6.7
 - Updated language files from Transifex
 
