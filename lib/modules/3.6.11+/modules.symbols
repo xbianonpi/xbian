@@ -6,6 +6,7 @@ alias symbol:ieee80211_queue_stopped mac80211
 alias symbol:cfg80211_wext_siwscan cfg80211
 alias symbol:cfg80211_wext_giwscan cfg80211
 alias symbol:o2hb_setup_callback ocfs2_nodemanager
+alias symbol:ps2_end_command libps2
 alias symbol:videobuf_queue_cancel videobuf_core
 alias symbol:l2tp_session_find_by_ifname l2tp_core
 alias symbol:v4l2_ctrl_grab videodev
@@ -87,6 +88,7 @@ alias symbol:snd_pcm_lib_default_mmap snd_pcm
 alias symbol:ar9003_mci_cleanup ath9k_hw
 alias symbol:wiphy_to_ieee80211_hw mac80211
 alias symbol:ipv6_getsockopt ipv6
+alias symbol:ps2_is_keyboard_id libps2
 alias symbol:roccat_connect hid_roccat
 alias symbol:usb_ftdi_elan_edset_setup ftdi_elan
 alias symbol:ath9k_hw_setmcastfilter ath9k_hw
@@ -300,6 +302,7 @@ alias symbol:w1_ds2760_write w1_ds2760
 alias symbol:cxd2820r_attach cxd2820r
 alias symbol:usb_wwan_write_room usb_wwan
 alias symbol:irias_add_integer_attrib irda
+alias symbol:ps2_drain libps2
 alias symbol:vb2_fop_write videobuf2_core
 alias symbol:unregister_cdrom cdrom
 alias symbol:rt2x00usb_register_read_async rt2x00usb
@@ -790,6 +793,7 @@ alias symbol:phy_scan_fixups libphy
 alias symbol:bt_sock_unregister bluetooth
 alias symbol:ath9k_hw_setuptxqueue ath9k_hw
 alias symbol:snd_timer_resolution snd_timer
+alias symbol:__ps2_command libps2
 alias symbol:inet_diag_register inet_diag
 alias symbol:dm_rh_dirty_log dm_region_hash
 alias symbol:vb2_ops_wait_finish videobuf2_core
@@ -1256,6 +1260,7 @@ alias symbol:nfc_unregister_device nfc
 alias symbol:lro_receive_frags inet_lro
 alias symbol:v9fs_unregister_trans 9pnet
 alias symbol:gameport_close gameport
+alias symbol:ps2_cmd_aborted libps2
 alias symbol:dib8000_get_adc_power dib8000
 alias symbol:lbtf_bcn_sent libertas_tf
 alias symbol:nf_ct_port_tuple_to_nlattr nf_conntrack
@@ -1540,6 +1545,8 @@ alias symbol:rt2x00lib_txdone rt2x00lib
 alias symbol:ath9k_hw_btcoex_disable ath9k_hw
 alias symbol:sys_imageblit sysimgblt
 alias symbol:w1_touch_block wire
+alias symbol:ps2_command libps2
+alias symbol:ps2_handle_response libps2
 alias symbol:dibusb_dib3000mc_tuner_attach dvb_usb_dibusb_common
 alias symbol:cx2341x_ctrl_query cx2341x
 alias symbol:llc_mac_hdr_init llc
@@ -1862,6 +1869,7 @@ alias symbol:ppp_input_error ppp_generic
 alias symbol:lbs_notify_command_response libertas
 alias symbol:ocfs2_stack_supports_plocks ocfs2_stackglue
 alias symbol:p9_client_link 9pnet
+alias symbol:ps2_init libps2
 alias symbol:dvb_filter_get_ac3info dvb_core
 alias symbol:v4l2_device_disconnect videodev
 alias symbol:usb_serial_generic_open usbserial
@@ -1916,6 +1924,7 @@ alias symbol:ulist_add btrfs
 alias symbol:_snd_pcm_hw_param_setempty snd_pcm
 alias symbol:nfc_tm_data_received nfc
 alias symbol:ax25_protocol_release ax25
+alias symbol:ps2_handle_ack libps2
 alias symbol:rt2800_sta_add rt2800lib
 alias symbol:xt_rateest_lookup xt_RATEEST
 alias symbol:md_wakeup_thread md_mod
@@ -1932,6 +1941,7 @@ alias symbol:ip_set_nfnl_get_byindex ip_set
 alias symbol:rt2x00lib_rxdone rt2x00lib
 alias symbol:nf_nat_set_seq_adjust nf_nat
 alias symbol:nf_nat_tcp_seq_adjust nf_nat
+alias symbol:ps2_begin_command libps2
 alias symbol:nfs4_acl_posix_to_nfsv4 nfsd
 alias symbol:snd_seq_autoload_lock snd_seq_device
 alias symbol:snd_pcm_hw_param_last snd_pcm
@@ -2007,6 +2017,7 @@ alias symbol:rt2800_vco_calibration rt2800lib
 alias symbol:hsi_put_controller hsi
 alias symbol:usb_wwan_dtr_rts usb_wwan
 alias symbol:drbd_disk_str drbd
+alias symbol:ps2_sendbyte libps2
 alias symbol:v4l2_ctrl_handler_init videodev
 alias symbol:nfnetlink_send nfnetlink
 alias symbol:serio_open serio

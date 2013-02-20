@@ -296,6 +296,14 @@ kernel/drivers/usb/serial/vivopay-serial.ko: kernel/drivers/usb/serial/usbserial
 kernel/drivers/usb/serial/zio.ko: kernel/drivers/usb/serial/usbserial.ko
 kernel/drivers/usb/chipidea/ci_hdrc.ko:
 kernel/drivers/usb/chipidea/ci13xxx_msm.ko: kernel/drivers/usb/chipidea/ci_hdrc.ko
+kernel/drivers/input/mouse/appletouch.ko:
+kernel/drivers/input/tablet/acecad.ko:
+kernel/drivers/input/tablet/aiptek.ko:
+kernel/drivers/input/tablet/gtco.ko:
+kernel/drivers/input/tablet/hanwang.ko:
+kernel/drivers/input/tablet/kbtab.ko:
+kernel/drivers/input/tablet/wacom.ko:
+kernel/drivers/input/touchscreen/usbtouchscreen.ko:
 kernel/drivers/input/misc/ad714x.ko:
 kernel/drivers/input/misc/ad714x-i2c.ko: kernel/drivers/input/misc/ad714x.ko
 kernel/drivers/input/misc/ad714x-spi.ko: kernel/drivers/input/misc/ad714x.ko
@@ -825,6 +833,7 @@ kernel/drivers/uio/uio_pdrv.ko: kernel/drivers/uio/uio.ko
 kernel/drivers/uio/uio_pdrv_genirq.ko: kernel/drivers/uio/uio.ko
 kernel/drivers/input/serio/serio.ko:
 kernel/drivers/input/serio/serport.ko: kernel/drivers/input/serio/serio.ko
+kernel/drivers/input/serio/libps2.ko:
 kernel/drivers/input/serio/serio_raw.ko: kernel/drivers/input/serio/serio.ko
 kernel/drivers/input/gameport/gameport.ko:
 kernel/drivers/input/gameport/lightning.ko: kernel/drivers/input/gameport/gameport.ko
