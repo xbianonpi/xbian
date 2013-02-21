@@ -1,5 +1,6 @@
 kernel/kernel/configs.ko
 kernel/fs/mbcache.ko
+kernel/fs/aufs/aufs.ko
 kernel/fs/autofs4/autofs4.ko
 kernel/fs/cachefiles/cachefiles.ko
 kernel/fs/configfs/configfs.ko
