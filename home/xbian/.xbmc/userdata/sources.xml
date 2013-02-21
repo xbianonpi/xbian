@@ -1,12 +1,11 @@
 <sources>
-<files>
-    <default pathversion="1"></default>
+    <files>
+        <default pathversion="1"></default>
         <name>SuperRepo.org Virtual Disk</name>
         <path pathversion="1">http://use.superrepo.org/Frodo</path>
-    <source>
-        <name>Root filesystem</name>
-        <path pathversion="1">/</path>
-    </source>
-</files>
+        <source>
+            <name>Root filesystem</name>
+            <path pathversion="1">/</path>
+        </source>
+    </files>
 </sources>
-
