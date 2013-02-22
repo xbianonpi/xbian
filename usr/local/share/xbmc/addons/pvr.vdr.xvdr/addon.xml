@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="pvr.vdr.xvdr"
-  version="0.9.7"
+  version="0.9.8"
   name="VDR XVDR Client"
   provider-name="Alexander Pipelka, Alwin Esch, Team XBMC">
   <requires>
