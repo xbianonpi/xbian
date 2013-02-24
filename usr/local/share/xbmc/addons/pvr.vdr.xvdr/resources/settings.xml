@@ -7,6 +7,7 @@
         <setting id="compression" type="enum" label="30001" lvalues="30053|30059|30060|30061" default="2" />
         <setting id="priority" type="enum" label="30002" values="0|5|10|15|20|25|30|35|40|45|50|55|60|65|70|75|80|85|90|95|99|100" default="10"/>
         <setting id="handlemessages" type="bool" label="30005" default="true" />
+        <setting id="piconpath" type="folder" label="30077" default="" />
     </category>
 
     <!-- VDR -->
