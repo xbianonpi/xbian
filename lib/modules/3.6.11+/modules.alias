@@ -5554,9 +5554,17 @@ alias hid:b0003g*v0000172Fp00000037 hid_waltop
 alias hid:b0003g*v0000172Fp00000034 hid_waltop
 alias hid:b0003g*v0000172Fp00000032 hid_waltop
 alias hid:b0005g*v0000057Ep00000306 hid_wiimote
+alias usb:v03EBp21FEd*dc*dsc*dp*ic*isc*ip*in* lirc_igorplugusb
+alias usb:v03EBp0002d*dc*dsc*dp*ic*isc*ip*in* lirc_igorplugusb
+alias usb:v15C2pFFDAd*dc*dsc*dp*ic*isc*ip*in* lirc_imon
+alias usb:v0AA8pFFDAd*dc*dsc*dp*ic*isc*ip*in* lirc_imon
+alias usb:v04E8pFF30d*dc*dsc*dp*ic*isc*ip*in* lirc_imon
+alias usb:v0AA8p8001d*dc*dsc*dp*ic*isc*ip*in* lirc_imon
 alias usb:vFFFFpFFFFd*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
 alias usb:v045Ep0284d*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
 alias usb:v040Bp6521d*dc*dsc*dp*ic*isc*ip*in* lirc_xbox
+alias usb:v0B48p2003d*dc*dsc*dp*ic*isc*ip*in* lirc_ttusbir
+alias lirc_pvr150 lirc_zilog
 alias usb:v1131p2035d*dc*dsc*dp*ic*isc*ip*in* w35und
 alias usb:v18E8p6233d*dc*dsc*dp*ic*isc*ip*in* w35und
 alias usb:v18E8p6230d*dc*dsc*dp*ic*isc*ip*in* w35und
