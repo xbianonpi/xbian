@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <strings>
     <!--CATEGORIE STRINGS -->
     <string id="30500">Apparence</string>
@@ -8,6 +8,5 @@
     <string id="30522">Jaune</string>
     <string id="30523">Bleu Ciel</string>
     <string id="30524">Aucune</string>
-    
     <string id="30530">Afficher la description avec le titre</string>
 </strings>
