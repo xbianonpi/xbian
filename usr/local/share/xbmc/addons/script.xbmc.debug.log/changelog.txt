@@ -1,0 +1,18 @@
+12.0.0
+ - use new method for log-file path retrieval
+ - updated translations
+11.0.7
+ - add android support
+ - added Korean translation
+11.0.6
+ - fixed log uploading on atv2 (thx jbeluch)
+ - added crashfile uploading for windows
+11.0.5
+ - changed addon-id to replace "Debug Log"-addon
+ - added danish translations (thx twinther)
+ - new icon
+ - improved the dialog
+ - changed the way os-detection works
+ - added German Translation
+11.0.4
+ - initial test release
