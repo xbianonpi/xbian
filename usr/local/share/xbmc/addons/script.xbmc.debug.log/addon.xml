@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.xbmc.debug.log"
+       name="XBMC Log Uploader"
+       version="12.0.0"
+       provider-name="Tristan Fischer (sphere@dersphere.de)">
+    <requires>
+        <import addon="xbmc.python" version="2.1.0"/>
+    </requires>
+    <extension point="xbmc.python.script" library="addon.py"/>
+    <extension point="xbmc.addon.metadata">
+        <language></language>
+       <summary lang="be">Uploads your logs to xbmclogs.com</summary>
+        <summary lang="ca">Puja els vostres registres a xbmclogs.com</summary>
+        <summary lang="da">Indsender dine logfiler til xbmclogs.com</summary>
+        <summary lang="de">Lädt logs zu xbmclogs.com hoch</summary>
+        <summary lang="el">Ανεβάστε τα αρχεία καταγραφής σας στο xbmclogs.com</summary>
+        <summary lang="en">Uploads your logs to xbmclogs.com</summary>
+        <summary lang="es">Enviar tus logs a xbmclogs.com</summary>
+        <summary lang="fr">Envoyer vos logs vers xbmclogs.com</summary>
+        <summary lang="hu">Feltölti a naplófájljait az xbmclogs.com-ra</summary>
+        <summary lang="it">Carica i tuoi log su xbmclogs.com</summary>
+        <summary lang="ko">로그를 xbmclogs.com에 업로드</summary>
+        <summary lang="lt">Galite atsiusti žurnalus iš xbmclogs.com</summary>
+        <summary lang="pl">Prześlij swoje logi na xbmclogs.com</summary>
+        <summary lang="pt">Envia os seus logs para xbmclogs.com</summary>
+        <summary lang="pt_BR">Upload seus logs para xbmclogs.com</summary>
+        <summary lang="ru">Выгружает Ваши логи на xbmclogs.com</summary>
+        <summary lang="sv">Laddar upp dina loggar till xbmclogs.com</summary>
+        <summary lang="zh">上传您的日志到xbmclogs.com</summary>
+        <description lang="be">This Addon uploads your logs to xbmclogs.com[CR]You will receive an email with seperate links to the uploaded logfiles</description>
+        <description lang="ca">Aquest afegitó puja els vostres registres a xbmclogs.com[CR]Rebreu un correu amb diferents enllaços als registres pujats</description>
+        <description lang="da">Denne add-on indsender dine logfiler til xbmclogs.com[CR]Du vil modtage en email med direkte links til de indsendte logfiler.</description>
+        <description lang="de">Dieses Add-on lädt deine Logfiles auf www.xbmclogs.com hoch[CR]Du wirst eine Email mit Links zu deinen Logfiles erhalten.</description>
+        <description lang="el">Αυτό το Πρόσθετο ανεβάζει τα αρχεία καταγραφής σας στο xbmclogs.com[CR]Θα λάβετε ένα email με ξεχωριστούς συνδέσμους για τα ανεβασμένα αρχεία</description>
+        <description lang="en">This Addon uploads your logs to xbmclogs.com[CR]You will receive an email with seperate links to the uploaded logfiles</description>
+        <description lang="es">Este complemento envía tus logs a xbmclogs.com[CR]Recibirás un email con los diferentes enlaces a tus logs enviados</description>
+        <description lang="fr">Cette extension envoie vos logs vers xbmclogs.com[CR]Vous recevrez un email avec les liens pour les fichiers de log.</description>
+        <description lang="hu">Ez a kiegészítő feltölti a naplófájljait az xbmclogs.com-ra[CR]Kapni fog egy levelet külön-külön linkekkel a feltöltött naplókra.</description>
+        <description lang="ko">이 애드온은 로그를 xbmclogs.com에 업로드 합니다.[CR]업로드된 로그파일들의 각 링크를 이메일로 받게 됩니다.</description>
+        <description lang="lt">Šis priedas įkelia/atsiunčia žurnalus iš xbmclogs.com[Cr]Jūs gausite elektroninį laišką su nuorodomis į (-at)nusiųstų žurnalų rinkmenas</description>
+        <description lang="pl">Wtyczka ta przesyła twoje logi na xbmclogs.com[CR]Otrzymasz email z oddzielnymi linkami do przesłanych logów</description>
+        <description lang="pt">Este Addon envia os seus logs para xbmclogs.com[CR]Receberá um email com ligações para os ficheiros log enviados.</description>
+        <description lang="pt_BR">Este Addon envia seus registros para xbmclogs.com [CR] Você receberá um e-mail com os links separados para os arquivos de log enviados</description>
+        <description lang="ru">Этот плагин выгрузит Ваши логи на xbmclogs.com[CR]Вы получите по почте раздельные ссылки на загруженные лог-файлы</description>
+        <description lang="sv">Detta tillägg laddar upp dina loggar till xbmclogs.com[CR]DU får ett epostmeddelande med separata länkar till dom uppladdade loggfilerna</description>
+        <description lang="zh">此插件将上传您的日志到xbmclogs.com[CR]你会收到一份邮件内含您上传日志文件的链接</description>
+        <platform>all</platform>
+    </extension>
+</addon>
