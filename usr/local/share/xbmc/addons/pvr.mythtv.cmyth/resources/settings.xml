@@ -10,7 +10,8 @@
     <setting id="db_port" type="number" visible="false" default="3306" />
     <setting id="extradebug" type="bool" label="30005" default="false" />
     <setting id="livetv" type="bool" label="30006" default="true" />
-    <setting id="livetv_priority" type="bool" label="30007" default="false" />
+    <setting id="livetv_priority" type="bool" label="30007" default="true" />
+    <setting id="livetv_conflict_strategy" type="enum" label="30008" lvalues="30009|30010|30011" default="30009" />
   </category>
   <category label="30049">
     <setting id="rec_template_provider" type="enum" label="30020" lvalues="30021|30022" default="1" />

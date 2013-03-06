@@ -1,3 +1,8 @@
+1.6.19
+
+- add timeshift skip support (FF/RW still not working)
+- fix bug in tvh webroot processing
+
 1.6.18
 
 - ensure channel count is not cleared after succesful sub

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="pvr.hts"
-  version="1.6.18"
+  version="1.6.19"
   name="Tvheadend HTSP Client"
   provider-name="Lars Op den Kamp, Team XBMC">
   <requires>

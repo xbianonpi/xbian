@@ -1,3 +1,8 @@
+v1.6.9
+- Added Live TV vs. recording conflict handling
+- Fixed recovering from backend connection loss on Windows
+- Fixed error when trying to set watched flag for recordings that already have been marked as watched
+
 v1.6.8
 - Performance improvements
     - Reduced startup time (Faster loading of EPG, channels, recordings and images)
