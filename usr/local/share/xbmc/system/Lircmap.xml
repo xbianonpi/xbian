@@ -567,20 +567,20 @@
                <pageminus>KEY_CHANNELDOWN</pageminus>
                <back>KEY_BACK</back>
                <menu>KEY_WINDOWS</menu>
-               <title>KEY_INFO</title>
-               <info>KEY_TIMESHIFTING</info>
+               <title>KEY_TIMESHIFTING</title>
+               <info>KEY_INFO</info>
                <skipplus>KEY_NEXT</skipplus>
                <skipminus>KEY_PREVIOUS</skipminus>
-               <display></display>
+               <display>KEY_YELLOW</display>
                <start>KEY_PLAY</start>
                <record>KEY_RECORD</record>
                <volumeplus>KEY_VOLUMEUP</volumeplus>
                <volumeminus>KEY_VOLUMEDOWN</volumeminus>
                <mute>KEY_MUTE</mute>
-               <myvideo>KEY_GREEN</myvideo>
-               <mymusic>KEY_RED</mymusic>
-               <mypictures>KEY_YELLOW</mypictures>
-               <mytv>KEY_BLUE</mytv>
+               <myvideo>KEY_VIDEO</myvideo>
+               <mymusic>KEY_MUSIC</mymusic>
+               <mypictures>KEY_PHOTO</mypictures>
+               <mytv>KEY_LIVETV</mytv>
                <one>KEY_ONE</one>
                <two>KEY_TWO</two>
                <three>KEY_THREE</three>
@@ -592,9 +592,11 @@
                <nine>KEY_NINE</nine>
                <zero>KEY_ZERO</zero>
                <PlayDVD>KEY_DVDMENU</PlayDVD>
-               <ShowVideoMenu>KEY_TEXT</ShowVideoMenu>
-               <NextSubtitle>KEY_*</NextSubtitle>
-               <AudioNextLanguage>KEY_#</AudioNextLanguage>
-               <ContextMenu>KEY_ENTER</ContextMenu>
+               <ShowVideoMenu>KEY_BLUE</ShowVideoMenu>
+               <NextSubtitle>KEY_RED</NextSubtitle>
+               <AudioNextLanguage>KEY_GREEN</AudioNextLanguage>
+               <ContextMenu>KEY_EPG</ContextMenu>
+               <recordedtv>KEY_RECORDEDTV</recordedtv>
+               <teletext>KEY_TEXT</teletext>
        </remote>
 </lircmap>
