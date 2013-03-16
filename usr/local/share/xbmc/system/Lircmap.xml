@@ -480,6 +480,12 @@
 		<recordedtv>KEY_PVR</recordedtv>
 		<teletext>KEY_TEXT</teletext>
 		<title>KEY_EPG</title>
+		<aspectratio>KEY_ZOOM</aspectratio>
+		<mymusic>KEY_RADIO</mymusic>
+		<mypictures>KEY_CAMERA</mypictures>
+		<mytv>KEY_TUNER</mytv>
+		<menu>KEY_MEDIA</menu>
+		<clear>KEY_DELETE</clear>		
 	</remote>
 	<remote device="mediacenter">
 		<pause>pause</pause>
