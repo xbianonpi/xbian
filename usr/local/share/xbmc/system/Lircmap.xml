@@ -480,12 +480,6 @@
 		<recordedtv>KEY_PVR</recordedtv>
 		<teletext>KEY_TEXT</teletext>
 		<title>KEY_EPG</title>
-		<aspectratio>KEY_ZOOM</aspectratio>
-		<mymusic>KEY_RADIO</mymusic>
-		<mypictures>KEY_CAMERA</mypictures>
-		<mytv>KEY_TUNER</mytv>
-		<menu>KEY_MEDIA</menu>
-		<clear>KEY_DELETE</clear>		
 	</remote>
 	<remote device="mediacenter">
 		<pause>pause</pause>
@@ -557,52 +551,5 @@
                <subtitle>KEY_TEXT</subtitle>
                <hash>KEY_HASHTAG</hash>
                <aspectratio>KEY_SWITCHVIDEOMODE</aspectratio>
-       </remote>
-       
-       <remote device="X10-OR32E">
-               <pause>KEY_PAUSE</pause>
-               <stop>KEY_STOP</stop>
-               <forward>KEY_FASTFORWARD</forward>
-               <reverse>KEY_REWIND</reverse>
-               <left>KEY_LEFT</left>
-               <right>KEY_RIGHT</right>
-               <up>KEY_UP</up>
-               <down>KEY_DOWN</down>
-               <select>KEY_OK</select>
-               <pageplus>KEY_CHANNELUP</pageplus>
-               <pageminus>KEY_CHANNELDOWN</pageminus>
-               <back>KEY_BACK</back>
-               <menu>KEY_WINDOWS</menu>
-               <title>KEY_TIMESHIFTING</title>
-               <info>KEY_INFO</info>
-               <skipplus>KEY_NEXT</skipplus>
-               <skipminus>KEY_PREVIOUS</skipminus>
-               <display>KEY_YELLOW</display>
-               <start>KEY_PLAY</start>
-               <record>KEY_RECORD</record>
-               <volumeplus>KEY_VOLUMEUP</volumeplus>
-               <volumeminus>KEY_VOLUMEDOWN</volumeminus>
-               <mute>KEY_MUTE</mute>
-               <myvideo>KEY_VIDEO</myvideo>
-               <mymusic>KEY_MUSIC</mymusic>
-               <mypictures>KEY_PHOTO</mypictures>
-               <mytv>KEY_LIVETV</mytv>
-               <one>KEY_ONE</one>
-               <two>KEY_TWO</two>
-               <three>KEY_THREE</three>
-               <four>KEY_FOUR</four>
-               <five>KEY_FIVE</five>
-               <six>KEY_SIX</six>
-               <seven>KEY_SEVEN</seven>
-               <eight>KEY_EIGHT</eight>
-               <nine>KEY_NINE</nine>
-               <zero>KEY_ZERO</zero>
-               <PlayDVD>KEY_DVDMENU</PlayDVD>
-               <ShowVideoMenu>KEY_BLUE</ShowVideoMenu>
-               <NextSubtitle>KEY_RED</NextSubtitle>
-               <AudioNextLanguage>KEY_GREEN</AudioNextLanguage>
-               <ContextMenu>KEY_EPG</ContextMenu>
-               <recordedtv>KEY_RECORDEDTV</recordedtv>
-               <teletext>KEY_TEXT</teletext>
        </remote>
 </lircmap>

@@ -135,6 +135,38 @@
 				<label>20151</label>
 				<visible>System.HasAlarm(shutdowntimer)</visible>
 			</control>
+			<control type="button" id="6">
+				<description>Suspend button</description>
+				<width>340</width>
+				<height>40</height>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<align>center</align>
+				<textwidth>290</textwidth>
+				<texturefocus border="25,5,25,5">ShutdownButtonFocus.png</texturefocus>
+				<texturenofocus border="25,5,25,5">ShutdownButtonNoFocus.png</texturenofocus>
+				<onclick>XBMC.Suspend()</onclick>
+				<visible>System.CanSuspend</visible>
+				<pulseonselect>no</pulseonselect>
+				<font>font13</font>
+				<label>13011</label>
+			</control>
+			<control type="button" id="7">
+				<description>Hibernate button</description>
+				<width>340</width>
+				<height>40</height>
+				<textcolor>grey2</textcolor>
+				<focusedcolor>white</focusedcolor>
+				<align>center</align>
+				<textwidth>290</textwidth>
+				<texturefocus border="25,5,25,5">ShutdownButtonFocus.png</texturefocus>
+				<texturenofocus border="25,5,25,5">ShutdownButtonNoFocus.png</texturenofocus>
+				<onclick>XBMC.Hibernate()</onclick>
+				<visible>System.CanHibernate</visible>
+				<pulseonselect>no</pulseonselect>
+				<font>font13</font>
+				<label>13010</label>
+			</control>
 			<control type="button" id="8">
 				<description>Reboot button</description>
 				<width>340</width>
