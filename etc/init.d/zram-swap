@@ -1,0 +1,61 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          zram
+# Required-Start:    
+# Required-Stop:     
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: zram swap
+# Description:       
+### END INIT INFO
+
+
+#pre-start script
+#    modprobe zram
+#    echo 134215680 > /sys/block/zram0/disksize
+#    mkswap /dev/zram0
+#    swapon /dev/zram0
+#end script
+
+#post-stop script
+#    swapoff /dev/zram0
+#    echo 0 > /sys/block/zram0/disksize
+#end script
+
+# Read configuration variable file if it is present
+[ -r /etc/default/$NAME ] && . /etc/default/$NAME
+
+# Load the VERBOSE setting and other rcS variables
+. /lib/init/vars.sh
+
+# Define LSB log_* functions.
+# Depend on lsb-base (>= 3.2-14) to ensure that this file is present
+# and status_of_proc is working.
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+	log_daemon_msg "Starting $DESC" "$NAME"
+	modprobe zram
+	echo 134217728 > /sys/block/zram0/disksize
+	mkswap /dev/zram0
+	swapon -p 20 /dev/zram0
+	losetup /dev/loop0 /var/swapfile
+	mkswap /dev/loop0
+	swapon -p 0 /dev/loop0
+	exit 0
+	;;
+  stop)
+	log_daemon_msg "Stopping $DESC" "$NAME"
+	swapoff /dev/zram0
+	echo 0 > /sys/block/zram0/disksize
+	rmmod zram
+	exit 0
+	;;
+  status)
+	[ -e /dev/zram[0-99] ] && log_daemon_msg "zram swap running" || log_daemon_msg "zram swap not running" 
+	exit 0
+	;;
+
+esac
+
