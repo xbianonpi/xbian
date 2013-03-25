@@ -1,0 +1,33 @@
+# Configuration for tmpfs filesystems mounted in early boot, before
+# filesystems from /etc/fstab are mounted.  For information about
+# these variables see the tmpfs(5) manual page.
+
+# /run is always mounted as a tmpfs on systems which support tmpfs
+# mounts.
+
+# mount /run/lock as a tmpfs (separately from /run).  Defaults to yes;
+# set to no to disable (/run/lock will then be part of the /run tmpfs,
+# if available).
+RAMLOCK=yes
+
+# mount /run/shm as a tmpfs (separately from /run).  Defaults to yes;
+# set to no to disable (/run/shm will then be part of the /run tmpfs,
+# if available).
+RAMSHM=yes
+
+# mount /tmp as a tmpfs.  Defaults to no; set to yes to enable (/tmp
+# will be part of the root filesystem if disabled).  /tmp may also be
+# configured to be a separate mount in /etc/fstab.
+RAMTMP=no
+
+# Size limits.  Please see tmpfs(5) for details on how to configure
+# tmpfs size limits.
+#TMPFS_SIZE=20%VM
+RUN_SIZE=10240
+LOCK_SIZE=5120
+SHM_SIZE=2048
+#TMP_SIZE=20480
+
+# Mount tmpfs on /tmp if there is less than the limit size (in kiB) on
+# the root filesystem (overriding RAMTMP).
+#TMP_OVERFLOW_LIMIT=1024
