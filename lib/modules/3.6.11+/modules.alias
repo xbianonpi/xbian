@@ -26,6 +26,9 @@ alias i2c:lp8551 lp855x_bl
 alias i2c:lp8550 lp855x_bl
 alias platform:pwm-backlight pwm_bl
 alias usb:v17E9p*d*dc*dsc*dp*icFFisc00ip00in* udlfb
+alias devname:loop-control loop
+alias char-major-10-237 loop
+alias block-major-7-* loop
 alias block-major-147-* drbd
 alias of:N*T*Cbosch,bmp085* bmp085_i2c
 alias i2c:bmp180 bmp085_i2c
@@ -40,9 +43,6 @@ alias scsi:t-0x01* st
 alias char-major-9-* st
 alias scsi:t-0x01* osst
 alias char-major-206-* osst
-alias scsi:t-0x04* sr_mod
-alias scsi:t-0x05* sr_mod
-alias block-major-11-* sr_mod
 alias spi:spidev spidev
 alias platform:bcm2708_spi spi_bcm2708
 alias platform:spi_gpio spi_gpio
@@ -3808,6 +3808,11 @@ alias usb:v1CBEp0103d*dc*dsc*dp*ic*isc*ip*in* zio
 alias platform:ci13xxx ci_hdrc
 alias platform:ci_hdrc ci_hdrc
 alias platform:msm_hsusb ci13xxx_msm
+alias tty-ldisc-2 serport
+alias serio:ty06pr*id*ex* serio_raw
+alias serio:ty01pr*id*ex* serio_raw
+alias platform:gpio-keys gpio_keys
+alias platform:gpio-keys-polled gpio_keys_polled
 alias usb:v05ACp022Bd*dc*dsc*dp*ic03isc*ip02in* appletouch
 alias usb:v05ACp022Ad*dc*dsc*dp*ic03isc*ip02in* appletouch
 alias usb:v05ACp0229d*dc*dsc*dp*ic03isc*ip02in* appletouch
@@ -4001,7 +4006,6 @@ alias input:b*v*p*e*-e*1,*k*120,*r*a*m*l*s*f*w* joydev
 alias input:b*v*p*e*-e*3,*k*r*a*6,*m*l*s*f*w* joydev
 alias input:b*v*p*e*-e*3,*k*r*a*8,*m*l*s*f*w* joydev
 alias input:b*v*p*e*-e*3,*k*r*a*0,*m*l*s*f*w* joydev
-alias input:b*v*p*e*-e*k*r*a*m*l*s*f*w* evdev
 alias i2c:bq32000 rtc_bq32k
 alias spi:rtc-ds1305 rtc_ds1305
 alias i2c:rx8025 rtc_ds1307
@@ -5281,6 +5285,7 @@ alias dm-raid5 dm_raid
 alias dm-raid4 dm_raid
 alias dm-raid10 dm_raid
 alias dm-raid1 dm_raid
+alias platform:leds-gpio leds_gpio
 alias hid:b0003g*v000009DAp0000001A hid_a4tech
 alias hid:b0003g*v000009DAp0000000A hid_a4tech
 alias hid:b0003g*v000009DAp00000006 hid_a4tech
@@ -5763,9 +5768,6 @@ alias sdio:c*v032Ad0007* csr_wifi
 alias net-pf-16-proto-11 cn
 alias platform:uio_pdrv uio_pdrv
 alias platform:uio_pdrv_genirq uio_pdrv_genirq
-alias tty-ldisc-2 serport
-alias serio:ty06pr*id*ex* serio_raw
-alias serio:ty01pr*id*ex* serio_raw
 alias usb:v04FAp2490d*dc*dsc*dp*ic*isc*ip*in* ds2490
 alias usb:v0A5Cp2033d*dc*dsc*dp*ic*isc*ip*in* bcm203x
 alias usb:v08FDp0002d*dc*dsc*dp*ic*isc*ip*in* bpa10x
@@ -6310,6 +6312,7 @@ alias netdev-sit0 sit
 alias rtnl-link-vlan 8021q
 alias net-pf-15 af_key
 alias rtnl-link-bridge bridge
+alias net-pf-5 appletalk
 alias net-pf-6 netrom
 alias net-pf-11 rose
 alias net-pf-3 ax25

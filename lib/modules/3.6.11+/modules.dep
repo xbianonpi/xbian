@@ -44,7 +44,6 @@ kernel/fs/isofs/isofs.ko:
 kernel/fs/hfsplus/hfsplus.ko:
 kernel/fs/hfs/hfs.ko:
 kernel/fs/ecryptfs/ecryptfs.ko:
-kernel/fs/nfsd/nfsd.ko:
 kernel/fs/cifs/cifs.ko:
 kernel/fs/ntfs/ntfs.ko:
 kernel/fs/fuse/fuse.ko:
@@ -98,9 +97,10 @@ kernel/drivers/video/fb_sys_fops.ko:
 kernel/drivers/video/udlfb.ko: kernel/drivers/video/fb_sys_fops.ko kernel/drivers/video/sysimgblt.ko kernel/drivers/video/sysfillrect.ko kernel/drivers/video/syscopyarea.ko
 kernel/drivers/base/regmap/regmap-i2c.ko:
 kernel/drivers/base/regmap/regmap-spi.ko:
-kernel/drivers/block/pktcdvd.ko: kernel/drivers/cdrom/cdrom.ko
+kernel/drivers/block/loop.ko:
+kernel/drivers/block/pktcdvd.ko:
 kernel/drivers/block/nbd.ko:
-kernel/drivers/block/cryptoloop.ko:
+kernel/drivers/block/cryptoloop.ko: kernel/drivers/block/loop.ko
 kernel/drivers/block/drbd/drbd.ko: kernel/lib/lru_cache.ko kernel/drivers/connector/cn.ko
 kernel/drivers/misc/eeprom/eeprom_93cx6.ko:
 kernel/drivers/misc/bmp085-i2c.ko: kernel/drivers/base/regmap/regmap-i2c.ko
@@ -108,7 +108,6 @@ kernel/drivers/misc/bmp085-spi.ko: kernel/drivers/base/regmap/regmap-spi.ko
 kernel/drivers/nfc/pn533.ko: kernel/net/nfc/nfc.ko
 kernel/drivers/scsi/st.ko:
 kernel/drivers/scsi/osst.ko:
-kernel/drivers/scsi/sr_mod.ko: kernel/drivers/cdrom/cdrom.ko
 kernel/drivers/spi/spidev.ko:
 kernel/drivers/spi/spi-bcm2708.ko:
 kernel/drivers/spi/spi-bitbang.ko:
@@ -183,6 +182,7 @@ kernel/drivers/net/netconsole.ko:
 kernel/drivers/net/phy/libphy.ko:
 kernel/drivers/net/phy/mdio-bitbang.ko: kernel/drivers/net/phy/libphy.ko
 kernel/drivers/net/tun.ko:
+kernel/drivers/net/appletalk/ipddp.ko: kernel/net/appletalk/appletalk.ko kernel/net/802/psnap.ko kernel/net/llc/llc.ko
 kernel/drivers/net/irda/irda-usb.ko: kernel/net/irda/irda.ko kernel/lib/crc-ccitt.ko
 kernel/drivers/net/irda/stir4200.ko: kernel/net/irda/irda.ko kernel/lib/crc-ccitt.ko
 kernel/drivers/net/irda/mcs7780.ko: kernel/net/irda/irda.ko kernel/lib/crc-ccitt.ko
@@ -203,7 +203,6 @@ kernel/drivers/net/slip/slip.ko: kernel/drivers/net/slip/slhc.ko
 kernel/drivers/net/slip/slhc.ko:
 kernel/drivers/net/wimax/i2400m/i2400m.ko: kernel/net/wimax/wimax.ko
 kernel/drivers/net/wimax/i2400m/i2400m-usb.ko: kernel/drivers/net/wimax/i2400m/i2400m.ko kernel/net/wimax/wimax.ko
-kernel/drivers/cdrom/cdrom.ko:
 kernel/drivers/usb/host/ssb-hcd.ko: kernel/drivers/ssb/ssb.ko
 kernel/drivers/usb/storage/ums-alauda.ko:
 kernel/drivers/usb/storage/ums-cypress.ko:
@@ -296,6 +295,10 @@ kernel/drivers/usb/serial/vivopay-serial.ko: kernel/drivers/usb/serial/usbserial
 kernel/drivers/usb/serial/zio.ko: kernel/drivers/usb/serial/usbserial.ko
 kernel/drivers/usb/chipidea/ci_hdrc.ko:
 kernel/drivers/usb/chipidea/ci13xxx_msm.ko: kernel/drivers/usb/chipidea/ci_hdrc.ko
+kernel/drivers/input/serio/serport.ko:
+kernel/drivers/input/serio/serio_raw.ko:
+kernel/drivers/input/keyboard/gpio_keys.ko:
+kernel/drivers/input/keyboard/gpio_keys_polled.ko: kernel/drivers/input/input-polldev.ko
 kernel/drivers/input/mouse/appletouch.ko:
 kernel/drivers/input/tablet/acecad.ko:
 kernel/drivers/input/tablet/aiptek.ko:
@@ -325,7 +328,6 @@ kernel/drivers/input/ff-memless.ko:
 kernel/drivers/input/input-polldev.ko:
 kernel/drivers/input/matrix-keymap.ko:
 kernel/drivers/input/joydev.ko:
-kernel/drivers/input/evdev.ko:
 kernel/drivers/rtc/rtc-bq32k.ko:
 kernel/drivers/rtc/rtc-ds1305.ko:
 kernel/drivers/rtc/rtc-ds1307.ko:
@@ -733,7 +735,7 @@ kernel/drivers/md/dm-zero.ko: kernel/drivers/md/dm-mod.ko
 kernel/drivers/md/dm-raid.ko: kernel/drivers/md/dm-mod.ko kernel/drivers/md/raid10.ko kernel/drivers/md/raid1.ko kernel/drivers/md/raid456.ko kernel/drivers/md/md-mod.ko kernel/crypto/async_tx/async_pq.ko kernel/crypto/async_tx/async_xor.ko kernel/crypto/xor.ko kernel/crypto/async_tx/async_memcpy.ko kernel/crypto/async_tx/async_raid6_recov.ko kernel/lib/raid6/raid6_pq.ko kernel/crypto/async_tx/async_tx.ko
 kernel/drivers/md/dm-thin-pool.ko: kernel/drivers/md/persistent-data/dm-persistent-data.ko kernel/drivers/md/dm-bufio.ko kernel/drivers/md/dm-mod.ko
 kernel/drivers/md/dm-verity.ko: kernel/drivers/md/dm-bufio.ko kernel/drivers/md/dm-mod.ko
-kernel/drivers/cpufreq/cpufreq_stats.ko:
+kernel/drivers/leds/leds-gpio.ko:
 kernel/drivers/leds/ledtrig-timer.ko:
 kernel/drivers/leds/ledtrig-oneshot.ko:
 kernel/drivers/leds/ledtrig-heartbeat.ko:
@@ -821,10 +823,6 @@ kernel/drivers/connector/cn.ko:
 kernel/drivers/uio/uio.ko:
 kernel/drivers/uio/uio_pdrv.ko: kernel/drivers/uio/uio.ko
 kernel/drivers/uio/uio_pdrv_genirq.ko: kernel/drivers/uio/uio.ko
-kernel/drivers/input/serio/serio.ko:
-kernel/drivers/input/serio/serport.ko: kernel/drivers/input/serio/serio.ko
-kernel/drivers/input/serio/libps2.ko:
-kernel/drivers/input/serio/serio_raw.ko: kernel/drivers/input/serio/serio.ko
 kernel/drivers/input/gameport/gameport.ko:
 kernel/drivers/input/gameport/lightning.ko: kernel/drivers/input/gameport/gameport.ko
 kernel/drivers/input/gameport/ns558.ko: kernel/drivers/input/gameport/gameport.ko
@@ -1133,6 +1131,7 @@ kernel/net/bridge/netfilter/ebt_snat.ko: kernel/net/netfilter/x_tables.ko
 kernel/net/bridge/netfilter/ebt_log.ko: kernel/net/netfilter/x_tables.ko
 kernel/net/bridge/netfilter/ebt_ulog.ko: kernel/net/netfilter/x_tables.ko
 kernel/net/bridge/netfilter/ebt_nflog.ko: kernel/net/netfilter/x_tables.ko
+kernel/net/appletalk/appletalk.ko: kernel/net/802/psnap.ko kernel/net/llc/llc.ko
 kernel/net/netrom/netrom.ko: kernel/net/ax25/ax25.ko
 kernel/net/rose/rose.ko: kernel/net/ax25/ax25.ko
 kernel/net/ax25/ax25.ko:
