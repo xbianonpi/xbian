@@ -2,8 +2,8 @@
    <network>
         <cachemembuffersize>20971520</cachemembuffersize>
    </network>
-   <fanartres>540</fanartres>
-   <imageres>256</imageres>
+   <fanartres>720</fanartres>
+   <imageres>540</imageres>
    <cputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | grep -o "[0-9]\{2\}") C"</cputempcommand>
    <gputempcommand>echo "$(/opt/vc/bin/vcgencmd measure_temp | grep -o "[0-9]\{2\}") C"</gputempcommand>
    <lookandfeel>  
