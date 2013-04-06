@@ -2,7 +2,7 @@
 
 # Consult the console-setup(5) manual page.
 
-ACTIVE_CONSOLES="/dev/tty[1-6]"
+ACTIVE_CONSOLES="/dev/tty[1-2]"
 
 CHARMAP="UTF-8"
 
