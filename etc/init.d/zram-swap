@@ -33,29 +33,50 @@
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
+start () {
+	modprobe -q zram  
+	echo 134217728 > /sys/block/zram0/disksize  
+	mkswap /dev/zram0 > /dev/null 2>&1
+	swapon -p 20 /dev/zram0  >/dev/null 2>&1
+	losetup /dev/loop0 /var/swapfile  >/dev/null 2>&1
+	mkswap /dev/loop0  >/dev/null 2>&1
+	swapon -p 0 /dev/loop0  >/dev/null 2>&1
+	log_action_msg "Starting $DESC" "$NAME"
+}
+
+stop () {
+	swapoff /dev/zram0  >/dev/null 2>&1
+	swapoff /dev/loop0  >/dev/null 2>&1
+	echo 0 > /sys/block/zram0/disksize
+	rmmod zram  >/dev/null 2>&1
+	losetup -d /dev/loop0  >/dev/null 2>&1
+	log_action_msg "Stopping $DESC" "$NAME"
+}
+
 case "$1" in
   start)
-	log_daemon_msg "Starting $DESC" "$NAME"
-	modprobe zram
-	echo 134217728 > /sys/block/zram0/disksize
-	mkswap /dev/zram0
-	swapon -p 20 /dev/zram0
-	losetup /dev/loop0 /var/swapfile
-	mkswap /dev/loop0
-	swapon -p 0 /dev/loop0
-	exit 0
+	start
+	log_success_msg "Started ok"
 	;;
   stop)
-	log_daemon_msg "Stopping $DESC" "$NAME"
-	swapoff /dev/zram0
-	echo 0 > /sys/block/zram0/disksize
-	rmmod zram
-	exit 0
+	stop
+	log_success_msg "Stopped ok"
+	;;
+  restart)
+	stop
+	sleep 1
+	start
+	log_success_msg "Restarted ok"
 	;;
   status)
-	[ -e /dev/zram[0-99] ] && log_daemon_msg "zram swap running" || log_daemon_msg "zram swap not running" 
-	exit 0
+	[ -e /dev/zram[0-99] ] && log_success_msg "zram swap running" || log_success_msg "zram swap not running" 
+	;;
+  *)
+	log_success_msg "Usage: zram-swap {start|stop|status|restart}"
+	exit 1	
 	;;
 
 esac
 
+
+exit 0
