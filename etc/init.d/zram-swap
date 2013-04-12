@@ -33,37 +33,56 @@
 # and status_of_proc is working.
 . /lib/lsb/init-functions
 
+SWAPFILE="/var/swapfile"
+LOOP=''
+
 start () {
 	modprobe -q zram  
 	echo 134217728 > /sys/block/zram0/disksize  
 	mkswap /dev/zram0 > /dev/null 2>&1
 	swapon -p 20 /dev/zram0  >/dev/null 2>&1
-	losetup /dev/loop0 /var/swapfile  >/dev/null 2>&1
-	mkswap /dev/loop0  >/dev/null 2>&1
+	if [ ! -e "$SWAPFILE" ]; then
+		log_action_msg "Creating $SWAPFILE"
+		dd if=/dev/zero of="$SWAPFILE" bs=1M count=128 >/dev/null 2>&1
+		mkswap "$SWAPFILE" >/dev/null 2>&1
+	fi
+	LOOP=`losetup -f`
+	echo "$LOOP" > /run/$(basename "$0").conf
+	losetup "$LOOP" "$SWAPFILE"  >/dev/null 2>&1
 	swapon -p 0 /dev/loop0  >/dev/null 2>&1
 	log_action_msg "Starting $DESC" "$NAME"
 }
 
 stop () {
+	LOOP=`cat /run/$(basename "$0").conf`
 	swapoff /dev/zram0  >/dev/null 2>&1
-	swapoff /dev/loop0  >/dev/null 2>&1
+	swapoff "$LOOP"  >/dev/null 2>&1
 	echo 0 > /sys/block/zram0/disksize
 	rmmod zram  >/dev/null 2>&1
-	losetup -d /dev/loop0  >/dev/null 2>&1
+	losetup -d "$LOOP"  >/dev/null 2>&1
+	rm /run/$(basename "$0").conf
 	log_action_msg "Stopping $DESC" "$NAME"
 }
 
 case "$1" in
   start)
+	if [ -e /run/$(basename "$0").conf ]; then
+		log_warning_msg "Already started."
+		exit 99
+	fi 
 	start
 	log_success_msg "Started ok"
 	;;
   stop)
+	if [ ! -e /run/$(basename "$0").conf ]; then
+		log_warning_msg "Not started."
+		exit 99
+	fi
 	stop
 	log_success_msg "Stopped ok"
 	;;
   restart)
-	stop
+	test -e $/run/$(basename "$0").conf && stop
 	sleep 1
 	start
 	log_success_msg "Restarted ok"
