@@ -1,0 +1,18 @@
+##################################
+# As of udev 098:
+#   SYSFS -> ATTRS
+#   BUS   -> SUBSYSTEMS
+#   ID    -> KERNELS
+#
+# So if someone is using an old version of udev they may need to use a
+# different first line like:
+#    SYSFS{manufacturer} == "IguanaWorks", 
+
+ATTR{manufacturer} == "IguanaWorks", ATTR{product} == "USB IR Transceiver", \
+               OWNER = "iguanair", MODE = "0664", \
+               RUN  = "/bin/mkdir -p /var/run/iguanaIR", \
+               RUN += "/bin/chown iguanair /var/run/iguanaIR", \
+               RUN += "/etc/init.d/iguanaIR rescan"
+
+# FOR DEBUGGING TRY ADDING TO THE RUN LINES:
+#RUN += "/bin/bash -c 'echo $major $minor r=$result i=$id n=$number k=$kernel p=$parent r=$root >> /tmp/udev.txt'"

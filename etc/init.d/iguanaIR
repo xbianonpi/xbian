@@ -1,0 +1,233 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:	iguanair
+# Required-Start:	$remote_fs
+# Required-Stop:	$remote_fs
+# Short-Description: IguanaWorks USB IR Device Daemon
+# Description: IguanaWorks USB IR Device Daemon
+# Should-Start:
+# Should-Stop:
+# X-Start-Before: lirc
+# X-Stop-After: lirc
+# Default-Start: 2 3 4 5 
+# Default-Stop: 0 1 6
+### END INIT INFO
+#
+# Startup script for the Iguanaworks USB IR daemon.
+#
+# Two lines for Fedora's chkconfig
+# chkconfig: 2345 80 20
+# description: Enables the driver for Iguanaworks USB IR devices.
+#
+######################
+
+# load the default settings
+[ -f /etc/default/iguanaIR ] && . /etc/default/iguanaIR
+# combine some variables into a command line
+IGUANAIR_OPTIONS="$OPTIONS --log-level=$LOGLEVEL --send-timeout=$SENDTIMEOUT --receive-timeout=$RECEIVETIMEOUT $DRIVERS"
+
+# We need to know what helper functions are legal, so detect the
+# distro.  Override this in /etc/defaults/iguanaIR
+# First try lsb, if it exists, if not then use our
+# /etc/issue hack.
+
+LSBLOCATION=`which lsb_release`
+
+if [ "$DISTRO" = "" ]; then
+
+	if [ -x "$LSBLOCATION" ]; then
+		DISTRO=`lsb_release -s -i | tr 'A-Z' 'a-z'`
+	else
+		DISTRO=`head -1 /etc/issue | sed 's/ .*//' | tr 'A-Z' 'a-z'`
+	fi
+fi
+
+if [ "$DISTRO" = "fedora" -o "$DISTRO" = "mythdora" -o "$DISTRO" = "centos" -o "$DISTRO" = "rhel" -o "$DISTRO" = "scientific" ]; then
+    # welcome to fedora land
+    . /etc/init.d/functions
+
+    # fedora needs these variables
+    LOCKFILE=/var/lock/subsys/iguanaIR
+    PIDFILE=/var/run/igdaemon.pid
+
+    # definitions to make a common shell script    
+    log_begin_msg()
+    {
+        echo -n $*
+    }
+    log_end_msg()
+    {
+        echo
+    }
+elif [ "$DISTRO" = "gentoo" ]; then
+    # hello gentoo?
+    . /etc/init.d/functions.sh
+    log_begin_msg()
+    {
+        ebegin $*
+    }
+    log_end_msg()
+    {
+        eend $*
+    }
+else
+    if [ "$DISTRO" != "debian" -a "$DISTRO" != "ubuntu" ]; then
+        echo "WARNING: failed to recognize distro, defaulting to Debian."
+    fi
+    # ubuntu and others
+    . /lib/lsb/init-functions
+fi
+# common defaults
+IGPATH=/usr/bin/igdaemon
+LOGFILE=/var/log/iguanaIR.log
+RETVAL=0
+
+# check for the executable exists
+if [ ! -x $IGPATH ]; then
+    echo $"Failed to find igdaemon executable."
+    exit 1
+fi
+
+# I like the way gentoo does startup scripts, but no dependencies for
+# me.
+depends()
+{
+    RETVAL=0
+}
+
+start()
+{
+    # figure out what command to run to start the daemon
+    if [ "$LOCKFILE" != "" ]; then 
+        if [ ! -e $LOCKFILE ]; then
+            START="daemon --user=iguanair $IGPATH $IGUANAIR_OPTIONS -l $LOGFILE"
+        fi
+    else
+        START="start-stop-daemon --start --chuid iguanair --group iguanair --exec $IGPATH -- $IGUANAIR_OPTIONS -l $LOGFILE"
+    fi
+
+    if [ "$START" != "" ]; then
+        # make sure the log file exists/is writable
+        touch $LOGFILE
+        chown iguanair:iguanair $LOGFILE
+
+        # start the daemon
+        log_begin_msg "Starting Iguanaworks USB IR daemon..."
+        $START
+        RETVAL=$?
+        log_end_msg $RETVAL
+
+        # touch the PIDFILE
+        if [ "$PIDFILE" != "" -a $RETVAL = 0 ]; then
+            echo $(pidofproc $IGPATH) > $PIDFILE
+            touch $LOCKFILE
+        fi
+    fi
+
+    return $RETVAL
+}
+
+stop()
+{
+    log_begin_msg "Stopping Iguanaworks USB IR daemon..."
+    if [ "$LOCKFILE" != "" ]; then
+        killproc $IGPATH
+    else
+        start-stop-daemon --stop --oknodo --retry 2 --exec $IGPATH
+    fi
+    RETVAL=$?
+    log_end_msg $RETVAL
+
+    if [ "$LOCKFILE" != "" ]; then
+        [ $RETVAL = 0 ] && rm -f $LOCKFILE $PIDFILE
+    fi
+
+    return $RETVAL
+}
+
+restart()
+{
+    stop && start
+}
+
+rescan()
+{
+    log_begin_msg "Signalling Iguanaworks USB IR daemon: "
+    if [ "$LOCKFILE" != "" ]; then
+        if [ -e $LOCKFILE ]; then
+            PID=$(pidofproc $IGPATH)
+            kill -s HUP $PID
+            echo_success
+        fi
+    else
+        start-stop-daemon --stop --signal HUP --exec $IGPATH
+    fi
+
+    RETVAL=$?
+    log_end_msg $RETVAL
+}
+
+usage()
+{
+    if [ "$LOCKFILE" != "" ]; then
+        echo $"Usage: $0 {start|stop|status|restart|condrestart|force-restart|rescan}"
+    else
+        echo $"Usage: $0 {start|stop|status|restart|force-restart|rescan}"
+    fi
+    RETVAL=1
+}
+
+
+forcereload()
+{
+    restart
+}
+
+
+
+# See how we were called.
+case "$1" in
+    start)
+# NOTE: was necessary on old versions of udev.... why? but now causes weird
+#       keyboard and similar issues on F9 (and F8 has been reported)
+#        if type udevtrigger > /dev/null 2>&1; then
+#            udevtrigger
+#        fi
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    rescan)
+        rescan
+        ;;
+    force-reload)
+        forcereload
+        ;;
+    status)
+        if [ "$LOCKFILE" != "" ]; then
+            status $IGPATH
+        else
+		if [ -z $(pidofproc $IGPATH) ]; then
+		echo "IguanaIR Daemon is not running"
+		else
+		echo "IguanaIR Daemon is running (pid $(pidofproc $IGPATH) )"
+		fi            
+        fi
+        ;;
+    condrestart)
+        if [ "$LOCKFILE" != "" ]; then
+            [ -e $LOCKFILE ] && restart
+        else
+            usage
+        fi
+        ;;
+    *)
+        usage
+        ;;
+esac
+
+exit $RETVAL

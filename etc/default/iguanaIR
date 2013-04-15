@@ -1,0 +1,61 @@
+## The IguanaWorks daemon (igdaemon) as a few common-line options that
+## are configured here.
+
+## There are multiple logging levels for igdaemon
+## 0 = normal
+## 1 = log info
+## 2 = log debug1
+## 3 = log debug2 (excessive)
+## 4 = log debug3 (excessively excessive)
+LOGLEVEL="0"
+
+## Because of a bug in libusb, using threads when communicating with
+## our device can cause the device to hang. As a work around, we have
+## an option to disable using threads. This option may cause problems
+## when sending long IR signals and will take a slightly larger amount
+## of overhead on your computer. Unless you have problems with the
+## threadless version, we recommend using it for increased stability.
+## The option to disable threads is:
+## "--no-threads"
+
+## Uncomment the line below to disable threads
+#OPTIONS="--no-threads"
+
+## If you enable threads, then you can decrease the receive timeout
+## because it does not limit how quickly you can send. It does limit
+## how quickly you can quit the daemon. With threads enabled, we set
+## this timeout to 1000ms. With threads disabled, we put the timeout
+## at 50ms. You can use a larger value if you want to save a little
+## amount of cpu time, but it may cause problems with sends, 
+## particularly long send.
+
+## With the --no-threads option used
+#RECEIVETIMEOUT="50"
+
+## When threads are used (and not --no-threads)
+RECEIVETIMEOUT="1000"
+
+## the igdaemon can use different backend USB drivers and should be
+## told which to try first since we prefer the libusb driver to the
+## libusbpre1.0
+DRIVERS="--driver=libusb"
+
+## You can set the timeout value for sendings IR signals. This set how
+## long to wait for send to successfully complete before assuming that
+## the send failed and returning an error. Time is measured in ms and
+## the default is 1000. Do not change this unless you have good
+## reason.
+SENDTIMEOUT="1000"
+
+## The init.d script for igdaemon auto detects what distro you are
+## using (fedora, debian, ubuntu, gentoo). You can overwrite this
+## detection by uncommenting one of the lines below. If your distro is
+## not detected, please send a ticket to:
+## http://iguanaworks.net/projects/IguanaIR/
+## Including your distribution and the entire contents of /etc/issue.
+## We will try to add support for your distro in the next release. In
+## the meantime, maybe try some of the other distro overrides.
+#DISTRO="fedora"
+#DISTRO="debian"
+#DISTRO="ubuntu"
+#DISTRO="gentoo"
