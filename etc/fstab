@@ -1,3 +1,7 @@
-proc            /proc           proc    defaults          0       0
-UUID=8B12-9112  /boot           vfat    defaults,rw,relatime          0       2
-UUID=29b6c2f5-5469-49f2-abd5-daa9149021cc       /       ext4    defaults,rw,noatime,relatime    0       1
+#
+#
+#
+proc		/proc		proc		defaults	0	0
+LABEL=xbian-root-btrfs		/		btrfs		defaults,rw,compress=lzo,relatime,noatime	0	1
+LABEL=xbian-root-btrfs		/home		btrfs		subvol=HOME/.btrfs/snapshot/@running	0	2
+
