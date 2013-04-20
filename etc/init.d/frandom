@@ -1,0 +1,49 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          frandom
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Initialize frandom and erandom
+# Description:
+### END INIT INFO
+#
+# Author: CurlyMoo <development@xbian.org>
+#
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+	if [ ! -f /dev/urandom.orig ]; then
+		mv /dev/urandom /dev/urandom.orig
+	else
+		rm /dev/urandom
+	fi
+	ln -s /dev/frandom /dev/urandom
+
+	if [ ! -f /dev/random.orig ]; then
+		mv /dev/random /dev/random.orig
+	else
+		rm /dev/random
+	fi
+	ln -s /dev/erandom /dev/random
+	;;
+  stop)
+	mv /dev/urandom.orig /dev/urandom
+	mv /dev/random.orig /dev/random
+	;;
+  restart)
+	stop
+	sleep 1
+	start
+	;;
+  *)
+	echo "Usage: /etc/init.d/frandom {start|stop}" >&2
+	exit 3
+	;;
+esac
+
+:
