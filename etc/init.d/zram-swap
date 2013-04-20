@@ -37,7 +37,8 @@ SWAPFILE="/var/swapfile"
 LOOP=''
 
 start () {
-	modprobe -q zram  
+	modprobe -q zram
+        modprobe -q loop
 	echo 134217728 > /sys/block/zram0/disksize  
 	mkswap /dev/zram0 > /dev/null 2>&1
 	swapon -p 20 /dev/zram0  >/dev/null 2>&1
