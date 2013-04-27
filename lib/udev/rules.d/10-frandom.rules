@@ -1,0 +1,8 @@
+#
+# These are the rules for the frandom devices. In theory, we could let
+# udev's catch-all rule create the /dev node based upon the kernel name,
+# which gives correct result, except that the default MODE set in
+# 50-udev.rules (0600) is too restrictive.
+#
+
+KERNEL=="[ef]random", NAME="%k", MODE="444", OPTIONS="last_rule"
