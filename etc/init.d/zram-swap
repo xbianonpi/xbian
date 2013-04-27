@@ -46,6 +46,7 @@ start () {
 		dd if=/dev/zero of="$SWAPFILE" bs=1M count=128 >/dev/null 2>&1
 		mkswap "$SWAPFILE" >/dev/null 2>&1
 	fi
+	chattr -C "$SWAPFILE"
 	LOOP=`losetup -f`
 	echo "$LOOP" > /run/$(basename "$0").conf
 	losetup "$LOOP" "$SWAPFILE"  >/dev/null 2>&1
