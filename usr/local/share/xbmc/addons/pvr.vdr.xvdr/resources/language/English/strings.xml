@@ -79,4 +79,13 @@
     <string id="30075">Your TV channel list is currently empty.</string>
     <string id="30076">Do you want to start a channel scan ?</string>
     <string id="30077">Picons</string>
+    <string id="30078">Time Shifting</string>
+    <string id="30079">Memorybuffer size (Mb)</string>
+    <string id="30080">Buffer folder</string>
+    <string id="30081">Method</string>
+    <string id="30082">Simple timeshift (Pause LiveTV)</string>
+    <string id="30083">Full timeshift (RAM)</string>
+    <string id="30084">Full timeshift (HDD)</string>
+    <string id="30085">HDD Buffer size (Mb)</string>
+    <string id="30086">Start with I-Frame (Raspberry Pi)</string>
 </strings>

@@ -1,3 +1,7 @@
+1.7.5
+
+[updated] Bump after PVR API version bump
+
 1.6.5
 
 [updated] Language files from Transifex

@@ -79,4 +79,13 @@
     <string id="30075">Ihre TV Kanalliste ist leer.</string>
     <string id="30076">Wollen Sie den Sendersuchlauf starten ?</string>
     <string id="30077">Picons</string>
+    <string id="30078">Timeshift</string>
+    <string id="30079">Puffergröße RAM (Mb)</string>
+    <string id="30080">Pufferverzeichnis</string>
+    <string id="30081">Methode</string>
+    <string id="30082">Einfach (Pause LiveTV)</string>
+    <string id="30083">Vollständig (RAM)</string>
+    <string id="30084">Vollständig (HDD)</string>
+    <string id="30085">Puffergröße HDD (Mb)</string>
+    <string id="30086">Video startet mit I-Frame (Raspberry Pi)</string>
 </strings>

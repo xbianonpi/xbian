@@ -118,7 +118,7 @@ msgid "TV-Bouquet"
 msgstr ""
 
 msgctxt "#30027"
-imsgid "Fetch picons from webinterface"
+msgid "Fetch picons from webinterface"
 msgstr ""
 
 #empty strings from id 30028 to 30499

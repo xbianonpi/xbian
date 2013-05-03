@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <addon
   id="pvr.njoy"
-  version="1.6.2"
+  version="1.7.2"
   name="Njoy N7 PVR Client"
   provider-name="Team XBMC">
   <requires>
     <c-pluff version="0.1"/>
-    <import addon="xbmc.pvr" version="1.6.0"/>
+    <import addon="xbmc.pvr" version="1.7.0"/>
   </requires>
   <extension
     point="xbmc.pvrclient"

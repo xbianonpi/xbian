@@ -1,3 +1,5 @@
+v1.7.165 (07-03-2013)
+- Bump after PVR API version bump
 v1.6.165 (19-01-2013)
 - Do not disable the add-on when it can not connect to the ARGUS-TV server.
 v1.6.164 (18-01-2013)

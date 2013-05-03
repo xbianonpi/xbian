@@ -1,3 +1,6 @@
+v1.7.4
+- Bump after PVR API version bump
+
 v1.6.4
 
 - small change to improve the performance of radio channels

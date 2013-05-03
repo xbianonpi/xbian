@@ -1,3 +1,11 @@
+v1.7.10
+- Get last played position for recordings from the server
+
+v1.7.9
+- Provide EDLs if available (commercial skip data cut lists)
+  Currently only works for videos with constant frame
+- Disconnect from / reconnect to backend when XBMC goes to / resumes from standby
+
 v1.6.9
 - Added Live TV vs. recording conflict handling
 - Fixed recovering from backend connection loss on Windows

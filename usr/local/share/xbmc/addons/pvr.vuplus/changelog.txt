@@ -1,3 +1,6 @@
+1.7.7
+- Bump after PVR API version bump
+
 1.6.7
 - add: support for /virtual) recording folders
 - add: support for fetching picons from the webinterface

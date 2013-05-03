@@ -15,6 +15,7 @@
         <setting id="autochannelgroups" type="bool" label="30046" default="false" />
         <setting id="audiotype" type="enum" label="30049" values="NONE|MP2|AC3|EAC3|AAC|LATM" default="1" />
         <setting id="updatechannels" type="enum" label="30052" lvalues="30053|30054|30055|30056|30057|30058" default="3" />
+        <setting id="iframe" type="bool" label="30086" default="false" />
     </category>
 
     <!-- ChannelFilter -->
@@ -23,5 +24,13 @@
         <setting id="nativelangonly" type="bool" label="30069" default="false" />
         <setting id="encryptedchannels" type="bool" label="30071" default="true" />
         <setting id="caids" type="text" label="30070" default="" />
+    </category>
+
+    <!-- Time Shifting -->
+    <category label="30078">
+        <setting id="tsmethod" type="enum" label="30081" lvalues="30082|30083|30084" default="0" />
+        <setting id="tsbuffersize" type="number" label="30079" default="200" />
+        <setting id="tsbuffersizehdd" type="number" label="30085" default="1024" />
+        <setting id="tsfolder" type="folder" label="30080" default="" />
     </category>
 </settings>

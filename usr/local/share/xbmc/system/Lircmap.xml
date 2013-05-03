@@ -10,7 +10,7 @@
 
 <lircmap>
 	<remote device="mceusb">
-        <altname>srm7500</altname>
+    <altname>srm7500</altname>
 		<play>Play</play>
 		<pause>Pause</pause>
 		<stop>Stop</stop>
@@ -417,7 +417,11 @@
 		<down>KEY_DOWN</down>
 		<select>KEY_OK</select>
 		<select>KEY_ENTER</select>
+		<enter>KEY_ENTER</enter>
+		<clear>KEY_DELETE</clear>
 		<start>KEY_SELECT</start>
+		<start>KEY_PROG1</start>
+		<start>KEY_HOME</start>
 		<back>KEY_ESC</back>
 		<back>KEY_EXIT</back>
 		<back>KEY_BACK</back>
@@ -435,18 +439,24 @@
 		<channelplus>KEY_CHANNELUP</channelplus>
 		<channelminus>KEY_CHANNELDOWN</channelminus>
 		<skipplus>KEY_NEXTSONG</skipplus>
+		<skipplus>KEY_NEXT</skipplus>
 		<skipminus>KEY_PREVIOUSSONG</skipminus>
+		<skipminus>KEY_PREVIOUS</skipminus>
 		<title>KEY_TITLE</title>
+		<title>KEY_EPG</title>
 		<subtitle>KEY_SUBTITLE</subtitle>
-		<subtitle>KEY_NUMERIC_STAR</subtitle>
+        <subtitle>KEY_NUMERIC_STAR</subtitle>
 		<language>KEY_LANGUAGE</language>
 		<mute>KEY_MUTE</mute>
 		<power>KEY_POWER</power>
-		<power>KEY_SLEEP</power>
+        <power>KEY_SLEEP</power>
 		<myvideo>KEY_VIDEO</myvideo>
 		<mymusic>KEY_AUDIO</mymusic>
 		<mypictures>KEY_MHP</mypictures>
+		<mypictures>KEY_CAMERA</mypictures>
 		<mytv>KEY_TV</mytv>
+		<liveradio>KEY_RADIO</liveradio>
+		<mytv>KEY_TUNER</mytv>
 		<one>KEY_1</one>
 		<two>KEY_2</two>
 		<three>KEY_3</three>
@@ -457,7 +467,6 @@
 		<eight>KEY_8</eight>
 		<nine>KEY_9</nine>
 		<zero>KEY_0</zero>
-		<red>KEY_RED</red>
 		<one>KEY_NUMERIC_1</one>
 		<two>KEY_NUMERIC_2</two>
 		<three>KEY_NUMERIC_3</three>
@@ -468,18 +477,33 @@
 		<eight>KEY_NUMERIC_8</eight>
 		<nine>KEY_NUMERIC_9</nine>
 		<zero>KEY_NUMERIC_0</zero>
+		<star>KEY_NUMERIC_STAR</star>
+		<hash>KEY_NUMERIC_POUND</hash>
+		<red>KEY_RED</red>
+        <one>KEY_NUMERIC_1</one>
+        <two>KEY_NUMERIC_2</two>
+        <three>KEY_NUMERIC_3</three>
+        <four>KEY_NUMERIC_4</four>
+        <five>KEY_NUMERIC_5</five>
+        <six>KEY_NUMERIC_6</six>
+        <seven>KEY_NUMERIC_7</seven>
+        <eight>KEY_NUMERIC_8</eight>
+        <nine>KEY_NUMERIC_9</nine>
+        <zero>KEY_NUMERIC_0</zero>
 		<green>KEY_GREEN</green>
 		<yellow>KEY_YELLOW</yellow>
 		<blue>KEY_BLUE</blue>
-		<menu>KEY_MENU</menu>
 		<menu>KEY_DVD</menu>
+		<menu>KEY_MENU</menu>
+        <menu>KEY_DVD</menu>
 		<info>KEY_INFO</info>
 		<info>KEY_PROPS</info>
-		<start>KEY_HOME</start>
 		<display>KEY_ANGLE</display>
+		<display>KEY_ZOOM</display>
 		<recordedtv>KEY_PVR</recordedtv>
 		<teletext>KEY_TEXT</teletext>
-		<title>KEY_EPG</title>
+        <title>KEY_EPG</title>
+		<clear>KEY_DELETE</clear>
 	</remote>
 	<remote device="mediacenter">
 		<pause>pause</pause>
@@ -524,32 +548,30 @@
 		<mymusic>green</mymusic>
 		<mypictures>yellow</mypictures>
 		<myvideo>blue</myvideo>
-	</remote>   
- 
-        <remote device="smt1000t">
-               <mute>KEY_MUTE</mute>
-               <mypvr>KEY_TV</mypvr>
-               <subtitle>KEY_TEXT</subtitle>
-               <language>KEY_AUDIO</language>
-               <menu>KEY_MENU</menu>
-               <title>KEY_INFO</title>
-               <select>KEY_OK</select>
-               <stop>KEY_EXIT</stop>
-               <info>KEY_EPG</info>
-               <pageplus>KEY_CHANNELUP</pageplus>
-               <pageminus>KEY_CHANNELDOWN</pageminus>
-               <myvideo>KEY_RED</myvideo>
-               <mymusic>KEY_GREEN</mymusic>
-               <mytv>KEY_YELLOW</mytv>
-               <mypictures>KEY_BLUE</mypictures>
-       </remote> 
-   
-       <remote device="srm7500">
-               <display>KEY_SETUP</display>
-               <title>KEY_CONTEXT_MENU</title>
-               <star>KEY_STAR</star>
-               <subtitle>KEY_TEXT</subtitle>
-               <hash>KEY_HASHTAG</hash>
-               <aspectratio>KEY_SWITCHVIDEOMODE</aspectratio>
-       </remote>
+	</remote>
+    <remote device="smt1000t">
+        <mute>KEY_MUTE</mute>
+        <mypvr>KEY_TV</mypvr>
+        <subtitle>KEY_TEXT</subtitle>
+        <language>KEY_AUDIO</language>
+        <menu>KEY_MENU</menu>
+        <title>KEY_INFO</title>
+        <select>KEY_OK</select>
+        <stop>KEY_EXIT</stop>
+        <info>KEY_EPG</info>
+        <pageplus>KEY_CHANNELUP</pageplus>
+        <pageminus>KEY_CHANNELDOWN</pageminus>
+        <myvideo>KEY_RED</myvideo>
+        <mymusic>KEY_GREEN</mymusic>
+        <mytv>KEY_YELLOW</mytv>
+        <mypictures>KEY_BLUE</mypictures>
+    </remote>
+    <remote device="srm7500">
+        <display>KEY_SETUP</display>
+        <title>KEY_CONTEXT_MENU</title>
+        <star>KEY_STAR</star>
+        <subtitle>KEY_TEXT</subtitle>
+        <hash>KEY_HASHTAG</hash>
+        <aspectratio>KEY_SWITCHVIDEOMODE</aspectratio>
+    </remote>
 </lircmap>

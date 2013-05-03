@@ -110,7 +110,7 @@ msgid "TV-Bouquet"
 msgstr "TV-Bouquet"
 
 msgctxt "#30027"
-imsgid "Fetch picons from webinterface"
+msgid "Fetch picons from webinterface"
 msgstr "Lade Picons vom Web-Interface"
 
 #empty strings from id 30028 to 30499
