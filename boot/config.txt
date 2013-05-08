@@ -1,7 +1,8 @@
+initramfs initramfs.gz  0x00a00000
 arm_freq=840
 core_freq=250
 disable_overscan=1
 gpu_mem_256=128
-gpu_mem_512=128
+gpu_mem_512=224
 sdram_freq=400
 over_voltage=0
