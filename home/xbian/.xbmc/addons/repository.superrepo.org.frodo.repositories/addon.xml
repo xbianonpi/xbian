@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="repository.superrepo.org.frodo.repositories" name="SuperRepo Repositories" version="0.2.1" provider-name="Bart Otten">
+	<extension point="xbmc.addon.repository" name="SuperRepo.org Repository - Repositories">
+		<info compressed="false">http://addons.superrepo.org/Frodo/Repositories/addons.xml</info>
+		<checksum>http://addons.superrepo.org/Frodo/Repositories/addons.xml.md5</checksum>
+		<datadir zip="true">http://addons.superrepo.org/Frodo/Repositories/</datadir>
+	</extension>
+	<extension point="xbmc.addon.metadata">
+		<summary>Install add-ons from the SuperRepo.org Repositories Repository</summary>
+		<summary lang="nl">Installeer add-ons uit de SuperRepo.org Repositories Repository</summary>
+		<summary lang="cz">Inštalácia add-ons zo SuperRepo.org Repositories Repozitár</summary>
+		<summary lang="de">Installation von Addons aus dem SuperRepo.org Repositories Repository</summary>
+		<summary lang="pt"> Instale add-ons do SuperRepo.org {} SUB Repositório </summary>
+		<summary lang="br"> Instale add-ons do SuperRepo.org {} SUB Repositório </summary>
+		<description>Download and install add-ons in the category "Repositories" from the SuperRepo.org addon repository.[CR][CR]If you find a broken or not working addon or you would like to include another one, please have a look at http://superrepo.org/[CR][CR]The repository is maintained by the XBMC community using the SuperRepo Wiki and our generator fetches addons from multiple sources. Therefore SuperRepo accepts no responsibility for this service.[CR][CR]The eXtended Reposity Generator is developed by Bart Otten[CR][CR]</description>
+		<description lang="nl">Download and installeer add-ons in de categorie "Repositories" uit de SuperRepo.org addon repository.[CR][CR]Als u een niet werkende addon vindt of u wilt een extra addon toevoegen, kijk dan op http://superrepo.org/[CR][CR]De repository wordt via de SuperRepo Wiki onderhouden door de XBMC gemeenschap en de generator verzamelt addons van verschillende bronnen. Daarom accepteert SuperRepo geen enkele verantwoordelijkheid voor de ingevoegde addons.[CR][CR]De eXtended Reposity Generator is ontwikkeld door Bart Otten[CR][CR]</description>
+		<description lang="cz">Preber a inštaluj add-ons do kategórie "Repositories" z SuperRepo.org addon repozitár.[CR][CR]Ak si našiel add-on ktorý je poškodený alebo nefunkčný, alebo chceš pridať nový addon, potom prosím pozri na http://superrepo.org/[CR][CR]Repozitár je udržiavaný komunitou XBMC a za pomoci SuperRepo Wiki, a tento preberá addons z rôznych zdrojov. Vzhľadom na to, SuperRepo nenesie žiadnu zodpovednosť za služby poskytované týmito addons.[CR][CR]Rozšírený repozitár vyvinul Bart Otten[CR][CR]</description>    
+		<description lang="de">Lade und installiere Addons der Kategorie "Repositories" aus dem SuperRepo.org Addon Repository.[CR][CR]Möchtest du ein fehlerhaftes Addon melden oder ein neues Addon vorschlagen, kannst du dies über unsere Webseite http://superrepo.org tun.[CR][CR]Das Repository wird mit Hilfe des SuperRepo Wiki durch die XBMC Community gepflegt und durch unseren Generator aus mehreren Quellen zusammengestellt. Daher übernimmt SuperRepo keinerlei Verantwortung für diesen Service.[CR][CR]Der "eXtended Reposity Generator" wird durch Bart Otten entwickelt.[CR][CR]</description>
+		<description lang="pt"> Baixe e instale o add-ons na categoria "{} SUB" do Repositório SuperRepo.org. [CR] [CR] Se você encontrar um addon quebrado ou não funcionando, ou você gostaria de incluir um outro, por favor visite http://superrepo.org/ [CR] [CR]O repositório é mantida pela comunidade do XBMC usando o Wiki do SuperRepo e o nosso gerador de busca de addons múltiplas fontes. Portanto SuperRepo não aceita qualquer responsabilidade por esse serviço.[CR][CR]O Gerador Reposity eXtended é desenvolvido por Bart Otten[CR][CR] </description> 
+		<description lang="br"> Baixe e instale o add-ons na categoria "{} SUB" do Repositório SuperRepo.org. [CR] [CR] Se você encontrar um addon quebrado ou não funcionando, ou você gostaria de incluir um outro, por favor visite http://superrepo.org/ [CR][CR]O repositório é mantida pela comunidade do XBMC usando o Wiki do SuperRepo e o nosso gerador de busca de addons múltiplas fontes. Portanto SuperRepo não aceita qualquer responsabilidade por esse serviço.[CR][CR]O Gerador Reposity eXtended é desenvolvido por Bart Otten[CR][CR]</description> 
+		<disclaimer>The repository is maintained by the XBMC community and our generator fetches addons from multiple sources. Therefore SuperRepo accepts no responsibility for included addons.[CR]</disclaimer>
+		<disclaimer lang="nl">De repository wordt onderhouden door de XBMC gemeenschap en de generator verzamelt addons van verschillende bronnen. Daarom accepteert SuperRepo geen enkele verantwoordelijkheid voor de ingevoegde addons.[CR]</disclaimer>
+		<disclaimer lang="cz">Repozitár je udržiavaný komunitou XBMC a za pomoci SuperRepo Wiki, a tento preberá addons z rôznych zdrojov. Vzhľadom na to, SuperRepo nenesie žiadnu zodpovednosť za služby poskytované týmito addons.[CR]</disclaimer>
+		<disclaimer lang="de">Das Repository wird durch die XBMC Community gepflegt und durch unseren Generator aus mehreren Quellen zusammengestellt. Daher übernimmt SuperRepo keinerlei Verantwortung für die enthaltenen Addons.[CR]</disclaimer>
+		<disclaimer lang="pt"> O repositório é mantido pela comunidade comunidade do XBMC e o nosso gerador de busca de addons de múltiplas fontes. Portanto SuperRepo aceita não se responsabiliza por addons incluídos.[CR]</disclaimer>
+		<disclaimer lang="br"> O repositório é mantido pela comunidade comunidade do XBMC e o nosso gerador de busca de addons de múltiplas fontes. Portanto SuperRepo aceita não se responsabiliza por addons incluídos.[CR]</disclaimer>
+		<platform>all</platform>
+	</extension>
+</addon>

@@ -1,0 +1,5 @@
+[B]february 23th 2012[/B]
+0.2.1: Added translations
+
+[B]february 14th 2012[/B]
+0.2.0: Release of XRGv2
