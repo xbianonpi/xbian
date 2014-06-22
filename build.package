@@ -87,7 +87,7 @@ do_prep()
 
     if [ -d hooks.d/pre-configure.d ]; then
         for f in $(ls hooks.d/pre-configure.d); do
-            ( cd "$dir/working"; sh ../../../hooks.d/pre-configure.d/$f; )
+            ( cd "$dir/working"; do_run $config_build_env ../../../hooks.d/pre-configure.d/$f; )
         done
     fi
 
@@ -122,7 +122,7 @@ do_make()
 
     if [ -d hooks.d/pre-build.d ]; then
         for f in $(ls hooks.d/pre-build.d); do
-            ( cd "$dir/working"; sh ../../../hooks.d/pre-build.d/$f; )
+            ( cd "$dir/working"; do_run $config_build_env ../../../hooks.d/pre-build.d/$f; )
         done
     fi
 
