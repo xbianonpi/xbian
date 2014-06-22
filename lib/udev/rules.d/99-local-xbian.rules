@@ -1,1 +1,0 @@
-KERNEL=="tty0", GROUP="xbian", OWNER="xbian"

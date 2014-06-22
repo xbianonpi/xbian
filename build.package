@@ -1,0 +1,353 @@
+export INSTALL_MOD_PATH=$(readlink -f ./content)
+export INSTALL_FW_PATH=$(readlink -f ./content)
+export DESTDIR=$(readlink -f ./content)
+config_patch_fuzzy=1000
+opt_arch=''
+opt_action=''
+result=0
+
+rexp()
+{
+    [ ! -e "$1" ] && return
+
+    while read line; do
+        echo $line | grep -q '^[a-zA-Z]' || continue
+        export "$line"
+    done < "$1"
+}
+
+print_log() # level, message, ...
+{
+    LEVEL=$1
+    shift 1
+
+    case $LEVEL in
+        (eme*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.emerge "$*"
+            echo Emergency: "$*" 1>&2
+            ;;
+        (ale*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.alert "$*"
+            echo Alert: "$*" 1>&2
+            ;;
+        (cri*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.crit "$*"
+            echo Critical: "$*" 1>&2
+            ;;
+        (err*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.err "$*"
+            echo Error: "$*" 1>&2
+            ;;
+        (war*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.warning "$*"
+            test -z "$opt_quiet" && echo Warning: "$*" 1>&2
+            WARNING_COUNT=$(( $WARNING_COUNT + 1 ))
+            ;;
+        (not*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.notice "$*"
+            test -z "$opt_quiet" && echo "$*"
+            ;;
+        (inf*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.info "$*"
+            test -n "$opt_verbose" && echo "$*"
+            ;;
+        (deb*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.debug "$*"
+            test -n "$opt_debug" && echo Debug: "$*"
+            ;;
+        (*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" "$*"
+            echo "$*" 1>&2
+            ;;
+    esac
+}
+
+do_run() # [argv]
+{
+    if [ -n "$opt_dry_run" ]; then
+        echo "... Running $*"
+        RC="$?"
+    else
+        eval $*
+        RC="$?"
+        if [ "$RC" -eq '0' ]; then
+            print_log debug "$*"
+        else
+            print_log warning "$* returned $RC"
+        fi
+    fi
+
+    export result=$((result + RC))
+    return "$RC"
+}
+
+do_prep()
+{
+    dir="$1"
+
+    if [ -d hooks.d/pre-configure.d ]; then
+        for f in $(ls hooks.d/pre-configure.d); do
+            ( cd "$dir/working"; sh ../../../hooks.d/pre-configure.d/$f; )
+        done
+    fi
+
+    cd "$dir/working"
+    runprepare=0
+
+    if [ -n "$config_source_prepare" ]; then
+        if [ -e configure ]; then
+            [ "$( find ./ -iname configure.\* -newer configure | grep -c .; )" -gt 0 ] && runprepare=1
+        else
+            runprepare=1
+        fi
+
+        [ $runprepare -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_prepare; )
+    fi
+
+    runconfigure=0
+    if [ -n "$config_source_configure" ]; then
+        if [ -e configure ]; then
+            [ "$( find ./ \( -iname Makefile \) ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
+        else
+            runconfigure=1
+        fi
+
+        [ $runconfigure -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_configure; )
+    fi
+}
+
+do_make()
+{
+    dir="$1"
+
+    if [ -d hooks.d/pre-build.d ]; then
+        for f in $(ls hooks.d/pre-build.d); do
+            ( cd "$dir/working"; sh ../../../hooks.d/pre-build.d/$f; )
+        done
+    fi
+
+    cd "$dir/working"
+
+    if [ -n "$config_build_targets" ]; then
+        for t in $config_build_targets; do
+            ( rexp ../env; do_run $config_build_env $config_build_make $t; )
+        done
+    else
+        ( rexp ../env; do_run $config_build_env $config_build_make; )
+    fi
+}
+
+do_patch()
+{
+    dir=$(basename "$1")
+    [ ! -d ./patches ] && return
+    cd ./patches
+
+    for p in $(find ./ "./$dir" -maxdepth 1 -iname \*.patch -type f | sort); do
+        (
+        cd ../build/$dir/working
+        echo "checking $p"
+        if ! patch -p1 --dry-run -F $config_patch_fuzzy < ../../../patches/$p >/dev/null; then
+            continue
+        fi
+        echo "Patching with $p"
+        patch -p1 -F $config_patch_fuzzy < ../../../patches/$p
+        echo "-----------------"
+        )
+    done
+
+    cd ..
+    if [ -d extra-files/$dir ]; then
+        (
+        cd extra-files/$dir
+        find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working"
+        )
+    fi
+}
+
+do_wipe()
+{
+    dir="$1"
+    do_run rm -fr "$dir/working"
+}
+
+do_clean()
+{
+    dir="$1"
+    cd "$dir/working"
+
+    do_run $config_build_env make clean
+}
+
+do_clone()
+{
+    dir="$1"
+
+    if [ "$config_source_keep" != yes ]; then
+        do_wipe "$dir"
+    fi
+
+    cd "$dir"
+    if [ ! -d "./working" ]; then
+        case "$config_source_type" in
+            git)
+                [ -n "$config_source_branch" ] && export config_source_branch="-b $config_source_branch"
+                do_run git clone $config_source_branch $config_source_type_extra $config_source_addr working
+                ;;
+            *)
+                ;;
+        esac
+    fi
+
+    cd ./working
+    if [ "$config_source_reset" = yes ]; then
+        case "$config_source_type" in
+            git)
+                do_run git reset --hard
+                do_run git clean -df -e '\*.o' -e '\*.P'
+                ;;
+            *)
+                ;;
+        esac
+    fi
+
+    if [ "$config_source_branch" = yes ]; then
+        case "$config_source_type" in
+            git)
+                do_run git checkout "$config_source_branch"
+                ;;
+            *)
+                ;;
+        esac
+    fi
+
+    if [ "$config_source_refresh" = yes ]; then
+        case "$config_source_type" in
+            git)
+                do_run git pull
+                ;;
+            *)
+                ;;
+        esac
+    fi
+}
+
+do_exit()
+{
+    echo "$1 / $result"
+    exit $result
+}
+
+do_deb()
+{
+    dir="$1"
+    if [ "$config_deb_contentclean" = yes ]; then 
+        find ./content/ -mindepth 1 -maxdepth 1 ! -regex '.*/DEBIAN' | \
+            xargs -L1 rm -fr
+
+        cp -ar ./content-tpl/* ./content
+    fi
+
+    cd "$dir/working"
+    commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
+    for t in $config_install_targets; do
+        ( rexp ../env; do_run $config_build_env $config_build_make $t; )
+    done
+
+    cd ../../..
+
+    config_deb_version="$config_deb_version-$(printf '%x' $(date +%s))"
+    sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
+
+    ### git log -n1 --format=oneline | awk '{print $1}'
+    ### git ls-remote $config_source_addr master | awk '{print $1}'
+    echo "  (at commit src $commit_src, commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
+
+    do_run $config_build_env sh ../gen.package
+    rm -f "$dir"/*.deb
+    mv *.deb "$dir"
+}
+
+
+# ----------------------
+
+GETOPT=$(getopt \
+        --longoptions=action:,arch:,config_source_refresh:,help \
+        --options=a:m:h \
+        -- "$@" ) \
+        || exit 128
+
+for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
+
+    unset $(env | grep config_ | awk -F'=' '{print $1}')
+    result=0
+
+    [ -e build/config ] && rexp build/config
+    [ -e "$dir/config" ] && rexp "$dir/config"
+
+    eval set -- ${GETOPT}
+
+    while [ "$#" -gt '0' ]; do
+        case "$1" in
+            (--action|-a)
+                opt_action=$2
+                shift 2
+                ;;
+            (--arch|-m)
+                opt_arch=$2
+                shift 2
+                ;;
+            (--config_*)
+                param=$1
+                param="${param##--}=$2"
+                do_run export $param
+                shift 2
+                ;;
+            (--help|-h)
+                do_show_help
+                exit 0
+                ;;
+            *)
+                shift 1
+                ;;
+        esac
+    done
+
+    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+
+    case $opt_action in
+        wipe)
+            ( do_wipe "$dir" )
+            ;;
+        clean)
+            ( do_clean "$dir" )
+            ;;
+        patch)
+            ( do_patch "$dir" )
+            ;;
+        prepare)
+            ( do_prep "$dir" )
+            ;;
+        make)
+            ( do_make "$dir" )
+            ;;
+        clone)
+            ( do_clone "$dir" )
+            ;;
+        deb)
+            ( do_deb "$dir"; )
+            ;;
+        ''|build)
+            ( do_clone "$dir"; )
+            [ $result -gt 0 ] && do_exit "!!! git clone problem" || result=0
+            ( do_patch "$dir"; )
+            [ $result -gt 0 ] && do_exit "!!! patch problem" || result=0
+            ( do_prep "$dir"; )
+            [ $result -gt 0 ] && do_exit "!!! source prep problem" || result=0
+            ( do_make "$dir"; )
+            [ $result -gt 0 ] && do_exit "!!! make problem" || result=0
+            ( do_deb "$dir"; )
+            [ $result -gt 0 ] && do_exit "!!! deb problem" || result=0
+            ;;
+    esac
+done
