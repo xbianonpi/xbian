@@ -1,0 +1,6 @@
+
+[ $config_platform != imx6 ] && return
+
+cp ./rootfs/etc/uboot-env/SPL ./
+cp ./rootfs/etc/uboot-env/u-boot.img ./
+

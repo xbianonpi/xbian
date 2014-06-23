@@ -1,0 +1,18 @@
+
+[ $config_platform != rpi ] && return
+
+isVerHigher()
+{
+    ver1=$1
+    ver2=$2
+
+    [ "$(echo -e "$ver1\n$ver2" | sort -t'.' -g | tail -n 1)" = "$ver2" ] && return 0
+    return 1
+}
+
+cp ./rootfs/boot/cmdline.new ./rootfs/boot/cmdline.txt
+
+cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+if isVerHigher $(chroot ./rootfs dpkg-query -W xbian-package-kernel | awk '{print $2}') '1.5.0'; then
+    sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
+fi

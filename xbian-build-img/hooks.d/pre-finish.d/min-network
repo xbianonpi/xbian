@@ -1,0 +1,15 @@
+sed -i '/ lo/d' ./rootfs/etc/network/interfaces
+sed -i '/ eth0/d' ./rootfs/etc/network/interfaces
+
+echo \
+"auto lo
+auto eth0
+
+iface eth0 inet dhcp
+iface lo inet loopback
+
+allow-hotplug wlan0
+iface wlan0 inet dhcp
+
+iface default inet dhcp
+" >> ./rootfs/etc/network/interfaces

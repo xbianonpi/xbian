@@ -1,0 +1,5 @@
+
+[ $config_platform != rpi ] && return
+
+cp ../../../extra-files/config.txt ./rootfs/boot/config.txt
+

@@ -1,0 +1,11 @@
+initramfs initramfs.gz  0x0a000000
+gpu_mem_512=128
+gpu_mem_256=100
+initial_turbo=3
+hdmi_force_hotplug=1
+hdmi_ignore_cec_init=1
+disable_overscan=1
+disable_splash=1
+arm_freq=840
+core_freq=275
+sdram_freq=400

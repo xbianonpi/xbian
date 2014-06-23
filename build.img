@@ -1,0 +1,355 @@
+##
+##      Copyright (C) 2012 - 2014 XBian
+##
+##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
+##
+##  This Program is free software; you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation; either version 2, or (at your option)
+##  any later version.
+##
+##  This Program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+##  GNU General Public License for more details.
+##
+##  You should have received a copy of the GNU General Public License
+##  along with XBMC; see the file COPYING.  If not, see
+##  <http://www.gnu.org/licenses/>.
+##
+##
+
+do_exit()
+{
+    echo "$1 / $result"
+    exit $result
+}
+
+rexp()
+{
+    [ ! -e "$1" ] && return
+
+    while read line; do
+        echo $line | grep -q '^[a-zA-Z]' || continue
+        export "$line"
+    done < "$1"
+}
+
+print_log() # level, message, ...
+{
+    LEVEL=$1
+    shift 1
+
+    case $LEVEL in
+        (eme*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.emerge "$*"
+            echo Emergency: "$*" 1>&2
+            ;;
+        (ale*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.alert "$*"
+            echo Alert: "$*" 1>&2
+            ;;
+        (cri*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.crit "$*"
+            echo Critical: "$*" 1>&2
+            ;;
+        (err*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.err "$*"
+            echo Error: "$*" 1>&2
+            ;;
+        (war*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.warning "$*"
+            test -z "$opt_quiet" && echo Warning: "$*" 1>&2
+            WARNING_COUNT=$(( $WARNING_COUNT + 1 ))
+            ;;
+        (not*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.notice "$*"
+            test -z "$opt_quiet" && echo "$*"
+            ;;
+        (inf*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.info "$*"
+            test -n "$opt_verbose" && echo "$*"
+            ;;
+        (deb*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.debug "$*"
+            test -n "$opt_debug" && echo Debug: "$*"
+            ;;
+        (*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" "$*"
+            echo "$*" 1>&2
+            ;;
+    esac
+}
+
+do_run() # [argv]
+{
+    if [ -n "$opt_dry_run" ]; then
+        echo "... Running $*"
+        RC="$?"
+    else
+        eval $*
+        RC="$?"
+        if [ "$RC" -eq '0' ]; then
+            print_log debug "$*"
+        else
+            print_log warning "$* returned $RC"
+        fi
+    fi
+
+    export result=$((result + RC))
+    return "$RC"
+}
+
+do_wipe()
+{
+    dir="$1"
+    do_run rm -fr "$dir/working"
+}
+
+do_img()
+{
+    dir=$(readlink -f "$1")
+    do_wipe "$dir"
+
+    mkdir -p "$dir/working"
+    cd "$dir/working"
+
+    touch $IMGNAME
+    #convert size to byte size
+    config_img_size=$(echo $config_img_size | sed "s%G% \*1024M%;s%M% \*1024K%;s%K% \*1024%;" | bc)
+
+    [ $config_fstype_root = btrfs ] && [ $config_img_size -lt 1200000000 ] && config_img_size=1200000000
+    truncate -s $config_img_size $IMGNAME
+
+    modprobe -q loop
+    parted -s $IMGNAME mklabel msdos
+
+    echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
+
+    case $config_fstype_boot in
+        ext2)
+            mkfs.ext2 -L xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+            ;;
+        vfat|fat|msdos)
+            mkfs.msdos -F 16 -n xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+            ;;
+    esac
+
+    case $config_fstype_root in
+        ext4|ext2|ext3)
+            mkfs.ext4 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>/dev/null 1>&2
+            ;;
+        btrfs)
+            mkfs.btrfs -O skinny-metadata -m single -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
+            ;;
+    esac
+
+#    if [ -n "$config_build_targets" ]; then
+#        for t in $config_build_targets; do
+#            ( rexp ../env; do_run $config_build_env $config_build_make $t; )
+#        done
+#    else
+#        ( rexp ../env; do_run $config_build_env $config_build_make; )
+#    fi
+
+}
+
+do_debootstrap()
+{
+    dir=$(readlink -f "$1")
+    cd "$dir/working"
+
+    if [ -e /run/$IMGNAME.loopd ]; then
+        . /run/$IMGNAME.loopd
+        export loopd
+    else
+        do_exit "missing loop/img/other error" 100
+    fi
+
+    mkdir -p ./rootfs
+    mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p2 ./rootfs
+    btrfs sub create ./rootfs/root
+    btrfs sub create ./rootfs/root/@
+    btrfs sub create ./rootfs/modules
+    btrfs sub create ./rootfs/modules/@
+    btrfs sub create ./rootfs/home
+    btrfs sub create ./rootfs/home/@
+    umount ./rootfs
+
+    [ -z "$config_fsoptions_root" ] && config_fsoptions_root='-o '
+    mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p2 ./rootfs
+    mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
+    mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p2 ./rootfs/home
+    mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p2 ./rootfs/lib/modules
+    mkdir -p ./rootfs/tmp/tmp && mount -o bind /tmp ./rootfs/tmp/tmp; mkdir -p ./rootfs/var/cache/apt/archives; mount -o bind /tmp ./rootfs/var/cache/apt/archives
+
+    mkdir -p ./rootfs/boot
+    mount -t $config_fstype_boot /dev/mapper/${loopd}p1 ./rootfs/boot
+
+    [ -n "$config_distro_variant" ] && export config_distro_variant="--variant=$config_distro_variant"
+    [ -n "$config_include_deb" ] && export config_include_deb="--include=$config_include_deb"
+    [ -n "$config_exclude_deb" ] && export config_exclude_deb="--exclude=$config_exclude_deb"
+
+    debootstrap --download-only $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
+    mkdir -p ./rootfs/usr/bin; cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+
+    #### hack to remove packages which raspbian considers essential and doesn't want them remove even when excluded and 
+    #### another package with it's function is going to be installed (eg sysvinit vs. upstart)
+    sed -i 's/sysvinit //' ./rootfs/debootstrap/required; sed -i '/sysvinit /d' ./rootfs/debootstrap/debpaths
+    sed -i 's/sysvinit-core//' ./rootfs/debootstrap/required; sed -i '/sysvinit-core/d' ./rootfs/debootstrap/debpaths
+    chroot ./rootfs debootstrap/debootstrap --second-stage
+
+    echo "deb $config_distro_url $config_distro_name main" >> ./rootfs/etc/apt/sources.list
+}
+
+do_xbian()
+{
+    dir=$(readlink -f "$1")
+    cd "$dir/working"
+
+    chroot ./rootfs wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.0_armhf.deb
+    chroot ./rootfs dpkg -i xbian-package-repo_1.0.0_armhf.deb
+    chroot ./rootfs rm xbian-package-repo_1.0.0_armhf.deb
+    [ "$config_allow_staging_devel" = yes ] && chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
+    chroot ./rootfs apt-get update
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    mkdir -p ./rootfs/fake
+    ( cd ./rootfs/fake
+    for f in initctl invoke-rc.d restart start stop start-stop-daemon service reboot; do
+        rm -f ./$f && ln -s /bin/true ./$f
+    done )
+
+    export PATH=/fake:$PATH
+    eval chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()'
+    rm -fr ./rootfs/fake
+}
+
+do_finish()
+{
+    dir=$(readlink -f "$1")
+
+    if [ -e /run/$IMGNAME.loopd ]; then
+        . /run/$IMGNAME.loopd
+        export loopd
+    fi
+
+    cd "$dir/../.."
+
+    if [ -d hooks.d/pre-finish.d ]; then
+        for f in $(ls hooks.d/pre-finish.d); do
+            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-finish.d/$f; )
+        done
+    fi
+
+    chroot "$dir/working/rootfs" /usr/local/sbin/all-clean
+
+    cd "$dir/working"
+    df -h
+    for d in ./rootfs/boot ./rootfs/home ./rootfs/lib/modules ./rootfs/tmp/tmp ./rootfs/var/cache/apt/archives ./rootfs; do
+        umount $d 2>/dev/null
+    done
+
+    kpartx -dv $IMGNAME
+    rm -f /run/$IMGNAME.loopd
+
+}
+
+do_post()
+{
+    export config_img_size=$(echo $config_img_size | sed "s%G% \*1024M%;s%M% \*1024K%;s%K% \*1024%;" | bc)
+    dir=$(readlink -f "$1")
+    mkdir -p "$dir/working/rootfs"
+
+    if [ -d hooks.d/post-img.d ]; then
+        for f in $(ls hooks.d/post-img.d); do
+            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/post-img.d/$f; )
+        done
+    fi
+
+    mv "$dir/working/$IMGNAME" "$dir"
+}
+
+# ----------------------
+
+[ $(id -u) -ne 0 ] && do_exit "for img creation please run again with root privileges"
+
+GETOPT=$(getopt \
+        --longoptions=action:,arch:,config_source_refresh:,help \
+        --options=a:m:h \
+        -- "$@" ) \
+        || exit 128
+
+for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
+
+    unset $(env | grep config_ | awk -F'=' '{print $1}')
+    result=0
+
+    [ -e build/config ] && rexp build/config
+    [ -e "$dir/config" ] && rexp "$dir/config"
+
+    eval set -- ${GETOPT}
+
+    while [ "$#" -gt '0' ]; do
+        case "$1" in
+            (--action|-a)
+                opt_action=$2
+                shift 2
+                ;;
+            (--arch|-m)
+                opt_arch=$2
+                shift 2
+                ;;
+            (--config_*)
+                param=$1
+                param="${param##--}=$2"
+                do_run export $param
+                shift 2
+                ;;
+            (--help|-h)
+                do_show_help
+                exit 0
+                ;;
+            *)
+                shift 1
+                ;;
+        esac
+    done
+
+    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+    [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
+
+    export config_platform=${opt_arch%%-*}
+    export config_platform_branch=$opt_arch
+    export config_branch=${opt_arch##*-}
+
+    export IMGNAME=$config_img_name-$(basename $dir)-$(date +%Y%m%d).img
+
+    case $opt_action in
+        img)
+            ( do_img "$dir" )
+            ;;
+        debootstrap)
+            ( do_debootstrap "$dir" )
+            ;;
+        xbian)
+            ( do_xbian "$dir" )
+            ;;
+        finish)
+            ( do_finish "$dir" )
+            ;;
+        post)
+            ( do_post "$dir" )
+            ;;
+        ""|build)
+            ( do_img "$dir" )
+            ( do_debootstrap "$dir" )
+            ( do_xbian "$dir" )
+            ( do_finish "$dir" )
+            ( do_post "$dir" )
+            ;;
+    esac
+done

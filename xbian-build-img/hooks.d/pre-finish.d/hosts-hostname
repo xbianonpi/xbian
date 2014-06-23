@@ -1,0 +1,2 @@
+echo "xbian.private" > ./rootfs/etc/hostname
+cp ../../../extra-files/hosts ./rootfs/etc/hosts
