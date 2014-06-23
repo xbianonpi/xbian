@@ -329,6 +329,11 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     done
 
     [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+    [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
+
+    export config_platform=${opt_arch%%-*}
+    export config_platform_branch=$opt_arch
+    export config_branch=${opt_arch##*-}
 
     case $opt_action in
         wipe)
