@@ -293,6 +293,8 @@ do_deb()
 
     config_deb_version="$config_deb_version-$(printf '%x' $(date +%s))"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
+    sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control
+    sed -i "s%__PKGNAME__%$config_deb_pkgname%" content/DEBIAN/control
 
     ### git log -n1 --format=oneline | awk '{print $1}'
     ### git ls-remote $config_source_addr master | awk '{print $1}'
