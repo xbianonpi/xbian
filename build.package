@@ -338,6 +338,7 @@ Usage summary:
                   control files (version, commits, etc). binaries will be also stripped and final
                   .deb package will be moved into ./build/platform
 
+  --list, -l                 list all available configured platforms / branches
 
 "
 }
@@ -345,8 +346,8 @@ Usage summary:
 # ----------------------
 
 GETOPT=$(getopt \
-        --longoptions=action:,arch:,config_source_refresh:,help \
-        --options=a:m:h \
+        --longoptions=action:,list,arch:,config_source_refresh:,help \
+        --options=a:m:hlo: \
         -- "$@" ) \
         || exit 128
 
@@ -362,6 +363,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
 
     while [ "$#" -gt '0' ]; do
         case "$1" in
+            (-l|--list)
+                printf "Target platform: %s,       Branch: %s,      URL: %s\n" $(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']*) $config_source_branch $config_source_addr
+                continue 2
+                ;;
             (--action|-a)
                 opt_action=$2
                 shift 2
