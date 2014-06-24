@@ -375,10 +375,8 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
                 opt_arch=$2
                 shift 2
                 ;;
-            (--config_*)
-                param=$1
-                param="${param##--}=$2"
-                do_run export $param
+            (-o)
+                do_run export $2
                 shift 2
                 ;;
             (--help|-h)
