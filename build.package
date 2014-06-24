@@ -194,7 +194,7 @@ do_clean()
     dir="$1"
     cd "$dir/working"
 
-    do_run $config_build_env make clean
+    do_run $config_build_env $config_build_make clean
 }
 
 do_clone()
@@ -306,6 +306,34 @@ do_deb()
     mv *.deb "$dir"
 }
 
+do_show_help()
+{
+echo "
+Usage summary:
+
+  --action, -a [action]      action to perform:
+
+   wipe         - will completely remove working directory (including git clone of src repository)
+   clean        - will run "make clean" in the working tree
+   clone        - will run "git clone". if source is already cloned then reset/pull is part if this action
+                  and finer control is allowed through three paramters - look at "patch" description
+   patch        - will try to re-apply patches. if source is not reset to HEAD, nothing will be applied
+                  (git reset operation is running in "clone" action as it is needed for correct auto
+                  git pull. wheter reset is performed is controled by parameters config_source_keep,
+                  config_source_reset and config_source_refresh - default values is YES)
+   prepare      - will prepare sources for compilation. usually ./autogen.sh or ./bootstrap is started,
+                  then ./configure. controlled via parameters config_source_prepare and 
+                  config_source_configure
+   make         - runs "make". if finishes successfully, package is compiled and ready to be packaged
+   install      - will run "make install". this will copy binaries into ./content folder, in final folder
+                  structure
+   deb          - will build package out of ./content folder. part of this action is also updating the
+                  control files (version, commits, etc). binaries will be also stripped and final
+                  .deb package will be moved into ./build/platform
+
+
+"
+}
 
 # ----------------------
 
@@ -357,6 +385,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export config_platform=${opt_arch%%-*}
     export config_platform_branch=$opt_arch
     export config_branch=${opt_arch##*-}
+    [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
     case $opt_action in
         wipe)
