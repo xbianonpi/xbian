@@ -21,7 +21,8 @@
 
 do_exit()
 {
-    echo "$1 / $result"
+    [ -n "$2" ] && result=$2
+    echo "$1 error $result"
     exit $result
 }
 
@@ -161,7 +162,8 @@ do_other()
 
 
 # ----------------------
-[ $(id -u) -ne 0 ] && do_exit "for buildroot preparation run again with root privileges"
+[ $(id -u) -ne 0 ] && do_exit "for buildroot preparation run again with root privileges" 20
+
 [ $1 = prepare ] && { do_prepare; exit $?; }
 
 GETOPT=$(getopt \
