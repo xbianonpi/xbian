@@ -1,0 +1,219 @@
+##
+##      Copyright (C) 2012 - 2014 XBian
+##
+##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
+##
+##  This Program is free software; you can redistribute it and/or modify
+##  it under the terms of the GNU General Public License as published by
+##  the Free Software Foundation; either version 2, or (at your option)
+##  any later version.
+##
+##  This Program is distributed in the hope that it will be useful,
+##  but WITHOUT ANY WARRANTY; without even the implied warranty of
+##  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+##  GNU General Public License for more details.
+##
+##  You should have received a copy of the GNU General Public License
+##  along with XBMC; see the file COPYING.  If not, see
+##  <http://www.gnu.org/licenses/>.
+##
+##
+
+do_exit()
+{
+    echo "$1 / $result"
+    exit $result
+}
+
+rexp()
+{
+    [ ! -e "$1" ] && return
+
+    while read line; do
+        echo $line | grep -q '^[a-zA-Z]' || continue
+        export "$line"
+    done < "$1"
+}
+
+print_log() # level, message, ...
+{
+    LEVEL=$1
+    shift 1
+
+    case $LEVEL in
+        (eme*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.emerge "$*"
+            echo Emergency: "$*" 1>&2
+            ;;
+        (ale*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.alert "$*"
+            echo Alert: "$*" 1>&2
+            ;;
+        (cri*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.crit "$*"
+            echo Critical: "$*" 1>&2
+            ;;
+        (err*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.err "$*"
+            echo Error: "$*" 1>&2
+            ;;
+        (war*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.warning "$*"
+            test -z "$opt_quiet" && echo Warning: "$*" 1>&2
+            WARNING_COUNT=$(( $WARNING_COUNT + 1 ))
+            ;;
+        (not*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.notice "$*"
+            test -z "$opt_quiet" && echo "$*"
+            ;;
+        (inf*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.info "$*"
+            test -n "$opt_verbose" && echo "$*"
+            ;;
+        (deb*)
+            # test -n "$opt_syslog" && logger -t "$opt_prefix" -p daemon.debug "$*"
+            test -n "$opt_debug" && echo Debug: "$*"
+            ;;
+        (*)
+            test -n "$opt_syslog" && logger -t "$opt_prefix" "$*"
+            echo "$*" 1>&2
+            ;;
+    esac
+}
+
+do_run() # [argv]
+{
+    if [ -n "$opt_dry_run" ]; then
+        echo "... Running $*"
+        RC="$?"
+    else
+        eval $*
+        RC="$?"
+        if [ "$RC" -eq '0' ]; then
+            print_log debug "$*"
+        else
+            print_log warning "$* returned $RC"
+        fi
+    fi
+
+    export result=$((result + RC))
+    return "$RC"
+}
+
+do_wipe()
+{
+    dir="$1"
+    do_run rm -fr "$dir/working"
+}
+
+do_deps()
+{
+    dir=$(readlink -f "$1")
+    apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_deb_base 1>/dev/null
+
+    cp "$dir/extra-files/$config_platform.conf" /etc/schroot/chroot.d
+    sed -i "s%__DIR__%$config_root_prefix/$config_platform%" /etc/schroot/chroot.d/$config_platform.conf
+    mkdir -p $config_root_prefix/$config_platform
+    mkdir -p $config_root_prefix/$config_platform/etc/apt/apt.conf.d
+    cp "$dir/extra-files/04autoremove" $config_root_prefix/$config_platform/etc/apt/apt.conf.d
+
+    cp "$dir/extra-files/schroot-fstab" /etc/schroot/schroot-fstab-$config_platform
+    sed -i "s%__DIR__%$(readlink -f $fstabbind)%g" /etc/schroot/schroot-fstab-$config_platform
+
+}
+
+do_prep()
+{
+    dir=$(readlink -f "$1")
+
+    debootstrap --no-check-gpg  --include=eatmydata --arch $config_distro_arch --foreign $config_distro_name $dir $config_distro_url
+    mkdir -p $dir/usr/bin; cp /usr/bin/qemu-arm-static $dir/usr/bin
+
+    eatmydata=$(grep eatmydata $config_root_prefix/$config_platform/debootstrap/debpaths | awk '{print $2}')
+    dpkg -x $config_root_prefix/$config_platform/$eatmydata $config_root_prefix/$config_platform
+    schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
+
+    echo "deb $config_distro_url $config_distro_name main" >> $dir/etc/apt/sources.list
+}
+
+do_other()
+{
+    dir=$(readlink -f "$1")
+    schroot --directory /tmp -p -c $config_platform -- wget http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.0_armhf.deb
+    schroot --directory /tmp -p -c $config_platform -- dpkg -i xbian-package-repo_1.0.0_armhf.deb
+    schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
+    schroot --directory / -p -c $config_platform -- apt-get update
+
+    schroot --directory / -p -c $config_platform -- apt-get install -y --force-yes  -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+}
+
+
+# ----------------------
+[ $(id -u) -ne 0 ] && do_exit "for buildroot preparation run again with root privileges"
+
+GETOPT=$(getopt \
+        --longoptions=action:,arch:,config_source_refresh:,help \
+        --options=a:m:h \
+        -- "$@" ) \
+        || exit 128
+
+for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
+
+    unset $(env | grep config_ | awk -F'=' '{print $1}')
+    result=0
+
+    [ -e build/config ] && rexp build/config
+    [ -e "$dir/config" ] && rexp "$dir/config"
+
+    eval set -- ${GETOPT}
+
+    while [ "$#" -gt '0' ]; do
+        case "$1" in
+            (--action|-a)
+                opt_action=$2
+                shift 2
+                ;;
+            (--arch|-m)
+                opt_arch=$2
+                shift 2
+                ;;
+            (--config_*)
+                param=$1
+                param="${param##--}=$2"
+                do_run export $param
+                shift 2
+                ;;
+            (--help|-h)
+                do_show_help
+                exit 0
+                ;;
+            *)
+                shift 1
+                ;;
+        esac
+    done
+
+    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+    [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
+
+    export config_platform=${opt_arch%%-*}
+    export config_platform_branch=$opt_arch
+    export config_branch=${opt_arch##*-}
+
+    if [ -z "$config_root_prefix" ]; then
+        export config_root_prefix=$(readlink -f $(pwd)/../build-root-dirs)
+    else
+        mkdir -p $(readlink -f $(pwd)/../build-root-dirs)
+        ln -s $config_root_prefix/$config_platform $(readlink -f $(pwd)/../build-root-dirs)/$config_platform
+    fi
+
+    export fstabbind=$(readlink -f $(dirname $0))
+
+    case $opt_action in
+        ""|build)
+            ( do_deps "$(pwd)" )
+            ( do_prep "$config_root_prefix/$config_platform" )
+            ( do_other "$config_root_prefix/$config_platform" )
+            ;;
+    esac
+done
