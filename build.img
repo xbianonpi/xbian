@@ -110,6 +110,7 @@ do_img()
 {
     dir=$(readlink -f "$1")
     do_wipe "$dir"
+    apt-get install -y --force-yes $config_deb_base 1>/dev/null
 
     mkdir -p "$dir/working"
     cd "$dir/working"
