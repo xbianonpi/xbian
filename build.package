@@ -269,20 +269,23 @@ do_install()
         find ./content/ -mindepth 1 -maxdepth 1 ! -regex '.*/DEBIAN' -print0 | \
             xargs -0 -L1 rm -fr
 
-        cp -ar ./content-tpl/* ./content
     fi
 
-    cd "$dir/working"
-    commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
     for t in $config_install_targets; do
         ( rexp ../env; do_run $config_build_env $config_build_make $t; )
     done
 
-    echo "commit_src=$commit_src" > $DESTDIR/DEBIAN/src_repo_hash_HEAD
 }
 
 do_deb()
 {
+    DESTDIR=$(pwd)/content-tpl
+    (
+        cd "$dir/working"
+        commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
+        echo "commit_src=$commit_src" > $DESTDIR/DEBIAN/src_repo_hash_HEAD
+    )
+
     export MAKEFLAGS=-j1
 
     if [ -d hooks.d/pre-deb.d ]; then
@@ -290,6 +293,9 @@ do_deb()
             ( cd "./content"; do_run $config_build_env sh ../hooks.d/pre-deb.d/$f; )
         done
     fi
+
+    rm -f ./content/DEBIAN/*
+    cp -ar ./content-tpl/* ./content
 
     config_deb_version="$config_deb_version-$(printf '%x' $(date +%s))"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
