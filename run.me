@@ -21,6 +21,24 @@
 ##
 ##
 
+if [ "$1" = prepare ]; then
+    (
+    cd $XBIANROOT
+    sh ./create.buildroot prepare
+    )
+    if [ $? -eq 0 ]; then
+        echo "Successfully initialised. Please logout and login again."
+        exit 0
+    else
+        echo "Something went wrong"
+        exit 50
+    fi
+fi
 
-[ -e "build.log" ] && mv build.log build.log.old
-sh ../build.img $@ 2>&1 | tee build.log
+if [ -e ./build/config ]; then
+    . ./build/config
+    sh $XBIANROOT/$config_wrapper $*
+else
+    echo "it doesn't seem we are inside build configuration directory!"
+    exit 100
+fi

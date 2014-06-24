@@ -1,2 +1,3 @@
 config_deb_base=debootstrap qemu-user-static schroot kpartx parted btrfs-tools dosfstools u-boot-tools coreutils
 config_root_prefix=
+config_wrapper=create.buildroot
