@@ -36,7 +36,7 @@ if [ "$1" = prepare ]; then
 fi
 
 if [ -e ./build/config ]; then
-    . ./build/config
+    config_wrapper=$(grep config_wrapper ./build/config | awk -F'=' '{print $2}')
     sh $XBIANROOT/$config_wrapper $*
 else
     echo "it doesn't seem we are inside build configuration directory!"

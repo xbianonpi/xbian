@@ -364,7 +364,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     while [ "$#" -gt '0' ]; do
         case "$1" in
             (-l|--list)
-                printf "Target platform: %s,       Branch: %s,      URL: %s\n" $(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']*) $config_source_branch $config_source_addr
+                printf "Target platform: %s,       Branch: %s,      URL: %s\n" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
                 continue 2
                 ;;
             (--action|-a)
