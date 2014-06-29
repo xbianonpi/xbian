@@ -130,7 +130,7 @@ do_prep()
         fi
 
 #        [ $runprepare -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_prepare; )
-        [ $runprepare -eq 1 ] && ( rexp ../env; do_run $config_source_prepare; )
+        [ $runprepare -eq 1 ] && ( do_run $config_source_prepare; )
     fi
 
     runconfigure=0
