@@ -243,7 +243,7 @@ do_clone()
     if [ "$config_source_branch" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git checkout "$config_source_branch"
+                do_run git checkout -t "$config_source_branch"
                 ;;
             *)
                 ;;
@@ -253,12 +253,21 @@ do_clone()
     if [ "$config_source_refresh" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git pull
+                do_run git pull origin "$config_source_branch"
                 ;;
             *)
                 ;;
         esac
     fi
+
+    cd ../../..
+    if [ -d hooks.d/post-clone.d ]; then
+        for f in $(ls hooks.d/post-clone.d); do
+#            ( cd "$dir/working"; rexp ../env; QEMU_SET_ENV=QEMU_STACK_SIZE=1048576 do_run $config_build_env sh ../../../hooks.d/post-clone.d/$f; )
+            ( cd "$dir/working"; do_run sh ../../../hooks.d/post-clone.d/$f; )
+        done
+    fi
+
 }
 
 do_exit()
