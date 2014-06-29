@@ -336,7 +336,7 @@ do_deb()
     [ -e content/DEBIAN/src_repo_hash_HEAD ] && . content/DEBIAN/src_repo_hash_HEAD && rm content/DEBIAN/src_repo_hash_HEAD
     echo "  (at commit src $commit_src, commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
 
-    do_run $config_build_env sh $XBIANROOT/gen.package
+    do_run sh $XBIANROOT/gen.package
     rm -f "$dir"/*.deb
     mv *.deb "$dir"
 }
