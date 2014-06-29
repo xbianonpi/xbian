@@ -114,7 +114,8 @@ do_prep()
 
     if [ -d hooks.d/pre-configure.d ]; then
         for f in $(ls hooks.d/pre-configure.d); do
-            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-configure.d/$f; )
+#            ( cd "$dir/working"; rexp ../env; QEMU_SET_ENV=QEMU_STACK_SIZE=1048576 do_run $config_build_env sh ../../../hooks.d/pre-configure.d/$f; )
+            ( cd "$dir/working"; do_run sh ../../../hooks.d/pre-configure.d/$f; )
         done
     fi
 
