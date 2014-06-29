@@ -19,7 +19,6 @@
 ##
 ##
 
-
 rm_size() {
     cat ./content/DEBIAN/control | grep -v "Installed-Size:" > ./content/DEBIAN/control.new
     mv ./content/DEBIAN/control.new ./content/DEBIAN/control
@@ -43,12 +42,12 @@ rm_size
 
 cd content
 [ -d ./tmp ] && mv ./tmp ..
-find ./ -type f -print0 | xargs -0 $str $strargs 2>/dev/null
+find ./ \( -executable -type f -o -iname \*.so -o -iname \*.ko \) -print0 | xargs -0 $str $strargs 2>/dev/null
 tot=$(du -sb | awk '{print $1}'); tot=$((tot/1024)); echo $tot > ../size.txt
 printf "Installed-Size: %u\n" $(cat ../size.txt) >> ./DEBIAN/control
 find ./ -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P\0' | sort -z| xargs --null md5sum > DEBIAN/md5sums
 cd ..
-fakeroot dpkg-deb -b ./content "${package}""${version}".deb
+fakeroot dpkg-deb -Zxz -b ./content "${package}""${version}".deb
 [ -d ./tmp ] && mv ./tmp ./content
 # remove the size again, because on different filesystems du will return different size
 rm_size
