@@ -30,7 +30,16 @@ rexp()
 
     while read line; do
         echo $line | grep -q '^[a-zA-Z]' || continue
-        export "$line"
+        vaname=$(echo "$line" | awk -F'=' '{print $1}')
+        vavalue=${line#*=}
+        case $vaname in
+            config_*)
+                export "$line"
+                ;;
+            *)
+                eval "export $vaname=\"\$$vaname $vavalue\""
+                ;;
+        esac
     done < "$1"
 }
 
