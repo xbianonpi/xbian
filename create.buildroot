@@ -129,6 +129,7 @@ do_deps()
     mkdir -p $config_root_prefix/$config_platform
     mkdir -p $config_root_prefix/$config_platform/etc/apt/apt.conf.d
     cp "$dir/extra-files/04autoremove" $config_root_prefix/$config_platform/etc/apt/apt.conf.d
+    cp "$dir/extra-files/05xbian" $config_root_prefix/$config_platform/etc/apt/apt.conf.d
 
     cp "$dir/extra-files/schroot-fstab" /etc/schroot/schroot-fstab-$config_platform
     sed -i "s%__DIR__%$(readlink -f $fstabbind)%g" /etc/schroot/schroot-fstab-$config_platform
