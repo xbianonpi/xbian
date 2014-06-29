@@ -323,6 +323,14 @@ do_deb()
     sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control
     sed -i "s%__PKGNAME__%$config_deb_pkgname%" content/DEBIAN/control
 
+    if [ -n "$config_deb_ctrlextra" ]; then
+        sed -i "s%__CTRLEXTRA__%$config_deb_ctrlextra%" content/DEBIAN/control
+        printf "%b\n" "$(cat content/DEBIAN/control)" > content/DEBIAN/control.new
+        mv content/DEBIAN/control.new content/DEBIAN/control
+    else
+        sed -i "%__CTRLEXTRA__%d" content/DEBIAN/control
+    fi
+
     ### git log -n1 --format=oneline | awk '{print $1}'
     ### git ls-remote $config_source_addr master | awk '{print $1}'
     [ -e content/DEBIAN/src_repo_hash_HEAD ] && . content/DEBIAN/src_repo_hash_HEAD && rm content/DEBIAN/src_repo_hash_HEAD
