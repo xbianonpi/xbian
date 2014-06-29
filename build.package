@@ -172,7 +172,7 @@ do_patch()
     [ ! -d ./patches ] && return
     cd ./patches
 
-    for p in $({ find ./ -maxdepth 1 -iname \*.patch -type f; find "./$dir" -iname \*.patch -type f;} | sort); do
+    for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f; find -L "./$dir" -iname \*.patch -type f;} | sort); do
         (
         cd ../build/$dir/working
         echo "checking $p"
