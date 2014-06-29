@@ -323,7 +323,7 @@ Usage summary:
 
    wipe         - will completely remove working directory (including git clone of src repository)
    clean        - will run "make clean" in the working tree
-   clone        - will run "git clone". if source is already cloned then reset/pull is part if this action
+   clone        - will run "git clone". if source is already cloned then reset/pull is part of this action
                   and finer control is allowed through three paramters - look at "patch" description
    patch        - will try to re-apply patches. if source is not reset to HEAD, nothing will be applied
                   (git reset operation is running in "clone" action as it is needed for correct auto
