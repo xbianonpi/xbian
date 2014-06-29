@@ -133,28 +133,6 @@ do_deps()
     cp "$dir/extra-files/schroot-fstab" /etc/schroot/schroot-fstab-$config_platform
     sed -i "s%__DIR__%$(readlink -f $fstabbind)%g" /etc/schroot/schroot-fstab-$config_platform
 
-    cat<<EOF>$config_root_prefix/$config_platform/etc/apt/apt.conf.d/05xbian
-APT::Install-Recommends "0";
-APT::Install-Suggests "0";
-APT::Get::AllowUnauthenticated "0";
-
-DPkg::NoTriggers "true";
-PackageManager::Configure "smart";
-DPkg::ConfigurePending "true";
-
-Acquire::Languages "none";
-
-Dpkg::Options {
-   "--force-confdef";
-   "--force-confold";
-}
-
-Acquire::PDiffs "0";
-Acquire::GzipIndexes "false";
-Acquire::CompressionTypes::Order:: "gz";
-
-EOF
-
 }
 
 do_prep()
