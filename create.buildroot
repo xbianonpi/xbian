@@ -113,8 +113,8 @@ do_prepare()
 export xbiangit=$(pwd)/run.me
 export XBIANROOT=$(pwd)
 
-export PATH=/usr/lib/ccache:$PATH
-export MAKEFLAGS="-j$(grep -c processor /proc/cpuinfo )"
+export PATH=/usr/lib/ccache:\$PATH
+export MAKEFLAGS="-j\$(grep -c processor /proc/cpuinfo )"
 EOF
 
     apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_deb_base 1>/dev/null
