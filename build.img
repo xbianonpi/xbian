@@ -279,8 +279,8 @@ do_post()
 [ $(id -u) -ne 0 ] && do_exit "for img creation please run again with root privileges"
 
 GETOPT=$(getopt \
-        --longoptions=action:,arch:,config_source_refresh:,help \
-        --options=a:m:h \
+        --longoptions=action:,arch:,config_source_refresh:,help,list \
+        --options=a:m:hl \
         -- "$@" ) \
         || exit 128
 
@@ -296,6 +296,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
 
     while [ "$#" -gt '0' ]; do
         case "$1" in
+            (-l|--list)
+                printf "Local Name: %s\n" "${dir#*build/}"
+                continue 2
+                ;;
             (--action|-a)
                 opt_action=$2
                 shift 2
