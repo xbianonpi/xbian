@@ -255,7 +255,7 @@ do_deb()
     [ -e content/DEBIAN/src_repo_hash_HEAD ] && . content/DEBIAN/src_repo_hash_HEAD && rm content/DEBIAN/src_repo_hash_HEAD
     echo "  (at commit src $commit_src, commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
 
-    $config_build_env sh -c '$(find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko \) -print0 | xargs -0 strip --strip-unneeded 2>/dev/null )'
+    do_run $config_build_env 'find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko \) -print0' | do_run $config_build_env xargs -0 strip --strip-unneeded -p 2>/dev/null
     sync
     sh $XBIANROOT/gen.package
     rm -f "$dir"/*.deb
