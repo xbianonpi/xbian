@@ -97,12 +97,18 @@ do_debootstrap()
 
     mkdir -p ./rootfs
     mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p2 ./rootfs
-    btrfs sub create ./rootfs/root
-    btrfs sub create ./rootfs/root/@
-    btrfs sub create ./rootfs/modules
-    btrfs sub create ./rootfs/modules/@
-    btrfs sub create ./rootfs/home
-    btrfs sub create ./rootfs/home/@
+    case $config_fstype_root in
+        btrfs)
+            btrfs sub create ./rootfs/root
+            btrfs sub create ./rootfs/root/@
+            btrfs sub create ./rootfs/modules
+            btrfs sub create ./rootfs/modules/@
+            btrfs sub create ./rootfs/home
+            btrfs sub create ./rootfs/home/@
+            ;;
+        *)
+            ;;
+    esac
     umount ./rootfs
 
     [ -z "$config_fsoptions_root" ] && config_fsoptions_root='-o '
@@ -111,6 +117,8 @@ do_debootstrap()
     mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p2 ./rootfs/home
     mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p2 ./rootfs/lib/modules
     mkdir -p ./rootfs/tmp/tmp && mount -o bind /tmp ./rootfs/tmp/tmp; mkdir -p ./rootfs/var/cache/apt/archives; mount -o bind /tmp ./rootfs/var/cache/apt/archives
+
+    find ./rootfs/tmp -iname \*.deb | xargs rm -f
 
     mkdir -p ./rootfs/boot
     mount -t $config_fstype_boot /dev/mapper/${loopd}p1 ./rootfs/boot
@@ -151,7 +159,7 @@ do_xbian()
     done )
 
     export PATH=/fake:$PATH
-    eval chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart'
+    eval chroot ./rootfs apt-get install -y --force-yes -o PackageManager::Configure=smart -o DPkg::NoTriggers=1 -o DPkg::ConfigurePending=1 -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
     rm -fr ./rootfs/fake
 }
 
@@ -172,11 +180,12 @@ do_finish()
         done
     fi
 
+    umount ./rootfs/var/cache/apt/archives ./rootfs/tmp/tmp
     chroot "$dir/working/rootfs" /usr/local/sbin/all-clean
 
     cd "$dir/working"
     df -h
-    for d in ./rootfs/boot ./rootfs/home ./rootfs/lib/modules ./rootfs/tmp/tmp ./rootfs/var/cache/apt/archives ./rootfs; do
+    for d in ./rootfs/boot ./rootfs/home ./rootfs/lib/modules ./rootfs; do
         umount $d 2>/dev/null
     done
 
