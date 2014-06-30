@@ -322,7 +322,7 @@ do_deb()
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
     sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control
     sed -i "s%__PKGNAME__%$config_deb_pkgname%" content/DEBIAN/control
-    sed -i "s%__PKGDEPS__%$config_deb_depends%" content/DEBIAN/control
+    sed -i "s%__PKGDEPS__%Depends: $config_deb_depends%" content/DEBIAN/control
 
     if [ -n "$config_deb_ctrlextra" ]; then
         sed -i "s%__CTRLEXTRA__%$config_deb_ctrlextra%" content/DEBIAN/control
