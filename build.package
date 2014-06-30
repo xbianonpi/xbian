@@ -388,6 +388,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
 
     [ -e build/config ] && rexp build/config
     [ -e "$dir/config" ] && rexp "$dir/config"
+    [ -e "$dir/config_pkgver" ] && rexp "$dir/config_pkgver"
 
     eval set -- ${GETOPT}
 
