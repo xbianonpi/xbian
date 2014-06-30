@@ -36,7 +36,7 @@ do_img()
 {
     dir=$(readlink -f "$1")
     do_wipe "$dir"
-    apt-get install -y --force-yes $config_deb_base 1>/dev/null
+    apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base 1>/dev/null
 
     mkdir -p "$dir/working"
     cd "$dir/working"
@@ -151,7 +151,7 @@ do_xbian()
     done )
 
     export PATH=/fake:$PATH
-    eval chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()'
+    eval chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart'
     rm -fr ./rootfs/fake
 }
 
