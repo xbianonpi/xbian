@@ -143,8 +143,9 @@ do_clone()
     if [ ! -d "./working" ]; then
         case "$config_source_type" in
             git)
-                [ -n "$config_source_branch" ] && export config_source_branch="-b $config_source_branch"
-                do_run git clone $config_source_branch $config_source_type_extra $config_source_addr working
+                config_branch=''
+                [ -n "$config_source_branch" ] && export config_branch="-b "
+                do_run git clone $config_branch$config_source_branch $config_source_type_extra $config_source_addr working
                 ;;
             *)
                 ;;
@@ -166,7 +167,7 @@ do_clone()
     if [ "$config_source_branch" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git checkout -t "$config_source_branch"
+#                do_run git checkout -t "$config_source_branch"
                 ;;
             *)
                 ;;
@@ -176,7 +177,8 @@ do_clone()
     if [ "$config_source_refresh" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git pull origin "$config_source_branch"
+                do_run git fetch origin "$config_source_branch"
+                do_run git merge origin/"$config_source_branch"
                 ;;
             *)
                 ;;
@@ -224,6 +226,9 @@ do_deb()
         echo "commit_src=$commit_src" > $DESTDIR/DEBIAN/src_repo_hash_HEAD
     )
 
+    rm -f ./content/DEBIAN/*
+    cp -ar ./content-tpl/* ./content
+
     export MAKEFLAGS=-j1
 
     if [ -d hooks.d/pre-deb.d ]; then
@@ -232,9 +237,6 @@ do_deb()
             ( cd "./content"; do_run sh ../hooks.d/pre-deb.d/$f; )
         done
     fi
-
-    rm -f ./content/DEBIAN/*
-    cp -ar ./content-tpl/* ./content
 
     config_deb_version="$config_deb_version-$(printf '%x' $(date +%s))"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
