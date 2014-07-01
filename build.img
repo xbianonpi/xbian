@@ -180,7 +180,7 @@ do_finish()
         done
     fi
 
-    umount ./rootfs/var/cache/apt/archives ./rootfs/tmp/tmp
+    ( cd "$dir/working"; umount ./rootfs/var/cache/apt/archives ./rootfs/tmp/tmp; )
     chroot "$dir/working/rootfs" /usr/local/sbin/all-clean
 
     cd "$dir/working"
