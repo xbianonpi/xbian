@@ -311,7 +311,7 @@ GETOPT=$(getopt \
         -- "$@" ) \
         || exit 128
 
-for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | grep -vw content-tpl |sort); do
+for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
 
     unset $(env | grep config_ | awk -F'=' '{print $1}')
     result=0

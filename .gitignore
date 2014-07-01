@@ -5,3 +5,4 @@ build/*/working/*
 build.*
 *.img
 ._*
+build-root-dirs/*

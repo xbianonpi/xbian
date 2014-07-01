@@ -63,6 +63,7 @@ do_deps()
 
 do_prep()
 {
+    [ -e $config_root_prefix/$config_platform/debootstrap ] && return
     dir=$(readlink -f "$1")
 
     debootstrap --no-check-gpg  --include=eatmydata --arch $config_distro_arch --foreign $config_distro_name $dir $config_distro_url
@@ -89,11 +90,10 @@ do_other()
 
 # ----------------------
 [ $(id -u) -ne 0 ] && do_exit "for buildroot preparation run again with root privileges" 20
-
 [ $1 = prepare ] && { do_prepare; exit $?; }
 
 GETOPT=$(getopt \
-        --longoptions=action:,arch:,config_source_refresh:,help \
+        --longoptions=action:,arch:,config_source_refresh:,help,debug \
         --options=a:m:h \
         -- "$@" ) \
         || exit 128
@@ -110,6 +110,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
 
     while [ "$#" -gt '0' ]; do
         case "$1" in
+            (--debug)
+                set -x
+                shift 1
+                ;;
             (--action|-a)
                 opt_action=$2
                 shift 2
@@ -142,17 +146,17 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export config_branch=${opt_arch##*-}
 
     if [ -z "$config_root_prefix" ]; then
-        export config_root_prefix=$(readlink -f $(pwd)/../build-root-dirs)
+        export config_root_prefix=$(readlink -f $XBIANROOT/build-root-dirs)
     else
-        mkdir -p $(readlink -f $(pwd)/../build-root-dirs)
-        ln -s $config_root_prefix/$config_platform $(readlink -f $(pwd)/../build-root-dirs)/$config_platform
+        mkdir -p $(readlink -f $XBIANROOT/build-root-dirs)
+        ln -s $config_root_prefix/$config_platform $(readlink -f $XBIANROOT/build-root-dirs)/$config_platform
     fi
 
     export fstabbind=$(readlink -f $(dirname $0))
 
     case $opt_action in
         ""|build)
-            ( do_deps "$(pwd)" )
+            ( do_deps "$XBIANROOT/xbian-prep-root" )
             ( do_prep "$config_root_prefix/$config_platform" )
             ( do_other "$config_root_prefix/$config_platform" )
             ;;
