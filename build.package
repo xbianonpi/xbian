@@ -150,7 +150,8 @@ do_clone()
             *)
                 ;;
         esac
-    fi
+        cd ./working
+    else
 
     cd ./working
     if [ "$config_source_reset" = yes ]; then
@@ -183,6 +184,7 @@ do_clone()
             *)
                 ;;
         esac
+    fi
     fi
 
     cd ../../..
@@ -219,15 +221,20 @@ do_install()
 
 do_deb()
 {
-    DESTDIR=$(pwd)/content-tpl
+    DESTDIR=$(pwd)/build/$config_platform_branch
     (
         cd "$dir/working"
         commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
-        echo "commit_src=$commit_src" > $DESTDIR/DEBIAN/src_repo_hash_HEAD
+        echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
 
     rm -f ./content/DEBIAN/*
-    cp -ar ./content-tpl/* ./content
+
+    # backcompatibility only, should be removed 
+    [ -e ./content-tpl ] && cp -ar ./content-tpl/* ./content
+
+    [ -e build/content-tpl ] && cp -ar build/content-tpl/* ./content
+    [ -e build/$config_platform_branch/content-tpl ] && cp -ar build/$config_platform_branch/content-tpl/* ./content
 
     export MAKEFLAGS=-j1
 
@@ -254,7 +261,7 @@ do_deb()
 
     ### git log -n1 --format=oneline | awk '{print $1}'
     ### git ls-remote $config_source_addr master | awk '{print $1}'
-    [ -e content/DEBIAN/src_repo_hash_HEAD ] && . content/DEBIAN/src_repo_hash_HEAD && rm content/DEBIAN/src_repo_hash_HEAD
+    [ -e $DESTDIR/src_repo_hash_HEAD ] && . $DESTDIR/src_repo_hash_HEAD && rm -f $DESTDIR/src_repo_hash_HEAD
     echo "  (at commit src $commit_src, commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
 
     do_run $config_build_env 'find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko \) -print0' | do_run $config_build_env xargs -0 strip --strip-unneeded -p 2>/dev/null
