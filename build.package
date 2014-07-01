@@ -276,7 +276,9 @@ do_show_help()
 echo "
 Usage summary:
 
-  --action, -a [action]      action to perform:
+  --arch, -m [platform/buildconfig]     existing configurations as listed by --list
+
+  --action, -a [action]                 action to perform:
 
    wipe         - will completely remove working directory (including git clone of src repository)
    clean        - will run "make clean" in the working tree
@@ -309,7 +311,7 @@ GETOPT=$(getopt \
         -- "$@" ) \
         || exit 128
 
-for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
+for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | grep -vw content-tpl |sort); do
 
     unset $(env | grep config_ | awk -F'=' '{print $1}')
     result=0
@@ -323,7 +325,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     while [ "$#" -gt '0' ]; do
         case "$1" in
             (-l|--list)
-                printf "Local Name: %16s,   Target: %13s,    Branch: %20s,   URL: %-40s\n" "${dir#*build/}" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
+                printf "ConfigName: %16s,   Target: %13s,    Branch: %20s,   URL: %-40s\n" "${dir#*build/}" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
                 continue 2
                 ;;
             (--action|-a)
