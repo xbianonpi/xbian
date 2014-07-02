@@ -6,3 +6,4 @@ build.*
 *.img
 ._*
 build-root-dirs/*
+*.img.xz
