@@ -59,7 +59,11 @@ do_prep()
     runconfigure=0
     if [ -n "$config_source_configure" ]; then
         if [ -e configure ]; then
-            [ "$( find ./ \( -iname Makefile \) ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
+            if [ -e Makefile ]; then
+                [ "$( find ./ \( -iname Makefile \) ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
+            else
+                runconfigure=1
+            fi
         else
             runconfigure=1
         fi

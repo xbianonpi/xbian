@@ -285,11 +285,11 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
             ( do_post "$dir" )
             ;;
         ""|build)
-            ( do_img "$dir" )
-            ( do_debootstrap "$dir" )
-            ( do_xbian "$dir" )
-            ( do_finish "$dir" )
-            ( do_post "$dir" )
+            ( do_img "$dir" || do_exit )
+            ( do_debootstrap "$dir" || do_exit )
+            ( do_xbian "$dir" || do_exit )
+            ( do_finish "$dir" || do_exit  )
+            ( do_post "$dir" || do_exit  )
             ;;
     esac
 done
