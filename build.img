@@ -145,8 +145,8 @@ do_xbian()
     cd "$dir/working"
 
     chroot ./rootfs wget http://xbian.brantje.com/pool/devel/main/x/xbian-package-repo/xbian-package-repo_1.0.1_armhf.deb
-    chroot ./rootfs dpkg -i xbian-package-repo_1.0.0_armhf.deb
-    chroot ./rootfs rm xbian-package-repo_1.0.0_armhf.deb
+    chroot ./rootfs dpkg -i xbian-package-repo_1.0.1_armhf.deb
+    chroot ./rootfs rm xbian-package-repo_1.0.1_armhf.deb
     [ "$config_allow_staging_devel" = yes ] && chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
     chroot ./rootfs apt-get update
 
