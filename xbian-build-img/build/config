@@ -9,4 +9,6 @@ config_distro_variant=minbase
 config_include_deb=sed,locales,wget,upstart,lsb-release
 config_exclude_deb=busybox,sysvinit,debconf-i18n
 
+config_xbianrepository=http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.2_armhf.deb
+
 config_wrapper=build.img
