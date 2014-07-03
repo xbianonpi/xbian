@@ -69,7 +69,7 @@ do_img()
             mkfs.ext4 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>/dev/null 1>&2
             ;;
         btrfs)
-            mkfs.btrfs -O skinny-metadata -m single -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
+            mkfs.btrfs -O skinny-metadata -m single -n 32768 -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
             ;;
     esac
 
