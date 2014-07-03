@@ -317,7 +317,8 @@ GETOPT=$(getopt \
 
 for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
 
-    unset $(env | grep config_ | awk -F'=' '{print $1}')
+    echo "PROCESSING $(basename $dir)";
+    unset $(env | grep config_ | awk -F'=' '{print $1}'); opt_arch=''
     result=0
 
     [ -e build/config ] && rexp build/config
