@@ -144,6 +144,7 @@ do_xbian()
     dir=$(readlink -f "$1")
     cd "$dir/working"
 
+    chroot ./rootfs apt-get update
     chroot ./rootfs wget $config_xbianrepository
     chroot ./rootfs dpkg -i $(basename $config_xbianrepository)
     chroot ./rootfs rm -f $(basename $config_xbianrepository)
@@ -206,7 +207,10 @@ do_post()
         done
     fi
 
-    mv "$dir/working/$IMGNAME" "$dir"
+    if [ -n "$config_img_compress" ]; then
+        do_run $config_img_compress "$dir/working/$IMGNAME"
+    fi
+    mv "$dir"/working/$IMGNAME* "$dir"
 }
 
 # ----------------------
