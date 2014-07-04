@@ -3,7 +3,7 @@ config_distro_url=http://mirrordirector.raspbian.org/raspbian/
 config_distro_arch=armhf
 config_fstype_root=btrfs
 config_fsoptions_root=-o compress=lzo,autodefrag,noatime
-config_img_size=600M
+config_img_size=500M
 config_fstype_boot=vfat
 config_xbian_deb=xbian-package-kernel xbian-package-cec xbian-package-config-shell xbian-package-config-xbmc xbian-package-firmware xbian-package-initramfs-tools xbian-package-libtag xbian-package-lirc xbian-package-samba xbian-package-shairplay xbian-package-splash xbian-package-upstart-xbmc-bridge xbian-package-usbmount xbian-package-vnc-server xbian-package-xbianhome xbian-package-xbmc xbian-package-xbmc-scripts xbian-package-zram-swap xbian-update
 config_allow_staging_devel=yes
