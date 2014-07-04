@@ -33,6 +33,7 @@ fi
 
 do_prep()
 {
+    set -e
     dir="$1"
 
     if [ -d hooks.d/pre-configure.d ]; then
@@ -60,7 +61,7 @@ do_prep()
     if [ -n "$config_source_configure" ]; then
         if [ -e configure ]; then
             if [ -e Makefile ]; then
-                [ "$( find ./ \( -iname Makefile \) ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
+                [ "$( find ./ -iname Makefile ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
             else
                 runconfigure=1
             fi
@@ -74,6 +75,7 @@ do_prep()
 
 do_make()
 {
+    set -e
     dir="$1"
 
     if [ -d hooks.d/pre-build.d ]; then
@@ -249,7 +251,7 @@ do_deb()
         done
     fi
 
-    [ -z "$config_distro" ] && config_deb_version="$config_deb_version-$(printf '%x' $(date +%s))"
+    [ -z "$config_distro" ] && config_deb_version="$config_deb_version-$(date +%s)"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
     sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control
     sed -i "s%__PKGNAME__%$config_deb_pkgname%" content/DEBIAN/control
@@ -264,7 +266,7 @@ do_deb()
     fi
 
     ### git log -n1 --format=oneline | awk '{print $1}'
-    ### git ls-remote $config_source_addr master | awk '{print $1}'
+    ### git ls-remote $config_source_addr -h master | awk '{print $1}'
     [ -e $DESTDIR/src_repo_hash_HEAD ] && . $DESTDIR/src_repo_hash_HEAD && rm -f $DESTDIR/src_repo_hash_HEAD
     echo "  (at commit src $commit_src, commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
 
@@ -317,7 +319,6 @@ GETOPT=$(getopt \
 
 for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
 
-    echo "PROCESSING $(basename $dir)";
     unset $(env | grep config_ | awk -F'=' '{print $1}'); opt_arch=''
     result=0
 
@@ -356,6 +357,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     done
 
     [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+    echo "PROCESSING $(basename $dir)";
     [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
 
     export config_platform=${opt_arch%%-*}
@@ -389,18 +391,12 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             ( do_deb "$dir" )
             ;;
         ''|build)
-            ( do_clone "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! git clone problem" || result=0
-            ( do_patch "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! patch problem" || result=0
-            ( do_prep "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! source prep problem" || result=0
-            ( do_make "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! make problem" || result=0
-            ( do_install "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! install problem" || result=0
-            ( do_deb "$dir"; )
-            [ $result -gt 0 ] && do_exit "!!! deb problem" || result=0
+            ( do_clone "$dir" || do_exit "!!! git clone problem" )
+            ( do_patch "$dir" || do_exit "!!! patch problem" )
+            ( do_prep "$dir" || do_exit "!!! source prep problem" )
+            ( do_make "$dir" || do_exit "!!! make problem" )
+            ( do_install "$dir" || do_exit "!!! install problem" )
+            ( do_deb "$dir" || do_exit "!!! deb problem" )
             ;;
     esac
 done
