@@ -21,6 +21,7 @@
 
 do_exit()
 {
+    set +e
     [ -n "$2" ] && result=$2
     echo "$1 error $result"
     exit $result
@@ -28,6 +29,7 @@ do_exit()
 
 rexp()
 {
+    set +e
     [ ! -e "$1" ] && return
 
     while read line; do
@@ -47,6 +49,7 @@ rexp()
 
 print_log() # level, message, ...
 {
+    set +e
     LEVEL=$1
     shift 1
 
@@ -93,6 +96,7 @@ print_log() # level, message, ...
 
 do_run() # [argv]
 {
+    set +e
     if [ -n "$opt_dry_run" ]; then
         echo "... Running $*"
         RC="$?"
@@ -106,7 +110,7 @@ do_run() # [argv]
         fi
     fi
 
-    export result=$((result + RC))
+    result=$((result + RC))
     return "$RC"
 }
 
