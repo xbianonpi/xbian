@@ -274,7 +274,7 @@ do_deb()
     sync
     sh $XBIANROOT/gen.package
     rm -f "$dir"/*.deb
-    mv *.deb "$dir" && touch DESTDIR=$(pwd)/build/$config_platform_branch/working/.force.aptonly
+    mv *.deb "$dir" && touch $(pwd)/build/$config_platform_branch/working/.force.aptonly
 }
 
 do_show_help()
