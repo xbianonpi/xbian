@@ -185,8 +185,7 @@ do_clone()
     if [ "$config_source_refresh" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git pull origin $config_source_branch
-#                do_run git merge origin/"$config_source_branch"
+                do_run git pull --depth=1 origin $config_source_branch
                 ;;
             *)
                 ;;
