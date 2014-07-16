@@ -250,6 +250,8 @@ do_deb()
         done
     fi
 
+    do_readconfig "$dir"
+
     [ -z "$config_distro" ] && config_deb_version="$config_deb_version-$(date +%s)"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control
     sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control
@@ -321,15 +323,9 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     unset $(env | grep config_ | awk -F'=' '{print $1}'); opt_arch=''
     result=0
 
-    [ -e build/config ] && rexp build/config
-    if [ -e "$dir/config_pkgver" ]; then
-        rexp "$dir/config_pkgver"
-    else
-        echo "config_deb_version=" > "$dir/config_pkgver"
-    fi
-    [ -e "$dir/config" ] && rexp "$dir/config"
-
     eval set -- ${GETOPT}
+
+    do_readconfig "$dir"
 
     while [ "$#" -gt '0' ]; do
         case "$1" in

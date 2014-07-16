@@ -47,6 +47,18 @@ rexp()
     done < "$1"
 }
 
+do_readconfig() {
+    dir="$1"
+
+    if [ -e "$dir/config_pkgver" ]; then
+        rexp "$dir/config_pkgver"
+    else
+        echo "config_deb_version=" > "$dir/config_pkgver"
+    fi
+    [ -e build/config ] && rexp build/config
+    [ -e "$dir/config" ] && rexp "$dir/config"
+}
+
 print_log() # level, message, ...
 {
     set +e
