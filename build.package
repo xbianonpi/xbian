@@ -106,6 +106,7 @@ do_patch()
         cd ../build/$dir/working
         echo "checking $p"
         if ! patch -p1 --dry-run -F $config_patch_fuzzy < ../../../patches/$p >/dev/null; then
+            echo "! won't patch with $p"
             continue
         fi
         echo "Patching with $p"
@@ -205,7 +206,7 @@ do_clone()
 
 do_install()
 {
-    export MAKEFLAGS=-j1
+#    export MAKEFLAGS=-j1
 
     export INSTALL_MOD_PATH=$(readlink -f ./content)
     export INSTALL_FW_PATH=$(readlink -f ./content)
@@ -246,7 +247,6 @@ do_deb()
 
     if [ -d hooks.d/pre-deb.d ]; then
         for f in $(ls hooks.d/pre-deb.d); do
-#            ( cd "./content"; do_run $config_build_env sh ../hooks.d/pre-deb.d/$f; )
             ( cd "./content"; do_run sh ../hooks.d/pre-deb.d/$f; )
         done
     fi
