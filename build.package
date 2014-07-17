@@ -80,7 +80,8 @@ do_make()
 
     if [ -d hooks.d/pre-build.d ]; then
         for f in $(ls hooks.d/pre-build.d); do
-            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-build.d/$f; )
+#            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-build.d/$f; )
+            ( cd "$dir/working"; do_run sh ../../../hooks.d/pre-build.d/$f; )
         done
     fi
 
