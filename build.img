@@ -51,8 +51,8 @@ do_img()
     modprobe -q loop
     parted -s $IMGNAME mklabel msdos
 
-    echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-    echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    echo "2048,35840,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    echo "37888,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
 
     case $config_fstype_boot in
@@ -66,10 +66,10 @@ do_img()
 
     case $config_fstype_root in
         ext4|ext2|ext3)
-            mkfs.ext4 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>/dev/null 1>&2
+            mkfs.$config_fstype_root -L $config_rootfs_label /dev/mapper/${loopd}p2 2>/dev/null 1>&2
             ;;
         btrfs)
-            mkfs.btrfs -O skinny-metadata -m single -n 32768 -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
+            mkfs.btrfs -O skinny-metadata -m single -d single -n 16384 -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
             ;;
     esac
 
