@@ -185,7 +185,9 @@ do_clone()
     if [ "$config_source_refresh" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git pull --depth=1 origin $config_source_branch
+                ep=''
+                grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
+                do_run git pull $ep origin $config_source_branch
                 ;;
             *)
                 ;;
