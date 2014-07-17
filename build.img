@@ -142,6 +142,13 @@ do_debootstrap()
 do_xbian()
 {
     dir=$(readlink -f "$1")
+
+    if [ -d hooks.d/pre-xbiandebs.d ]; then
+        for f in $(ls hooks.d/pre-xbiandebs.d); do
+            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-xbiandebs.d/$f; )
+        done
+    fi
+
     cd "$dir/working"
 
     chroot ./rootfs apt-get update
@@ -186,8 +193,14 @@ do_finish()
 
     cd "$dir/working"
     df -h
-    for d in ./rootfs/boot ./rootfs/home ./rootfs/lib/modules ./rootfs; do
-        umount $d 2>/dev/null
+
+    umfail=1
+    while [ $umfail -eq 1 ]; do
+        umfail=0
+        for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '{print $3}' | sort -r); do
+            echo "umounting $d"
+            umount $d || umfail=1
+        done
     done
 
     kpartx -dv $IMGNAME

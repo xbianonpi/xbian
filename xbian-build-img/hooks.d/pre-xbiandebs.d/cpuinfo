@@ -1,0 +1,14 @@
+
+
+umount ./rootfs/proc >/dev/null 2>&1
+
+case $config_platform in
+    rpi)
+        echo "hardware BCM2708" > ./rootfs/proc/cpuinfo
+        ;;
+    imx6)
+        echo "hardware iMX6" > ./rootfs/proc/cpuinfo
+        ;;
+    *)
+        ;;
+esac
