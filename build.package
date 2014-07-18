@@ -19,7 +19,7 @@
 ##
 ##
 
-config_patch_fuzzy=1000
+config_patch_fuzzy=10
 opt_arch=''
 opt_action=''
 result=0
