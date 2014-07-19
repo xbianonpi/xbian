@@ -23,8 +23,12 @@
 
 if [ "$1" = prepare ]; then
     (
-    cd $XBIANROOT
-    sh ./create.buildroot prepare
+    if [ -r ./create.buildroot ]; then
+        sh ./create.buildroot prepare
+    else
+        echo "Perhaps not in xbian clone directory?"
+        false
+    fi
     )
     if [ $? -eq 0 ]; then
         echo "Successfully initialised. Please logout and login again."

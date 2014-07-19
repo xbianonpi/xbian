@@ -19,6 +19,7 @@
 ##
 ##
 
+[ -n "$XBIANROOT" ] || export XBIANROOT=$(readlink -f ./)
 if [ -e $XBIANROOT/common.functions ]; then
     . $XBIANROOT/common.functions
 else
