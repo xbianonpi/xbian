@@ -1,3 +1,4 @@
+#!/bin/sh -e
 ##
 ##      Copyright (C) 2012 - 2014 XBian
 ##
@@ -33,7 +34,6 @@ fi
 
 do_prep()
 {
-    set -e
     dir="$1"
 
     if [ -d hooks.d/pre-configure.d ]; then
@@ -75,7 +75,6 @@ do_prep()
 
 do_make()
 {
-    set -e
     dir="$1"
 
     if [ -d hooks.d/pre-build.d ]; then
@@ -397,13 +396,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             ( do_deb "$dir" )
             ;;
         ''|build)
-            set -e
-            ( do_clone "$dir" || do_exit "!!! git clone problem" )
-            ( do_patch "$dir" || do_exit "!!! patch problem" )
-            ( do_prep "$dir" || do_exit "!!! source prep problem" )
-            ( do_make "$dir" || do_exit "!!! make problem" )
-            ( do_install "$dir" || do_exit "!!! install problem" )
-            ( do_deb "$dir" || do_exit "!!! deb problem" )
+            dr=$(pwd)
+            for act in do_clone do_patch do_prep do_make do_install do_deb; do
+                ( $act "$dir" )
+            done 
             ;;
     esac
 
@@ -412,5 +408,5 @@ done
 
 
 do_readconfig "$(pwd)/build"
-[ $config_source_type = raw ] && ( do_deb "$(pwd)/build" || do_exit "!!! deb problem" )
+[ $config_source_type = raw ] && ( do_deb "$(pwd)/build" || exit )
 
