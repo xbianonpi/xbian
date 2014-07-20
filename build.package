@@ -1,4 +1,3 @@
-#!/bin/sh -e
 ##
 ##      Copyright (C) 2012 - 2014 XBian
 ##
@@ -24,6 +23,7 @@ config_patch_fuzzy=10
 opt_arch=''
 opt_action=''
 result=0
+use_debug=no
 
 if [ -e $XBIANROOT/common.functions ]; then
     . $XBIANROOT/common.functions
@@ -36,15 +36,10 @@ do_prep()
 {
     dir="$1"
 
-    if [ -d hooks.d/pre-configure.d ]; then
-        for f in $(ls hooks.d/pre-configure.d); do
-#            ( cd "$dir/working"; rexp ../env; QEMU_SET_ENV=QEMU_STACK_SIZE=1048576 do_run $config_build_env sh ../../../hooks.d/pre-configure.d/$f; )
-            ( cd "$dir/working"; do_run sh ../../../hooks.d/pre-configure.d/$f; )
-        done
-    fi
+    do_hooks pre-configure.d
 
     cd "$dir/working"
-    runprepare=0
+    [ "$2" = force ] && runprepare=1 || runprepare=0
 
     if [ -n "$config_source_prepare" ]; then
         if [ -e configure ]; then
@@ -57,7 +52,7 @@ do_prep()
         [ $runprepare -eq 1 ] && ( do_run $config_source_prepare; )
     fi
 
-    runconfigure=0
+    [ "$2" = force ] && runprepare=1 || runprepare=0
     if [ -n "$config_source_configure" ]; then
         if [ -e configure ]; then
             if [ -e Makefile ]; then
@@ -77,12 +72,7 @@ do_make()
 {
     dir="$1"
 
-    if [ -d hooks.d/pre-build.d ]; then
-        for f in $(ls hooks.d/pre-build.d); do
-#            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-build.d/$f; )
-            ( cd "$dir/working"; do_run sh ../../../hooks.d/pre-build.d/$f; )
-        done
-    fi
+    do_hooks pre-build.d
 
     cd "$dir/working"
 
@@ -164,8 +154,8 @@ do_clone()
     if [ "$config_source_reset" = yes ]; then
         case "$config_source_type" in
             git)
-                do_run git reset --hard
-                do_run git clean -df -e '\*.o' -e '\*.P'
+                do_run git reset --hard origin/$config_source_branch
+                do_run git clean -df -e '*.o' -e '*.P'
                 ;;
             *)
                 ;;
@@ -195,14 +185,7 @@ do_clone()
     fi
     fi
 
-    cd ../../..
-    if [ -d hooks.d/post-clone.d ]; then
-        for f in $(ls hooks.d/post-clone.d); do
-#            ( cd "$dir/working"; rexp ../env; QEMU_SET_ENV=QEMU_STACK_SIZE=1048576 do_run $config_build_env sh ../../../hooks.d/post-clone.d/$f; )
-            ( cd "$dir/working"; do_run sh ../../../hooks.d/post-clone.d/$f; )
-        done
-    fi
-
+    do_hooks post-clone.d
 }
 
 do_install()
@@ -277,7 +260,7 @@ do_deb()
     [ -n "$commit_src" ] && commit_src="at commit src $commit_src,"
     echo "  ($commit_src commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
 
-    do_run $config_build_env 'find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko -o -iname \*.a \) -print0' | $config_build_env xargs -0 strip --strip-unneeded -p 2>/dev/null
+    do_run $config_build_env 'find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko -o -iname \*.a \) -print0' | { $config_build_env xargs -0 strip --strip-unneeded -p 2>/dev/null || :; }
     sync
     do_run sh $XBIANROOT/gen.package
     rm -f "$dir"/*.deb
@@ -312,7 +295,8 @@ Usage summary:
                   control files (version, commits, etc). binaries will be also stripped and final
                   .deb package will be moved into ./build/platform
 
-  --list, -l                 list all available configured platforms / branches
+  --list, -l    - list all available configured platforms / branches
+  --debug, -d   - debug output
 
 "
 }
@@ -320,12 +304,15 @@ Usage summary:
 # ----------------------
 
 GETOPT=$(getopt \
-        --longoptions=action:,list,arch:,config_source_refresh:,help \
-        --options=a:m:hlo: \
+        --longoptions=action:,list,arch:,config_source_refresh:,help,debug \
+        --options=a:m:hlo:d \
         -- "$@" ) \
         || exit 128
 
+export XBIANPKGDIR="$(pwd)"
+
 for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
+    export XBIANARCHDIR=$(readlink -f "$dir")
 
     unset $(env | grep config_ | awk -F'=' '{print $1}'); opt_arch=''
     result=0
@@ -337,7 +324,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     while [ "$#" -gt '0' ]; do
         case "$1" in
             (-l|--list)
-                printf "ConfigName: %16s,   Target: %13s,    Branch: %20s,   URL: %-40s\n" "${dir#*build/}" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
+                printf "ConfigName: %s\n\tTarget: %s\n\tBranch: %s\n\t   URL: %s\n\n" "${dir#*build/}" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
                 continue 2
                 ;;
             (--action|-a)
@@ -356,12 +343,17 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
                 do_show_help
                 exit 0
                 ;;
+            (-d|--debug)
+                use_debug=yes
+                shift
+                ;;
             *)
                 shift 1
                 ;;
         esac
     done
 
+    [ "$use_debug" = no ] || set -x
     [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
     echo "PROCESSING $(basename $dir)";
     [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
@@ -382,7 +374,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             ( do_patch "$dir" )
             ;;
         prepare)
-            ( do_prep "$dir" )
+            ( do_prep "$dir" force )
             ;;
         make)
             ( do_make "$dir" )

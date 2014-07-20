@@ -1,5 +1,4 @@
-#!/bin/sh -e
-
+set -e
 ##
 ##      Copyright (C) 2012 - 2014 XBian
 ##
@@ -21,15 +20,16 @@
 ##
 ##
 
+[ -z "$SHELL" ] || SHELL=sh
+
 if [ "$1" = prepare ]; then
-    (
     if [ -r ./create.buildroot ]; then
-        sh ./create.buildroot prepare
+        $SHELL -Ee ./create.buildroot prepare
     else
         echo "Perhaps not in xbian clone directory?"
         false
     fi
-    )
+
     if [ $? -eq 0 ]; then
         echo "Successfully initialised. Please logout and login again."
         exit 0
@@ -38,12 +38,10 @@ if [ "$1" = prepare ]; then
         exit 50
     fi
 elif [ "$1" = autobuild ]; then
-    (
     cd $XBIANROOT
     [ -e build.log ] && mv build.log build.old.log
     echo "started at $(date)" > build.log
-    sh ./Autobuilder.sh | tee -a build.log
-    )
+    $SHELL -Ee ./Autobuilder.sh | tee -a build.log
     exit 0
 fi
 
@@ -51,7 +49,7 @@ if [ -e ./build/config ]; then
     config_wrapper=$(grep config_wrapper ./build/config | awk -F'=' '{print $2}')
     [ -e build.log ] && mv build.log build.old.log
     echo "started at $(date)" > build.log
-    sh $XBIANROOT/$config_wrapper $* | tee -a build.log
+    $SHELL -eE $XBIANROOT/$config_wrapper $* | tee -a build.log
 else
     echo "it doesn't seem we are inside build configuration directory!"
     exit 100
