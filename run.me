@@ -20,7 +20,7 @@ set -e
 ##
 ##
 
-[ -z "$SHELL" ] || SHELL=sh
+[ -n "$SHELL" ] || export SHELL=sh
 
 if [ "$1" = prepare ]; then
     if [ -r ./create.buildroot ]; then

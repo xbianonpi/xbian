@@ -19,7 +19,7 @@
 ##
 ##
 
-trap -- "echo 'ERROR RETURNED'; exit 1; " TERM
+trap "echo 'ERROR RETURNED'; exit 1; " TERM
 
 do_exit()
 {
