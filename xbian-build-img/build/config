@@ -7,9 +7,9 @@ config_img_compress=xz
 config_distro_variant=minbase
 
 ### comma separated list of packages to be installed on top of variant defined by config_distro_variant. passed to debootstap
-config_include_deb=locales,wget,upstart,lsb-release,nano,inetutils-tools,less,ca-certificates,policykit-1,systemd-shim,python-tz
+config_include_deb=locales,wget,upstart,lsb-release,nano,inetutils-tools,less,ca-certificates,policykit-1,python-tz
 config_exclude_deb=busybox,sysvinit,debconf-i18n,systemd-sysv
 
-config_xbianrepository=http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.2_armhf.deb
+config_xbianrepository=http://xbian.brantje.com/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.3-1_armhf.deb
 
 config_wrapper=build.img
