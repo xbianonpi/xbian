@@ -1,5 +1,5 @@
 
-[ "$config_platform" != imx6 ] && return
+[ "$config_platform" = imx6 ] || return 0
 
 loopd=$(losetup -f)
 losetup $loopd ./$IMGNAME

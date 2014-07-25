@@ -1,10 +1,11 @@
-[ "$config_fstype_root" != btrfs ] && return
+[ "$config_fstype_root" = btrfs ] || return 0
 
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 mount -t btrfs /dev/mapper/${loopd}p2 ./rootfs
 btrfs fi resize $config_img_size ./rootfs
 
 newpartsize=$((config_img_size/512+20))
+df -h | grep /working/
 umount ./rootfs; sync
 kpartx -dv $IMGNAME
 echo ",$newpartsize,,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
