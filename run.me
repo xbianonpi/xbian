@@ -41,8 +41,8 @@ elif [ "$1" = autobuild ]; then
     cd $XBIANROOT
     [ -e build.log ] && mv build.log build.old.log
     echo "started at $(date)" > build.log
-    $SHELL -Ee ./Autobuilder.sh | tee -a build.log
-    exit 0
+    $SHELL ./Autobuilder.sh | tee -a build.log
+    exit
 fi
 
 if [ -e ./build/config ]; then
@@ -54,3 +54,5 @@ else
     echo "it doesn't seem we are inside build configuration directory!"
     exit 100
 fi
+
+exit

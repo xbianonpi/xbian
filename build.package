@@ -24,6 +24,7 @@ opt_arch=''
 opt_action=''
 result=0
 use_debug=no
+use_silent=no
 
 if [ -e $XBIANROOT/common.functions ]; then
     . $XBIANROOT/common.functions
@@ -43,20 +44,20 @@ do_prep()
 
     if [ -n "$config_source_prepare" ]; then
         if [ -e configure ]; then
-            [ "$( find ./ -maxdepth 1 -iname configure.\* -newer configure | grep -c .; )" -gt 0 ] && runprepare=1
+            [ "$( find ./ -maxdepth 1 -iname configure.\* -newer configure | grep -c .; )" -gt 0 ] && runprepare=1 || :
         else
             runprepare=1
         fi
 
 #        [ $runprepare -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_prepare; )
-        [ $runprepare -eq 1 ] && ( do_run $config_source_prepare; )
+        [ $runprepare -eq 1 ] && ( do_run $config_source_prepare; ) || :
     fi
 
-    [ "$2" = force ] && runprepare=1 || runprepare=0
+    [ "$2" = force ] && runconfigure=1 || runconfigure=0
     if [ -n "$config_source_configure" ]; then
         if [ -e configure ]; then
             if [ -e Makefile ]; then
-                [ "$( find ./ -maxdepth 1 -iname Makefile ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1
+                [ "$( find ./ -maxdepth 1 -iname Makefile ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1 || :
             else
                 runconfigure=1
             fi
@@ -64,7 +65,7 @@ do_prep()
             runconfigure=1
         fi
 
-        [ $runconfigure -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_configure; )
+        [ $runconfigure -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_configure; ) || :
     fi
 }
 
@@ -94,13 +95,13 @@ do_patch()
     for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null; find -L "./$dir" -iname \*.patch -type f 2>/dev/null; } | sort); do
         (
         cd ../build/$dir/working
-        echo "checking $p"
+        [ $use_silent = yes ] || echo "checking $p"
         if ! patch -p1 --dry-run -F $config_patch_fuzzy < ../../../patches/$p >/dev/null; then
-            echo "! won't patch with $p"
+            echo "! won't patch with $p" >/dev/stderr
             continue
         fi
-        echo "Patching with $p"
-        patch -p1 -F $config_patch_fuzzy < ../../../patches/$p
+        [ $use_silent = yes ] || echo "Patching with $p"
+        do_run patch -p1 -F $config_patch_fuzzy < ../../../patches/$p
         echo "-----------------"
         )
     done
@@ -109,7 +110,7 @@ do_patch()
     if [ -d extra-files/$dir ]; then
         (
         cd extra-files/$dir
-        find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working"
+        find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
         )
     fi
 }
@@ -117,7 +118,7 @@ do_patch()
 do_wipe()
 {
     dir="$1"
-    do_run rm -fr "$dir/working"
+    do_run rm -r "$dir/working"
 }
 
 do_clean()
@@ -154,8 +155,8 @@ do_clone()
     if [ "$config_source_reset" = yes ]; then
         case "$config_source_type" in
             git)
+                do_run git clean -df -e '.*\.o' -e '.*\.P' -e '\.force\..*'
                 do_run git reset --hard origin/$config_source_branch
-                do_run git clean -df -e '*.o' -e '*.P'
                 ;;
             *)
                 ;;
@@ -199,8 +200,7 @@ do_install()
     dir="$1"
     if [ "$config_deb_contentclean" = yes ]; then 
         find ./content/ -mindepth 1 -maxdepth 1 ! -regex '.*/DEBIAN' -print0 | \
-            xargs -0 -L1 rm -fr
-
+            xargs -0 -L1 rm -r
     fi
 
     cd "$dir/working"
@@ -220,7 +220,7 @@ do_deb()
         echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
 
-    rm -f ./content/DEBIAN/*
+    rm ./content/DEBIAN/*
 
     # backcompatibility only, should be removed 
     [ -e ./content-tpl ] && cp -ar ./content-tpl/* ./content
@@ -255,7 +255,8 @@ do_deb()
 
     ### git log -n1 --format=oneline | awk '{print $1}'
     ### git ls-remote $config_source_addr -h master | awk '{print $1}'
-    [ -e $DESTDIR/src_repo_hash_HEAD ] && . $DESTDIR/src_repo_hash_HEAD && rm -f $DESTDIR/src_repo_hash_HEAD
+    [ ! -e $DESTDIR/src_repo_hash_HEAD ] || . $DESTDIR/src_repo_hash_HEAD
+    rm -f $DESTDIR/src_repo_hash_HEAD
 
     [ -n "$commit_src" ] && commit_src="at commit src $commit_src,"
     echo "  ($commit_src commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
@@ -305,12 +306,16 @@ Usage summary:
 # ----------------------
 
 GETOPT=$(getopt \
-        --longoptions=action:,list,arch:,config_source_refresh:,help,debug \
-        --options=a:m:hlo:d \
+        --longoptions=action:,list,arch:,config_source_refresh:,help,debug,silent \
+        --options=a:m:hlo:ds \
         -- "$@" ) \
         || exit 128
 
 export XBIANPKGDIR="$(pwd)"
+if [ -e $XBIANPKGDIR/build.~lock ]; then
+    echo "another process running... or stale lock exists at $XBIANPKGDIR/build.~lock"
+    exit 100
+fi
 
 for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
     export XBIANARCHDIR=$(readlink -f "$dir")
@@ -348,6 +353,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
                 use_debug=yes
                 shift
                 ;;
+            (-s|--silent)
+                use_silent=yes
+                shift
+                ;;
             *)
                 shift 1
                 ;;
@@ -356,13 +365,20 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
 
     [ "$use_debug" = no ] || set -x
     [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+
+    echo "-------------------------------"
     echo "PROCESSING $(basename $dir)";
+    echo "-------------------------------"
+
     [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
 
     export config_platform=${opt_arch%%-*}
     export config_platform_branch=$opt_arch
     export config_branch=${opt_arch##*-}
     [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
+
+    touch $XBIANPKGDIR/build.~lock
+    trap 'rm -f $XBIANPKGDIR/build.~lock' EXIT
 
     case $opt_action in
         wipe)
@@ -397,6 +413,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             ;;
     esac
 
+    printf "\n-------------------------------\nFINISHED OK\n-------------------------------\n"
     exit 0
 done
 

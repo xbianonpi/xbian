@@ -19,7 +19,7 @@
 ##
 ##
 
-trap "echo 'ERROR RETURNED'; exit 1; " TERM
+trap "echo 'ERROR RETURNED from command'; exit 1" TERM
 
 do_exit()
 {
@@ -112,7 +112,12 @@ do_run() # [argv]
         echo "... Running $*"
         RC="$?"
     else
-        eval $*
+        if [ "$use_silent" = yes ]; then
+            eval $* 1>/dev/null
+        else
+            eval $*
+        fi
+
         RC="$?"
         if [ "$RC" -eq '0' ]; then
             print_log debug "$*"
@@ -122,13 +127,14 @@ do_run() # [argv]
     fi
 
     [ $RC -gt 0 ] && kill $$
-    return "$RC"
+    set -e
+    return $RC
 }
 
 do_hooks()
 {
 
-[ -z "$XBIANPKGDIR" -o -z "$XBIANARCHDIR" -o -z "$1" ] && return 1
+    [ -z "$XBIANPKGDIR" -o -z "$XBIANARCHDIR" -o -z "$1" ] && exit 1
 
     olddir=$(pwd)
 
@@ -138,8 +144,8 @@ do_hooks()
             (
             cd "$XBIANARCHDIR/working"
             [ -n "$2" ] && rexp $XBIANPKGDIR/$2
-            echo "Running hook $f from $1"
-            do_run sh $XBIANPKGDIR/hooks.d/$1/$f
+            echo "### Running hook $f from $1 ###"
+            do_run sh +e $XBIANPKGDIR/hooks.d/$1/$f
             )
         done
     fi

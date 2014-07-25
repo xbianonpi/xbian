@@ -19,6 +19,8 @@
 ##
 ##
 
+use_debug=no
+
 if [ -e $XBIANROOT/common.functions ]; then
     . $XBIANROOT/common.functions
 else
@@ -29,7 +31,8 @@ fi
 do_wipe()
 {
     dir="$1"
-    do_run rm -fr "$dir/working"
+    [ ! -e "$dir/working/rootfs" ] || do_run rm -r "$dir/working/rootfs"
+    rm -f "$dir/working/*"
 }
 
 do_img()
@@ -112,11 +115,20 @@ do_debootstrap()
     umount ./rootfs
 
     [ -z "$config_fsoptions_root" ] && config_fsoptions_root='-o '
-    mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p2 ./rootfs
-    mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
-    mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p2 ./rootfs/home
-    mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p2 ./rootfs/lib/modules
-    mkdir -p ./rootfs/tmp/tmp && mount -o bind /tmp ./rootfs/tmp/tmp; mkdir -p ./rootfs/var/cache/apt/archives; mount -o bind /tmp ./rootfs/var/cache/apt/archives
+
+    case $config_fstype_root in
+        btrfs)
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p2 ./rootfs
+            mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p2 ./rootfs/home
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p2 ./rootfs/lib/modules
+            ;;
+        *)
+            mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p2 ./rootfs
+            ;;
+    esac
+
+    mkdir -p ./rootfs/tmp/tmp && mount -o bind /tmp ./rootfs/tmp/tmp; mkdir -p ./rootfs/var/cache/apt/archives && mount -o bind /tmp ./rootfs/var/cache/apt/archives
 
     find ./rootfs/tmp -iname \*.deb | xargs rm -f
 
@@ -145,11 +157,7 @@ do_xbian()
 {
     dir=$(readlink -f "$1")
 
-    if [ -d hooks.d/pre-xbiandebs.d ]; then
-        for f in $(ls hooks.d/pre-xbiandebs.d); do
-            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-xbiandebs.d/$f; )
-        done
-    fi
+    do_hooks pre-xbiandebs.d
 
     cd "$dir/working"
 
@@ -157,7 +165,13 @@ do_xbian()
     chroot ./rootfs wget $config_xbianrepository
     chroot ./rootfs dpkg -i $(basename $config_xbianrepository)
     chroot ./rootfs rm -f $(basename $config_xbianrepository)
-    [ "$config_allow_staging_devel" = yes ] && chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
+
+    chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list; cp ./rootfs/etc/apt/sources.list.d/xbian.list /tmp/xbian.list
+
+    [ "$config_allow_staging_devel" = yes ] || ( IFS=$'\n'; for l in $(grep devel /tmp/xbian.list); do sed -i "s%$l%###\ $l%" /tmp/xbian.list; done; )
+    [ "$config_allow_staging" = yes ] || ( IFS=$'\n'; for l in $(grep staging /tmp/xbian.list); do sed -i "s%$l%###\ $l%" /tmp/xbian.list; done; )
+    cp /tmp/xbian.list ./rootfs/etc/apt/sources.list.d/xbian.list
+
     chroot ./rootfs apt-get update
 
     export DEBIAN_FRONTEND=noninteractive
@@ -173,6 +187,56 @@ do_xbian()
     rm -fr ./rootfs/fake
 }
 
+clean_tmp()
+{
+    set +e
+
+    umfail=1
+    while [ $umfail -eq 1 ]; do
+        umfail=0
+        for d in rootfs/var/cache/apt/archives rootfs/tmp/tmp; do
+            if mountpoint -q $XBIANARCHDIR/working/$d; then
+                umount $XBIANARCHDIR/working/$d || umfail=1
+            fi
+        done
+        [ $umfail -eq 0 ] || sleep 5
+    done
+
+    set -e
+    return 0
+}
+
+clean_all()
+{
+    set +e
+
+    umfail=1
+    while [ $umfail -eq 1 ]; do
+        umfail=0
+        for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '{print $3}' | sort -r); do
+            if mountpoint -q $d; then
+                umount $d || umfail=1
+            fi
+        done
+        [ $umfail -eq 0 ] || sleep 5
+    done
+
+    set -e
+    return 0
+}
+
+clean_loopd()
+{
+    set +e
+
+    cd $XBIANARCHDIR/working
+    kpartx -dv $IMGNAME >/dev/null 2>&1
+    rm -f /run/$IMGNAME.loopd
+
+    set -e
+    return 0
+}
+
 do_finish()
 {
     dir=$(readlink -f "$1")
@@ -184,30 +248,17 @@ do_finish()
 
     cd "$dir/../.."
 
-    if [ -d hooks.d/pre-finish.d ]; then
-        for f in $(ls hooks.d/pre-finish.d); do
-            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/pre-finish.d/$f; )
-        done
-    fi
+    do_hooks pre-finish.d
 
-    ( cd "$dir/working"; umount ./rootfs/var/cache/apt/archives ./rootfs/tmp/tmp; )
-    chroot "$dir/working/rootfs" /usr/local/sbin/all-clean
+    clean_tmp
+    chroot "$dir/working/rootfs" /usr/local/sbin/all-clean >/dev/null 2>&1 || :
 
     cd "$dir/working"
-    df -h
+    df -h | grep /working/
 
-    umfail=1
-    while [ $umfail -eq 1 ]; do
-        umfail=0
-        for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '{print $3}' | sort -r); do
-            echo "umounting $d"
-            umount $d || umfail=1
-        done
-    done
+    clean_all
 
-    kpartx -dv $IMGNAME
-    rm -f /run/$IMGNAME.loopd
-
+    clean_loopd
 }
 
 do_post()
@@ -216,13 +267,10 @@ do_post()
     dir=$(readlink -f "$1")
     mkdir -p "$dir/working/rootfs"
 
-    if [ -d hooks.d/post-img.d ]; then
-        for f in $(ls hooks.d/post-img.d); do
-            ( cd "$dir/working"; do_run $config_build_env sh ../../../hooks.d/post-img.d/$f; )
-        done
-    fi
+    do_hooks post-img.d
 
     if [ -n "$config_img_compress" ]; then
+        echo "compressing $IMGNAME. this may take a while."
         do_run $config_img_compress "$dir/working/$IMGNAME"
     fi
     mv "$dir"/working/$IMGNAME* "$dir"
@@ -233,12 +281,19 @@ do_post()
 [ $(id -u) -ne 0 ] && do_exit "for img creation please run again with root privileges"
 
 GETOPT=$(getopt \
-        --longoptions=action:,arch:,config_source_refresh:,help,list \
-        --options=a:m:hl \
+        --longoptions=action:,arch:,config_source_refresh:,help,list,debug \
+        --options=a:m:hld \
         -- "$@" ) \
         || exit 128
 
+export XBIANPKGDIR="$(pwd)"
+if [ -e $XBIANPKGDIR/build.~lock ]; then
+    echo "another process running... or stale lock exists at $XBIANPKGDIR/build.~lock"
+    exit 100
+fi
+
 for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
+    export XBIANARCHDIR=$(readlink -f "$dir")
 
     unset $(env | grep config_ | awk -F'=' '{print $1}')
     result=0
@@ -272,11 +327,17 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
                 do_show_help
                 exit 0
                 ;;
+            (--debug|-d)
+                use_debug=yes
+                shift
+                ;;
             *)
                 shift 1
                 ;;
         esac
     done
+
+    [ $use_debug = no ] || set -x
 
     [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
     [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
@@ -286,6 +347,9 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export config_branch=${opt_arch##*-}
 
     export IMGNAME=$config_img_name-$(basename $dir)-$(date +%Y%m%d).img
+
+    touch $XBIANPKGDIR/build.~lock
+    trap "clean_tmp; clean_all; clean_loopd; rm -f $XBIANPKGDIR/build.~lock" EXIT TERM
 
     case $opt_action in
         img)
@@ -304,11 +368,14 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
             ( do_post "$dir" )
             ;;
         ""|build)
-            ( do_img "$dir" || do_exit )
-            ( do_debootstrap "$dir" || do_exit )
-            ( do_xbian "$dir" || do_exit )
-            ( do_finish "$dir" || do_exit  )
-            ( do_post "$dir" || do_exit  )
+            dr=$(pwd)
+            for act in do_img do_debootstrap do_xbian do_finish do_post; do
+                ( $act "$dir" )
+            done
+            ;;
+        *)
             ;;
     esac
 done
+
+printf "\n-------------------------------\nFINISHED OK\n-------------------------------\n"
