@@ -145,6 +145,13 @@ do_clone()
                 [ -n "$config_source_branch" ] && export config_branch="-b "
                 do_run git clone $config_branch$config_source_branch $config_source_type_extra $config_source_addr working
                 ;;
+            tar)
+                do_run wget $config_source_addr -O $(basename $config_source_addr)
+                mkdir -p working
+                tar -zxf $(basename $config_source_addr) -C ./working --strip-components 1
+                cd ./working
+                cd ..
+                ;;
             *)
                 ;;
         esac
@@ -157,6 +164,7 @@ do_clone()
             git)
                 do_run git clean -df -e '.*\.o' -e '.*\.P' -e '\.force\..*'
                 do_run git reset --hard origin/$config_source_branch
+                do_run git clean -df -e '.*\.o' -e '.*\.P' -e '\.force\..*'
                 ;;
             *)
                 ;;
@@ -198,10 +206,11 @@ do_install()
     export DESTDIR=$(readlink -f ./content)
 
     dir="$1"
-    if [ "$config_deb_contentclean" = yes ]; then 
+    if [ "$config_deb_contentclean" = yes -a -e ./content ]; then 
         find ./content/ -mindepth 1 -maxdepth 1 ! -regex '.*/DEBIAN' -print0 | \
-            xargs -0 -L1 rm -r
+            xargs -0 -L1 rm -r >/dev/null 2>&1|| :
     fi
+    mkdir -p ./content
 
     cd "$dir/working"
     for t in $config_install_targets; do
@@ -220,7 +229,7 @@ do_deb()
         echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
 
-    rm ./content/DEBIAN/*
+    rm -f ./content/DEBIAN/*
 
     # backcompatibility only, should be removed 
     [ -e ./content-tpl ] && cp -ar ./content-tpl/* ./content
