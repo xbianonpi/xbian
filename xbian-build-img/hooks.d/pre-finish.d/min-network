@@ -1,5 +1,5 @@
-sed -i '/ lo/d' ./rootfs/etc/network/interfaces
-sed -i '/ eth0/d' ./rootfs/etc/network/interfaces
+sed -i '/ lo/d' ./rootfs/etc/network/interfaces >/dev/null 2>&1
+sed -i '/ eth0/d' ./rootfs/etc/network/interfaces >/dev/null 2>&1
 
 echo \
 "auto lo

@@ -1,0 +1,4 @@
+
+[ $config_platform != imx6-solidrun ] && return
+
+useradd -G audio,video,users,input,sudo -m -p paI8KFtCOiEM6 -s /bin/bash -d /home/solidrun solidrun

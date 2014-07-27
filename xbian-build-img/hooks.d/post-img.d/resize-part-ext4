@@ -1,0 +1,18 @@
+[ "$config_fstype_root" = btrfs ] || return 0
+
+loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+resize2fs -M /dev/mapper/${loopd}p2
+
+mount /dev/mapper/${loopd}p2 ./rootfs
+config_img_size=$(df -B512 --output=used ./rootfs | tail -1)
+
+newpartsize=$((config_img_size+20))
+df -h | grep /working/
+umount ./rootfs; sync
+kpartx -dv $IMGNAME
+echo ",$newpartsize,,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
+
+newimgsize=$((newpartsize+71680))
+dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
+mv $IMGNAME.new $IMGNAME; sync
+

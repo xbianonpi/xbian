@@ -1,0 +1,16 @@
+config_img_name=jessie
+config_rootfs_label=solidrun
+
+config_distro_name=jessie
+config_distro_url=http://ftp.de.debian.org/debian
+config_distro_arch=armhf
+config_fstype_root=ext4
+config_fsoptions_root=-o noatime
+config_img_size=600M
+config_fstype_boot=ext2
+config_xbian_deb=linux-image-3.10.30-armmp xbian-package-initramfs-tools firmware-imx libimx libfslvpuwrap xserver-xorg-video-imx-viv policykit-1
+config_allow_staging_devel=yes
+config_allow_staging=yes
+
+config_include_deb=locales,wget,lsb-release,nano,inetutils-tools,less,ca-certificates,apt-utils,python-tz,lxde
+config_exclude_deb=

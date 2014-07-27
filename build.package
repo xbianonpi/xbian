@@ -164,7 +164,6 @@ do_clone()
             git)
                 do_run git clean -df -e '.*\.o' -e '.*\.P' -e '\.force\..*'
                 do_run git reset --hard origin/$config_source_branch
-                do_run git clean -df -e '.*\.o' -e '.*\.P' -e '\.force\..*'
                 ;;
             *)
                 ;;
@@ -186,6 +185,8 @@ do_clone()
             git)
                 ep=''
                 grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
+                git pull $ep origin $config_source_branch >/dev/null 2>&1 || :
+                do_run git reset --hard origin/$config_source_branch >/dev/null 2>&1
                 do_run git pull $ep origin $config_source_branch
                 ;;
             *)
