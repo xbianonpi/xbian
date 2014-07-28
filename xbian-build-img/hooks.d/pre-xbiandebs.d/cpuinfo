@@ -1,14 +1,20 @@
 
 
-umount ./rootfs/proc >/dev/null 2>&1 || :
+mountpoint -q ./rootfs/proc && umount ./rootfs/proc || :
 
 case $config_platform in
     rpi*)
+        AR=RPI
         echo "hardware BCM2708" > ./rootfs/proc/cpuinfo
         ;;
     imx6*)
+        AR=iMX6
         echo "hardware iMX6" > ./rootfs/proc/cpuinfo
         ;;
     *)
         ;;
 esac
+
+
+printf "#!/bin/sh\necho $AR\n" > ./rootfs/usr/local/bin/xbian-arch; chmod +x ./rootfs/usr/local/bin/xbian-arch
+
