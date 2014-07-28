@@ -1,5 +1,5 @@
 
-[ $config_platform != rpi ] && return
+[ $config_platform = rpi ] || return 0
 
 isVerHigher()
 {

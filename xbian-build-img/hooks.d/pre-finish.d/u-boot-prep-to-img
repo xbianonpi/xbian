@@ -1,6 +1,5 @@
 
-[ $config_platform != imx6 ] && return
 
-cp ./rootfs/etc/uboot-env/SPL ./
-cp ./rootfs/etc/uboot-env/u-boot.img ./
+[ ! -e ./rootfs/etc/uboot-env/SPL ] || cp -v ./rootfs/etc/uboot-env/SPL ./
+[ ! -e ./rootfs/etc/uboot-env/u-boot.img ] || cp -v ./rootfs/etc/uboot-env/u-boot.img ./
 

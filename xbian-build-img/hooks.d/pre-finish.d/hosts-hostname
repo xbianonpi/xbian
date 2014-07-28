@@ -1,2 +1,10 @@
-echo "xbian.private" > ./rootfs/etc/hostname
+
+case $config_platform in
+    imx6-solidrun)
+        ;;
+    *)
+        echo "xbian.private" > ./rootfs/etc/hostname
+        ;;
+esac
+
 cp ../../../extra-files/hosts ./rootfs/etc/hosts

@@ -1,6 +1,6 @@
 
 
-umount ./rootfs/proc >/dev/null 2>&1
+umount ./rootfs/proc >/dev/null 2>&1 || :
 
 case $config_platform in
     rpi*)
