@@ -1,10 +1,13 @@
 [ "$config_fstype_root" = ext4 ] || return 0
 
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+e2fsck -f /dev/mapper/${loopd}p2
 resize2fs -M /dev/mapper/${loopd}p2
 
 mount /dev/mapper/${loopd}p2 ./rootfs
-config_img_size=$(df -B512 --output=used ./rootfs | tail -1)
+newpartsize=$(tune2fs -l /dev/mapper/${loopd}p2 | grep 'Block count' | awk -F':' '{print $2}')
+newpartblocksize=$(tune2fs -l /dev/mapper/${loopd}p2| grep 'Block size' | awk -F':' '{print $2}')
+config_img_size=$((newpartsize*newpartblocksize/512))
 
 newpartsize=$((config_img_size+20))
 df -h | grep /working/

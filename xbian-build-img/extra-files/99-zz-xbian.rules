@@ -1,0 +1,4 @@
+KERNEL=="tty0", MODE="0666", GROUP="input"
+KERNEL=="uinput", GROUP="input", MODE="0664"
+SUBSYSTEM=="input", KERNEL=="mouse*|mice|event*", GROUP="input", MODE="0660"
+

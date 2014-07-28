@@ -1,0 +1,4 @@
+
+touch ./rootfs/dev/mmcblk0p2
+chroot ./rootfs ln -s /dev/mmcblk0p2 /dev/root
+

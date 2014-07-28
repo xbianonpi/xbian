@@ -12,5 +12,5 @@ config_xbian_deb=lightdm linux-image-3.10.30-armmp xbian-package-initramfs-tools
 config_allow_staging_devel=yes
 config_allow_staging=yes
 
-config_include_deb=locales,wget,lsb-release,nano,inetutils-tools,less,ca-certificates,apt-utils,python-tz,lxde
+config_include_deb=locales,wget,lsb-release,nano,inetutils-tools,less,ca-certificates,apt-utils,python-tz,lxde,coreutils
 config_exclude_deb=

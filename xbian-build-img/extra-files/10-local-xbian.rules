@@ -1,0 +1,26 @@
+# set deadline scheduler for non-rotating disks
+#ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/scheduler}="deadline"
+
+# set cfq scheduler for rotating disks
+#ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="1", ATTR{queue/scheduler}="noop"
+#
+ACTION=="add|change", KERNEL=="sd[a-z]", ATTR{queue/rotational}=="0", ATTR{queue/iosched/slice_idle}="0"
+ACTION=="add|change", KERNEL=="mmcblk0", ATTR{queue/iosched/slice_idle}="0"
+ACTION=="add|change", KERNEL=="mmcblk0", ATTR{queue/iosched/target_latency}="120"
+
+SUBSYSTEM=="vchiq", GROUP="video", MODE="0666"
+SUBSYSTEM=="graphics_class", GROUP="video", MODE="0666"
+ACTION=="add", KERNEL=="tty0", MODE="0666", GROUP="input", OPTIONS+="last_rule"
+KERNEL=="event*", MODE="0664", GROUP="input"
+
+SUBSYSTEM=="misc", KERNEL=="uinput", GROUP="input", MODE="0664"
+
+KERNEL=="mxc_hdmi", MODE="0660", GROUP="video"
+KERNEL=="mxc_hdmi_cec", GROUP="input"
+KERNEL=="mxc_vpu", GROUP="video"
+KERNEL=="mxc_ipu", GROUP="video"
+
+KERNEL=="fb[0-1]", ACTION=="add|change", RUN+="/usr/local/bin/modes-cubox"
+
+#KERNEL=="busfreq.13", ACTION=="add|change", ATTR{enable}="0"
+

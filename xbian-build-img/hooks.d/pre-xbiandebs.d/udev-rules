@@ -1,0 +1,4 @@
+
+[ -d ./rootfs/lib/udev/rules.d ] || mkdir -p ./rootfs/lib/udev/rules.d
+
+cp -v ../../../extra-files/*.rules ./rootfs/lib/udev/rules.d
