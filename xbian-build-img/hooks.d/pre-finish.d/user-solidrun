@@ -1,8 +1,0 @@
-
-[ $config_platform = imx6-solidrun ] || return 0
-
-for GG in input audio video; do
-    grep -wq $GG /etc/group || groupadd $GG || :
-done
-
-useradd -G audio,video,users,input,sudo -m -p paI8KFtCOiEM6 -s /bin/bash -d /home/solidrun solidrun
