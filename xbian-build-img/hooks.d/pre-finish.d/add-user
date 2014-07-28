@@ -10,12 +10,13 @@ case $config_platform in
 esac
 
 for GG in input audio video; do
-    grep -wq $GG /etc/group || groupadd $GG || :
+    grep -wq $GG ./rootfs/etc/group || chroot ./rootfs groupadd $GG || :
 done
 
-mkdir -p /home/$USERNAME
+mkdir -p ./rootfs/home/$USERNAME
 
 pass=$(printf "import crypt\nprint crypt.crypt('$PASSWORD','SA')" | python)
-useradd -G audio,video,users,input,sudo -m -p $pass -s /bin/bash -d /home/$USERNAME $USERNAME
+chroot ./rootfs chown $USERNAME:$USERNAME /home/$USERNAME 
+chroot ./rootfs useradd -G audio,video,users,input,sudo -m -p $pass -s /bin/bash -d /home/$USERNAME $USERNAME
 
 printf "\n------------\nAdded local user $USERNAME with password $PASSWORD\n------------\n"
