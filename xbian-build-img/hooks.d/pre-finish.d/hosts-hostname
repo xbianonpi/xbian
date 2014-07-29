@@ -1,5 +1,7 @@
 
-case $config_platform in
+cp ../../../extra-files/hosts ./rootfs/etc/hosts
+
+case $config_platform_branch in
     imx6-solidrun)
         ;;
     *)
@@ -7,4 +9,3 @@ case $config_platform in
         ;;
 esac
 
-cp ../../../extra-files/hosts ./rootfs/etc/hosts
