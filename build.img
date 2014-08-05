@@ -73,9 +73,9 @@ do_img()
             ;;
         btrfs)
             if mkfs.btrfs --help 2>&1 | grep -q '\-O'; then
-                mkfs.btrfs -O skinny-metadata -m single -d single -n 16384 -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
+                mkfs.btrfs -O skinny-metadata -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>&1
             else
-                mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label -f /dev/mapper/${loopd}p2 2>&1
+                mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>&1
             fi
             ;;
     esac
