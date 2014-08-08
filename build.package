@@ -89,7 +89,12 @@ do_make()
 do_patch()
 {
     dir=$(basename "$1")
-    [ ! -d ./patches ] && return
+
+    if [ -e build/$dir/working/.force.nopatch -a "$2" = fullrun ]; then
+        rm -f build/$dir/working/.force.nopatch
+        return 0
+    fi
+    [ ! -d ./patches ] && return 0
     cd ./patches
 
     for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null; find -L "./$dir" -iname \*.patch -type f 2>/dev/null; } | sort); do
@@ -111,6 +116,15 @@ do_patch()
         (
         cd extra-files/$dir
         find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
+
+        ### add new files into git tracked files
+        case "$config_source_type" in
+            git)
+                find ./ -type f -print0 | ( cd ../$1/working; xargs -0 git add )
+                ;;
+            *)
+                ;;
+        esac
         )
     fi
 }
@@ -137,8 +151,10 @@ do_clone()
         do_wipe "$dir"
     fi
 
+    initialrun=no
     cd "$dir"
     if [ ! -d "./working" ]; then
+        initialrun=yes
         case "$config_source_type" in
             git)
                 config_branch=''
@@ -180,14 +196,24 @@ do_clone()
         esac
     fi
 
-    if [ "$config_source_refresh" = yes ]; then
+    if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
         case "$config_source_type" in
             git)
                 ep=''
+                ### commit local changes into new tmp branch
+                ( git branch -D local-changes; git checkout -b local-changes || : )
+                ( git add .; git commit --allow-empty-message --no-edit; git checkout master || : )
+                cmtnr=$(git log -1 local-changes | grep -m1 .| awk '{print $2}')
+
+                ### reset main branch and pull changes from upstream
                 grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
                 git pull $ep origin $config_source_branch >/dev/null 2>&1 || :
                 do_run git reset --hard origin/$config_source_branch >/dev/null 2>&1
                 do_run git pull $ep origin $config_source_branch
+
+                ### merge our previous changes from tmp branch
+                git merge --no-edit $cmtnr
+                touch .force.nopatch
                 ;;
             *)
                 ;;
@@ -418,7 +444,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
         ''|build)
             dr=$(pwd)
             for act in do_clone do_patch do_prep do_make do_install do_deb; do
-                ( $act "$dir" )
+                ( $act "$dir" fullrun )
             done 
             ;;
     esac
