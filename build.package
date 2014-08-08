@@ -181,6 +181,10 @@ do_clone()
                 do_run git clean -df -e *.o -e *.P -e .force*
                 do_run git reset --hard origin/$config_source_branch
                 ;;
+            tar)
+                rm -fr ./*
+                ( cd ../; tar -zxf $(basename $config_source_addr) -C ./working --strip-components 1; )
+                ;;
             *)
                 ;;
         esac
