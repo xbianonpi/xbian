@@ -187,7 +187,11 @@ do_xbian()
     done )
 
     export PATH=/fake:$PATH
-    eval chroot ./rootfs apt-get install -y --force-yes -o PackageManager::Configure=smart -o DPkg::NoTriggers=1 -o DPkg::ConfigurePending=1 -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
+
+    ### let's settle down apt consistency after debootstrap (without initial install -f will not install
+    ### any packages in next loop even with correct dependencies
+    eval chroot ./rootfs apt-get install -y --force-yes -f
+    eval chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
     rm -fr ./rootfs/fake
 }
 
