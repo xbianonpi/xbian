@@ -5,6 +5,7 @@ case $config_platform_branch in
         PASSWORD=solidrun
         ;;
     *)
+        return 0
         ;;
 esac
 
