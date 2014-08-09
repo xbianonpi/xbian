@@ -205,19 +205,22 @@ do_clone()
             git)
                 ep=''
                 ### commit local changes into new tmp branch
-                ( git branch -D local-changes; git checkout -b local-changes || : )
-                ( git add .; git commit --allow-empty-message --no-edit; git checkout master || : )
+                ( git branch -D local-changes || :; git checkout -b local-changes || : ) >/dev/null 2>&1
+                ( git add .; git commit --allow-empty-message --no-edit || :; git checkout $config_source_branch || : ) >/dev/null 2>&1
                 cmtnr=$(git log -1 local-changes | grep -m1 .| awk '{print $2}')
 
                 ### reset main branch and pull changes from upstream
                 grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
-                git pull $ep origin $config_source_branch >/dev/null 2>&1 || :
+                git pull $ep origin $config_source_branch 2>&1 || :
                 do_run git reset --hard origin/$config_source_branch >/dev/null 2>&1
                 do_run git pull $ep origin $config_source_branch
 
                 ### merge our previous changes from tmp branch
-                git merge --no-edit $cmtnr
-                touch .force.nopatch
+                if [ -n "$cmtnr" ]; then
+                    git fetch --unshallow
+                    git merge --no-edit $cmtnr
+                    touch .force.nopatch
+                fi
                 ;;
             *)
                 ;;
