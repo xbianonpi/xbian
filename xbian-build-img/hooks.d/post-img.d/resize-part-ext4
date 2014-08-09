@@ -1,7 +1,7 @@
 [ "$config_fstype_root" = ext4 ] || return 0
 
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
-e2fsck -p /dev/mapper/${loopd}p2
+e2fsck -fy /dev/mapper/${loopd}p2
 resize2fs -M /dev/mapper/${loopd}p2
 
 mount /dev/mapper/${loopd}p2 ./rootfs
