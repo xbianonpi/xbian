@@ -235,6 +235,8 @@ do_install()
 {
 #    export MAKEFLAGS=-j1
 
+    do_hooks pre-install.d
+
     export INSTALL_MOD_PATH=$(readlink -f ./content)
     export INSTALL_FW_PATH=$(readlink -f ./content)
     export DESTDIR=$(readlink -f ./content)
