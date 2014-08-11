@@ -120,7 +120,8 @@ do_patch()
         ### add new files into git tracked files
         case "$config_source_type" in
             git)
-                find ./ -type f -print0 | ( cd ../$1/working; xargs -0 git add )
+                files="$(find ./ -type f -print0 | grep -v '\.config')"
+                [ -z "$files" ] || find ./ -type f -print0 | grep -v '\.config'| ( cd ../../$1/working; xargs -0 git add )
                 ;;
             *)
                 ;;
@@ -201,25 +202,41 @@ do_clone()
     fi
 
     if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
+        touch .force.nopatch
         case "$config_source_type" in
             git)
-                ep=''
+                ep=''; cmtnr=''
                 ### commit local changes into new tmp branch
-                ( git branch -D local-changes || :; git checkout -b local-changes || : ) >/dev/null 2>&1
-                ( git add .; git commit --allow-empty-message --no-edit || :; git checkout $config_source_branch || : ) >/dev/null 2>&1
-                cmtnr=$(git log -1 local-changes | grep -m1 .| awk '{print $2}')
+                if git status | grep -q 'Changes not staged\|Untracked files'; then
+                    echo "Saving local changes to 'local-changes'"
+                    if [ -z "$(git branch --list local-changes)" ]; then
+                        git add .; sync
+                        git checkout -b local-changes
+                        git commit --allow-empty-message --no-edit || :
+                        cmtnr=$(git log -1 local-changes | grep -m1 .| awk '{print $2}')
+                    else
+                        echo "Branch local-changes already exists, probably it's merge into \
+origin/$config_source_branch didn't succeed. fix the situation and remove local-changes, \
+then rerun process."
+                        echo "ERROR " && return 99
+                    fi
+                fi
+                echo "Back to $config_source_branch"
+                git checkout $config_source_branch
 
                 ### reset main branch and pull changes from upstream
-                grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
-                git pull $ep origin $config_source_branch 2>&1 || :
-                do_run git reset --hard origin/$config_source_branch >/dev/null 2>&1
-                do_run git pull $ep origin $config_source_branch
+                #grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
+                #git pull $ep origin $config_source_branch 2>&1 || :
+                echo "Trying pull from remote..."
+                do_run git clean -df -e *.o -e *.P -e .force*
+                do_run git reset --hard
+                do_run git pull origin $config_source_branch
 
                 ### merge our previous changes from tmp branch
                 if [ -n "$cmtnr" ]; then
-                    git fetch --unshallow
-                    git merge --no-edit $cmtnr
-                    touch .force.nopatch
+                    echo "Will merge your changes back..."
+                    git fetch --unshallow || : >/dev/null 2>&1
+                    git merge --no-edit $cmtnr && git branch -D local-changes || return 99
                 fi
                 ;;
             *)
