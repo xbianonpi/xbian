@@ -328,6 +328,9 @@ do_deb()
     sync
     do_run $SHELL $XBIANROOT/gen.package
     rm -f "$dir"/*.deb
+
+    do_hooks post-deb.d
+
     mv *.deb "$dir"
     [ ! -d $(pwd)/build/$config_platform_branch/working ] || touch $(pwd)/build/$config_platform_branch/working/.force.aptonly
 }
