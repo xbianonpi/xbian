@@ -44,7 +44,7 @@ do_img()
     mkdir -p "$dir/working"
     cd "$dir/working"
 
-    touch $IMGNAME
+    rm -fr $IMGNAME; sync; touch $IMGNAME
     #convert size to byte size
     config_img_size=$(echo $config_img_size | sed "s%G% \*1024M%;s%M% \*1024K%;s%K% \*1024%;" | bc)
 
@@ -217,6 +217,10 @@ clean_tmp()
 clean_all()
 {
     set +e
+
+    for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '$5 ~ /btrfs/ {print $3}' 2>/dev/null); do
+        mountpoint -q $d && btrfs fi sync $d >/dev/null 2>&1
+    done
 
     umfail=1
     while [ $umfail -eq 1 ]; do

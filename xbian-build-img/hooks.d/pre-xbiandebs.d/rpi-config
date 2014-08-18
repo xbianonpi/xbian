@@ -1,5 +1,11 @@
 
-[ $config_platform = rpi ] || return 0
+case $config_platform in
+    rpi*)
+        cp ../../../extra-files/config.txt ./rootfs/boot/config.txt
+        ;;
+    *)
+        ;;
+esac
 
-cp ../../../extra-files/config.txt ./rootfs/boot/config.txt
+
 

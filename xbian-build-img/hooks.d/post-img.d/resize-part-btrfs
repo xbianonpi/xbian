@@ -2,11 +2,25 @@
 
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 mount -t btrfs /dev/mapper/${loopd}p2 ./rootfs
-btrfs fi resize $config_img_size ./rootfs
+btrfs fi sync ./rootfs
+dmesg -C
 
-newpartsize=$((config_img_size/512+20))
-df -h | grep /working/
+while btrfs fi resize -50M ./rootfs >/dev/null 2>&1; do
+    while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
+    btrfs fi sync ./rootfs >/dev/null 2>&1
+    dmesg -C
+done
+
+btrfs fi resize +10M ./rootfs >/dev/null
+while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
+
+btrfs dev scan >/dev/null 2>&1
+df -h ./rootfs
+btrfs fi df ./rootfs
 umount ./rootfs; sync
+
+newpartsize=$(dmesg | grep -i "new size" | grep "/dev/mapper/${loopd}p2\|/dev/dm" | tail -1 | awk '{print $NF}')
+newpartsize=$((newpartsize/512+64))
 kpartx -dv $IMGNAME
 echo ",$newpartsize,,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
 

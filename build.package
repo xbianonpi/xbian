@@ -97,7 +97,7 @@ do_patch()
     [ ! -d ./patches ] && return 0
     cd ./patches
 
-    for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null; find -L "./$dir" -iname \*.patch -type f 2>/dev/null; } | sort); do
+    for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null | sort; find -L "./$dir" -iname \*.patch -type f 2>/dev/null | sort; }); do
         (
         cd ../build/$dir/working
         [ $use_silent = yes ] || echo "checking $p"
@@ -116,16 +116,6 @@ do_patch()
         (
         cd extra-files/$dir
         find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
-
-        ### add new files into git tracked files
-        case "$config_source_type" in
-            git)
-                files="$(find ./ -type f -print0 | grep -v '\.config')"
-                [ -z "$files" ] || find ./ -type f -print0 | grep -v '\.config'| ( cd ../../$1/working; xargs -0 git add )
-                ;;
-            *)
-                ;;
-        esac
         )
     fi
 }

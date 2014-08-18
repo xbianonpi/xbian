@@ -1,4 +1,19 @@
+. /run/$IMGNAME.loopd
 
-touch ./rootfs/dev/mmcblk0p2
+
+mkdir -p ./rootfs/dev/mapper
+mount -o bind /dev/mapper ./rootfs/dev/mapper
+
+mkdir -p ./rootfs/tmp/dev.real
+mount -o bind /dev ./rootfs/tmp/dev.real
+
+rm -f ./rootfs/dev/${loopd}
+
+chroot ./rootfs sh -c "for dm in \$(ls /tmp/dev.real/dm*); do ln -s \$dm /dev/\$(basename \$dm); done"
 chroot ./rootfs ln -s /dev/mmcblk0p2 /dev/root
+chroot ./rootfs sh -c "cp -a \$(readlink -f /dev/mapper/${loopd}p2) /dev/mmcblk0p2"
+chroot ./rootfs cp -a /tmp/dev.real/${loopd} /dev/${loopd}
+chroot ./rootfs cp -a /tmp/dev.real/${loopd} /dev/mmcblk0
 
+touch ./rootfs/dev/fuse
+touch ./rootfs/run/noreboot

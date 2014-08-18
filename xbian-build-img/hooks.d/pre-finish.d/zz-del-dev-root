@@ -1,0 +1,7 @@
+
+unset loopd || :
+
+umount ./rootfs/dev/mapper
+umount ./rootfs/tmp/dev.real
+rmdir ./rootfs/dev/mapper ./rootfs/tmp/dev.real
+rm -fr ./rootfs/dev/*

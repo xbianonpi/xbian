@@ -1,5 +1,0 @@
-
-
-[ ! -e ./rootfs/etc/uboot-env/SPL ] || cp -v ./rootfs/etc/uboot-env/SPL ./
-[ ! -e ./rootfs/etc/uboot-env/u-boot.img ] || cp -v ./rootfs/etc/uboot-env/u-boot.img ./
-

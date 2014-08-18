@@ -1,0 +1,3 @@
+
+printf "#!/bin/sh\nbasename \$(ls /lib/modules | tail -1) 2>/dev/null\n" > ./rootfs/usr/local/bin/uname
+chmod +x ./rootfs/usr/local/bin/uname

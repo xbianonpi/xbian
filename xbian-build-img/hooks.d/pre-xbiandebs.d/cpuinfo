@@ -2,6 +2,8 @@
 
 mountpoint -q ./rootfs/proc && umount ./rootfs/proc || :
 
+echo fuse > ./rootfs/proc/modules
+
 case $config_platform in
     rpi*)
         AR=RPI

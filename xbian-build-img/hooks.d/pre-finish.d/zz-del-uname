@@ -1,0 +1,5 @@
+
+rm -f ./rootfs/usr/local/bin/uname
+rm -f ./rootfs/proc/cpuinfo
+rm -f ./rootfs/proc/modules
+rm -f ./rootfs/usr/local/bin/udhcp*
