@@ -1,0 +1,10 @@
+
+
+case $config_platform_branch in
+    imx6-solidrun)
+        chroot ./rootfs update-rc.d ssh enable
+        ;;
+    *)
+        ;;
+esac
+
