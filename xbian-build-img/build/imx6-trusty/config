@@ -1,0 +1,12 @@
+config_distro_name=trusty
+config_distro_url=http://ports.ubuntu.com/ubuntu-ports
+config_distro_arch=armhf
+config_fstype_root=ext4
+config_fsoptions_root=-o data=writeback,noatime
+config_img_size=1600M
+config_fstype_boot=ext2
+config_xbian_deb=ntp isc-common-client net-tools xserver-xorg-video-imx-viv ubuntu-desktop unity-control-center indicator-datetime systemd-services systemd-shim libsystemd-daemon0=204-5ubuntu20 libpam-systemd=204-5ubuntu20 openssh-server openssh-client nfs-common linux-image-3.10.51-armmp firmware-imx libimx xbian-package-initramfs-tools  libfslvpuwrap xorg
+config_allow_staging_devel=yes
+config_allow_staging=yes
+
+config_include_deb=locales,wget,upstart,lsb-release,nano,less,ca-certificates,apt-utils,python-tz,busybox-static,sudo

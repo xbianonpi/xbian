@@ -1,7 +1,8 @@
 
 
 case $config_platform_branch in
-    imx6-solidrun)
+    imx6-solidrun|imx6-trusty)
+        chroot ./rootfs update-rc.d ssh defaults
         chroot ./rootfs update-rc.d ssh enable
         ;;
     *)

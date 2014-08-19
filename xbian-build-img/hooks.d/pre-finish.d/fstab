@@ -1,7 +1,8 @@
 case $config_platform_branch in
-    imx6-solidrun)
+    imx6-solidrun|imx6-trusty)
         echo "/dev/mmcblk0p1      /boot         ext2          defaults,rw,auto          0       0"  >> ./rootfs/etc/fstab
         ;;
     *)
         ;;
 esac
+

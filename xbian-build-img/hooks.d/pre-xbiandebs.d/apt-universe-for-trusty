@@ -1,0 +1,11 @@
+
+case $config_platform_branch in
+    imx6-trusty)
+        sed -i 's/trusty main/trusty main universe/g' ./rootfs/etc/apt/sources.list
+        ;;
+    *)
+        ;;
+esac
+
+
+
