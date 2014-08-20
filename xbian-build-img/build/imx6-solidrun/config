@@ -8,7 +8,7 @@ config_fstype_root=ext4
 config_fsoptions_root=-o noatime
 config_img_size=1100M
 config_fstype_boot=ext2
-config_xbian_deb=ifupdown openssh-server openssh-client bluez task-xfce-desktop xserver-xorg xserver-xorg-core libcairo2 systemd-sysv linux-image-3.10.51-armmp xbian-package-initramfs-tools firmware-imx libimx libfslvpuwrap xserver-xorg-video-imx-viv policykit-1 nfs-common ntp rpcbind libbluetooth3 iceweasel xdm console-setup
+config_xbian_deb=ifupdown openssh-server openssh-client bluez task-xfce-desktop xserver-xorg xserver-xorg-core libcairo2 systemd-sysv linux-image-3.10.51-armmp xbian-package-initramfs-tools firmware-imx libimx libfslvpuwrap xserver-xorg-video-imx-viv policykit-1 nfs-common ntp rpcbind libbluetooth3 iceweasel xdm console-setup libgl1-mesa-dri
 config_allow_staging_devel=yes
 config_allow_staging=yes
 
