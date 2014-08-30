@@ -5,9 +5,6 @@ config_fstype_root=btrfs
 config_fsoptions_root=-o compress=lzo,noatime,ssd
 config_img_size=600M
 config_fstype_boot=ext2
-config_xbian_deb=systemd-shim=6-4 libpam-systemd=204-14 systemd=204-14 libsystemd-daemon0=204-14 libsystemd-journal0=204-14 libsystemd-login0=204-14 linux-image-3.10.51-armmp xbian-package-cec-6q xbian-package-config-shell xbian-package-config-xbmc firmware-imx libimx xbian-package-initramfs-tools libfslvpuwrap xbian-package-libtag xbian-package-lirc xbian-package-samba xbian-package-shairplay-6q xbian-package-splash xbian-package-upstart-xbmc-bridge xbian-package-usbmount xbian-package-vnc-server xbian-package-xbianhome xbian-package-xbmc-6q xbian-package-xbmc-scripts xserver-xorg-video-imx-viv xbian-package-zram-swap xbian-update bluez
+config_xbian_deb=linux-image-3.10.51-armmp xbian-package-cec-6q xbian-package-config-shell xbian-package-config-xbmc firmware-imx libimx xbian-package-initramfs-tools libfslvpuwrap xbian-package-libtag xbian-package-lirc xbian-package-samba xbian-package-shairplay-6q xbian-package-splash xbian-package-upstart-xbmc-bridge xbian-package-usbmount xbian-package-vnc-server xbian-package-xbianhome xbian-package-xbmc-6q xbian-package-xbmc-scripts xserver-xorg-video-imx-viv xbian-package-zram-swap xbian-update bluez
 config_allow_staging_devel=yes
 config_allow_staging=yes
-
-config_include_deb=locales,wget,upstart,lsb-release,nano,inetutils-tools,less,ca-certificates,apt-utils,python-tz
-#config_include_deb=policykit-1
