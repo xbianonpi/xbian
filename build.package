@@ -144,7 +144,7 @@ do_clone()
 
     initialrun=no
     cd "$dir"
-    if [ ! -d "./working" ]; then
+    if [ ! -d "./working/.git" ]; then
         initialrun=yes
         case "$config_source_type" in
             git)
