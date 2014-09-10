@@ -84,6 +84,8 @@ do_make()
     else
         ( rexp ../env; do_run $config_build_env $config_build_make; )
     fi
+
+    do_hooks post-build.d
 }
 
 do_patch()
