@@ -4,6 +4,7 @@ cp ../../../extra-files/hosts ./rootfs/etc/hosts
 case $config_platform_branch in
     imx6-solidrun|imx6-trusty)
         echo "imx6" > ./rootfs/etc/hostname
+        echo "127.0.0.1			imx6" >> ./rootfs/etc/hosts
         ;;
     *)
         echo "xbian.private" > ./rootfs/etc/hostname

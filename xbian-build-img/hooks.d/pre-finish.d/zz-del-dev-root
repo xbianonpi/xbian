@@ -1,7 +1,8 @@
 
 unset loopd || :
 
-umount ./rootfs/dev/mapper
-umount ./rootfs/tmp/dev.real
+umount -l ./rootfs/tmp/dev.real
+umount -l ./rootfs/dev/mapper
+sleep 2
 rmdir ./rootfs/dev/mapper ./rootfs/tmp/dev.real
 rm -fr ./rootfs/dev/*
