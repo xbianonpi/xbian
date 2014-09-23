@@ -1,0 +1,4 @@
+chroot ./rootfs apt-get install -y locales
+chroot ./rootfs localedef -i en_US -c -f UTF-8 -A /etc/locale.alias en_US.UTF-8
+chroot ./rootfs rm /etc/timezone || true
+chroot ./rootfs ln -s /usr/share/zoneinfo/Greenwich /etc/timezone
