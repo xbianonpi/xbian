@@ -25,6 +25,31 @@ rm_size() {
     rm -f ./size.txt
 }
 
+make_shlibs() {
+    echo "... creating lib dependencies (this may take a while)"
+    rmsrc=no
+    if ! grep -q 'Source\:' DEBIAN/control; then 
+        rmsrc=yes
+        sed -i 's/Package:/Source:\nPackage:/' DEBIAN/control
+    fi
+
+    echo 5.0 > DEBIAN/compat
+    mkdir -p DEBIAN/$package
+    find -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
+    ln -s DEBIAN debian
+    $config_build_env fakeroot dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>/dev/null
+
+    rm -fr DEBIAN/$package/DEBIAN
+    mv DEBIAN/$package/* ./
+    rm -fr DEBIAN/$package 
+    rm -f debian DEBIAN/compat
+    [ $rmsrc = yes ] && sed -i '/Source:/d' DEBIAN/control
+
+    depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
+    sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
+    rm -f DEBIAN/*.log DEBIAN/$package.substvars
+}
+
 tot=0
 
 package=$(cat ./content/DEBIAN/control | grep Package | awk '{print $2}')
@@ -34,6 +59,8 @@ version=$(cat ./content/DEBIAN/control | grep Version | awk '{print $2}')
 rm_size
 
 cd content
+grep -q '${shlibs:Depends}' DEBIAN/control && [ -n "$config_build_env" ] && make_shlibs
+
 tot=$(du -sb | awk '{print $1}'); tot=$((tot/1024)); echo $tot > ../size.txt
 printf "Installed-Size: %u\n" $(cat ../size.txt) >> ./DEBIAN/control
 find ./ -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P\0' | sort -z| xargs --null md5sum > DEBIAN/md5sums
