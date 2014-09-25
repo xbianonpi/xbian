@@ -2,7 +2,7 @@ config_distro_name=wheezy
 config_distro_url=http://mirrordirector.raspbian.org/raspbian/
 config_distro_arch=armhf
 config_fstype_root=btrfs
-config_fsoptions_root=-o compress=lzo,noatime
+config_fsoptions_root=-o compress=lz4,noatime
 config_img_size=530M
 config_fstype_boot=vfat
 config_xbian_deb=net-tools firmware-ralink firmware-realtek firmware-atheros isc-dhcp-client policykit-1 xbian-package-kernel xbian-package-cec xbian-package-config-shell xbian-package-config-xbmc xbian-package-firmware=1.6.0 xbian-package-initramfs-tools xbian-package-libtag xbian-package-lirc xbian-package-samba xbian-package-shairplay xbian-package-splash xbian-package-upstart-xbmc-bridge xbian-package-usbmount xbian-package-vnc-server xbian-package-xbianhome xbian-package-xbmc xbian-package-xbmc-scripts xbian-package-zram-swap xbian-update
