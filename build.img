@@ -154,7 +154,7 @@ do_debootstrap()
 
     chroot ./rootfs debootstrap/debootstrap --second-stage
 
-    echo "deb $config_distro_url $config_distro_name main non-free" >> ./rootfs/etc/apt/sources.list
+    echo "deb $config_distro_url $config_distro_name main" >> ./rootfs/etc/apt/sources.list
 }
 
 do_xbian()
