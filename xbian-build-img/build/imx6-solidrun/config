@@ -2,7 +2,7 @@ config_img_name=jessie
 config_rootfs_label=solidrun
 
 config_distro_name=jessie
-config_distro_url=http://ftp.de.debian.org/debian
+config_distro_url=http://http.debian.net/debian
 config_distro_arch=armhf
 config_fstype_root=ext4
 config_fsoptions_root=-o noatime
