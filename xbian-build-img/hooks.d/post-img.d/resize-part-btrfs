@@ -24,7 +24,7 @@ newpartsize=$((newpartsize/512+64))
 kpartx -dv $IMGNAME
 echo ",$newpartsize,,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
 
-newimgsize=$((newpartsize+71680))
+newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
 mv $IMGNAME.new $IMGNAME; sync
 

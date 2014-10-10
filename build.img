@@ -55,7 +55,8 @@ do_img()
     parted -s $IMGNAME mklabel msdos
 
     echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-    echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+#    echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    echo "141312,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
 
     case $config_fstype_boot in
