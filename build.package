@@ -273,6 +273,7 @@ do_deb()
         commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
         echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
+    [ -d ./content ] || mkdir ./content
 
     rm -f ./content/DEBIAN/*
 
@@ -475,4 +476,4 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
 done
 
 do_readconfig "$(pwd)/build"
-[ $config_source_type = raw ] && do_deb "$(pwd)/build"
+[ $config_source_type = raw ] && { rm -fr "$(pwd)/content/*" && do_deb "$(pwd)/build"; }
