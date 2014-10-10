@@ -8,6 +8,8 @@ case $config_platform_branch in
         ;;
     *)
         echo "xbian.private" > ./rootfs/etc/hostname
+        sed -i 's%<devicename.*>.*</devicename>%<devicename>xbian</devicename>%' /home/xbian/.xbmc/userdata/guisettings.xml ||:
+        sed -i 's%<setting id="device_name" value=".*" />%<setting id="device_name" value="xbian" />%' /home/xbian/.xbmc/userdata/peripheral_data/* ||:
         ;;
 esac
 
