@@ -48,6 +48,8 @@ make_shlibs() {
     depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
     sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
     rm -f DEBIAN/*.log DEBIAN/$package.substvars
+
+    echo "... lib dependencies done"
 }
 
 tot=0

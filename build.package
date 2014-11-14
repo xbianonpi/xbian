@@ -436,7 +436,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
     touch $XBIANPKGDIR/build.~lock
-    trap 'rm -f $XBIANPKGDIR/build.~lock' EXIT
+    trap 'rm -f $XBIANPKGDIR/build.~lock; sync;' EXIT
 
     case $opt_action in
         wipe)
