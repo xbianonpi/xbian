@@ -41,7 +41,7 @@ rexp()
                 export "$line"
                 ;;
             *)
-                eval "export $vaname=\"\$$vaname $vavalue\""
+                eval export $vaname=\"\$$vaname $vavalue\"
                 ;;
         esac
     done < "$1"

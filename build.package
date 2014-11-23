@@ -227,7 +227,7 @@ then rerun process."
                 ### merge our previous changes from tmp branch
                 if [ -n "$cmtnr" ]; then
                     echo "Will merge your changes back..."
-                    git fetch --unshallow || : >/dev/null 2>&1
+                    git fetch --unshallow  >/dev/null 2>&1 || :
                     git merge --no-edit $cmtnr && git branch -D local-changes || return 99
                 fi
                 ;;
