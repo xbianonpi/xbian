@@ -10,6 +10,6 @@ config_distro_variant=minbase
 config_include_deb=locales,wget,libautodie-perl,lsb-release,nano,inetutils-tools,less,ca-certificates,python-tz,apt-utils,psmisc
 config_exclude_deb=busybox,sysvinit,debconf-i18n,systemd-sysv
 
-config_xbianrepository=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.3_armhf.deb
+config_xbianrepository=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.6_armhf.deb
 
 config_wrapper=build.img
