@@ -146,6 +146,8 @@ do_hooks()
             [ -n "$2" ] && rexp $XBIANPKGDIR/$2
             echo "### Running hook $f from $1 ###"
             do_run sh +e $XBIANPKGDIR/hooks.d/$1/$f
+            [ $? -ne 0 ] && res=FAILED || res=OK
+            echo "### Running hook $f from $1 finished $res ###"
             )
         done
     fi
