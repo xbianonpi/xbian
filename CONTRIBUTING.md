@@ -21,5 +21,7 @@ Make sure to specify which platform, _and the specific model_, you're experienci
 
 ## Don't ignore us
 Developers might ask further questions regarding the issue you're experiencing, or may want you to test a specific version of a package which may fix your problem.
+
 Please remember that this an open source project and people are doing their best **in their free time**.
+
 Also, there's no point in reporting a bug if you don't actually care to get it fixed.
