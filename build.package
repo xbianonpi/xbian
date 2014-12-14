@@ -138,6 +138,8 @@ do_clean()
 
 do_clone()
 {
+    do_hooks pre-clone.d
+
     dir="$1"
 
     if [ "$config_source_keep" != yes ]; then
