@@ -55,8 +55,8 @@ do_readconfig() {
     else
         echo "config_deb_version=" > "$dir/config_pkgver"
     fi
-    [ -e build/config ] && rexp build/config
-    [ -e "$dir/config" ] && rexp "$dir/config"
+    [ -e build/config ] && rexp build/config || :
+    [ -e "$dir/config" ] && rexp "$dir/config" || :
 }
 
 print_log() # level, message, ...

@@ -272,7 +272,7 @@ do_deb()
     [ -d "$dir/working" ] && \
     (
         cd "$dir/working"
-        commit_src=$(git log -n1 --format=oneline | awk '{print $1}')
+        commit_src=$(git log -n1 --format=oneline --remotes= | awk '{print $1}')
         echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
     [ -d ./content ] || mkdir ./content
@@ -316,7 +316,7 @@ do_deb()
     rm -f $DESTDIR/src_repo_hash_HEAD
 
     [ -n "$commit_src" ] && commit_src="at commit src $commit_src,"
-    echo "  ($commit_src commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline | awk '{print $1}'))" >> content/DEBIAN/control
+    echo "  ($commit_src commit xbian repo $( [ -e .git ] && git log -n1 --format=oneline --remotes= | awk '{print $1}'))" >> content/DEBIAN/control
 
     eval export $config_build_env 2>/dev/null && eval export $config_build_env
     find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko -o -iname \*.a \) -print0 | eval $config_build_env xargs -0 ${CROSS_COMPILE}strip --strip-unneeded -p 2>/dev/null || :
