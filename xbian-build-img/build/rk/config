@@ -1,0 +1,10 @@
+config_distro_name=jessie
+config_distro_url=http://http.debian.net/debian
+config_distro_arch=armhf
+config_fstype_root=ext4
+config_fsoptions_root=
+config_img_size=1200M
+config_offset_root=262144
+config_xbian_deb=policykit-1 upstart firmware-ralink firmware-realtek firmware-atheros bluez
+config_allow_staging_devel=no
+config_allow_staging=yes

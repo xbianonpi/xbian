@@ -54,29 +54,41 @@ do_img()
     modprobe -q loop
     parted -s $IMGNAME mklabel msdos
 
-    echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-#    echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-    echo "141312,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    if [ -z $config_offset_root ]; then
+        config_offset_root=141312;
+    fi
+    if [ -z $config_fstype_boot ]; then
+#        echo "71680,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+        echo "$config_offset_root,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    else
+        echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+#        echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+        echo "$config_offset_root,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+    fi
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
-
-    case $config_fstype_boot in
-        ext2)
-            mkfs.ext2 -L xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
-            ;;
-        vfat|fat|msdos)
-            mkfs.msdos -F 16 -n xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
-            ;;
-    esac
+    if [ -z $config_fstype_boot ]; then
+        rootpart=1
+    else
+        rootpart=2
+    	case $config_fstype_boot in
+	    ext2)
+                mkfs.ext2 -L xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+                ;;
+            vfat|fat|msdos)
+                mkfs.msdos -F 16 -n xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+                ;;
+        esac
+    fi
 
     case $config_fstype_root in
         ext4|ext2|ext3)
-            mkfs.$config_fstype_root -L $config_rootfs_label /dev/mapper/${loopd}p2 2>/dev/null 1>&2
+            mkfs.$config_fstype_root -L $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>/dev/null 1>&2
             ;;
         btrfs)
             if mkfs.btrfs --help 2>&1 | grep -q '\-O'; then
-                mkfs.btrfs -O skinny-metadata -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>&1
+                mkfs.btrfs -O skinny-metadata -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>&1
             else
-                mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p2 2>&1
+                mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>&1
             fi
             ;;
     esac
@@ -104,7 +116,12 @@ do_debootstrap()
     fi
 
     mkdir -p ./rootfs
-    mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p2 ./rootfs
+    if [ -z $config_fstype_boot ]; then
+        rootpart=1
+    else
+        rootpart=2
+    fi
+    mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
     case $config_fstype_root in
         btrfs)
             btrfs sub create ./rootfs/root
@@ -119,17 +136,17 @@ do_debootstrap()
     esac
     umount ./rootfs
 
-    [ -z "$config_fsoptions_root" ] && config_fsoptions_root='-o '
+    [ -z "$config_fsoptions_root" ] && [ "$config_fstype_root" = btrfs ] && config_fsoptions_root='-o '
 
     case $config_fstype_root in
         btrfs)
-            mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p2 ./rootfs
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p${rootpart} ./rootfs
             mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
-            mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p2 ./rootfs/home
-            mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p2 ./rootfs/lib/modules
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/home
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/lib/modules
             ;;
         *)
-            mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p2 ./rootfs
+            mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
             ;;
     esac
 
@@ -138,7 +155,9 @@ do_debootstrap()
     find ./rootfs/tmp -iname \*.deb | xargs rm -f
 
     mkdir -p ./rootfs/boot
-    mount -t $config_fstype_boot /dev/mapper/${loopd}p1 ./rootfs/boot
+    if ! [ -z $config_fstype_boot ]; then
+        mount -t $config_fstype_boot /dev/mapper/${loopd}p1 ./rootfs/boot
+    fi
 
     [ -n "$config_distro_variant" ] && export config_distro_variant="--variant=$config_distro_variant"
     [ -n "$config_include_deb" ] && export config_include_deb="--include=$config_include_deb"
