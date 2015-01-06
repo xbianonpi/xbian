@@ -1,7 +1,7 @@
 config_img_name=xbian-image
 config_rootfs_label=xbian
 config_deb_base=binfmt-support debootstrap qemu-user-static schroot kpartx parted btrfs-tools dosfstools u-boot-tools coreutils
-config_img_compress=pixz
+config_img_compress=gzip -9
 
 ### --variant passed to debootstrap
 config_distro_variant=minbase
