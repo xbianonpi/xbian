@@ -187,7 +187,7 @@ do_xbian()
 
     chroot ./rootfs apt-get update
     chroot ./rootfs wget $config_xbianrepository
-    chroot ./rootfs dpkg -i $(basename $config_xbianrepository)
+    chroot ./rootfs dpkg -i --force-confdef --force-confnew $(basename $config_xbianrepository)
     chroot ./rootfs rm -f $(basename $config_xbianrepository)
 
     chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list; cp ./rootfs/etc/apt/sources.list.d/xbian.list /tmp/xbian.list
