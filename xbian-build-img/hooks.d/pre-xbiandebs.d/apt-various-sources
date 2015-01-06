@@ -6,7 +6,7 @@ case $config_platform_branch in
     rpi*)
         sed -i 's/wheezy main/wheezy main non-free/g' ./rootfs/etc/apt/sources.list
         ;;
-    imx6*)
+    imx6*|rk)
         sed -i 's/jessie main/jessie main non-free/g' ./rootfs/etc/apt/sources.list
         ;;
     *)
