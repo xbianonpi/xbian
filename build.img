@@ -289,6 +289,9 @@ do_finish()
     chroot "$dir/working/rootfs" /usr/local/sbin/all-clean >/dev/null 2>&1 || :
 
     cd "$dir/working"
+
+    rm rootfs/usr/bin/qemu-arm-static
+
     df -h | grep /working/
 
     clean_all
