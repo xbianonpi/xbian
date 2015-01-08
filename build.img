@@ -39,7 +39,7 @@ do_img()
 {
     dir=$(readlink -f "$1")
     do_wipe "$dir"
-    if grep -q centos /etc/os-release; then
+    if [ -f /etc/centos-release ]; then
         yum -y install $config_yum_base 2>/dev/null 1>/dev/null
     else
         apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base 1>/dev/null
@@ -169,7 +169,7 @@ do_debootstrap()
 
     debootstrap --download-only $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
 
-    if grep -q centos /etc/os-release; then
+    if [ -f /etc/centos-release ]; then
         [ -d qemu ] && rm -rf qemu
         mkdir qemu; cd qemu
         wget -q http://security.ubuntu.com/ubuntu/pool/universe/q/qemu/qemu-user-static_2.0.0+dfsg-2ubuntu1.9_amd64.deb
