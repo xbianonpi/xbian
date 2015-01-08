@@ -35,17 +35,39 @@ do_wipe()
 
 do_prepare()
 {
+    ### CentOS doesn't have /sbin and /bin in $PATH by default
     echo "Writing loader file /etc/profile.d/xbiangit.sh"
     cat<<EOF>/etc/profile.d/xbiangit.sh
 export xbiangit=$(pwd)/run.me
 export XBIANROOT=$(pwd)
 
-export PATH=/usr/lib/ccache:\$PATH
+export PATH=/usr/lib/ccache:/sbin:/bin:\$PATH
 export MAKEFLAGS="-j\$(grep -c processor /proc/cpuinfo )"
 EOF
 
     echo "Installing $config_deb_base"
-    apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_deb_base 1>/dev/null
+    if grep -q centos /etc/os-release; then
+        export $(cat /etc/os-release | grep VERSION_ID | sed -e 's/"//g');
+        if [ $VERSION_ID -eq 5 ]; then
+            wget -q http://dl.fedoraproject.org/pub/epel/5/x86_64/epel-release-5-4.noarch.rpm
+            rpm --quiet -Uvh epel-release-5*.rpm
+            rm epel-release-5*.rpm
+        elif [ $VERSION_ID -eq 6 ]; then
+            wget -q http://dl.fedoraproject.org/pub/epel/6/x86_64/epel-release-6-8.noarch.rpm
+            rpm --quiet -Uvh epel-release-6*.rpm
+            rm epel-release-6*.rpm
+        elif [ $VERSION_ID -eq 7 ]; then
+            wget -q http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+            rpm --quiet -Uvh epel-release-7*.rpm
+            rm epel-release-7*.rpm
+        else
+           echo "Cannot install EPEL repository in CentOS"
+	   exit 500;
+        fi
+        yum install -y $config_yum_base 2>/dev/null 1>/dev/null
+    else
+        apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_deb_base 1>/dev/null
+    fi
     echo "Installing done..."
 }
 

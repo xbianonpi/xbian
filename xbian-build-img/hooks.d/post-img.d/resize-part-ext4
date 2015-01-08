@@ -1,4 +1,8 @@
-[ "$config_fstype_root" = ext4 ] || return 0
+### [ "$config_fstype_root" = ext4 ] || return 0
+###
+### This way wasn't accepted by CentOS
+
+if [ "$config_fstype_root" = ext4 ]; then
 
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 e2fsck -fy /dev/mapper/${loopd}p2
@@ -19,3 +23,4 @@ newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
 mv $IMGNAME.new $IMGNAME; sync
 
+fi

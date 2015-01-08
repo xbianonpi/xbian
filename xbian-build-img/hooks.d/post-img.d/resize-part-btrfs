@@ -1,4 +1,8 @@
-[ "$config_fstype_root" = btrfs ] || return 0
+### [ "$config_fstype_root" = btrfs ] || return 0
+###
+### This way wasn't accepted by CentOS
+
+if [ "$config_fstype_root" = btrfs ]; then
 
 rootpart=2
 if [ -z $config_fstype_boot ]; then
@@ -33,3 +37,4 @@ newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
 mv $IMGNAME.new $IMGNAME; sync
 
+fi

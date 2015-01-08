@@ -39,7 +39,11 @@ do_img()
 {
     dir=$(readlink -f "$1")
     do_wipe "$dir"
-    apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base 1>/dev/null
+    if grep -q centos /etc/os-release; then
+        yum -y install $config_yum_base 2>/dev/null 1>/dev/null
+    else
+        apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base 1>/dev/null
+    fi
 
     mkdir -p "$dir/working"
     cd "$dir/working"
@@ -164,13 +168,33 @@ do_debootstrap()
     [ -n "$config_exclude_deb" ] && export config_exclude_deb="--exclude=$config_exclude_deb"
 
     debootstrap --download-only $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
-    mkdir -p ./rootfs/usr/bin; cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+
+    if grep -q centos /etc/os-release; then
+        [ -d qemu ] && rm -rf qemu
+        mkdir qemu; cd qemu
+        wget -q http://security.ubuntu.com/ubuntu/pool/universe/q/qemu/qemu-user-static_2.0.0+dfsg-2ubuntu1.9_amd64.deb
+        ar -x *.deb
+        tar -xf data.tar.*
+        mkdir -p ../rootfs/usr/bin; cp usr/bin/qemu-arm-static ../rootfs/usr/bin/qemu-arm-static
+        cd ..
+        rm -rf qemu
+    else
+        mkdir -p ./rootfs/usr/bin; cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+    fi
 
     #### hack to remove packages which raspbian considers essential and doesn't want them remove even when excluded and 
     #### another package with it's function is going to be installed (eg sysvinit vs. upstart)
     sed -i 's/sysvinit //' ./rootfs/debootstrap/required; sed -i '/sysvinit /d' ./rootfs/debootstrap/debpaths
     sed -i 's/sysvinit-core//' ./rootfs/debootstrap/required; sed -i '/sysvinit-core/d' ./rootfs/debootstrap/debpaths
     sed -i 's/systemd-sysv//' ./rootfs/debootstrap/required; sed -i '/systemd-sysv/d' ./rootfs/debootstrap/debpaths
+
+    #### On CentOS the binfmt_misc entry for qemu-arm points
+    #### to /usr/bin/qemu-arm instead of /usr/bin/qemu-arm-static
+    #### This works cross-platform
+    [ -f /proc/sys/fs/binfmt_misc/qemu-arm ] && echo "-1" >/proc/sys/fs/binfmt_misc/qemu-arm 2>/dev/null 1>/dev/null || :
+    if ! grep -q /usr/bin/qemu-arm-static /proc/sys/fs/binfmt_misc/qemu-arm; then
+        echo ':qemu-arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || : 
+    fi
 
     chroot ./rootfs debootstrap/debootstrap --second-stage
 
@@ -249,7 +273,7 @@ clean_all()
     while [ $umfail -eq 1 ]; do
         umfail=0
         for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '{print $3}' | sort -r); do
-            if mountpoint -q $d; then
+            if [ $(mountpoint -q $d; echo $?) -eq 0 ] && [ "$d" != "/" ]; then
                 umount $d || umfail=1
             fi
         done
