@@ -55,7 +55,9 @@ do_img()
     [ $config_fstype_root = btrfs ] && [ $config_img_size -lt 1200000000 ] && config_img_size=1200000000
     truncate -s $config_img_size $IMGNAME
 
-    modprobe -q loop
+    if ! [ -f /etc/centos-release ]; then
+        modprobe -q loop
+    fi
     parted -s $IMGNAME mklabel msdos
 
     if [ -z $config_offset_root ]; then
@@ -69,6 +71,9 @@ do_img()
 #        echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
         echo "$config_offset_root,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     fi
+
+    [ -d /run ] || mkdir /run
+
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
     if [ -z $config_fstype_boot ]; then
         rootpart=1
