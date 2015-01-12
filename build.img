@@ -60,10 +60,10 @@ do_img()
     fi
     parted -s $IMGNAME mklabel msdos
 
-    if [ -z $config_offset_root ]; then
+    if [ -z "$config_offset_root" ]; then
         config_offset_root=141312;
     fi
-    if [ -z $config_fstype_boot ]; then
+    if [ -z "$config_fstype_boot" ]; then
 #        echo "71680,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
         echo "$config_offset_root,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     else
@@ -129,11 +129,9 @@ do_debootstrap()
     fi
 
     mkdir -p ./rootfs
-    if [ -z $config_fstype_boot ]; then
-        rootpart=1
-    else
-        rootpart=2
-    fi
+    rootpart=2
+    [ -n "$config_fstype_boot" ] || rootpart=1
+
     mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
     case $config_fstype_root in
         btrfs)
