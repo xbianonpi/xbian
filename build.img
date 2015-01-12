@@ -75,19 +75,21 @@ do_img()
     [ -d /run ] || mkdir /run
 
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}; echo loopd=$loopd > /run/$IMGNAME.loopd
-    if [ -z $config_fstype_boot ]; then
-        rootpart=1
-    else
-        rootpart=2
-    	case $config_fstype_boot in
-	    ext2)
-                mkfs.ext2 -L xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
-                ;;
-            vfat|fat|msdos)
-                mkfs.msdos -F 16 -n xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
-                ;;
-        esac
-    fi
+    #### success creating loop device, export already here to make $loopd variable visible for cleanup trap functions ####
+    export loopd
+
+    rootpart=2
+    case $config_fstype_boot in
+        ext2)
+            mkfs.ext2 -L xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+            ;;
+        vfat|fat|msdos)
+            mkfs.msdos -F 16 -n xbianboot /dev/mapper/${loopd}p1 2>/dev/null 1>&2
+            ;;
+        '')
+            rootpart=1
+            ;;
+    esac
 
     case $config_fstype_root in
         ext4|ext2|ext3)
@@ -99,6 +101,8 @@ do_img()
             else
                 mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>&1
             fi
+            ;;
+        *)
             ;;
     esac
 
@@ -269,6 +273,7 @@ clean_tmp()
 clean_all()
 {
     set +e
+    [ -n "$loopd" ] || loopd=noexistent
 
     for d in $(mount | grep "mapper/$loopd\|$dir/working/rootfs" | awk '$5 ~ /btrfs/ {print $3}' 2>/dev/null); do
         mountpoint -q $d && btrfs fi sync $d >/dev/null 2>&1
