@@ -416,7 +416,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export config_platform_branch=$opt_arch
     export config_branch=${opt_arch##*-}
 
-    export IMGNAME=$config_img_name-$(basename $dir)-$(date +%Y%m%d).img
+    export IMGNAME=${config_img_name}_$(date +%Y.%m.%d)_$(basename $dir).img
 
     touch $XBIANPKGDIR/build.~lock
     trap "clean_tmp; clean_all; clean_loopd; rm -f $XBIANPKGDIR/build.~lock" EXIT TERM

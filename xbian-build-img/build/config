@@ -1,4 +1,4 @@
-config_img_name=xbian-image
+config_img_name=XBian
 config_rootfs_label=xbian
 config_deb_base=binfmt-support debootstrap qemu-user-static schroot kpartx parted btrfs-tools dosfstools u-boot-tools coreutils
 config_yum_base=debootstrap schroot kpartx parted btrfs-progs dosfstools cbootimage coreutils bc
