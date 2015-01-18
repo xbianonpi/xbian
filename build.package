@@ -202,36 +202,15 @@ do_clone()
                 ep=''; cmtnr=''
                 ### commit local changes into new tmp branch
                 if git status | grep -q 'Changes not staged\|Untracked files'; then
-                    echo "Saving local changes to 'local-changes'"
-                    if [ -z "$(git branch --list local-changes)" ]; then
-                        git add .; sync
-                        git checkout -b local-changes
-                        git commit --allow-empty-message --no-edit || :
-                        cmtnr=$(git log -1 local-changes | grep -m1 .| awk '{print $2}')
-                    else
-                        echo "Branch local-changes already exists, probably it's merge into \
-origin/$config_source_branch didn't succeed. fix the situation and remove local-changes, \
-then rerun process."
-                        echo "ERROR " && return 99
-                    fi
+                        git add --all .; sync
+                        git commit -m "$(echo auto commit on action clone at - $(date))" --no-edit || :
                 fi
-                echo "Back to $config_source_branch"
-                git checkout $config_source_branch
 
                 ### reset main branch and pull changes from upstream
                 #grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
                 #git pull $ep origin $config_source_branch 2>&1 || :
                 echo "Trying pull from remote..."
-                do_run git clean -df -e *.o -e *.P -e .force*
-                do_run git reset --hard
                 do_run git pull origin $config_source_branch
-
-                ### merge our previous changes from tmp branch
-                if [ -n "$cmtnr" ]; then
-                    echo "Will merge your changes back..."
-                    git fetch --unshallow  >/dev/null 2>&1 || :
-                    git merge --no-edit $cmtnr && git branch -D local-changes || return 99
-                fi
                 ;;
             *)
                 ;;
