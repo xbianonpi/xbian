@@ -7,7 +7,7 @@ case $config_platform_branch in
         echo "127.0.0.1			imx6" >> ./rootfs/etc/hosts
         ;;
     *)
-        echo "xbian.private" > ./rootfs/etc/hostname
+        echo "xbian" > ./rootfs/etc/hostname
 				for n in {kodi,xbmc}; do
 				    if [ -d "/home/xbian/.$n" ]; then
 				        sed -i 's%<devicename.*>.*</devicename>%<devicename>xbian</devicename>%' /home/xbian/.$n/userdata/guisettings.xml ||:
