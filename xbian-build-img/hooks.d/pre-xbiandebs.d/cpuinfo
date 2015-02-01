@@ -17,6 +17,10 @@ case $config_platform in
         AR=rk
         echo "hardware RK30board" > ./rootfs/proc/cpuinfo
 	;;
+    bpi*)
+        AR=BPI
+        echo "hardware sun7i" > ./rootfs/proc/cpuinfo
+	;;	
     *)
         ;;
 esac
