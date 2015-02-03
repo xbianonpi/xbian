@@ -1,5 +1,11 @@
 
 case $config_platform in
+    rpi2*)
+        cp ./rootfs/boot/cmdline.new ./rootfs/boot/cmdline.txt
+
+        cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+        sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
+        ;;
     rpi*)
         cp ./rootfs/boot/cmdline.new ./rootfs/boot/cmdline.txt
 

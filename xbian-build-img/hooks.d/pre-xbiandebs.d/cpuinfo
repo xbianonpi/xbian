@@ -5,6 +5,10 @@ mountpoint -q ./rootfs/proc && umount ./rootfs/proc || :
 echo fuse > ./rootfs/proc/modules
 
 case $config_platform in
+    rpi2*)
+        AR=RPI
+        echo "hardware BCM2836" > ./rootfs/proc/cpuinfo
+        ;;
     rpi*)
         AR=RPI
         echo "hardware BCM2708" > ./rootfs/proc/cpuinfo
@@ -20,7 +24,7 @@ case $config_platform in
     bpi*)
         AR=BPI
         echo "hardware sun7i" > ./rootfs/proc/cpuinfo
-	;;	
+	;;
     *)
         ;;
 esac
