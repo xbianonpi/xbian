@@ -111,6 +111,7 @@ do_other()
 {
     dir=$(readlink -f "$1")
     printf "#!/bin/sh\n\necho $config_xbian_arch\n" > $dir/usr/local/bin/xbian-arch; chmod +x $dir/usr/local/bin/xbian-arch
+    schroot --directory / -p -c $config_platform -- apt-get update
     schroot --directory /tmp -p -c $config_platform -- apt-get install -y --force-yes lsb-release
     schroot --directory /tmp -p -c $config_platform -- wget http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.6-1_armhf.deb
     schroot --directory /tmp -p -c $config_platform -- dpkg -i xbian-package-repo_1.0.6-1_armhf.deb
