@@ -98,8 +98,10 @@ do_prep()
     debootstrap --no-check-gpg  --include=eatmydata --arch $config_distro_arch --foreign $config_distro_name $dir $config_distro_url
     mkdir -p $dir/usr/bin; cp /usr/bin/qemu-arm-static $dir/usr/bin
 
-    eatmydata=$(grep eatmydata $config_root_prefix/$config_platform/debootstrap/debpaths | awk '{print $2}')
-    dpkg -x $config_root_prefix/$config_platform/$eatmydata $config_root_prefix/$config_platform
+    eatmydata=($(grep eatmydata $config_root_prefix/$config_platform/debootstrap/debpaths | awk '{print $2}'))
+    for pkg in ${eatmydata[@]}; do
+        dpkg -x $config_root_prefix/$config_platform/$pkg $config_root_prefix/$config_platform
+    done
     schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
 
     echo "deb $config_distro_url $config_distro_name main" >> $dir/etc/apt/sources.list
