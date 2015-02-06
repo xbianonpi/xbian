@@ -135,6 +135,7 @@ do_hooks()
 {
 
     [ -z "$XBIANPKGDIR" -o -z "$XBIANARCHDIR" -o -z "$1" ] && exit 1
+    [ -d "$XBIANARCHDIR/working" ] || return 0
 
     olddir=$(pwd)
 

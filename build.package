@@ -125,7 +125,7 @@ do_patch()
 do_wipe()
 {
     dir="$1"
-    do_run rm -r "$dir/working"
+    do_run rm -fr "$dir/working"
 }
 
 do_clean()
@@ -147,7 +147,7 @@ do_clone()
     fi
 
     initialrun=no
-    cd "$dir"
+    cd "$dir" || { mkdir -p "$dir" && cd "$dir"; }
     if [ ! -d "./working/.git" ]; then
         initialrun=yes
         case "$config_source_type" in
