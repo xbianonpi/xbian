@@ -1,4 +1,5 @@
 initramfs initramfs.gz  0x1000000
+gpu_mem_1024=256
 gpu_mem_512=144
 gpu_mem_256=100
 initial_turbo=3
