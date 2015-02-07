@@ -5,6 +5,3 @@ initial_turbo=3
 hdmi_ignore_cec_init=1
 disable_overscan=1
 disable_splash=1
-arm_freq=840
-core_freq=320
-sdram_freq=400
