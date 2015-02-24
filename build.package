@@ -159,7 +159,7 @@ do_clone()
             tar)
                 do_run wget $config_source_addr -O $(basename $config_source_addr)
                 mkdir -p working
-                tar -zxf $(basename $config_source_addr) -C ./working --strip-components 1
+                tar -xf $(basename $config_source_addr) -C ./working --strip-components 1
                 cd ./working
                 cd ..
                 ;;
