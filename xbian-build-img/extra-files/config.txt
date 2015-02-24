@@ -1,10 +1,8 @@
 initramfs initramfs.gz  0x1000000
+gpu_mem_1024=256
 gpu_mem_512=144
 gpu_mem_256=100
 initial_turbo=3
 hdmi_ignore_cec_init=1
 disable_overscan=1
 disable_splash=1
-arm_freq=840
-core_freq=320
-sdram_freq=400
