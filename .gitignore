@@ -7,3 +7,5 @@ build.*
 ._*
 build-root-dirs/*
 *.img.xz
+build.preloader
+build.upload-apt.sh
