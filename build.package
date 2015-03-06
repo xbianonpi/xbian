@@ -196,7 +196,7 @@ do_clone()
     fi
 
     if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
-        touch .force.nopatch
+        [ "$config_source_reset" = yes ] || touch .force.nopatch
         case "$config_source_type" in
             git)
                 ep=''; cmtnr=''
