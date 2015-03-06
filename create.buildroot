@@ -105,6 +105,8 @@ do_prep()
     schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
 
     echo "deb $config_distro_url $config_distro_name main" >> $dir/etc/apt/sources.list
+
+    schroot --directory / -p -c $config_platform -- apt-get clean
 }
 
 do_other()
@@ -119,6 +121,8 @@ do_other()
     schroot --directory / -p -c $config_platform -- apt-get update
 
     schroot --directory / -p -c $config_platform -- apt-get install -y --force-yes  -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+
+    schroot --directory / -p -c $config_platform -- apt-get clean
 }
 
 
