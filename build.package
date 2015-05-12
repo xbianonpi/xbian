@@ -243,6 +243,7 @@ do_install()
         ( rexp ../env; do_run $config_build_env $config_build_make $t; )
     done
 
+    do_hooks post-install.d
 }
 
 do_deb()
