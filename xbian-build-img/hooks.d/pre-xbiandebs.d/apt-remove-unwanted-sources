@@ -1,0 +1,15 @@
+
+case $config_platform_branch in
+    imx6-trusty)
+        ;;
+    rpi*|bpi*)
+        sed -i '/debian/d' ./rootfs/etc/apt/sources.list
+        ;;
+    imx6*|rk)
+        ;;
+    *)
+        ;;
+esac
+
+
+
