@@ -270,6 +270,22 @@ do_deb()
 
     export MAKEFLAGS=-j1
 
+    if [ "$config_deb_pkgcreatenative" = yes ]; then
+        [ -d "$dir/working" ] || return 0
+        cd "$dir/working"
+        rm -f ../*.deb
+        rexp ../env; do_hooks '##withbuildenv##' pre-deb.d
+
+        for h in dh_auto_install dh_installdirs dh_strip dh_buildinfo dh_installinfo dh_installdocs \
+                 dh_installcatalogs dh_link dh_gencontrol dh_shlibdeps dh_install dh_installman dh_fixperms dh_builddeb; do
+
+            do_run $config_build_env fakeroot $h \
+                          $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
+                          $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
+        done
+        return 0
+    fi
+
     if [ -d hooks.d/pre-deb.d ]; then
         for f in $(ls hooks.d/pre-deb.d); do
             ( cd "./content"; do_run sh ../hooks.d/pre-deb.d/$f; )
