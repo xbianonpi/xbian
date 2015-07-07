@@ -277,8 +277,8 @@ do_deb()
         rexp ../env; do_hooks '##withbuildenv##' pre-deb.d
 
         for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
-                 dh_link dh_gencontrol dh_shlibdeps dh_makeshlibs dh_install dh_installman dh_fixperms \
-                 dh_installdeb; do
+                 dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
+                 dh_installdeb dh_shlibdeps dh_gencontrol ; do
 
             do_run $config_build_env fakeroot $h \
                           $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
