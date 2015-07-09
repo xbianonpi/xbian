@@ -1,0 +1,5 @@
+
+cat ./rootfs/etc/apt/sources.list.d/xbian.list
+[ ! -e ./rootfs/etc/ld.so.preload.chroot ] && return 0
+
+mv ./rootfs/etc/ld.so.preload.chroot ./rootfs/etc/ld.so.preload
