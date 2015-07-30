@@ -245,6 +245,7 @@ do_install()
         ( rexp ../env; do_run $config_build_env $config_build_make $t; )
     done
 
+    unset DESTDIR
     do_hooks post-install.d
 }
 
@@ -444,8 +445,9 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     export config_branch=${opt_arch##*-}
     [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
-    touch $XBIANPKGDIR/build.~lock
-    trap 'rm -f $XBIANPKGDIR/build.~lock; sync;' EXIT
+    trap 'kill_gitbuilder; sync;' EXIT
+
+    git_preloader
 
     case $opt_action in
         wipe)

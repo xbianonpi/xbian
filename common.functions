@@ -19,12 +19,21 @@
 ##
 ##
 
-trap "echo 'ERROR RETURNED from command'; exit 1" TERM
+GIT_WRAPPER_DIR=/tmp/.gitbuilder
+GIT_WRAPPER=$GIT_WRAPPER_DIR.git
+
+kill_gitbuilder()
+{
+    rm -fr $GIT_WRAPPER_DIR/.pid
+}
+
+trap "echo 'ERROR RETURNED from command'; kill_gitbuilder; exit 1" TERM
 
 do_exit()
 {
     [ -n "$2" ] && result=$2
     echo "$1 error $result"
+    kill_gitbuilder
     exit $result
 }
 
@@ -131,9 +140,74 @@ do_run() # [argv]
     return $RC
 }
 
+check_git()
+{
+    if [ -n "$config_build_env" ]; then
+        gitpath=$(eval $config_build_env which git) || :
+        gitlink=$(eval $config_build_env readlink -f $gitpath 2>/dev/null) || :
+        if [ "$gitlink" != "$GIT_WRAPPER" ]; then
+            [ -n "$gitpath" ] || gitpath='/usr/bin/git'
+            eval $config_build_env cp -f $gitpath $gitpath.old > /dev/null 2>&1 || :
+            eval $config_build_env rm -f $gitpath; eval $config_build_env ln -s $GIT_WRAPPER $gitpath || :
+            gitlink=$(eval $config_build_env readlink -f $gitpath 2>/dev/null) || :
+            if [ "$gitlink" != "$GIT_WRAPPER" ]; then
+                echo "!!!git inside buildroot must be symlink to $GIT_WRAPPER !!!"
+                kill_gitbuilder
+                exit 1
+            fi
+        fi
+    fi
+}
+
+git_preloader()
+{
+    LOCKDIR=dir.LOCK
+    mkdir -p $GIT_WRAPPER_DIR
+
+    while ! mkdir $GIT_WRAPPER_DIR/.pid 2>/dev/null; do
+        echo "another process exists $(cat $GIT_WRAPPER_DIR/.pid/pid)"
+        echo "wait until process finishes or remove stale $GIT_WRAPPER_DIR/.pid"
+        sleep 5
+    done
+
+    while sleep 2; do
+        clones=$(find $GIT_WRAPPER_DIR -iname tmp.\*.new 2>/dev/null)
+        for f in $clones; do
+            set --
+            while read a; do
+                set -- "$@" "$a"
+            done < $f
+            rm -f $f
+            cd $1; shift
+            git "$@" > $f.out 2>&1 || :
+            mv $f.out $f.done || :
+        done
+        test -d $GIT_WRAPPER_DIR/$LOCKDIR && rmdir $GIT_WRAPPER_DIR/$LOCKDIR || :
+        [ -d $GIT_WRAPPER_DIR/.pid ] || break
+    done & >/dev/null 2>&1 pid=$!
+    echo $pid > $GIT_WRAPPER_DIR/.pid/pid
+
+    echo "#!/bin/sh
+        f=\$(mktemp -u --suffix=.new --tmpdir=$GIT_WRAPPER_DIR)
+        while ! mkdir $GIT_WRAPPER_DIR/$LOCKDIR 2> /dev/null ; do sleep 0.3; done
+        printf '%s\n' \$(pwd) > \$f
+        printf '%s\n' \"\${@}\" >> \$f
+        while ! test -e \$f.done; do
+            sleep 1
+        done
+        sleep 1
+        cat \$f.done
+        rm -f \$f.done
+    " > $GIT_WRAPPER
+    chmod +x $GIT_WRAPPER
+
+    check_git
+
+    return 0
+}
+
 do_hooks()
 {
-
     [ -z "$XBIANPKGDIR" -o -z "$XBIANARCHDIR" -o -z "$1" ] && exit 1
     [ -d "$XBIANARCHDIR/working" ] || return 0
 
