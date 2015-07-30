@@ -142,7 +142,7 @@ do_run() # [argv]
 
 check_git()
 {
-    if [ -n "$config_build_env" ]; then
+    if [ -n "$config_build_env" ] && echo $config_build_env | grep -q ^schroot; then
         gitpath=$(eval $config_build_env which git) || :
         gitlink=$(eval $config_build_env readlink -f $gitpath 2>/dev/null) || :
         if [ "$gitlink" != "$GIT_WRAPPER" ]; then
