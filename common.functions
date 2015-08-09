@@ -21,10 +21,12 @@
 
 GIT_WRAPPER_DIR=/tmp/.gitbuilder
 GIT_WRAPPER=$GIT_WRAPPER_DIR.git
+LOCKDIR=dir.LOCK
 
 kill_gitbuilder()
 {
     rm -fr $GIT_WRAPPER_DIR/.pid
+    rm -fr $GIT_WRAPPER_DIR/$LOCKDIR
 }
 
 trap "echo 'ERROR RETURNED from command'; kill_gitbuilder; exit 1" TERM
@@ -161,7 +163,9 @@ check_git()
 
 git_preloader()
 {
-    LOCKDIR=dir.LOCK
+    [ -z "$SCHROOT_CHROOT_NAME" ] || return 0
+    check_git
+
     mkdir -p $GIT_WRAPPER_DIR
 
     while ! mkdir $GIT_WRAPPER_DIR/.pid 2>/dev/null; do
@@ -171,6 +175,7 @@ git_preloader()
     done
 
     while sleep 2; do
+
         clones=$(find $GIT_WRAPPER_DIR -iname tmp.\*.new 2>/dev/null)
         for f in $clones; do
             set --
@@ -178,8 +183,10 @@ git_preloader()
                 set -- "$@" "$a"
             done < $f
             rm -f $f
-            cd $1; shift
-            git "$@" > $f.out 2>&1 || :
+            (
+                cd $1; shift
+                /usr/bin/git "$@" > $f.out 2>&1 || :
+            )
             mv $f.out $f.done || :
         done
         test -d $GIT_WRAPPER_DIR/$LOCKDIR && rmdir $GIT_WRAPPER_DIR/$LOCKDIR || :
@@ -200,8 +207,6 @@ git_preloader()
         rm -f \$f.done
     " > $GIT_WRAPPER
     chmod +x $GIT_WRAPPER
-
-    check_git
 
     return 0
 }
