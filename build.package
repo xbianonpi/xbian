@@ -136,6 +136,8 @@ do_clean()
     cd "$dir/working"
 
     do_run $config_build_env $config_build_make clean
+
+    do_hooks post-clean.d
 }
 
 do_clone()
