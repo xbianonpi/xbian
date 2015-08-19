@@ -11,6 +11,6 @@ config_distro_variant=minbase
 config_include_deb=man-db,locales,wget,libautodie-perl,nano,inetutils-tools,less,ca-certificates,apt-utils,psmisc
 config_exclude_deb=busybox,sysvinit,debconf-i18n,systemd-sysv
 
-config_xbianrepository=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_20150709-0_armhf.deb
+config_xbianrepository=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_20150723-2_armhf.deb
 
 config_wrapper=build.img 
