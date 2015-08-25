@@ -34,10 +34,12 @@ make_shlibs() {
     fi
 
     echo 5.0 > DEBIAN/compat
+    sarch=$(grep 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}')
+    [ -n "$sarch" ] || sarch=$(dpkg-architecture |grep TARGET_ARCH= | awk -F'=' '{print $2}')
     mkdir -p DEBIAN/$package
     find -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
     ln -s DEBIAN debian
-    $config_build_env fakeroot dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
+    $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
 
     rm -fr DEBIAN/$package/DEBIAN
     mv DEBIAN/$package/* ./

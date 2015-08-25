@@ -65,7 +65,7 @@ do_prep()
             runconfigure=1
         fi
 
-        [ $runconfigure -eq 1 ] && ( rexp ../env; do_run $config_build_env $config_source_configure; ) || :
+        [ $runconfigure -eq 1 ] && ( rexp ../env && do_run $config_build_env $config_source_configure; )
     fi
 
     do_hooks post-configure.d
