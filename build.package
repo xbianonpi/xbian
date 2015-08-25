@@ -136,6 +136,8 @@ do_clean()
     cd "$dir/working"
 
     do_run $config_build_env $config_build_make clean
+
+    do_hooks post-clean.d
 }
 
 do_clone()
@@ -476,9 +478,12 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             ;;
         ''|build)
             dr=$(pwd)
+            [ -e "./.autowipe" ] && . "./.autowipe"
+            [ "$config_wipe_before" = "yes" ] && do_wipe "$dir" fullrun
             for act in do_clone do_patch do_prep do_make do_install do_deb; do
                 ( $act "$dir" fullrun )
             done 
+            [ "$config_wipe_after" = "yes" ] && do_wipe "$dir" fullrun
             ;;
     esac
 
