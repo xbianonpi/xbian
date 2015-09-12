@@ -451,7 +451,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
 
     git_preloader
 
-    case $opt_action in
+    opt_action=$(echo $opt_action | tr ',' ' ')
+
+    for a in $opt_action; do
+      case $a in
         wipe)
             ( do_wipe "$dir" )
             ;;
@@ -485,7 +488,8 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             done 
             [ "$config_wipe_after" = "yes" ] && do_wipe "$dir" fullrun
             ;;
-    esac
+      esac
+    done
 
     printf "\n-------------------------------\nFINISHED OK\n-------------------------------\n"
     exit 0
