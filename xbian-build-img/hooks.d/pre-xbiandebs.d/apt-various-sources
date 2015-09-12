@@ -3,10 +3,8 @@ case $config_platform_branch in
     imx6-trusty)
         sed -i 's/trusty main/trusty main universe/g' ./rootfs/etc/apt/sources.list
         ;;
-    rpi|bpi*)
+    imx6*|rk|bpi*|rpi*)
         sed -i 's/wheezy main/wheezy main non-free/g' ./rootfs/etc/apt/sources.list
-        ;;
-    imx6*|rk|rpi2)
         sed -i 's/jessie main/jessie main non-free/g' ./rootfs/etc/apt/sources.list
         ;;
     *)
