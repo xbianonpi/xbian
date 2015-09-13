@@ -20,57 +20,90 @@
 ##
 
 rm_size() {
-    cat ./content/DEBIAN/control | grep -v "Installed-Size:" > ./content/DEBIAN/control.new
-    mv ./content/DEBIAN/control.new ./content/DEBIAN/control
+    [ -n "$1" ] && dir="$1" || dir=content
+    cat ./$dir/DEBIAN/control | grep -v "Installed-Size:" > ./$dir/DEBIAN/control.new
+    mv ./$dir/DEBIAN/control.new ./$dir/DEBIAN/control
     rm -f ./size.txt
 }
 
 make_shlibs() {
     echo "... creating lib dependencies (this may take a while)"
-    rmsrc=no
-    if ! grep -q 'Source\:' DEBIAN/control; then 
-        rmsrc=yes
-        sed -i 's/Package:/Source:\nPackage:/' DEBIAN/control
-    fi
-
-    echo 5.0 > DEBIAN/compat
-    sarch=$(grep 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}')
-    [ -n "$sarch" ] || sarch=$(dpkg-architecture |grep TARGET_ARCH= | awk -F'=' '{print $2}')
-    mkdir -p DEBIAN/$package
-    find -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
-    ln -s DEBIAN debian
     $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
-
-    rm -fr DEBIAN/$package/DEBIAN
-    mv DEBIAN/$package/* ./
-    rm -fr DEBIAN/$package 
-    rm -f debian DEBIAN/compat
-    [ $rmsrc = yes ] && sed -i '/Source:/d' DEBIAN/control
-
-    depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
-    sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
-    rm -f DEBIAN/*.log DEBIAN/$package.substvars
-
     echo "... lib dependencies done"
+}
+
+make_dbg() {
+    echo "... creating dbg package (this may take a while)"
+    $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_strip --dbg-package=$package
+    mkdir -p ../content-dbg; rm -fr ../content-dbg/*; mkdir ../content-dbg/DEBIAN
+    mv DEBIAN/control-dbg ../content-dbg/DEBIAN/control
+    mv DEBIAN/$package-dbg/* ../content-dbg && rmdir DEBIAN/$package-dbg
+    echo "... dbg package done"
+}
+
+prepare_debhelper_tree() {
+    case "$1" in
+        start)
+            rmsrc=no
+            echo 4.0 > DEBIAN/compat
+
+            if ! grep -q 'Source\:' DEBIAN/{control,control-dbg}; then 
+                rmsrc=yes
+                sed -i 's/Package:/Source:\nPackage:/' DEBIAN/{control,control-dbg}
+            fi
+
+            sarch=$(grep -m1 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}')
+            [ -n "$sarch" ] || sarch=$(dpkg-architecture |grep TARGET_ARCH= | awk -F'=' '{print $2}')
+
+            mkdir -p DEBIAN/$package
+            find -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
+            ln -s DEBIAN debian
+            ;;
+        end)
+            rm -fr DEBIAN/$package/DEBIAN
+            mv DEBIAN/$package/* ./
+            rm -fr DEBIAN/$package 
+            rm -f debian DEBIAN/compat
+            [ $rmsrc = yes ] && sed -i '/Source:/d' DEBIAN/control
+
+            depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
+            sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
+            rm -f DEBIAN/*.log DEBIAN/$package.substvars
+            ;;
+        *)
+            ;;
+    esac
 }
 
 tot=0
 
-package=$(cat ./content/DEBIAN/control | grep Package | awk '{print $2}')
-version=$(cat ./content/DEBIAN/control | grep Version | awk '{print $2}')
+package=$(grep -m1 Package ./content/DEBIAN/control | awk '{print $2}')
+version=$(grep -m1 Version ./content/DEBIAN/control | awk '{print $2}')
 
 # calculate size dynamically. remove first any entry, then add the actual 
 rm_size
 
 cd content
-grep -q '${shlibs:Depends}' DEBIAN/control && [ -n "$config_build_env" ] && make_shlibs
+grep -q '${shlibs:Depends}' DEBIAN/control || test -e DEBIAN/control-dbg && \
+    {
+        prepare_debhelper_tree start
+        grep -q '${shlibs:Depends}' DEBIAN/control && [ -n "$config_build_env" ] && make_shlibs
+        test -e DEBIAN/control-dbg && [ -n "$config_build_env" ] && make_dbg
+        prepare_debhelper_tree end
+    }
 
-tot=$(du -sb | awk '{print $1}'); tot=$((tot/1024)); echo $tot > ../size.txt
-printf "Installed-Size: %u\n" $(cat ../size.txt) >> ./DEBIAN/control
-find ./ -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P\0' | sort -z| xargs --null md5sum > DEBIAN/md5sums
 cd ..
-fakeroot dpkg-deb -Zxz -b ./content "${package}""${version}".deb
-# remove the size again, because on different filesystems du will return different size
-rm_size
+for c in content content-dbg; do 
+  package=$(grep -m1 Package ./$c/DEBIAN/control | awk '{print $2}')
+  (
+    cd $c
+    tot=$(du -sb | awk '{print $1}'); tot=$((tot/1024)); echo $tot > ../size.txt
+    printf "Installed-Size: %u\n" $(cat ../size.txt) >> ./DEBIAN/control
+    find ./ -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P\0' | sort -z| xargs --null md5sum > DEBIAN/md5sums 
+  )
+  fakeroot dpkg-deb -Zxz -b ./$c "${package}""${version}".deb
+  # remove the size again, because on different filesystems du will return different size
+  rm_size $c
+done
 
 sync
