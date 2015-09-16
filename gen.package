@@ -94,6 +94,7 @@ grep -q '${shlibs:Depends}' DEBIAN/control || test -e DEBIAN/control-dbg && \
 
 cd ..
 for c in content content-dbg; do 
+  [ -d $c ] || continue
   package=$(grep -m1 Package ./$c/DEBIAN/control | awk '{print $2}')
   (
     cd $c
