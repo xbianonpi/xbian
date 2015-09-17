@@ -1,0 +1,2 @@
+mkdir -p ./rootfs/etc/default
+cp ../../../extra-files/console-setup ./rootfs/etc/default
