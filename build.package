@@ -452,7 +452,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
 
     git_preloader
 
-    opt_action=$(echo $opt_action | tr ',' ' ')
+    [ "$opt_action" = '' ] && opt_action="build" || opt_action=$(echo $opt_action | tr ',' ' ')
 
     for a in $opt_action; do
       case $a in
