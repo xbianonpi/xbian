@@ -19,6 +19,8 @@
 ##
 ##
 
+echo ${WORKSPACE} | grep -q ^${JENKINS_HOME} || unset WORKSPACE
+
 GIT_WRAPPER_DIR=/tmp/.gitbuilder
 GIT_WRAPPER=$GIT_WRAPPER_DIR.git
 LOCKDIR=dir.LOCK
