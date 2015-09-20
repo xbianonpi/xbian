@@ -1,0 +1,16 @@
+#!/bin/bash -x
+
+
+search()
+{ (
+  cd "$1"
+  find ./build -maxdepth 2 -mindepth 2 -name config -exec grep ^config_source_branch=$PARAM {} + \
+    | xargs -L1 -I{} sh -c 'echo $(basename $(dirname {}))'
+) }
+
+## $1 = project, package to build
+## $2 = source_branch to search  for
+
+export PARAM=$2
+
+search "$1"
