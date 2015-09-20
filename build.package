@@ -127,6 +127,7 @@ do_patch()
 do_wipe()
 {
     dir="$1"
+    [ -h "$dir" -a -e "$dir" ] && return 0
     do_run rm -fr "$dir/working"
 }
 
@@ -148,6 +149,15 @@ do_clone()
 
     if [ "$config_source_keep" != yes ]; then
         do_wipe "$dir"
+    fi
+
+    if [ -n "$WORKSPACE" ]; then
+        do_wipe "$dir"
+        ln -s "$WORKSPACE" "$dir"
+        do_run git clean -dfx
+        do_run git reset --hard
+        do_hooks post-clone.d
+        return 0
     fi
 
     initialrun=no
