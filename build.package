@@ -428,6 +428,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
                 use_silent=yes
                 shift
                 ;;
+            (-o|--sources)
+                source_branch="$2"
+                shift 2
+                ;;
             *)
                 shift 1
                 ;;
@@ -435,7 +439,8 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     done
 
     [ "$use_debug" = no ] || set -x
-    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && continue
+    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && \
+        ! grep -q "^config_source_branch=$source_branch" && continue
 
     echo "-------------------------------"
     echo "PROCESSING $(basename $dir)";
