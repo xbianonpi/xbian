@@ -153,10 +153,14 @@ do_clone()
 
     if [ -n "$WORKSPACE" ]; then
         do_wipe "$dir"
-        ln -s "$WORKSPACE" "$dir"
-        do_run git clean -dfx
-        do_run git reset --hard
-        do_hooks post-clone.d
+        ln -s "$WORKSPACE" "$dir/working"
+        cd "$dir/working"
+        (
+          cd "$dir/working"
+          do_run git clean -dfx
+          do_run git reset --hard
+          do_hooks post-clone.d
+        )
         return 0
     fi
 
