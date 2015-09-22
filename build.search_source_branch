@@ -1,5 +1,4 @@
-#!/bin/bash -x
-
+#!/bin/bash
 
 search()
 { (
