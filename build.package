@@ -154,7 +154,6 @@ do_clone()
     if [ -n "$WORKSPACE" ]; then
         do_wipe "$dir"
         ln -s "$WORKSPACE" "$dir/working"
-        cd "$dir/working"
         (
           cd "$dir/working"
           do_run git clean -dfx
@@ -453,8 +452,13 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     done
 
     [ "$use_debug" = no ] || set -x
-    [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ] && \
-        ! grep -q "^config_source_branch=$source_branch" && continue
+    if [ -n "$opt_arch" -a "$opt_arch" != $(basename "$dir") ]; then
+        if [ -n "$source_branch" ]; then
+            ! grep -q "^config_source_branch=$source_branch" "$dir/config" && continue
+        fi
+
+        continue
+    fi
 
     echo "-------------------------------"
     echo "PROCESSING $(basename $dir)";
