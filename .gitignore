@@ -2,10 +2,9 @@
 md5sums
 content/*
 build/*/working/*
-build.*
 *.img
+*.log
 ._*
 build-root-dirs/*
 *.img.xz
-build.preloader
 build.upload-apt.sh
