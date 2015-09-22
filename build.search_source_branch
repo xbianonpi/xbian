@@ -7,6 +7,9 @@ search()
     | xargs -L1 -I{} sh -c 'echo $(basename $(dirname {}))'
 ) }
 
+[ -n "$1" ] || exit 0
+[ -n "$2" ] || exit 0
+
 ## $1 = project, package to build
 ## $2 = source_branch to search  for
 

@@ -20,6 +20,7 @@ set -e
 ##
 ##
 
+export SHELL=/bin/bash
 [ -n "$SHELL" ] || export SHELL=sh
 
 if [ "$1" = prepare ]; then
@@ -49,7 +50,7 @@ if [ -e ./build/config ]; then
     config_wrapper=$(grep config_wrapper ./build/config | awk -F'=' '{print $2}')
     [ -e build.log ] && mv build.log build.old.log
     echo "started at $(date)" > build.log
-    $SHELL -eE $XBIANROOT/$config_wrapper $* | tee -a build.log
+    $SHELL -eE $XBIANROOT/$config_wrapper $* 2>&1 | tee -a build.log
 else
     echo "it doesn't seem we are inside build configuration directory!"
     exit 100

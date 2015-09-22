@@ -19,6 +19,13 @@
 ##
 ##
 
+if [ -e $XBIANROOT/common.functions ]; then
+    . $XBIANROOT/common.functions
+else
+    echo "Wrong setup. Open folder containing xbianonpi/xbian clone and rerun \"./run.me prepare\""
+    exit 500
+fi
+
 rm_size() {
     [ -n "$1" ] && dir="$1" || dir=content
     cat ./$dir/DEBIAN/control | grep -v "Installed-Size:" > ./$dir/DEBIAN/control.new
