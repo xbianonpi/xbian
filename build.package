@@ -127,7 +127,9 @@ do_patch()
 do_wipe()
 {
     dir="$1"
-    [ -h "$dir" -a -e "$dir" ] && return 0
+    if mountpoint -q "$dir/working"; then
+        sudo /bin/umount "$dir/working" && return 0 || return 1
+    fi
     do_run rm -fr "$dir/working"
 }
 
@@ -152,8 +154,8 @@ do_clone()
     fi
 
     if [ -n "$WORKSPACE" ]; then
-        do_wipe "$dir"
-        ln -s "$WORKSPACE" "$dir/working"
+        do_wipe "$dir" && mkdir -p "$dir/working"
+        sudo /bin/mount -o bind "$WORKSPACE" "$dir/working"
         (
           cd "$dir/working"
           do_run git clean -dfx
@@ -471,7 +473,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     export config_branch=${opt_arch##*-}
     [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
-    trap 'kill_gitbuilder; sync;' EXIT
+    trap "kill_gitbuilder; sync; mountpoint -q $dir/working && sudo /bin/umount $dir/working; " EXIT TERM
 
     git_preloader
 

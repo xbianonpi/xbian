@@ -8,3 +8,7 @@ build/*/working/*
 build-root-dirs/*
 *.img.xz
 build.upload-apt.sh
+xbian-package-*/
+xbian-update
+upload.sh
+build-root-dirs
