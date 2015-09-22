@@ -19,7 +19,8 @@
 ##
 ##
 
-echo ${WORKSPACE} | grep -q ^${JENKINS_HOME} || unset WORKSPACE
+###### /var/jenkins is default home on Slave machines
+echo ${WORKSPACE} | grep -q '^${JENKINS_HOME}\|^/var/jenkins' || unset WORKSPACE
 
 GIT_WRAPPER_DIR=/tmp/.gitbuilder
 GIT_WRAPPER=$GIT_WRAPPER_DIR.git
