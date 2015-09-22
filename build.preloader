@@ -1,0 +1,39 @@
+#!/bin/bash
+set -x
+
+cd $XBIANROOT/$1;
+if [ -n "$2" ]; then
+    BRANCH="$2"
+fi
+
+if [ -n "$BRANCH" ]; then
+    export GIT_BRANCH=$BRANCH
+fi
+
+GIT_BRANCH=${GIT_BRANCH##*/}
+
+git fetch --all
+git merge origin/master
+
+grep -v ^# .autobuild | \
+while read B REPO ARCH; do
+        [ "$B" = "$GIT_BRANCH" -o ${GIT_BRANCH} = master ] || continue
+
+        if [ -d "build/$B" ]; then
+
+                $xbiangit --arch $B;
+
+        elif [ -e gen.package.sh ]; then
+
+                ./gen.package.sh
+
+        fi
+
+        find . -maxdepth 3 -name *.deb -exec mv "{}" /opt/debs/ \;
+        if [ $(ls -1 /opt/debs | wc -l) -gt 0 ]; then
+                /home/xbian/build.upload-apt.sh $REPO $ARCH | sudo sftp apt:/web/.upload
+#1>/dev/null
+                rm /opt/debs/*.deb || :;
+        fi
+done
+

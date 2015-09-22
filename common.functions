@@ -19,7 +19,8 @@
 ##
 ##
 
-echo ${WORKSPACE} | grep -q ^${JENKINS_HOME} || unset WORKSPACE
+###### /var/jenkins is default home on Slave machines
+echo ${WORKSPACE} | grep -q '^${JENKINS_HOME}\|^/var/jenkins' || unset WORKSPACE
 
 GIT_WRAPPER_DIR=/tmp/.gitbuilder
 GIT_WRAPPER=$GIT_WRAPPER_DIR.git
@@ -230,7 +231,7 @@ do_hooks()
             cd "$XBIANARCHDIR/working"
             [ -n "$2" ] && rexp $XBIANPKGDIR/$2
             echo "### Running hook $f from $1 ###"
-            do_run $preloader sh +e $XBIANPKGDIR/hooks.d/$1/$f
+            do_run $preloader $SHELL -e $XBIANPKGDIR/hooks.d/$1/$f
             [ $? -ne 0 ] && res=FAILED || res=OK
             echo "### Running hook $f from $1 finished $res ###"
             )
