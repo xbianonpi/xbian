@@ -63,7 +63,7 @@ prepare_debhelper_tree() {
             [ -n "$sarch" ] || sarch=$(dpkg-architecture |grep TARGET_ARCH= | awk -F'=' '{print $2}')
 
             mkdir -p DEBIAN/$package
-            find -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
+            find ./ -mindepth 1 -maxdepth 1 -print0 | grep -vz ./DEBIAN\* | xargs -0 mv -t DEBIAN/$package
             ln -s DEBIAN debian
             ;;
         end)
