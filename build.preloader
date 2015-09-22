@@ -31,9 +31,20 @@ while read B REPO ARCH; do
 
         find . -maxdepth 3 -name *.deb -exec mv "{}" /opt/debs/ \;
         if [ $(ls -1 /opt/debs | wc -l) -gt 0 ]; then
+
+                for lf in $(ls /opt/debs/*.deb); do
+
+                        fbase=${lf%-*.deb}
+                        ftoday="$fbase-$(date --date='today 00:00' +%s).deb"
+
+                        files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" |sudo sftp -q apt:/web/.upload |grep ^\.incoming)
+
+                        for rf in $files; do
+                                [[ "$rf" > ".incoming.$REPO/$ARCH/$ftoday" ]] && echo "rm -v $rf" | sudo sftp -q apt:/web/.upload
+                        done
+                done
+
                 /home/xbian/build.upload-apt.sh $REPO $ARCH | sudo sftp apt:/web/.upload
-#1>/dev/null
                 rm /opt/debs/*.deb || :;
         fi
 done
-
