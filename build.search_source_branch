@@ -12,6 +12,7 @@ search()
 ## $1 = project, package to build
 ## $2 = source_branch to search  for
 
-export PARAM=$2
+PARAM=$2
+[ -z "$PARAM" ] || export PARAM="$PARAM\$"
 
 search "$1"
