@@ -34,6 +34,8 @@ while read B REPO ARCH; do
 
                 for lf in $(ls /opt/debs/*.deb); do
 
+                        echo $lf | grep -q -E '*-[0-9]{10}\.deb' || continue
+
                         fbase=${lf%-*.deb}
                         ftoday="$fbase-$(date --date='today 00:00' +%s).deb"
 
