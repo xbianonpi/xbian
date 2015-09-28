@@ -188,7 +188,7 @@ git_preloader()
             done < $f
             rm -f $f
             (
-                cd $1; shift
+                [ -z "$1" ] || cd "$1"; shift
                 /usr/bin/git "$@" > $f.out 2>&1 || :
             )
             mv $f.out $f.done || :
