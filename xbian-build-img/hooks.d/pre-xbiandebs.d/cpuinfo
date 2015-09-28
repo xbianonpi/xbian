@@ -8,7 +8,7 @@ case $config_platform in
     rpi2*)
         AR=RPI
         echo "hardware BCM2709" > ./rootfs/proc/cpuinfo
-        sed -i 's/rpi-jessie/rpi2-jessie/g' ./rootfs/etc/apt/sources.list.d/xbian.list
+        [ -e ./rootfs/etc/apt/sources.list.d/xbian.list ] && sed -i 's/rpi-jessie/rpi2-jessie/g' ./rootfs/etc/apt/sources.list.d/xbian.list || :
         ;;
     rpi*)
         AR=RPI
