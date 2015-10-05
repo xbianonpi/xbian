@@ -20,7 +20,7 @@
 ##
 
 ###### /var/jenkins is default home on Slave machines
-echo ${WORKSPACE} | grep -q '^${JENKINS_HOME}\|^/var/jenkins' || unset WORKSPACE
+echo ${WORKSPACE} | grep -q '^${JENKINS_HOME}\|^/var/jenkins\|^/var/lib/jenkins' || unset WORKSPACE
 
 GIT_WRAPPER_DIR=/tmp/.gitbuilder
 GIT_WRAPPER=$GIT_WRAPPER_DIR.git
@@ -188,7 +188,7 @@ git_preloader()
             done < $f
             rm -f $f
             (
-                cd $1; shift
+                [ -z "$1" ] || cd "$1"; shift
                 /usr/bin/git "$@" > $f.out 2>&1 || :
             )
             mv $f.out $f.done || :
