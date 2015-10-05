@@ -288,20 +288,24 @@ do_deb()
 
     export MAKEFLAGS=-j1
 
-    if [ "$config_deb_pkgcreatenative" = yes ]; then
+    if [ "$config_deb_pkgcreatenative" = yes ] || [ "$config_deb_pkgcreatenative" = auto ]; then
         [ -d "$dir/working" ] || return 0
         cd "$dir/working"
         rm -f ../*.deb
         rexp ../env; do_hooks '##withbuildenv##' pre-deb.d
 
-        for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
-                 dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
-                 dh_installdeb dh_shlibdeps dh_gencontrol ; do
+        if [ "$config_deb_pkgcreatenative" = auto ] && [ -x debian/rules ]; then
+            do_run $config_build_env fakeroot debian/rules binary
+        else
+            for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
+                     dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
+                     dh_installdeb dh_shlibdeps dh_gencontrol ; do
 
-            do_run $config_build_env fakeroot $h \
-                          $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
-                          $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
-        done
+                do_run $config_build_env fakeroot $h \
+                              $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
+                              $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
+            done
+        fi
 
         ver=$(grep . -m1 debian/changelog | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
         vernew="$ver-$(date +%s)"
