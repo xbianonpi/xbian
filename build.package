@@ -120,6 +120,7 @@ do_patch()
         (
         cd extra-files/$dir
         find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
+        find ./ -type l -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
         )
     fi
 }
