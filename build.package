@@ -120,6 +120,7 @@ do_patch()
         (
         cd extra-files/$dir
         find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
+        find ./ -type l -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" || :
         )
     fi
 }
@@ -286,26 +287,38 @@ do_deb()
 
     export MAKEFLAGS=-j1
 
-    if [ "$config_deb_pkgcreatenative" = yes ]; then
+    if [ "$config_deb_pkgcreatenative" = yes ] || [ "$config_deb_pkgcreatenative" = auto ]; then
         [ -d "$dir/working" ] || return 0
         cd "$dir/working"
         rm -f ../*.deb
         rexp ../env; do_hooks '##withbuildenv##' pre-deb.d
 
-        for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
-                 dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
-                 dh_installdeb dh_shlibdeps dh_gencontrol ; do
+        if [ "$config_deb_pkgcreatenative" = auto ] && [ -x debian/rules ]; then
+            do_run $config_build_env fakeroot debian/rules binary
+            DATE=$(date +%s)
+            for cl in $(find ./debian/ -maxdepth 1 -mindepth 1 -type f -name \*changelog\*); do
+                ver=$(grep . -m1 $cl | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
+                vernew="$ver-$DATE"
+                for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
+                    sed -i "s%$ver%$vernew%g" $d/control
+                done
+            done
+        else
+            for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
+                     dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
+                     dh_installdeb dh_shlibdeps dh_gencontrol ; do
 
-            do_run $config_build_env fakeroot $h \
-                          $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
-                          $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
-        done
+                do_run $config_build_env fakeroot $h \
+                              $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
+                              $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
+            done
 
-        ver=$(grep . -m1 debian/changelog | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
-        vernew="$ver-$(date +%s)"
-        for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
-            sed -i "s%$ver%$vernew%g" $d/control
-        done
+            ver=$(grep . -m1 debian/changelog | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
+            vernew="$ver-$(date +%s)"
+            for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
+                sed -i "s%$ver%$vernew%g" $d/control
+            done
+        fi
 
         do_run $config_build_env fakeroot dh_builddeb
         return 0

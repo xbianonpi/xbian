@@ -1,3 +1,5 @@
 config_deb_base=libltdl-dev dpkg-dev git debootstrap autoconf automake swig doxygen libtool libtool-bin autopoint pkg-config lzop default-jre-headless qemu-user-static schroot kpartx parted btrfs-tools dosfstools u-boot-tools coreutils libproxy-dev
 config_root_prefix=
 config_wrapper=create.buildroot
+config_package_repo=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_20150709-0_armhf.deb
+config_package_firmware=http://apt.xbian.org/pool/stable/rpi2-jessie/x/xbian-package-firmware/xbian-package-firmware_2.8.0-1444638638_armhf.deb

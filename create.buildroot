@@ -104,7 +104,7 @@ do_prep()
     done
     schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
 
-    echo "deb $config_distro_url $config_distro_name main" >> $dir/etc/apt/sources.list
+    echo "deb $config_distro_url $config_distro_name main" > $dir/etc/apt/sources.list
 
     schroot --directory / -p -c $config_platform -- apt-get clean
 }
@@ -115,14 +115,30 @@ do_other()
     printf "#!/bin/sh\n\necho $config_xbian_arch\n" > $dir/usr/local/bin/xbian-arch; chmod +x $dir/usr/local/bin/xbian-arch
     schroot --directory / -p -c $config_platform -- apt-get update
     schroot --directory /tmp -p -c $config_platform -- apt-get install -y --force-yes lsb-release
-    schroot --directory /tmp -p -c $config_platform -- wget http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/xbian-package-repo_1.0.6-1_armhf.deb
-    schroot --directory /tmp -p -c $config_platform -- dpkg --force-confdef --force-confnew -i xbian-package-repo_1.0.6-1_armhf.deb
+    schroot --directory /tmp -p -c $config_platform -- wget $config_package_repo
+    schroot --directory /tmp -p -c $config_platform -- dpkg --force-confdef --force-confnew -i ${config_package_repo##*/}
+    schroot --directory /tmp -p -c $config_platform -- rm -f /etc/apt/preferences.d/xbian
     schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
     schroot --directory / -p -c $config_platform -- apt-get update
 
     schroot --directory / -p -c $config_platform -- apt-get install -y --force-yes  -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
 
     schroot --directory / -p -c $config_platform -- apt-get clean
+
+    # Install firmware files for RPi manually
+    case "$config_platform" in
+        "armhfjessie")
+            cd /tmp
+            wget $config_package_firmware
+            FW="${config_package_firmware##*/}"
+            ar -x $FW data.tar.xz
+            TMP=$(mktemp -d)
+            tar -xf ./data.tar.xz -C $TMP
+            cp -a $TMP/etc $dir
+            cp -a $TMP/opt $dir
+            rm -f data.tar.xz $FW
+            ;;
+    esac
 }
 
 
