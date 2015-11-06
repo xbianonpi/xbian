@@ -57,7 +57,7 @@ do_prep()
     if [ -n "$config_source_configure" ]; then
         if [ -e configure ]; then
             if [ -e Makefile ]; then
-                [ "$( find ./ -maxdepth 1 -iname Makefile ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1 || :
+                [ "$( find ./ -maxdepth 1 -iname Makefile\* ! -newer configure | grep -c .; )" -gt 0 ] && runconfigure=1 || :
             else
                 runconfigure=1
             fi
