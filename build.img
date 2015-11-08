@@ -217,9 +217,9 @@ do_xbian()
     cd "$dir/working"
 
     chroot ./rootfs apt-get update
-    chroot ./rootfs wget $config_xbianrepository
-    chroot ./rootfs dpkg -i --force-confdef --force-confnew $(basename $config_xbianrepository)
-    chroot ./rootfs rm -f $(basename $config_xbianrepository)
+    chroot ./rootfs wget -r -l1 -q --no-parent $config_xbianrepository -P /tmp
+    repofile="$(chroot ./rootfs find /tmp -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
+    chroot ./rootfs dpkg -i --force-confdef --force-confnew $repofile
 
     chroot ./rootfs sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list; cp ./rootfs/etc/apt/sources.list.d/xbian.list /tmp/xbian.list
 
