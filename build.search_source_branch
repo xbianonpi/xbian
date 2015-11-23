@@ -13,4 +13,9 @@
 ## $1 = project, package to build
 ## $2 = source_branch to search  for
 
-search "$1" "$2"
+out=$(search "$1" "$2")
+if [ -n "$out" ]; then
+    echo $out
+else
+    echo $2
+fi
