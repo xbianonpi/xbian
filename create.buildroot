@@ -106,7 +106,17 @@ do_prep()
 
     echo "deb $config_distro_url $config_distro_name main" > $dir/etc/apt/sources.list
 
+    case "$config_platform" in
+        "amd64jessie")
+             echo "deb http://emdebian.org/tools/debian/ jessie main" >> $dir/etc/apt/sources.list
+             schroot -c $config_platform --directory / -p -- wget -qO- http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | schroot -c $config_platform -p -- apt-key add -
+             schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
+             schroot -c $config_platform --directory / -p -- apt-get update
+             schroot -c $config_platform --directory / -p -- apt-get install -y --force-yes crossbuild-essential-armhf
+             ;;
+    esac
     schroot --directory / -p -c $config_platform -- apt-get clean
+
 }
 
 do_other()
@@ -115,30 +125,60 @@ do_other()
     printf "#!/bin/sh\n\necho $config_xbian_arch\n" > $dir/usr/local/bin/xbian-arch; chmod +x $dir/usr/local/bin/xbian-arch
     schroot --directory / -p -c $config_platform -- apt-get update
     schroot --directory /tmp -p -c $config_platform -- apt-get install -y --force-yes lsb-release
-    schroot --directory /tmp -p -c $config_platform -- wget $config_package_repo
-    schroot --directory /tmp -p -c $config_platform -- dpkg --force-confdef --force-confnew -i ${config_package_repo##*/}
-    schroot --directory /tmp -p -c $config_platform -- rm -f /etc/apt/preferences.d/xbian
+    schroot --directory /tmp -p -c $config_platform -- wget -r -l1 -q --no-parent $config_package_repo
+    repofile="$(schroot --directory /tmp -p -c $config_platform -- find ./ -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
+    echo "Latest repo file is $repofile"
+    schroot --directory /tmp -p -c $config_platform -- dpkg -i --force-confdef --force-confnew $repofile
+    schroot --directory / -p -c $config_platform -- sed -i 's/curl/notcurl/g' /etc/apt/preferences.d/xbian
+    case $config_xbian_arch in
+        RPI)  rpref="rpi"  ;;
+        RPI2) rpref="rpi2" ;;
+        iMX6) rpref="imx6" ;;
+        *) ;;
+    esac
+    schroot --directory / -p -c $config_platform -- sed -i "s/unknown-/$rpref-/g" /etc/apt/sources.list.d/xbian.list
     schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
+    case "$config_platform" in
+        "amd64jessie")
+             schroot --directory / -c $config_platform -p -- sed -i -e 's/^deb m/deb [arch=armhf] m/g' /etc/apt/sources.list.d/xbian.list
+             ;;
+    esac
     schroot --directory / -p -c $config_platform -- apt-get update
-
     schroot --directory / -p -c $config_platform -- apt-get install -y --force-yes  -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+
+    case "$config_xbian_arch" in
+        "iMX6")
+            # Install firmware files for RPi manually
+            cd /tmp
+            wget -r -l1 -q --no-parent $config_package_firmware
+            FW="$(find ./ -name 'xbian-package-firmware*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-firmware)"
+            echo "Latest firmware is $FW"
+            dpkg -x $FW $dir
+            rm -f $FW
+            # Copy OpenGLES libs for i.MX6 to the right place
+            schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \;
+            # Copy some .pc files to the correct place
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig
+            ;;
+    esac
+
+    case "$config_platform" in
+        "amd64jessie")
+            GPP=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-g++)
+            schroot --directory / -c $config_platform -p -- ln -s $GPP /usr/bin/g++
+            GCC=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-gcc)
+            schroot --directory / -c $config_platform -p -- ln -s $GCC /usr/bin/gcc
+            # install libtool. Unfortunately because of wrong dependicies can't do it in the normal way
+            schroot --directory /tmp -c $config_platform -p -- apt-get download libtool
+            cd /tmp
+            dpkg -x libtool*.deb $dir
+            rm -f libtool*.deb
+            ;;
+    esac
 
     schroot --directory / -p -c $config_platform -- apt-get clean
 
-    # Install firmware files for RPi manually
-    case "$config_platform" in
-        "armhfjessie")
-            cd /tmp
-            wget $config_package_firmware
-            FW="${config_package_firmware##*/}"
-            ar -x $FW data.tar.xz
-            TMP=$(mktemp -d)
-            tar -xf ./data.tar.xz -C $TMP
-            cp -a $TMP/etc $dir
-            cp -a $TMP/opt $dir
-            rm -f data.tar.xz $FW
-            ;;
-    esac
 }
 
 
@@ -223,3 +263,5 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
             ;;
     esac
 done
+
+printf "\n-------------------------------\nFINISHED OK\n-------------------------------\n"
