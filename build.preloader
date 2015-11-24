@@ -17,7 +17,7 @@ git merge origin/master
 
 grep -v ^# .autobuild | \
 while read B REPO ARCH; do
-        [ "$B" = "$GIT_BRANCH" -o ${GIT_BRANCH} = master ] || continue
+        [ "$B" = "$GIT_BRANCH" -o "$GIT_BRANCH" = master ] || continue
 
         if [ -d "build/$B" ]; then
 
