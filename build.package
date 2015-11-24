@@ -414,6 +414,10 @@ if [ -e $XBIANPKGDIR/build.~lock ]; then
     exit 100
 fi
 
+do_readconfig "$(pwd)/build"
+[ $config_source_type = raw ] && { rm -fr "$(pwd)/content/*" && do_deb "$(pwd)/build"; exit 0; }
+unset $(env | grep config_ | awk -F'=' '{print $1}'); opt_arch=''
+
 for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep -vw content-tpl |sort); do
     export XBIANARCHDIR=$(readlink -f "$dir")
 
@@ -532,5 +536,3 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     exit 0
 done
 
-do_readconfig "$(pwd)/build"
-[ $config_source_type = raw ] && { rm -fr "$(pwd)/content/*" && do_deb "$(pwd)/build"; }
