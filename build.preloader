@@ -43,7 +43,15 @@ while read B REPO ARCH; do
                         files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" |sudo sftp -q apt:/web/.upload |grep ^\.incoming)
 
                         for rf in $files; do
-                                [[ "$rf" > ".incoming.$REPO/$ARCH/$ftoday" ]] && echo "rm $rf" | sudo sftp -q apt:/web/.upload
+                                dorm=no
+                                if [ "$REPO" = staging -o "$REPO" = devel ]; then
+                                        dorm=yes
+                                elif [[ "$rf" > ".incoming.$REPO/$ARCH/$ftoday" ]]; then
+                                        dorm=yes
+                                fi
+
+                                [ "$dorm" = yes ] || continue
+                                echo "rm $rf" | sudo sftp -q apt:/web/.upload
                         done
                 done
 
