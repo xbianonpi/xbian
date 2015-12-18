@@ -419,7 +419,9 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export IMGNAME=${config_img_name}_$(date +%Y.%m.%d)_$(basename $dir).img
 
     touch $XBIANPKGDIR/build.~lock
-    trap "clean_tmp; clean_all; clean_loopd; rm -f $XBIANPKGDIR/build.~lock" EXIT TERM
+    trap "kill_gitbuilder; sync; clean_tmp; clean_all; clean_loopd; rm -f $XBIANPKGDIR/build.~lock" EXIT TERM
+
+    git_preloader
 
     case $opt_action in
         img)
