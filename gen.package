@@ -60,6 +60,7 @@ prepare_debhelper_tree() {
             fi
 
             sarch=$(grep -m1 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}')
+            sarch=$(echo $sarch | tr -d ' ')
             [ -n "$sarch" ] || sarch=$(dpkg-architecture |grep TARGET_ARCH= | awk -F'=' '{print $2}')
 
             mkdir -p DEBIAN/$package
