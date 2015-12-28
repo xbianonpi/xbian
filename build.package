@@ -304,11 +304,12 @@ do_deb()
                 done
             done
         else
-            for h in dh_auto_install dh_installdirs dh_strip dh_installinfo dh_installdocs dh_installcatalogs \
-                     dh_link dh_makeshlibs dh_install dh_installman dh_fixperms \
-                     dh_installdeb dh_shlibdeps dh_gencontrol ; do
+            for h in dh_auto_install dh_install dh_installdocs dh_installchangelogs dh_installman \
+                     dh_perl dh_link dh_compress dh_fixperms dh_strip dh_makeshlibs dh_shlibdeps \
+                     dh_installdeb dh_gencontrol dh_md5sums; do
 
-                do_run $config_build_env fakeroot $h \
+                echo "Running $h"
+                do_run $config_build_env fakeroot $h -O--parallel \
                               $([ $h = dh_shlibdeps ] && echo '-- --ignore-missing-info') \
                               $([ $h = dh_autoinstall ] && echo "-O=-j$MAKEFLAGS")
             done
