@@ -67,8 +67,8 @@ do_img()
 #        echo "71680,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
         echo "$config_offset_root,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     else
-        echo "2048,69632,b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
 #        echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+        echo "2048,$((config_offset_root-2048)),b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
         echo "$config_offset_root,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
     fi
 
