@@ -21,11 +21,11 @@ while read B REPO ARCH; do
 
         if [ -d "build/$B" ]; then
 
-                $xbiangit --arch $B;
+                $xbiangit --arch $B || exit $?
 
         elif [ -e gen.package.sh ]; then
 
-                ./gen.package.sh
+                ./gen.package.sh || exit $?
 
         fi
 
