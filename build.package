@@ -158,7 +158,7 @@ do_clone()
         (
           cd "$dir/working"
           do_run git clean -dfx
-          do_run git reset --hard
+          do_run git reset --hard "$config_source_branch"
           do_hooks post-clone.d
         )
         return 0
