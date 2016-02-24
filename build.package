@@ -159,7 +159,7 @@ do_clone()
           cd "$dir/working"
           do_run git fetch --all
           do_run git checkout "$config_source_branch"
-          do_run git reset --hard "$config_source_branch"
+          do_run git reset --hard "origin/$config_source_branch"
           do_run git clean -dfx
           do_hooks post-clone.d
         )
