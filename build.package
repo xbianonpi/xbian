@@ -157,7 +157,7 @@ do_clone()
         sudo /bin/mount -o bind "$WORKSPACE" "$dir/working"
         (
           cd "$dir/working"
-          do_run git fetch all
+          do_run git fetch --all
           do_run git checkout "$config_source_branch"
           do_run git reset --hard "$config_source_branch"
           do_run git clean -dfx
