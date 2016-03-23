@@ -1,8 +1,70 @@
+# ****************************************************************
+# *                                                              *
+# * /boot/config.txt                                             *
+# *                                                              *
+# ****************************************************************
+
+# see /etc/default/xbian-initramfs
 initramfs initramfs.gz  0x1000000
+
 gpu_mem_1024=256
 gpu_mem_512=144
 gpu_mem_256=100
+
 initial_turbo=3
 hdmi_ignore_cec_init=1
 disable_overscan=1
 disable_splash=1
+
+# Double power for USB ports
+#max_usb_current=1
+
+
+# ****************************************************************
+# * Overlays. For more information please read                   *
+# *           /boot/README.overlays                              *
+# ****************************************************************
+
+# This parameter enables onboard sound via module snd_bcm2835.
+# Module will be loaded automatically, an entry in
+# /etc/modules[.xbian] has no effect and is not longer needed/
+# necessary with kernel 4.4 and above.
+# Please note, this setting should be commented out if a Hifiberry
+# device is used.
+dtparam=audio=on
+
+
+# ****************************************************************
+# * GPIO LIRC                                                    *
+# *   Please note:                                               *
+# *   GPIO input pin has to be remapped for working together     *
+# *   with Hifiberry sound cards                                 *
+# ****************************************************************
+
+dtoverlay=lirc-rpi,debug
+#dtoverlay=lirc-rpi,gpio_out_pin=17,gpio_in_pin=22,debug
+
+
+# ****************************************************************
+# * Hifiberry and compatible sound cards (I2S interface)         *
+# * May conflict with LIRC. See note above                       *
+# ****************************************************************
+
+#dtoverlay=hifiberry-amp
+#dtoverlay=hifiberry-dac
+#dtoverlay=hifiberry-dacplus
+#dtoverlay=hifiberry-digi
+
+
+# ****************************************************************
+# * Raspberry Pi 3 onboard Bluetooth                             *
+# ****************************************************************
+
+# This parameter enables usage of miniuart (ttyS0) for BT.
+# Please note that BT may not work properly if CPUFREQ_GOVERNOR
+# is set to something else than performance (see also
+# /etc/default/xbian-module-init-tools).
+#dtoverlay=pi3-miniuart-bt
+
+# Disables onboard Bluetooth
+#dtoverlay=pi3-disable-bt
