@@ -5,7 +5,7 @@ mountpoint -q ./rootfs/proc && umount ./rootfs/proc || :
 echo fuse > ./rootfs/proc/modules
 
 case $config_platform in
-    rpi2*)
+    rpi2*|rpi3*)
         AR=RPI
         echo "hardware BCM2709" > ./rootfs/proc/cpuinfo
         [ -e ./rootfs/etc/apt/sources.list.d/xbian.list ] && sed -i 's/rpi-jessie/rpi2-jessie/g' ./rootfs/etc/apt/sources.list.d/xbian.list || :

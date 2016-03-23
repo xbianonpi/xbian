@@ -5,7 +5,7 @@ case $config_platform_branch in
     rpi|bpi*)
         sed -i '/debian/d' ./rootfs/etc/apt/sources.list
         ;;
-    rpi2)
+    rpi2|rpi3)
         if grep -q "http://http.debian.net/debian" ./rootfs/etc/apt/sources.list; then
             sed -i '/http:\/\/ftp.*/d' ./rootfs/etc/apt/sources.list
         fi
