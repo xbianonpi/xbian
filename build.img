@@ -247,6 +247,10 @@ do_xbian()
     ### make pin settings effective
     eval LC_ALL=C chroot ./rootfs apt-get upgrade -y --force-yes
     rm -fr ./rootfs/fake
+
+    ### when all packages has been installed only stable repo is allowed again
+    ( IFS=$'\n'; for l in $(grep devel ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; )
+    ( IFS=$'\n'; for l in $(grep staging ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; )
 }
 
 clean_tmp()
