@@ -1,0 +1,29 @@
+
+case $config_platform in
+    rpi*)
+      ;; 
+
+    *)  
+      exit 0
+      ;;
+esac
+
+if [ -n $config_fstype_boot ]; then
+
+    echo "building NOOBS files from $IMGNAME. this may take a while."
+
+    loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+
+    dd if=/dev/mapper/${loopd}p2 | xz -z > ../xbianroot-$config_platform.xz
+
+    mkdir -p ./boot
+    mount /dev/mapper/${loopd}p1 ./boot
+    cd ./boot
+    tar -cJf ../../xbianboot-$config_platform.tar.xz *
+    cd ..
+    umount ./boot
+    rmdir ./boot
+
+    kpartx -dv $IMGNAME
+fi
+
