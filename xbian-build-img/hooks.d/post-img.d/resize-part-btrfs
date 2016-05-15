@@ -31,7 +31,17 @@ umount ./rootfs; sync
 newpartsize=$(dmesg | grep -i "new size" | grep "/dev/mapper/${loopd}p${rootpart}\|/dev/dm" | tail -1 | awk '{print $NF}')
 newpartsize=$((newpartsize/512+64))
 kpartx -dv $IMGNAME
-echo ",$newpartsize,,," | sfdisk -u S -N${rootpart} -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
+fdisk $IMGNAME <<EOF
+d
+$rootpart
+n
+p
+2
+
+$newpartsize
+w
+EOF
+sync
 
 newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
