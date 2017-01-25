@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2014 XBian
+##      Copyright (C) 2012 - 2017 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -102,29 +102,47 @@ do_prep()
     for pkg in ${eatmydata[@]}; do
         dpkg -x $config_root_prefix/$config_platform/$pkg $config_root_prefix/$config_platform
     done
-    schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
-
+    schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage || (
+        # As it was written (for Debian Stretch) we have to do this ugly workaround
+        schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage || (
+            systemdsysv=($(grep systemd-sysv $config_root_prefix/$config_platform/debootstrap/debpaths | awk '{print $2}'))
+            for pkg in ${systemdsysv[@]}; do
+                schroot --directory / -p -c $config_platform -- dpkg -i $pkg
+            done
+            schroot --directory / -p -c $config_platform -- debootstrap/debootstrap --second-stage
+        )
+    )
     echo "deb $config_distro_url $config_distro_name main" > $dir/etc/apt/sources.list
+
+    ### Since apt-get version > 1.0.* --force-yes option is depreciated we have to use --allow options
+    [ "$(schroot --directory / -p -c $config_platform -- apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"
 
     case "$config_platform" in
         "amd64jessie")
              echo "deb http://emdebian.org/tools/debian/ jessie main" >> $dir/etc/apt/sources.list
              schroot -c $config_platform --directory / -p -- wget -qO- http://emdebian.org/tools/debian/emdebian-toolchain-archive.key | schroot -c $config_platform -p -- apt-key add -
              schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
-             schroot -c $config_platform --directory / -p -- apt-get update
-             schroot -c $config_platform --directory / -p -- apt-get install -y --force-yes crossbuild-essential-armhf
+             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
+             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
+             ;;
+        "amd64stretch")
+             schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
+             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
+             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
              ;;
     esac
-    schroot --directory / -p -c $config_platform -- apt-get clean
-
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get clean
 }
 
 do_other()
 {
+    ### Since apt-get version > 1.0.* --force-yes option is depreciated we have to use --allow options
+    [ "$(schroot --directory / -p -c $config_platform -- apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"
+
     dir=$(readlink -f "$1")
     printf "#!/bin/sh\n\necho $config_xbian_arch\n" > $dir/usr/local/bin/xbian-arch; chmod +x $dir/usr/local/bin/xbian-arch
-    schroot --directory / -p -c $config_platform -- apt-get update
-    schroot --directory /tmp -p -c $config_platform -- apt-get install -y --force-yes lsb-release
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
+    LC_ALL=C schroot --directory /tmp -p -c $config_platform -- apt-get install $FORCE lsb-release
     schroot --directory /tmp -p -c $config_platform -- wget -r -l1 -q --no-parent $config_package_repo
     repofile="$(schroot --directory /tmp -p -c $config_platform -- find ./ -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
     echo "Latest repo file is $repofile"
@@ -139,41 +157,86 @@ do_other()
     schroot --directory / -p -c $config_platform -- sed -i "s/unknown-/$rpref-/g" /etc/apt/sources.list.d/xbian.list
     schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
     case "$config_platform" in
-        "amd64jessie")
+        amd64*)
              schroot --directory / -c $config_platform -p -- sed -i -e 's/^deb m/deb [arch=armhf] m/g' /etc/apt/sources.list.d/xbian.list
              ;;
     esac
-    schroot --directory / -p -c $config_platform -- apt-get update
-    schroot --directory / -p -c $config_platform -- apt-get install -y --force-yes  -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update 2>/dev/null || ( \
+        case "$config_platform" in
+            *stretch*)
+                # As it was written (for Debian Stretch) apt-get does not work with method mirror://
+                schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
+                ;;
+            *)
+                echo "FIXME: apt-get update fails"
+                exit 1
+                ;;
+        esac
+    )
+    case "$config_platform" in
+        amd64*)
+             ### Since Debian's linux-libc-dev package breaks XBian's (as it was written for Debian Stetch), we have to install files manually later
+             schroot --directory / -c $config_platform -p -- rm -f /etc/apt/preferences.d/01_linux-libc-dev_armhf
+             LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
+             schroot --directory /tmp -c $config_platform -p -- rm -f linux-libc-dev*.deb
+             schroot --directory /tmp -c $config_platform -p -- apt-get download linux-libc-dev:armhf
+             LIBCDEV="$(schroot --directory /tmp -c $config_platform -p -- find ./ -maxdepth 1 -name 'linux-libc-dev*.deb' 2>/dev/null | sort -r | grep -m1 linux-libc-dev)"
+             cat<<EOF>/tmp/01_linux-libc-dev_armhf
+Package: linux-libc-dev:armhf
+Pin: release o=XBian
+Pin-Priority: -1
+Package: linux-libc-dev:armhf
+Pin: release o=Debian
+Pin-Priority: 1001
+EOF
+             schroot --directory / -c $config_platform -p -- mv /tmp/01_linux-libc-dev_armhf /etc/apt/preferences.d/
+             ;;
+    esac
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+
+    L1=$(schroot --directory / -p -c $config_platform -- locale 2>/dev/null | grep "LANG=" | cut -d '=' -f 2)
+    L2=$(echo $L1 | sed -e "s/UTF-8/utf8/g")
+    schroot --directory / -p -c $config_platform -- locale -a 2>/dev/null | grep -qE "$L1|$L2" || { \
+        schroot --directory / -p -c $config_platform -- sed -i -e "s/# $L1/$L1/g" /etc/locale.gen; \
+        schroot --directory / -p -c $config_platform -- locale-gen;
+    }
 
     case "$config_xbian_arch" in
         "iMX6")
             # Install firmware files for RPi manually
-            cd /tmp
-            wget -r -l1 -q --no-parent $config_package_firmware
-            FW="$(find ./ -name 'xbian-package-firmware*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-firmware)"
+            schroot --directory /tmp -c $config_platform -p -- wget -r -l1 -q --no-parent $config_package_firmware
+            FW="$(schroot --directory /tmp -c $config_platform -p -- find ./ -name 'xbian-package-firmware*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-firmware)"
             echo "Latest firmware is $FW"
-            dpkg -x $FW $dir
-            rm -f $FW
+            schroot --directory /tmp -c $config_platform -p -- dpkg -x $FW /
+            schroot --directory /tmp -c $config_platform -p -- rm -f $FW
             # Copy OpenGLES libs for i.MX6 to the right place
-            schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \;
+            schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \; || :
             # Copy some .pc files to the correct place
-            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig
-            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
             ;;
     esac
 
     case "$config_platform" in
-        "amd64jessie")
+        amd64*)
             GPP=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-g++)
-            schroot --directory / -c $config_platform -p -- ln -s $GPP /usr/bin/g++
+            schroot --directory / -c $config_platform -p -- find /usr/bin/g++ -type l -delete 2>/dev/null || :
+            schroot --directory / -c $config_platform -p -- ln -s $GPP /usr/bin/g++ || :
             GCC=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-gcc)
-            schroot --directory / -c $config_platform -p -- ln -s $GCC /usr/bin/gcc
-            # install libtool. Unfortunately because of wrong dependicies can't do it in the normal way
-            schroot --directory /tmp -c $config_platform -p -- apt-get download libtool
-            cd /tmp
-            dpkg -x libtool*.deb $dir
-            rm -f libtool*.deb
+            schroot --directory / -c $config_platform -p -- find /usr/bin/gcc -type l -delete 2>/dev/null || :
+            schroot --directory / -c $config_platform -p -- ln -s $GCC /usr/bin/gcc || :
+            # install libtool if still needed. Unfortunately because of wrong dependencies can't do it in the normal way
+            schroot --directory / -c $config_platform -p -- dpkg-query -s libtool &>/dev/null || { \
+                schroot --directory /tmp -c $config_platform -p -- rm -f libtool*.deb; \
+                schroot --directory /tmp -c $config_platform -p -- apt-get download libtool; \
+                LIBTOOL="$(schroot --directory /tmp -c $config_platform -p -- find ./ -maxdepth 1 -name 'libtool*.deb' 2>/dev/null | sort -r | grep -m1 libtool)"; \
+                echo "Have to install libtool package files manually from $LIBTOOL"; \
+                schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBTOOL /; \
+                schroot --directory /tmp -c $config_platform -p -- rm -f libtool*.deb; \
+            }
+            echo "Installing linux-libc-dev package files manually from $LIBCDEV"
+            schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBCDEV /
             ;;
     esac
 
