@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2014 XBian
+##      Copyright (C) 2012 - 2017 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -191,9 +191,10 @@ do_debootstrap()
 
     #### hack to remove packages which raspbian considers essential and doesn't want them remove even when excluded and 
     #### another package with it's function is going to be installed (eg sysvinit vs. upstart)
-    sed -i 's/sysvinit //' ./rootfs/debootstrap/required; sed -i '/sysvinit /d' ./rootfs/debootstrap/debpaths
-    sed -i 's/sysvinit-core//' ./rootfs/debootstrap/required; sed -i '/sysvinit-core/d' ./rootfs/debootstrap/debpaths
-    sed -i 's/systemd-sysv//' ./rootfs/debootstrap/required; sed -i '/systemd-sysv/d' ./rootfs/debootstrap/debpaths
+    #### Not needed anymore. Under special condition (see workarounds below) it breaks building image
+    #    sed -i 's/sysvinit //' ./rootfs/debootstrap/required; sed -i '/sysvinit /d' ./rootfs/debootstrap/debpaths
+    #    sed -i 's/sysvinit-core//' ./rootfs/debootstrap/required; sed -i '/sysvinit-core/d' ./rootfs/debootstrap/debpaths
+    #    sed -i 's/systemd-sysv//' ./rootfs/debootstrap/required; sed -i '/systemd-sysv/d' ./rootfs/debootstrap/debpaths
 
     #### On CentOS the binfmt_misc entry for qemu-arm points
     #### to /usr/bin/qemu-arm instead of /usr/bin/qemu-arm-static
@@ -203,7 +204,10 @@ do_debootstrap()
         echo ':qemu-arm:M::\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x28\x00:\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/qemu-arm-static:' > /proc/sys/fs/binfmt_misc/register || : 
     fi
 
-    chroot ./rootfs debootstrap/debootstrap --second-stage
+    chroot ./rootfs debootstrap/debootstrap --second-stage || (
+        ### As it was written (for Debian Stretch) we have to do this ugly workaround
+        chroot ./rootfs debootstrap/debootstrap --second-stage
+    )
 
     echo "deb $config_distro_url $config_distro_name main" >> ./rootfs/etc/apt/sources.list
 }
@@ -217,6 +221,15 @@ do_xbian()
     cd "$dir/working"
 
     chroot ./rootfs apt-get update
+
+    export DEBIAN_FRONTEND=noninteractive
+
+    ### Since apt-get version > 1.0.* --force-yes option is depreciated we have to use --allow options and gnupg is required for apt-key
+    [ "$(LC_ALL=C chroot ./rootfs apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || { \
+        FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"; \
+        LC_ALL=C chroot ./rootfs apt-get install $FORCE gnupg; \
+    }
+
     chroot ./rootfs wget -r -l1 -q --no-parent $config_xbianrepository -P /tmp
     repofile="$(chroot ./rootfs find /tmp -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
     chroot ./rootfs dpkg -i --force-confdef --force-confnew $repofile
@@ -227,9 +240,19 @@ do_xbian()
     [ "$config_allow_staging" = yes ] || ( IFS=$'\n'; for l in $(grep staging /tmp/xbian.list); do sed -i "s%$l%###\ $l%" /tmp/xbian.list; done; )
     cp /tmp/xbian.list ./rootfs/etc/apt/sources.list.d/xbian.list
 
-    chroot ./rootfs apt-get update
-
-    export DEBIAN_FRONTEND=noninteractive
+    LC_ALL=C chroot ./rootfs apt-get update 2>/dev/null || ( \
+        ### As it was written (for Debian Stretch) apt-get does not work with method mirror://
+        case "$config_distro_name" in
+            stretch)
+                  LC_ALL=C chroot ./rootfs sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
+                  ;;
+            *)
+                echo "FIXME: apt-get update fails"
+                exit 1
+                ;;
+        esac
+        chroot ./rootfs apt-get update
+    )
 
     mkdir -p ./rootfs/fake
     ( cd ./rootfs/fake
@@ -239,21 +262,25 @@ do_xbian()
 
     export PATH=/fake:$PATH
 
+    LC_ALL=C chroot ./rootfs apt-get upgrade $FORCE
+
     ### let's settle down apt consistency after debootstrap (without initial install -f will not install
     ### any packages in next loop even with correct dependencies
-    eval LC_ALL=C chroot ./rootfs apt-get install -y --force-yes -f
+    LC_ALL=C chroot ./rootfs apt-get install $FORCE -f
     for i in $(seq 1 3); do
-        eval LC_ALL=C chroot ./rootfs apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb 2>&1 | tee /tmp/apt-get.out | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
+        LC_ALL=C chroot ./rootfs apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb $config_xbian_base_deb 2>&1 | tee /tmp/apt-get.out | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
         ! grep -q "E: Unable to fetch some" /tmp/apt-get.out && break
     done
 
     ### make pin settings effective
-    eval LC_ALL=C chroot ./rootfs apt-get upgrade -y --force-yes
+    LC_ALL=C chroot ./rootfs apt-get upgrade $FORCE
     rm -fr ./rootfs/fake
 
-    ### when all packages has been installed only stable repo is allowed again
-    ( IFS=$'\n'; for l in $(grep devel ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
-    ( IFS=$'\n'; for l in $(grep staging ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
+    ### when all packages has been installed only stable repo is allowed again for stable release
+    if ! echo $IMGNAME | grep -qE "devel|staging|test"; then
+        ( IFS=$'\n'; for l in $(grep devel ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
+        ( IFS=$'\n'; for l in $(grep staging ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
+    fi
 
     echo "##### xbian.list final begin ####"
     cat ./rootfs/etc/apt/sources.list.d/xbian.list
@@ -329,6 +356,7 @@ do_finish()
     do_hooks pre-finish.d
 
     clean_tmp
+
     chroot "$dir/working/rootfs" /usr/local/sbin/all-clean >/dev/null 2>&1 || :
 
     cd "$dir/working"

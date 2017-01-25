@@ -11,6 +11,13 @@ config_distro_variant=minbase
 config_include_deb=man-db,locales,wget,libautodie-perl,nano,inetutils-tools,less,ca-certificates,apt-utils,psmisc,pastebinit,logrotate,cgmanager
 config_exclude_deb=busybox,sysvinit,debconf-i18n,systemd-sysv
 
+### target independent base packages
+config_xbian_base_deb=iputils-ping net-tools firmware-ralink firmware-realtek firmware-atheros isc-dhcp-client policykit-1 bluez \
+  xbian-package-config-xbmc xbian-package-config-shell xbian-package-initramfs-tools xbian-package-upstart-xbmc-bridge xbian-package-usbmount \
+  xbian-package-xbianhome xbian-package-xbmc-scripts xbian-package-zram-swap xbian-update \
+  libcec xbian-package-lirc xbian-package-samba xbian-package-shairplay xbian-package-splash xbian-package-xbmc
+
+### we need this setting to get most recent xbian-package-repo
 config_xbianrepository=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/
 
 config_wrapper=build.img 
