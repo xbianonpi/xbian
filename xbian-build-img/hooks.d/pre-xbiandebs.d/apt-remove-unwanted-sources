@@ -1,16 +1,14 @@
 
 case $config_platform_branch in
-    imx6-trusty)
+    imx6-trusty|rk)
         ;;
-    rpi|bpi*)
-        sed -i '/debian/d' ./rootfs/etc/apt/sources.list
-        ;;
-    rpi2|rpi3)
-        if grep -q "http://http.debian.net/debian" ./rootfs/etc/apt/sources.list; then
+    rpi2*|rpi3*|imx6*)
+        if grep -qE "http://http.debian.net/debian|http://httpredir.debian.org/debian" ./rootfs/etc/apt/sources.list; then
             sed -i '/http:\/\/ftp.*/d' ./rootfs/etc/apt/sources.list
         fi
         ;;
-    imx6*|rk)
+    rpi*|bpi*)
+        sed -i '/debian/d' ./rootfs/etc/apt/sources.list
         ;;
     *)
         ;;
