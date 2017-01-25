@@ -10,5 +10,7 @@ build-root-dirs/*
 build.upload-apt.sh
 xbian-package-*/
 xbian-update
+mountall/
+build-images.sh
 upload.sh
 build-root-dirs
