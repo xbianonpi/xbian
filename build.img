@@ -244,7 +244,7 @@ do_xbian()
         ### As it was written (for Debian Stretch) apt-get does not work with method mirror://
         case "$config_distro_name" in
             stretch)
-                  LC_ALL=C chroot ./rootfs sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
+                  LC_ALL=C chroot ./rootfs sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt1.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
                   ;;
             *)
                 echo "FIXME: apt-get update fails"
