@@ -1,7 +1,8 @@
 #!/bin/bash
 set -x
 
-cd $XBIANROOT/$1;
+cd $XBIANROOT
+
 if [ -n "$2" ]; then
     BRANCH="$2"
 fi
@@ -12,6 +13,8 @@ fi
 
 GIT_BRANCH=${GIT_BRANCH##*/}
 
+[ -d $1 ] || git clone https://github.com/xbianonpi/$1
+cd $1
 git fetch --all
 git merge origin/master
 
