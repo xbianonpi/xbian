@@ -44,7 +44,12 @@ make_dbg() {
     $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_strip --dbg-package=$package
     mkdir -p ../content-dbg; rm -fr ../content-dbg/*; mkdir ../content-dbg/DEBIAN
     mv DEBIAN/control-dbg ../content-dbg/DEBIAN/control
-    mv DEBIAN/$package-dbg/* ../content-dbg && rmdir DEBIAN/$package-dbg
+    if [ -e DEBIAN/$package-dbg/ ]; then
+        mv DEBIAN/$package-dbg/* ../content-dbg && rmdir DEBIAN/$package-dbg
+    else
+        mkdir -p ../content-dbg/usr/lib
+        mv DEBIAN/$package/usr/lib/debug ../content-dbg/usr/lib/ && rmdir DEBIAN/$package/usr/lib/ && rmdir DEBIAN/$package/usr/ &>/dev/null || :
+    fi
     echo "... dbg package done"
 }
 
@@ -52,7 +57,7 @@ prepare_debhelper_tree() {
     case "$1" in
         start)
             rmsrc=no
-            echo 4.0 > DEBIAN/compat
+            echo 8 > DEBIAN/compat
 
             if ! grep -q 'Source\:' DEBIAN/{control,control-dbg}; then 
                 rmsrc=yes
