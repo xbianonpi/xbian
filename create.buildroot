@@ -173,12 +173,15 @@ do_other()
                 ;;
         esac
     )
+    LIBCDEV=''
     case "$config_platform" in
-        amd64*)
+        *v6)
+             ;;
+        *)
              ### Since Debian's linux-libc-dev package breaks XBian's (as it was written for Debian Stetch), we have to install files manually later
              schroot --directory / -c $config_platform -p -- rm -f /etc/apt/preferences.d/01_linux-libc-dev_armhf
              LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
-             schroot --directory /tmp -c $config_platform -p -- rm -f linux-libc-dev*.deb
+             schroot --directory /tmp -c $config_platform -p -- find ./ -name 'linux-libc-dev*.deb' -delete
              schroot --directory /tmp -c $config_platform -p -- apt-get download linux-libc-dev:armhf
              LIBCDEV="$(schroot --directory /tmp -c $config_platform -p -- find ./ -maxdepth 1 -name 'linux-libc-dev*.deb' 2>/dev/null | sort -r | grep -m1 linux-libc-dev)"
              cat<<EOF>/tmp/01_linux-libc-dev_armhf
@@ -213,8 +216,10 @@ EOF
             # Copy OpenGLES libs for i.MX6 to the right place
             schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \; || :
             # Copy some .pc files to the correct place
-            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
-            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
+            schroot --directory / -c $config_platform -p -- [ -e /usr/lib/pkgconfig/libcdio.pc ] && \
+                schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
+            schroot --directory / -c $config_platform -p -- [ -e /usr/lib/pkgconfig/libcec.pc ] && \
+                schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
             ;;
     esac
 
@@ -235,10 +240,13 @@ EOF
                 schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBTOOL /; \
                 schroot --directory /tmp -c $config_platform -p -- rm -f libtool*.deb; \
             }
-            echo "Installing linux-libc-dev package files manually from $LIBCDEV"
-            schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBCDEV /
             ;;
     esac
+
+    [ -n "$LIBCDEV" ] && { \
+        echo "Installing linux-libc-dev package files manually from $LIBCDEV"; \
+        schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBCDEV /; \
+    }
 
     schroot --directory / -p -c $config_platform -- apt-get clean
 
