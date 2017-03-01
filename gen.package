@@ -35,13 +35,13 @@ rm_size() {
 
 make_shlibs() {
     echo "... creating lib dependencies (this may take a while)"
-    $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
+    eval $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
     echo "... lib dependencies done"
 }
 
 make_dbg() {
     echo "... creating dbg package (this may take a while)"
-    $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_strip --dbg-package=$package
+    eval $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_strip --dbg-package=$package
     mkdir -p ../content-dbg; rm -fr ../content-dbg/*; mkdir ../content-dbg/DEBIAN
     mv DEBIAN/control-dbg ../content-dbg/DEBIAN/control
     if [ -e DEBIAN/$package-dbg/ ]; then
