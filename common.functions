@@ -70,6 +70,7 @@ do_readconfig() {
     else
         echo "config_deb_version=" > "$dir/config_pkgver"
     fi
+    [ -e "$XBIANROOT/config" ] && rexp $XBIANROOT/config || :
     [ -e build/config ] && rexp build/config || :
     [ -e "$dir/config" ] && rexp "$dir/config" || :
 }

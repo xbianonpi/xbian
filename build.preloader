@@ -3,6 +3,8 @@ set -x
 
 cd $XBIANROOT
 
+[ -e config ] && . config
+
 if [ -n "$2" ]; then
     BRANCH="$2"
 fi
@@ -20,6 +22,8 @@ git merge origin/master
 
 grep -v ^# .autobuild | \
 while read B REPO ARCH; do
+        eval REPO="$REPO"
+        eval ARCH="$ARCH"
         [ "$B" = "$GIT_BRANCH" -o "$GIT_BRANCH" = master ] || continue
 
         if [ -d "build/$B" ]; then
