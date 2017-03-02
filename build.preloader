@@ -1,19 +1,32 @@
 #!/bin/bash
-set -x
+###set -x
+
+recover_config() {
+	[ -e ${XBIANROOT}/config.bak ] && mv ${XBIANROOT}/config.bak ${XBIANROOT}/config
+}
+
+trap "{ recover_config; }" EXIT INT ERR
 
 cd $XBIANROOT
 
-[ -e config ] && . config
+recover_config
+[ -e ${XBIANROOT}/config ] || { echo "ERROR: Missing file ${XBIANROOT}/config"; exit 1; }
+
+. ${XBIANROOT}/config
+cp -a ${XBIANROOT}/config ${XBIANROOT}/config.bak
 
 if [ -n "$2" ]; then
-    BRANCH="$2"
+	BRANCH="$2"
 fi
 
 if [ -n "$BRANCH" ]; then
-    export GIT_BRANCH=$BRANCH
+	export GIT_BRANCH=$BRANCH
 fi
 
 GIT_BRANCH=${GIT_BRANCH##*/}
+DEST_DEB="/opt/debs"
+
+mkdir -p ${DEST_DEB}
 
 [ -d $1 ] || git clone https://github.com/xbianonpi/$1
 cd $1
@@ -21,48 +34,57 @@ git fetch --all
 git merge origin/master
 
 grep -v ^# .autobuild | \
-while read B REPO ARCH; do
-        eval REPO="$REPO"
-        eval ARCH="$ARCH"
-        [ "$B" = "$GIT_BRANCH" -o "$GIT_BRANCH" = master ] || continue
+while read B REPOX ARCHX; do
+	[ "$B" = "$GIT_BRANCH" -o "$GIT_BRANCH" = master ] || continue
+	for OS_VERSION in $config_os_versions; do
+		sed -i -e "s/config_os_version=.*/config_os_version=$OS_VERSION/g" ${XBIANROOT}/config
+		. ${XBIANROOT}/config
+		eval REPO="$REPOX"
+		eval ARCH="$ARCHX"
 
-        if [ -d "build/$B" ]; then
+		echo "$ARCHX" | grep -qE '[$]config_os_version|[$]{config_os_version}' && OS_SUPPORT='yes' || OS_SUPPORT='no'
 
-                $xbiangit --arch $B || exit $?
+		if [ -d "build/$B" ]; then
 
-        elif [ -e gen.package.sh ]; then
+			echo "Running on $(pwd) \$xbiangit --arch $B (config_os_version=$config_os_version)"
+			$xbiangit --arch $B || exit $?
 
-                ./gen.package.sh || exit $?
+		elif [ -e gen.package.sh ]; then
 
-        fi
+			echo "Running on $(pwd) ./gen.package.sh"
+			./gen.package.sh || exit $?
 
-        find . -maxdepth 3 -name *.deb -exec mv "{}" /opt/debs/ \;
-        if [ $(ls -1 /opt/debs | wc -l) -gt 0 ]; then
+		fi
 
-                for lf in $(ls /opt/debs/*.deb); do
+		find . -maxdepth 3 -name \*.deb -exec mv "{}" ${DEST_DEB}/ \;
+		if [ $(ls -1 ${DEST_DEB} | wc -l) -gt 0 ]; then
 
-                        lf=$(basename $lf)
-                        echo $lf | grep -q -E '*-[0-9]{10}\.deb' || continue
+			for lf in $(ls ${DEST_DEB}/*.deb); do
 
-                        fbase=${lf%-*.deb}
-                        ftoday="$fbase-$(date --date='today 00:00' +%s).deb"
+				lf=$(basename $lf)
+				echo $lf | grep -q -E '*-[0-9]{10}\.deb' || continue
 
-                        files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" |sudo sftp -q apt:/web/.upload |grep ^\.incoming)
+				fbase=${lf%-*.deb}
+				ftoday="$fbase-$(date --date='today 00:00' +%s).deb"
 
-                        for rf in $files; do
-                                dorm=no
-                                if [ "$REPO" = staging -o "$REPO" = devel ]; then
-                                        dorm=yes
-                                elif [[ "$rf" > ".incoming.$REPO/$ARCH/$ftoday" ]]; then
-                                        dorm=yes
-                                fi
+				files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" |sudo sftp -q apt:/web/.upload |grep ^\.incoming)
 
-                                [ "$dorm" = yes ] || continue
-                                echo "rm $rf" | sudo sftp -q apt:/web/.upload
-                        done
-                done
+				for rf in $files; do
+					dorm=no
+					if [ "$REPO" = staging -o "$REPO" = devel ]; then
+						dorm=yes
+					elif [[ "$rf" > ".incoming.$REPO/$ARCH/$ftoday" ]]; then
+						dorm=yes
+					fi
 
-                /home/xbian/build.upload-apt.sh $REPO $ARCH | sudo sftp apt:/web/.upload
-                rm /opt/debs/*.deb || :;
-        fi
+					[ "$dorm" = yes ] || continue
+					echo "rm $rf" | sudo sftp -q apt:/web/.upload
+				done
+			done
+
+			${XBIANROOT}/build.upload-apt.sh $REPO $ARCH | sudo sftp apt:/web/.upload
+			rm ${DEST_DEB}/*.deb || :;
+		fi
+		[ "$OS_SUPPORT" == 'yes' ] || break
+	done
 done
