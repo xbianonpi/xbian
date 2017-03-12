@@ -278,6 +278,8 @@ do_deb()
     )
     [ -d ./content ] || mkdir ./content
 
+    echo $config_build_make | grep -q "=dpkg-buildpackage" && return 0
+
     rm -f ./content/DEBIAN/*
 
     # backcompatibility only, should be removed 
