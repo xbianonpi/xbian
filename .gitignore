@@ -11,6 +11,7 @@ build.upload-apt.sh
 xbian-package-*/
 xbian-update
 mountall/
+btrfs-progs/
 build-images.sh
 upload.sh
 build-root-dirs
