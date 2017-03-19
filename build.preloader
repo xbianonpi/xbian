@@ -5,8 +5,6 @@ recover_config() {
 	[ -e ${XBIANROOT}/config.bak ] && mv ${XBIANROOT}/config.bak ${XBIANROOT}/config
 }
 
-trap "{ recover_config; }" EXIT INT ERR
-
 cd $XBIANROOT
 
 recover_config
@@ -28,14 +26,17 @@ DEST_DEB="/opt/debs"
 
 mkdir -p ${DEST_DEB}
 
+trap "{ recover_config; rm -f ${DEST_DEB}/*.deb; }" EXIT INT ERR
+
 [ -d $1 ] || git clone https://github.com/xbianonpi/$1
 cd $1
 git fetch --all
 git merge origin/master
 
-grep -v ^# .autobuild | \
+grep -vE '^\s*$|^#' .autobuild | \
 while read B REPOX ARCHX; do
 	[ "$B" = "$GIT_BRANCH" -o "$GIT_BRANCH" = master ] || continue
+	BUILD_ONCE='no'
 	for OS_VERSION in $config_os_versions; do
 		sed -i -e "s/config_os_version=.*/config_os_version=$OS_VERSION/g" ${XBIANROOT}/config
 		. ${XBIANROOT}/config
@@ -46,8 +47,11 @@ while read B REPOX ARCHX; do
 
 		if [ -d "build/$B" ]; then
 
-			echo "Running on $(pwd) \$xbiangit --arch $B (config_os_version=$config_os_version)"
-			$xbiangit --arch $B || exit $?
+			if [ "$BUILD_ONCE" == 'no' ]; then
+				echo "Running on $(pwd) \$xbiangit --arch $B (config_os_version=$config_os_version)"
+				grep -q "config_build_env=schroot" "build/$B/config" || BUILD_ONCE='yes'
+				$xbiangit --arch $B || exit $?
+			fi
 
 		elif [ -e gen.package.sh ]; then
 
@@ -67,7 +71,7 @@ while read B REPOX ARCHX; do
 				fbase=${lf%-*.deb}
 				ftoday="$fbase-$(date --date='today 00:00' +%s).deb"
 
-				files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" |sudo sftp -q apt:/web/.upload |grep ^\.incoming)
+				files=$(echo "ls .incoming.$REPO/$ARCH/${fbase}-*.deb" | sudo sftp -q apt:/web/.upload 2>/dev/null | grep ^\.incoming)
 
 				for rf in $files; do
 					dorm=no
@@ -83,7 +87,7 @@ while read B REPOX ARCHX; do
 			done
 
 			${XBIANROOT}/build.upload-apt.sh $REPO $ARCH | sudo sftp apt:/web/.upload
-			rm ${DEST_DEB}/*.deb || :;
+			[ "$BUILD_ONCE" == 'no' ] && rm -f ${DEST_DEB}/*.deb || :
 		fi
 		[ "$OS_SUPPORT" == 'yes' ] || break
 	done
