@@ -128,7 +128,7 @@ do_patch()
 do_wipe()
 {
     dir="$1"
-    while sudo /bin/umount "$dir/working"; do :; done
+    mountpoint -q "$dir/working" && while sudo /bin/umount "$dir/working"; do :; done
     do_run rm -fr "$dir/working"
 }
 
