@@ -13,9 +13,6 @@ case $config_platform in
         if dpkg --compare-versions $(chroot ./rootfs dpkg-query -W xbian-package-kernel | awk '{print $2}') gt '3.14.0'; then
             sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
         fi
-        echo 'arm_freq=840' >> ./rootfs/boot/config.txt
-        echo 'core_freq=320' >> ./rootfs/boot/config.txt
-        echo 'sdram_freq=400' >> ./rootfs/boot/config.txt
         ;;
     *)
         ;;
