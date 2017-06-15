@@ -188,54 +188,53 @@ do_clone()
         esac
         cd ./working
     else
+        cd ./working
+        if [ "$config_source_reset" = yes ]; then
+            case "$config_source_type" in
+                git)
+                    do_run git clean -xdf -e .force*
+                    do_run git reset --hard origin/$config_source_branch
+                    ;;
+                tar)
+                    rm -fr ./*
+                    ( cd ../; tar -zxf $(basename $config_source_addr) -C ./working --strip-components 1; )
+                    ;;
+                *)
+                    ;;
+            esac
+        fi
 
-    cd ./working
-    if [ "$config_source_reset" = yes ]; then
-        case "$config_source_type" in
-            git)
-                do_run git clean -xdf -e .force*
-                do_run git reset --hard origin/$config_source_branch
-                ;;
-            tar)
-                rm -fr ./*
-                ( cd ../; tar -zxf $(basename $config_source_addr) -C ./working --strip-components 1; )
-                ;;
-            *)
-                ;;
-        esac
-    fi
+        if [ "$config_source_branch" = yes ]; then
+            case "$config_source_type" in
+                git)
+                    do_run git checkout -t -b "$config_source_branch"
+                    ;;
+                *)
+                    ;;
+            esac
+        fi
 
-    if [ "$config_source_branch" = yes ]; then
-        case "$config_source_type" in
-            git)
-                do_run git checkout -t -b "$config_source_branch"
-                ;;
-            *)
-                ;;
-        esac
-    fi
+        if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
+            [ "$config_source_reset" = yes ] || touch .force.nopatch
+            case "$config_source_type" in
+                git)
+                    ep=''; cmtnr=''
+                    ### commit local changes into new tmp branch
+                    if git status | grep -q 'Changes not staged\|Untracked files'; then
+                            git add --all .; sync
+                            git commit -m "$(echo auto commit on action clone at - $(date))" --no-edit || :
+                    fi
 
-    if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
-        [ "$config_source_reset" = yes ] || touch .force.nopatch
-        case "$config_source_type" in
-            git)
-                ep=''; cmtnr=''
-                ### commit local changes into new tmp branch
-                if git status | grep -q 'Changes not staged\|Untracked files'; then
-                        git add --all .; sync
-                        git commit -m "$(echo auto commit on action clone at - $(date))" --no-edit || :
-                fi
-
-                ### reset main branch and pull changes from upstream
-                #grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
-                #git pull $ep origin $config_source_branch 2>&1 || :
-                echo "Trying pull from remote..."
-                do_run git pull origin $config_source_branch
-                ;;
-            *)
-                ;;
-        esac
-    fi
+                    ### reset main branch and pull changes from upstream
+                    #grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
+                    #git pull $ep origin $config_source_branch 2>&1 || :
+                    echo "Trying pull from remote..."
+                    do_run git pull origin $config_source_branch
+                    ;;
+                *)
+                    ;;
+            esac
+        fi
     fi
 
     do_hooks post-clone.d
