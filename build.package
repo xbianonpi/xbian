@@ -175,6 +175,7 @@ do_clone()
                 config_branch=''
                 [ -n "$config_source_branch" ] && export config_branch="-b "
                 do_run git clone $config_branch$config_source_branch $config_source_type_extra $config_source_addr working
+                [ -n "$config_checkout_commit" ] && { cd ./working; do_run git checkout $config_checkout_commit; cd ..; }
                 ;;
             tar)
                 do_run wget $config_source_addr -O $(basename $config_source_addr)
