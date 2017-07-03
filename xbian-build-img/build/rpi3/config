@@ -6,5 +6,5 @@ config_fsoptions_root=-o compress=lzo,noatime
 config_img_size=1000M
 config_fstype_boot=vfat
 config_xbian_deb=linux-image-bcm2836 xbian-package-firmware
-config_allow_staging_devel=yes
-config_allow_staging=yes
+config_allow_staging_devel=no
+config_allow_staging=no
