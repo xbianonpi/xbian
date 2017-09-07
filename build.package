@@ -329,12 +329,6 @@ do_deb()
         return 0
     fi
 
-    if [ -d hooks.d/pre-deb.d ]; then
-        for f in $(ls hooks.d/pre-deb.d); do
-            ( cd "./content"; do_run sh ../hooks.d/pre-deb.d/$f; )
-        done
-    fi
-
     do_readconfig "$dir"
 
     [ -e content/DEBIAN/control-dbg ] && ctrldbg=content/DEBIAN/control-dbg
@@ -350,6 +344,16 @@ do_deb()
         mv content/DEBIAN/control.new content/DEBIAN/control
     else
         sed -i '/__CTRLEXTRA__/d' content/DEBIAN/control $ctrldbg
+    fi
+
+    if [ -d hooks.d/pre-deb.d ]; then
+        for f in $(ls hooks.d/pre-deb.d); do
+            (
+            echo "### Running hook $f from $1 ###"
+            cd "./content"; do_run sh ../hooks.d/pre-deb.d/$f; [ $? -ne 0 ] && res=FAILED || res=OK
+            echo "### Running hook $f from $1 finished $res ###"
+            )
+        done
     fi
 
     ### git log -n1 --format=oneline | awk '{print $1}'
