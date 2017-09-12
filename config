@@ -11,4 +11,4 @@ config_os_versions="jessie stretch"
 # Building for version, invoked by
 # script $xbiangit
 #
-config_os_version=jessie
+config_os_version=stretch
