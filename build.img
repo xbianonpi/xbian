@@ -65,11 +65,32 @@ do_img()
     fi
     if [ -z "$config_fstype_boot" ]; then
 #        echo "71680,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-        echo "$config_offset_root,+,83,," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+        fdisk $IMGNAME <<EOF > /dev/null 2>&1
+n
+p
+1
+$config_offset_root
+
+w
+EOF
     else
 #        echo "71680,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-        echo "2048,$((config_offset_root-2048)),b,*," | sfdisk -u S -N1 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
-        echo "$config_offset_root,+,83,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1
+        fdisk $IMGNAME <<EOF > /dev/null 2>&1
+n
+p
+1
+2048
+$((config_offset_root-1))
+t
+b
+a
+n
+p
+2
+
+
+w
+EOF
     fi
 
     [ -d /run ] || mkdir /run

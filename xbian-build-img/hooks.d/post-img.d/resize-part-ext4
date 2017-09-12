@@ -17,7 +17,17 @@ newpartsize=$((config_img_size+20))
 df -h | grep /working/
 umount ./rootfs; sync
 kpartx -dv $IMGNAME
-echo ",$newpartsize,,," | sfdisk -u S -N2 -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
+fdisk $IMGNAME <<EOF >/dev/null 2>&1
+d
+2
+n
+p
+2
+
+$newpartsize
+w
+EOF
+sync
 
 newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
