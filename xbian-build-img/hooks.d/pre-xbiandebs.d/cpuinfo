@@ -10,23 +10,28 @@ case $config_platform in
         echo "hardware BCM2709" > ./rootfs/proc/cpuinfo
         for i in $(seq 0 3); do echo "processor : $i" >> ./rootfs/proc/cpuinfo; done
         [ -e ./rootfs/etc/apt/sources.list.d/xbian.list ] && sed -i 's/rpi-jessie/rpi2-jessie/g' ./rootfs/etc/apt/sources.list.d/xbian.list || :
+        echo "Machine : armv7l" >> ./rootfs/proc/cpuinfo
         ;;
     rpi*)
         AR=RPI
         echo "hardware BCM2708" > ./rootfs/proc/cpuinfo
         echo "processor : 0" >> ./rootfs/proc/cpuinfo
+        echo "Machine : armv6l" >> ./rootfs/proc/cpuinfo
         ;;
     imx6*)
         AR=iMX6
         echo "hardware SolidRun i.MX6" > ./rootfs/proc/cpuinfo
+        echo "Machine : armv7l" >> ./rootfs/proc/cpuinfo
         ;;
     rk*)
         AR=rk
         echo "hardware RK30board" > ./rootfs/proc/cpuinfo
+        echo "Machine : armv7l" >> ./rootfs/proc/cpuinfo
 	;;
     bpi*)
         AR=BPI
         echo "hardware sun7i" > ./rootfs/proc/cpuinfo
+        echo "Machine : armv7l" >> ./rootfs/proc/cpuinfo
 	;;
     *)
         ;;
