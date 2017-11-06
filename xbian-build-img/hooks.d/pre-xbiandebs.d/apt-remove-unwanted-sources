@@ -13,3 +13,5 @@ case $config_platform_branch in
     *)
         ;;
 esac
+
+sort --unique ./rootfs/etc/apt/sources.list > ./rootfs/etc/apt/sources.list.new && mv ./rootfs/etc/apt/sources.list.new ./rootfs/etc/apt/sources.list
