@@ -14,7 +14,7 @@ if [ -n $config_fstype_boot ] && ! echo $IMGNAME | grep -qE "devel|staging|test"
 
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 
-    dd if=/dev/mapper/${loopd}p2 | xz -z > ../xbianroot-$config_platform.xz
+    dd if=/dev/mapper/${loopd}p2 | xz --threads=0 -z > ../xbianroot-$config_platform.xz
 
     mkdir -p ./boot
     mount /dev/mapper/${loopd}p1 ./boot
