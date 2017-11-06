@@ -9,6 +9,7 @@ if [ -z $config_fstype_boot ]; then
     rootpart=1;
 fi
 
+echo "$IMGNAME"
 loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 mount -t btrfs /dev/mapper/${loopd}p${rootpart} ./rootfs
 btrfs fi sync ./rootfs
@@ -31,7 +32,7 @@ umount ./rootfs; sync
 newpartsize=$(dmesg | grep -i "new size" | grep "/dev/mapper/${loopd}p${rootpart}\|/dev/dm" | tail -1 | awk '{print $NF}')
 newpartsize=$((newpartsize/512+64))
 kpartx -dv $IMGNAME
-echo ",$newpartsize,,," | sfdisk -u S -N${rootpart} -H 4 -S 16 -q $IMGNAME > /dev/null 2>&1; sync
+echo ",$newpartsize,,," | sfdisk -u S -N${rootpart} -q $IMGNAME > /dev/null 2>&1; sync
 
 newimgsize=$((newpartsize+141312))
 dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
