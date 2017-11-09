@@ -1,0 +1,20 @@
+#!/bin/bash
+
+UUID=$(blkid -s UUID -o value /dev/mapper/${loopd}p2)
+
+case $config_platform in
+    rpi*)
+        sed -i "s%/dev/mmcblk0p2%UUID=$UUID%g" ./rootfs/boot/cmdline.txt
+        ;;
+
+    imx6*)
+        sed -i "s%/dev/mmcblk0p2%UUID=$UUID%g" ./rootfs/boot/boot.scr.txt
+        chroot ./rootfs sh -c 'cd ./boot;./mks;'
+        ;;
+
+    *)
+        ;;
+esac
+
+UUID=$(blkid -s UUID -o value /dev/mapper/${loopd}p1)
+sed -i "s%/dev/mmcblk0p1%UUID=$UUID%g" ./rootfs/etc/fstab
