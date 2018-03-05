@@ -2,4 +2,4 @@ config_deb_base=libltdl-dev dpkg-dev git debootstrap autoconf automake swig doxy
 config_root_prefix=
 config_wrapper=create.buildroot
 config_package_repo=http://apt.xbian.org/pool/stable/main/x/xbian-package-repo/
-config_package_firmware=http://apt.xbian.org/pool/stable/rpi2-jessie/x/xbian-package-firmware/
+config_package_firmware=http://apt.xbian.org/pool/stable/main/x/xbian-package-firmware/
