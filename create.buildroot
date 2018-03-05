@@ -143,18 +143,20 @@ do_other()
     printf "#!/bin/sh\n\necho $config_xbian_arch\n" > $dir/usr/local/bin/xbian-arch; chmod +x $dir/usr/local/bin/xbian-arch
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
     LC_ALL=C schroot --directory /tmp -p -c $config_platform -- apt-get install $FORCE lsb-release
+    schroot --directory /tmp -p -c $config_platform -- rm -rf apt.xbian.org
     schroot --directory /tmp -p -c $config_platform -- wget -r -l1 -q --no-parent $config_package_repo
     repofile="$(schroot --directory /tmp -p -c $config_platform -- find ./ -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
     echo "Latest repo file is $repofile"
     schroot --directory /tmp -p -c $config_platform -- dpkg -i --force-confdef --force-confnew $repofile
     schroot --directory / -p -c $config_platform -- sed -i 's/curl/notcurl/g' /etc/apt/preferences.d/xbian
     case $config_xbian_arch in
-        RPI)  rpref="rpi"  ;;
-        RPI2) rpref="rpi2" ;;
-        iMX6) rpref="imx6" ;;
-        *) ;;
+        RPI)  rpref="rpi";  mpref="armv6l" ;;
+        RPI2) rpref="rpi2"; mpref="armv7l" ;;
+        iMX6) rpref="imx6"; mpref="armv7l" ;;
+        *) rpref=''; mpref='' ;;
     esac
-    schroot --directory / -p -c $config_platform -- sed -i "s/unknown-/$rpref-/g" /etc/apt/sources.list.d/xbian.list
+    [ -z $rpref ] || schroot --directory / -p -c $config_platform -- sed -i "s/unknown-/$rpref-/g" /etc/apt/sources.list.d/xbian.list
+    [ -z $mpref ] || schroot --directory / -p -c $config_platform -- sed -i "s/x86_64-/$mpref-/g" /etc/apt/sources.list.d/xbian.list
     schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
     case "$config_platform" in
         amd64*)
