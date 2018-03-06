@@ -165,7 +165,7 @@ do_other()
     esac
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update 2>/dev/null || ( \
         case "$config_platform" in
-            *stretch*)
+            *stretch*|*jessie*)
                 # As it was written (for Debian Stretch) apt-get does not work with method mirror://
                 schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
                 ;;
