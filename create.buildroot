@@ -163,18 +163,19 @@ do_other()
              schroot --directory / -c $config_platform -p -- sed -i -e 's/^deb m/deb [arch=armhf] m/g' /etc/apt/sources.list.d/xbian.list
              ;;
     esac
-    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update 2>/dev/null || ( \
-        case "$config_platform" in
-            *stretch*|*jessie*)
-                # As it was written (for Debian Stretch) apt-get does not work with method mirror://
-                schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
-                ;;
-            *)
-                echo "FIXME: apt-get update fails"
-                exit 1
-                ;;
-        esac
-    )
+
+    case "$config_platform" in
+        *stretch*|*jessie*)
+            # As it was written (for Debian Stretch) apt-get does not work with method mirror://
+            schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
+            ;;
+        *)
+            echo "FIXME: apt-get update fails"
+            exit 1
+            ;;
+    esac
+
+    LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update 2>/dev/null
     LIBCDEV=''
     case "$config_platform" in
         *v6)
