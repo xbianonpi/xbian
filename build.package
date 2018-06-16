@@ -297,12 +297,13 @@ do_deb()
         [ -e build/$config_platform_branch/content-tpl ] && cp -ar build/$config_platform_branch/content-tpl/* ./content
 
     export MAKEFLAGS=-j1
+    rexp $dir/env
+    rm -f "$dir"/*.deb
 
     if [ "$config_deb_pkgcreatenative" = yes ] || [ "$config_deb_pkgcreatenative" = auto ]; then
         [ -d "$dir/working" ] || return 0
         cd "$dir/working"
-        rm -f ../*.deb
-        rexp ../env; do_hooks '##withbuildenv##' pre-deb.d
+        do_hooks '##withbuildenv##' pre-deb.d
 
         if [ "$config_deb_pkgcreatenative" = auto ] && [ -x debian/rules ]; then
             do_run $config_build_env fakeroot debian/rules binary
@@ -375,7 +376,6 @@ do_deb()
     [ -e ./content/DEBIAN/control-dbg ] || find ./content -type f \( -executable -o -iname \*.so -o -iname \*.ko -o -iname \*.a \) -print0 | eval $config_build_env xargs -0 ${CROSS_COMPILE}strip --strip-unneeded -p 2>/dev/null || :
     sync
     do_run $SHELL $XBIANROOT/gen.package
-    rm -f "$dir"/*.deb
 
     do_hooks post-deb.d
 
