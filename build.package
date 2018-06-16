@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2014 XBian
+##      Copyright (C) 2012 - 2018 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -175,19 +175,20 @@ do_clone()
                 config_branch=''
                 [ -n "$config_source_branch" ] && export config_branch="-b "
                 do_run git clone $config_branch$config_source_branch $config_source_type_extra $config_source_addr working
-                [ -n "$config_checkout_commit" ] && { cd ./working; do_run git checkout $config_checkout_commit; cd ..; }
+                [ -n "$config_checkout_commit" ] && { cd ./working; do_run git checkout $config_checkout_commit; }
+                [ -n "$config_source_tag" ] && { cd ./working; do_run git checkout tags/$config_source_tag -b $config_source_tag; }
                 ;;
             tar)
                 do_run wget $config_source_addr -O $(basename $config_source_addr)
                 mkdir -p working
                 tar -xf $(basename $config_source_addr) -C ./working --strip-components 1
                 cd ./working
-                cd ..
                 ;;
             *)
+                mkdir -p working
+                cd ./working
                 ;;
         esac
-        cd ./working
     else
         cd ./working
         if [ "$config_source_reset" = yes ]; then
@@ -195,6 +196,7 @@ do_clone()
                 git)
                     do_run git clean -xdf -e .force*
                     do_run git reset --hard origin/$config_source_branch
+                    [ -n "$config_source_tag" ] && do_run git checkout tags/$config_source_tag -b $config_source_tag
                     ;;
                 tar)
                     rm -fr ./*
@@ -209,6 +211,7 @@ do_clone()
             case "$config_source_type" in
                 git)
                     do_run git checkout -t -b "$config_source_branch"
+                    [ -n "$config_source_tag" ] && do_run git checkout tags/$config_source_tag -b $config_source_tag
                     ;;
                 *)
                     ;;
