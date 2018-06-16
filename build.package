@@ -218,13 +218,13 @@ do_clone()
             esac
         fi
 
-        if [ "$config_source_refresh" = yes -a $initialrun = no ]; then
+        if [ "$config_source_refresh" = yes -a $initialrun = no ] || [ "$config_source_refresh" = full -a $initialrun = no]; then
             [ "$config_source_reset" = yes ] || touch .force.nopatch
             case "$config_source_type" in
                 git)
                     ep=''; cmtnr=''
-                    ### commit local changes into new tmp branch
                     if git status | grep -q 'Changes not staged\|Untracked files'; then
+                            echo "Commit local changes into new tmp branch ..."
                             git add --all .; sync
                             git commit -m "$(echo auto commit on action clone at - $(date))" --no-edit || :
                     fi
@@ -232,8 +232,9 @@ do_clone()
                     ### reset main branch and pull changes from upstream
                     #grep -qi 'url = git://' -m1 .git/config && ep='--depth=1'
                     #git pull $ep origin $config_source_branch 2>&1 || :
-                    echo "Trying pull from remote..."
-                    do_run git pull origin $config_source_branch
+                    [ "$config_source_refresh" = full ] && br='' || br=$config_source_branch
+                    echo "Trying pull from remote ($br) ..."
+                    do_run git pull origin $br
                     ;;
                 *)
                     ;;
