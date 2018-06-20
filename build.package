@@ -299,6 +299,7 @@ do_deb()
     export MAKEFLAGS=-j1
     rexp $dir/env
     rm -f "$dir"/*.deb
+    do_readconfig "$dir"
 
     if [ "$config_deb_pkgcreatenative" = yes ] || [ "$config_deb_pkgcreatenative" = auto ]; then
         [ -d "$dir/working" ] || return 0
@@ -310,9 +311,9 @@ do_deb()
             DATE=$(date +%s)
             for cl in $(find ./debian/ -maxdepth 1 -mindepth 1 -type f -name \*changelog\*); do
                 ver=$(grep . -m1 $cl | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
-                vernew="$ver-$DATE"
+                xbiantag=${ver#*~}; [ "$xbiantag" != "$ver" -a "$xbiantag" = "xbian" ] && vernew="$ver$config_deb_version" || vernew="$ver-$DATE"
                 for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
-                    sed -i "s%$ver%$vernew%g" $d/control
+                    sed -i "s%^Version: $ver.*%Version: $vernew%g" $d/control
                 done
             done
         else
@@ -334,10 +335,9 @@ do_deb()
         fi
 
         do_run $config_build_env fakeroot dh_builddeb
+        do_hooks post-deb.d
         return 0
     fi
-
-    do_readconfig "$dir"
 
     [ -e content/DEBIAN/control-dbg ] && ctrldbg=content/DEBIAN/control-dbg
     [ -z "$config_distro" ] && config_deb_version="$config_deb_version-$(date +%s)"
