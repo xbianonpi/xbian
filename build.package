@@ -390,7 +390,7 @@ Usage summary:
 
   --arch, -m [platform/buildconfig]     existing configurations as listed by --list
 
-  --action, -a [action]                 action to perform:
+  --action, -a [action[,action[,action[,...]]]]    action to perform:
 
    wipe         - will completely remove working directory (including git clone of src repository)
    clean        - will run "make clean" in the working tree
