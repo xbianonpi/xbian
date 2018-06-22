@@ -101,7 +101,7 @@ do_patch()
     [ ! -d ./patches ] && return 0
     cd ./patches
 
-    for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null | sort; find -L ./ -name "$dir" -type d 2>/dev/null| sort | xargs -L1 -I%% sh -c 'find -L %% -maxdepth 1 -iname \*.patch -type f | sort'; }); do
+    for p in $({ find -L ./ -maxdepth 1 -iname \*.patch -type f 2>/dev/null | sort; find -L "./$dir" -type d 2>/dev/null| sort | xargs -L1 -I%% sh -c 'find -L %% -maxdepth 1 -iname \*.patch -type f | sort'; }); do
         (
         cd ../build/$dir/working
         [ $use_silent = yes ] || echo "checking $p"
