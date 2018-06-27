@@ -1,7 +1,7 @@
 # ******************************************************************************
 # *                                                                            *
 # * This file is part of XBian --- Kodi on the Raspberry Pi.                   *
-# * Copyright © 2017 XBian Team -- http://www.xbian.org - info@xbian.org       *
+# * Copyright © 2018 XBian Team -- http://www.xbian.org - info@xbian.org       *
 # *                                                                            *
 # * XBian is free software: you can redistribute it and/or modify it under the *
 # * terms of the GNU General Public License as published by the Free Software  *
@@ -31,7 +31,7 @@ gpu_mem_1024=256
 gpu_mem_512=144
 gpu_mem_256=100
 
-# Extra 16M memory on Pi2/Pi3
+# Extra 16M memory on Pi2/Pi3/Pi3B+
 # See also https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=180420
 #total_mem=1024
 
@@ -93,8 +93,8 @@ decode_WVC1=0x00000000
 # Module will be loaded automatically, an entry in
 # /etc/modules[.xbian] has no effect and is not longer needed/
 # necessary with kernel 4.4 and above.
-# Please note, this setting should be commented out if a Hifiberry
-# device is used.
+# Please note, this setting should be commented out or set to off
+# if a Hifiberry or any other I2S based sound device is used
 dtparam=audio=on
 
 
@@ -102,11 +102,12 @@ dtparam=audio=on
 # * GPIO LIRC                                                                  *
 # *   Please note:                                                             *
 # *   GPIO input pin has to be remapped for working together                   *
-# *   with Hifiberry sound cards                                               *
+# *   with I2S sound cards, like Hifiberry. For example                        *
+# *   dtoverlay=lirc-rpi,gpio_in_pin=22,debug for kernels <= 4.14 or           *
+# *   dtoverlay=gpio-ir,gpio_pin=22 for kernels >= 4.14                        *
 # ******************************************************************************
 
 dtoverlay=lirc-rpi,debug
-#dtoverlay=lirc-rpi,gpio_out_pin=17,gpio_in_pin=22,debug
 
 
 # ******************************************************************************
@@ -121,7 +122,7 @@ dtoverlay=lirc-rpi,debug
 
 
 # ******************************************************************************
-# * Raspberry Pi 3 onboard Bluetooth                                           *
+# * Raspberry Pi3/Pi3B+ onboard Bluetooth                                      *
 # ******************************************************************************
 
 # This parameter enables usage of miniuart (ttyS0) for BT.
