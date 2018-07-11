@@ -3,6 +3,19 @@
 #
 
 #
+# Build options
+#
+config_patch_fuzzy=5
+
+#
+# Options for building deb package
+#
+config_dpkg_deb_compat=8
+config_dpkg_deb_opts=-Zxz
+config_dpkg_deb_separator=_
+config_dpkg_deb_addarch=yes
+
+#
 # Building packages for versions invoked by
 # script build.preloader (Jenkins)
 #
