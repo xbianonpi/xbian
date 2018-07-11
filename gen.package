@@ -90,21 +90,23 @@ prepare_debhelper_tree() {
 tot=0
 
 package=$(grep -m1 Package ./content/DEBIAN/control | awk '{print $2}')
-version=$(grep -m1 Version ./content/DEBIAN/control | awk '{print $2}')
+version=$(grep -m1 Version ./content/DEBIAN/control | awk '{print $2}' | cut -d ':' -f 2-)
 
 # calculate size dynamically. remove first any entry, then add the actual 
 rm_size
 
 cd content
-grep -q '${shlibs:Depends}' DEBIAN/control || test -e DEBIAN/control-dbg && \
-    {
-        prepare_debhelper_tree start
-        grep -q '${shlibs:Depends}' DEBIAN/control && [ -n "$config_build_env" ] && make_shlibs
-        test -e DEBIAN/control-dbg && [ -n "$config_build_env" ] && make_dbg
-        prepare_debhelper_tree end
-    }
+if grep -q '${shlibs:Depends}' DEBIAN/control || [ -e DEBIAN/control-dbg ]; then
+    prepare_debhelper_tree start
+    grep -q '${shlibs:Depends}' DEBIAN/control && [ -n "$config_build_env" ] && make_shlibs
+    test -e DEBIAN/control-dbg && [ -n "$config_build_env" ] && make_dbg
+    prepare_debhelper_tree end
+elif [ -z "$sarch" -a "$config_dpkg_deb_addarch" = yes ]; then
+    sarch=$(grep -m1 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}' | tr -d ' ')
+fi
 
 cd ..
+
 for c in content content-dbg; do 
   [ -d $c ] || continue
   package=$(grep -m1 Package ./$c/DEBIAN/control | awk '{print $2}')
@@ -114,7 +116,8 @@ for c in content content-dbg; do
     printf "Installed-Size: %u\n" $(cat ../size.txt) >> ./DEBIAN/control
     find ./ -type f ! -regex '.*.hg.*' ! -regex '.*?debian-binary.*' ! -regex '.*?DEBIAN.*' -printf '%P\0' | sort -z| xargs --null md5sum > DEBIAN/md5sums 
   )
-  fakeroot dpkg-deb -Zxz -b ./$c "${package}""${version}".deb
+  [ "$config_dpkg_deb_addarch" = yes ] && arch="$config_dpkg_deb_separator$sarch" || arch=''
+  fakeroot dpkg-deb $config_dpkg_deb_opts -b ./$c "${package}"$config_dpkg_deb_separator"${version}"$arch.deb
   # remove the size again, because on different filesystems du will return different size
   rm_size $c
 done
