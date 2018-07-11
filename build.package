@@ -23,8 +23,8 @@ config_patch_fuzzy=5
 opt_arch=''
 opt_action=''
 result=0
-use_debug=no
-use_silent=no
+export use_debug=no
+export use_silent=no
 
 if [ -e $XBIANROOT/common.functions ]; then
     . $XBIANROOT/common.functions
@@ -467,11 +467,11 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
                 exit 0
                 ;;
             (-d|--debug)
-                use_debug=yes
+                export use_debug=yes
                 shift
                 ;;
             (-s|--silent)
-                use_silent=yes
+                export use_silent=yes
                 shift
                 ;;
             (-o|--sources)
