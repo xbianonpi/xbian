@@ -285,9 +285,9 @@ do_deb()
         commit_src=$(git log -n1 --format=oneline --remotes= | awk '{print $1}')
         echo "commit_src=$commit_src" > $DESTDIR/src_repo_hash_HEAD
     )
-    [ -d ./content ] || mkdir ./content
 
-    rm -f ./content/DEBIAN/*
+    mkdir -p ./content
+    rm -f ./content/DEBIAN/* "$dir"/*.deb
 
     # backcompatibility only, should be removed 
     [ -e ./content-tpl ] && cp -ar ./content-tpl/* ./content
@@ -298,7 +298,6 @@ do_deb()
 
     export MAKEFLAGS=-j1
     rexp $dir/env
-    rm -f "$dir"/*.deb
     do_readconfig "$dir"
 
     if [ "$config_deb_pkgcreatenative" = yes ] || [ "$config_deb_pkgcreatenative" = auto ]; then
