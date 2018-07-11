@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2014 XBian
+##      Copyright (C) 2012 - 2018 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -35,7 +35,7 @@ rm_size() {
 
 make_shlibs() {
     echo "... creating lib dependencies (this may take a while)"
-    eval $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1| grep -v 'warning\:'
+    eval LC_ALL=C $config_build_env fakeroot dpkg-architecture -a $sarch -c dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info 2>&1 | grep -v 'warning\:'
     echo "... lib dependencies done"
 }
 
