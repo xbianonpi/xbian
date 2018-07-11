@@ -57,7 +57,7 @@ prepare_debhelper_tree() {
     case "$1" in
         start)
             rmsrc=no
-            echo 8 > DEBIAN/compat
+            echo $config_dpkg_deb_compat > DEBIAN/compat
 
             if ! grep -q 'Source\:' DEBIAN/{control,control-dbg} 2>/dev/null; then
                 rmsrc=yes
