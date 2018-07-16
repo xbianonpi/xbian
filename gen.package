@@ -43,7 +43,7 @@ make_dbg() {
     echo "... creating dbg package (this may take a while)"
     eval $config_build_env fakeroot dpkg-architecture -a$sarch -c dh_strip --dbg-package=$package
     mkdir -p ../content-dbg; rm -fr ../content-dbg/*; mkdir ../content-dbg/DEBIAN
-    mv DEBIAN/control-dbg ../content-dbg/DEBIAN/control
+    cp DEBIAN/control-dbg ../content-dbg/DEBIAN/control
     if [ -e DEBIAN/$package-dbg/ ]; then
         mv DEBIAN/$package-dbg/* ../content-dbg && rmdir DEBIAN/$package-dbg
     else
@@ -61,7 +61,7 @@ prepare_debhelper_tree() {
 
             if ! grep -q 'Source\:' DEBIAN/{control,control-dbg} 2>/dev/null; then
                 rmsrc=yes
-                sed -i 's/Package:/Source:\n\nPackage:/' DEBIAN/{control,control-dbg} 2>/dev/null
+                sed -i 's/Package:/Source:\nPackage:/' DEBIAN/{control,control-dbg} 2>/dev/null
             fi
 
             sarch=$(grep -m1 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}' | tr -d ' ')
@@ -76,7 +76,7 @@ prepare_debhelper_tree() {
             mv DEBIAN/$package/* ./
             rm -fr DEBIAN/$package 
             rm -f debian DEBIAN/compat
-            [ $rmsrc = yes ] && sed -i '/Source:/{N;s/\n$//};/^Source:/d' {.,../content-dbg}/DEBIAN/control 2>/dev/null
+            [ $rmsrc = yes ] && sed -i '/Source:/d' DEBIAN/{control,control-dbg} 2>/dev/null
 
             depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
             sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
@@ -108,7 +108,7 @@ fi
 cd ..
 
 for c in content content-dbg; do 
-  [ -d $c ] || continue
+  [ -e ./$c/DEBIAN/control ] || continue
   package=$(grep -m1 Package ./$c/DEBIAN/control | awk '{print $2}')
   (
     cd $c
