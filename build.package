@@ -105,12 +105,15 @@ do_patch()
         (
         cd ../build/$dir/working
         [ $use_silent = yes ] || echo "checking $p"
-        if ! patch -p1 --dry-run -F $config_patch_fuzzy < ../../../patches/$p >/dev/null; then
+        if patch -p1 --dry-run -F $config_patch_fuzzy < ../../../patches/$p >/dev/null; then
+            [ $use_silent = yes ] || echo "Patching with $p"
+            do_run patch -p1 -F $config_patch_fuzzy < ../../../patches/$p
+        elif git apply --check < ../../../patches/$p >/dev/null; then
+            [ $use_silent = yes ] || echo "Patching (git apply) with $p"
+            do_run git apply --whitespace=nowarn < ../../../patches/$p >/dev/null
+        else
             echo "! won't patch with $p" >/dev/stderr
-            continue
         fi
-        [ $use_silent = yes ] || echo "Patching with $p"
-        do_run patch -p1 -F $config_patch_fuzzy < ../../../patches/$p
         echo "-----------------"
         )
     done
