@@ -1,0 +1,29 @@
+
+if [ -n $config_fstype_boot ] && echo $IMGNAME | grep -qE "devel|staging|test"; then
+
+    loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+
+    mkdir -p ./rootfs
+    mount /dev/mapper/${loopd}p2 -o subvol=root/@ ./rootfs
+    cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+
+    KODI_VERSION=$(chroot ./rootfs dpkg -l | grep -E "xbian-package-xbmc |xbian-package-xbmc-6q " | awk '$2 !~ /not/ {print $3}')
+    KODI_VERSION=$(echo ${KODI_VERSION%%-*} | sed "s/ALPHA/a/g;s/BETA/b/g;s/RC/rc/g")
+    KERNEL_VERSION=$(chroot ./rootfs dpkg -l | grep -E "xbian-package-kernel |linux-image-bcm2836 |linux-image-armmp " | awk '$2 !~ /not/ {print $3}')
+    KERNEL_VERSION=${KERNEL_VERSION%%-*}
+
+    NEWIMGNAME=${config_img_name}_$(chroot ./rootfs cat /etc/debian_version)-${KERNEL_VERSION}-${KODI_VERSION}_${IMGNAME##*_}
+    NEWIMGNAME=$(echo $NEWIMGNAME | sed "s/-devel././g;s/-staging././g;s/-test././g")
+
+    echo "Rename image name from $IMGNAME to $NEWIMGNAME"
+
+    rm -f ./rootfs/usr/bin/qemu-arm-static
+    umount ./rootfs
+    rmdir ./rootfs
+
+    kpartx -dv $IMGNAME
+
+    echo "IMGNAME=$NEWIMGNAME" > newimgname
+    mv $IMGNAME $NEWIMGNAME
+fi
+
