@@ -374,9 +374,9 @@ do_post()
     dir=$(readlink -f "$1")
     mkdir -p "$dir/working/rootfs"
 
-    [ -e "$dir/working/newimgname" ] && { . "$dir/working/newimgname"; rm -f "$dir/working/newimgname"; }
-
     do_hooks post-img.d
+
+    [ -e "$dir/working/newimgname" ] && { . "$dir/working/newimgname"; rm -f "$dir/working/newimgname"; }
 
     if [ -n "$config_img_compress" ]; then
         echo "compressing $IMGNAME. this may take a while."
