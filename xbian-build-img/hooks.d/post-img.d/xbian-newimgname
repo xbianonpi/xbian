@@ -13,7 +13,7 @@ if [ -n $config_fstype_boot ] && echo $IMGNAME | grep -qE "devel|staging|test"; 
     KERNEL_VERSION=${KERNEL_VERSION%%-*}
 
     NEWIMGNAME=${config_img_name}_$(chroot ./rootfs cat /etc/debian_version)-${KERNEL_VERSION}-${KODI_VERSION}_${IMGNAME##*_}
-    NEWIMGNAME=$(echo $NEWIMGNAME | sed "s/-devel././g;s/-staging././g;s/-test././g")
+    NEWIMGNAME=$(echo $NEWIMGNAME | sed "s/-devel././g;s/-staging././g;s/-test././g;s/[+~]//g")
 
     echo "Rename image name from $IMGNAME to $NEWIMGNAME"
 
