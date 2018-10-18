@@ -1,4 +1,6 @@
 
+exit 0
+
 case $config_platform in
     rpi2*|rpi3*)
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt
