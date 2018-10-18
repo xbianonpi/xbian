@@ -1,20 +1,18 @@
 
-exit 0
-
 case $config_platform in
     rpi2*|rpi3*)
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt
 
         cp /usr/bin/qemu-arm-static ./rootfs/usr/bin || :
-        sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
+        #sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
         ;;
     rpi*)
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt
 
         cp /usr/bin/qemu-arm-static ./rootfs/usr/bin || :
-        if dpkg --compare-versions $(chroot ./rootfs dpkg-query -W xbian-package-kernel | awk '{print $2}') gt '3.14.0'; then
-            sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
-        fi
+        #if dpkg --compare-versions $(chroot ./rootfs dpkg-query -W xbian-package-kernel | awk '{print $2}') gt '3.14.0'; then
+        #    sed -i 's/compress=lzo/compress=lz4/' ./rootfs/boot/cmdline.txt
+        #fi
         ;;
     *)
         ;;
