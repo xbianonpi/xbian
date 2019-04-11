@@ -14,13 +14,22 @@ if [ -n $config_fstype_boot ] && ! echo $IMGNAME | grep -qE "devel|staging|test"
 
     loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
 
-    dd if=/dev/mapper/${loopd}p2 | xz --threads=0 -z > ../xbianroot-$config_platform.xz
+    (
+        cd ..
+        dd if=/dev/mapper/${loopd}p2 | xz --threads=0 -z > xbianroot-$config_platform.xz
+        sha512sum xbianroot-$config_platform.xz > xbianroot-$config_platform.xz.sha512
+    )
 
     mkdir -p ./boot
     mount /dev/mapper/${loopd}p1 ./boot
-    cd ./boot
-    tar -cJf ../../xbianboot-$config_platform.tar.xz *
-    cd ..
+
+    (
+        cd ./boot
+        tar -cJf ../../xbianboot-$config_platform.tar.xz *
+        cd ../..
+        sha512sum xbianboot-$config_platform.tar.xz > xbianboot-$config_platform.tar.xz.sha512
+    )
+
     umount ./boot
     rmdir ./boot
 
