@@ -279,10 +279,6 @@ do_xbian()
         ( IFS=$'\n'; for l in $(grep devel ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
         ( IFS=$'\n'; for l in $(grep staging ./rootfs/etc/apt/sources.list.d/xbian.list); do echo $l | grep -qv '^### ' && sed -i "s%$l%###\ $l%" ./rootfs/etc/apt/sources.list.d/xbian.list; done; ) || :
     fi
-
-    echo "##### xbian.list final begin ####"
-    cat ./rootfs/etc/apt/sources.list.d/xbian.list
-    echo "##### xbian.list final end   ####"
 }
 
 clean_tmp()
