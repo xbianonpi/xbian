@@ -1,0 +1,17 @@
+if [ "$config_fstype_root" = zfs ]; then
+
+    case $config_platform in
+        rpi*)  f=./rootfs/boot/cmdline.txt; ffstype="rootfstype=btrfs"; tfstype="rootfstype=zfs" ;;
+        imx6*) f=./rootfs/boot/boot.scr.txt; ffstype="setenv fstype.*"; tfstype="setenv fstype zfs";;
+    esac
+
+    sed -i "s|root=[^ ]* |root=ZFS=${config_rootfs_label} |" $f
+    sed -i "s|$ffstype|$tfstype|" $f
+    sed -i 's|rootflags=[^ ]* ||' $f
+    chroot ./rootfs xbian-update-initramfs >/dev/null
+
+    #sed -i '/.*subvol=/s/^/#/;/.*[ \t]\/[ \t]/s/^/#/' ./rootfs/etc/fstab
+    sed -i '/^\/dev\/root/d' ./rootfs/etc/fstab
+
+fi
+

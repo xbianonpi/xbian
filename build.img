@@ -100,6 +100,12 @@ do_img()
                 mkfs.btrfs -m single -d single -n 16384 -L $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>&1
             fi
             ;;
+        zfs)
+            modprobe -q zfs
+            zpool create -f -o ashift=12 -O com.sun:auto-snapshot=false -O acltype=posixacl -O xattr=sa -O atime=off -O canmount=off -O compression=lz4 \
+                -O normalization=formD -O mountpoint=/ -R $(readlink -m ./rootfs) $config_rootfs_label /dev/mapper/${loopd}p${rootpart} 2>&1
+            zfs create -o com.sun:auto-snapshot=true -o canmount=noauto -o mountpoint=/ ${config_rootfs_label}/root 2>&1
+            ;;
         *)
             ;;
     esac
@@ -130,20 +136,26 @@ do_debootstrap()
     rootpart=2
     [ -n "$config_fstype_boot" ] || rootpart=1
 
-    mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
     case $config_fstype_root in
         btrfs)
+            mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
             btrfs sub create ./rootfs/root
             btrfs sub create ./rootfs/root/@
             btrfs sub create ./rootfs/modules
             btrfs sub create ./rootfs/modules/@
             btrfs sub create ./rootfs/home
             btrfs sub create ./rootfs/home/@
+            umount ./rootfs
+            ;;
+        zfs)
+            zfs mount ${config_rootfs_label}/root
+            zpool set bootfs=${config_rootfs_label}/root ${config_rootfs_label} 2>&1
+            zfs create -o com.sun:auto-snapshot=true -o mountpoint=/home ${config_rootfs_label}/home 2>&1
+            zfs create -o com.sun:auto-snapshot=true -o mountpoint=/lib/modules ${config_rootfs_label}/modules 2>&1
             ;;
         *)
             ;;
     esac
-    umount ./rootfs
 
     [ -z "$config_fsoptions_root" ] && [ "$config_fstype_root" = btrfs ] && config_fsoptions_root='-o '
 
@@ -153,6 +165,8 @@ do_debootstrap()
             mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
             mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/home
             mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/lib/modules
+            ;;
+        zfs)
             ;;
         *)
             mount -t $config_fstype_root $config_fsoptions_root /dev/mapper/${loopd}p${rootpart} ./rootfs
@@ -319,6 +333,8 @@ clean_all()
         done
         [ $umfail -eq 0 ] || sleep 5
     done
+
+    [ "$config_fstype_root" != zfs ] || zpool export ${config_rootfs_label} 2>/dev/null
 
     set -e
     return 0
