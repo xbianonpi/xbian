@@ -4,23 +4,23 @@
 
 if [ "$config_fstype_root" = ext4 ]; then
 
-loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
-e2fsck -fy /dev/mapper/${loopd}p2
-resize2fs -M /dev/mapper/${loopd}p2
+    loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+    e2fsck -fy /dev/mapper/${loopd}p2
+    resize2fs -M /dev/mapper/${loopd}p2
 
-mount /dev/mapper/${loopd}p2 ./rootfs
-newpartsize=$(tune2fs -l /dev/mapper/${loopd}p2 | grep 'Block count' | awk -F':' '{print $2}')
-newpartblocksize=$(tune2fs -l /dev/mapper/${loopd}p2| grep 'Block size' | awk -F':' '{print $2}')
-config_img_size=$((newpartsize*newpartblocksize/512))
+    mount /dev/mapper/${loopd}p2 ./rootfs
+    newpartsize=$(tune2fs -l /dev/mapper/${loopd}p2 | grep 'Block count' | awk -F':' '{print $2}')
+    newpartblocksize=$(tune2fs -l /dev/mapper/${loopd}p2| grep 'Block size' | awk -F':' '{print $2}')
+    config_img_size=$((newpartsize*newpartblocksize/512))
 
-newpartsize=$((config_img_size+20))
-df -h | grep /working/
-umount ./rootfs; sync
-kpartx -dv $IMGNAME
-echo ",$newpartsize,,," | sfdisk -u S -N2 -q $IMGNAME > /dev/null 2>&1; sync
+    newpartsize=$((config_img_size+20))
+    df -h | grep /working/
+    umount ./rootfs; sync
+    kpartx -dv $IMGNAME
+    echo ",$newpartsize,,," | sfdisk -u S -N2 -q $IMGNAME > /dev/null 2>&1; sync
 
-newimgsize=$((newpartsize+141312))
-dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
-mv $IMGNAME.new $IMGNAME; sync
+    newimgsize=$(( newpartsize + $(parted -s $IMGNAME unit s print | awk '/^[ ]*1/{printf "%d", $3}') + 1 ))
+    dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
+    mv $IMGNAME.new $IMGNAME; sync
 
 fi

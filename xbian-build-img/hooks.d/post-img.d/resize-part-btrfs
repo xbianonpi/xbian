@@ -4,38 +4,38 @@
 
 if [ "$config_fstype_root" = btrfs ]; then
 
-rootpart=2
-if [ -z $config_fstype_boot ]; then
-    rootpart=1;
-fi
+    rootpart=2
+    if [ -z $config_fstype_boot ]; then
+        rootpart=1;
+    fi
 
-echo "$IMGNAME"
-loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
-mount -t btrfs /dev/mapper/${loopd}p${rootpart} ./rootfs
-btrfs fi sync ./rootfs
-dmesg -C
-
-while btrfs fi resize -50M ./rootfs >/dev/null 2>&1; do
-    while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
-    btrfs fi sync ./rootfs >/dev/null 2>&1
+    echo "$IMGNAME"
+    loopd=$(kpartx -s -l $IMGNAME -av | tail -1 | awk '{print $3}'); loopd=${loopd%%p?}
+    mount -t btrfs /dev/mapper/${loopd}p${rootpart} ./rootfs
+    btrfs fi sync ./rootfs
     dmesg -C
-done
 
-btrfs fi resize +10M ./rootfs >/dev/null
-while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
+    while btrfs fi resize -50M ./rootfs >/dev/null 2>&1; do
+        while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
+        btrfs fi sync ./rootfs >/dev/null 2>&1
+        dmesg -C
+    done
 
-btrfs dev scan >/dev/null 2>&1
-df -h ./rootfs
-btrfs fi df ./rootfs
-umount ./rootfs; sync
+    btrfs fi resize +10M ./rootfs >/dev/null
+    while ! dmesg | grep -i btrfs | grep -qi "new size" ; do sleep 5; done
 
-newpartsize=$(dmesg | grep -i "new size" | grep "/dev/mapper/${loopd}p${rootpart}\|/dev/dm" | tail -1 | awk '{print $NF}')
-newpartsize=$((newpartsize/512+64))
-kpartx -dv $IMGNAME
-echo ",$newpartsize,,," | sfdisk -u S -N${rootpart} -q $IMGNAME > /dev/null 2>&1; sync
+    btrfs dev scan >/dev/null 2>&1
+    df -h ./rootfs
+    btrfs fi df ./rootfs
+    umount ./rootfs; sync
 
-newimgsize=$((newpartsize+141312))
-dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
-mv $IMGNAME.new $IMGNAME; sync
+    newpartsize=$(dmesg | grep -i "new size" | grep "/dev/mapper/${loopd}p${rootpart}\|/dev/dm" | tail -1 | awk '{print $NF}')
+    newpartsize=$((newpartsize/512+64))
+    kpartx -dv $IMGNAME
+    echo ",$newpartsize,,," | sfdisk -u S -N${rootpart} -q $IMGNAME > /dev/null 2>&1; sync
+
+    newimgsize=$(( newpartsize + $(parted -s $IMGNAME unit s print | awk '/^[ ]*1/{printf "%d", $3}') + 1 ))
+    dd if=$IMGNAME of=$IMGNAME.new bs=512 count=$newimgsize
+    mv $IMGNAME.new $IMGNAME; sync
 
 fi
