@@ -1,0 +1,11 @@
+config_img_name=XBian_Dev
+config_distro_name=stretch
+config_distro_url=http://deb.debian.org/debian
+config_distro_arch=armhf
+config_fstype_root=btrfs
+config_fsoptions_root=-o compress=lzo,noatime
+config_img_size=1000M
+config_fstype_boot=vfat
+config_xbian_deb=linux-image-bcm2836 xbian-package-firmware
+config_allow_staging_devel=yes
+config_allow_staging=yes
