@@ -8,7 +8,7 @@ case $config_platform in
       ;;
 esac
 
-if [ -n $config_fstype_boot ] && ! echo $IMGNAME | grep -qE "devel|staging|test"; then
+if [ -n $config_fstype_boot ] && ! echo $IMGNAME | grep -qE "devel|staging|test|zfs"; then
 
     echo "building NOOBS files from $IMGNAME. this may take a while."
 
