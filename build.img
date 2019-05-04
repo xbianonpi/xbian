@@ -42,7 +42,8 @@ do_img()
     if [ -f /etc/centos-release ]; then
         yum -y install $config_yum_base 2>/dev/null 1>/dev/null
     else
-        apt-get install -y --force-yes -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base 1>/dev/null
+        [ "$(LC_ALL=C apt-get --version | awk '/^apt/{ print $2 }')" \< "1.1" ] && FORCE="-y --force-yes" || FORCE="--yes --allow-change-held-packages"
+        apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base >/dev/null
     fi
 
     mkdir -p "$dir/working"
@@ -186,7 +187,7 @@ do_debootstrap()
     [ -n "$config_include_deb" ] && export config_include_deb="--include=$config_include_deb"
     [ -n "$config_exclude_deb" ] && export config_exclude_deb="--exclude=$config_exclude_deb"
 
-    debootstrap --download-only $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
+    debootstrap $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
 
     if [ -f /etc/centos-release ]; then
         [ -d qemu ] && rm -rf qemu
