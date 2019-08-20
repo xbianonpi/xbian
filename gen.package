@@ -61,7 +61,8 @@ prepare_debhelper_tree() {
 
             if ! grep -q 'Source\:' DEBIAN/{control,control-dbg} 2>/dev/null; then
                 rmsrc=yes
-                sed -i 's/Package:/Source:\nPackage:/' DEBIAN/{control,control-dbg} 2>/dev/null
+                cp -a DEBIAN/control DEBIAN/control.o
+                sed -i "s/Package:/Source: $package\n\nPackage:/" DEBIAN/control 2>/dev/null
             fi
 
             sarch=$(grep -m1 'Architecture\:' DEBIAN/control | awk -F':' '{print $2}' | tr -d ' ')
@@ -76,7 +77,7 @@ prepare_debhelper_tree() {
             mv DEBIAN/$package/* ./
             rm -fr DEBIAN/$package 
             rm -f debian DEBIAN/compat
-            [ $rmsrc = yes ] && sed -i '/Source:/d' DEBIAN/{control,control-dbg} 2>/dev/null
+            [ $rmsrc = yes ] && mv DEBIAN/control.o DEBIAN/control
 
             depends=$(cat DEBIAN/$package.substvars | awk -F'Depends=' '{print $2}')
             sed -i "s%\${shlibs:Depends}%$depends%" DEBIAN/control
