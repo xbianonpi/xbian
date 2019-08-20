@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2017 XBian
+##      Copyright (C) 2012 - 2019 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -95,7 +95,7 @@ do_prep()
     [ -e $config_root_prefix/$config_platform/debootstrap ] && return
     dir=$(readlink -f "$1")
 
-    debootstrap --no-check-gpg  --include=eatmydata --arch $config_distro_arch --foreign $config_distro_name $dir $config_distro_url
+    debootstrap --no-check-gpg --include=eatmydata,wget --arch $config_distro_arch --foreign $config_distro_name $dir $config_distro_url
     mkdir -p $dir/usr/bin; cp /usr/bin/qemu-arm-static $dir/usr/bin
 
     eatmydata=($(grep eatmydata $config_root_prefix/$config_platform/debootstrap/debpaths | awk '{print $2}'))
@@ -125,7 +125,7 @@ do_prep()
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
              ;;
-        "amd64stretch")
+        amd64stretch|amd64buster)
              schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
@@ -165,7 +165,7 @@ do_other()
     esac
 
     case "$config_platform" in
-        *stretch*|*jessie*)
+        *stretch*|*jessie*|*buster*)
             # As it was written (for Debian Stretch) apt-get does not work with method mirror://
             schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
             ;;
@@ -175,6 +175,7 @@ do_other()
             ;;
     esac
 
+    schroot --directory / -p -c $config_platform -- cat /etc/apt/sources.list.d/xbian.list
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update 2>/dev/null
     LIBCDEV=''
     case "$config_platform" in
@@ -253,6 +254,13 @@ EOF
 
     schroot --directory / -p -c $config_platform -- apt-get clean
 
+    ### Install links for that f...... TexturePacker
+    schroot --directory /usr/lib -c $config_platform -p -- ln -s /opt/vc/lib/libvchiq_arm.so
+    schroot --directory /usr/lib -c $config_platform -p -- ln -s /opt/vc/lib/libvcos.so
+    schroot --directory /usr/lib -c $config_platform -p -- ln -s /opt/vc/lib/libbcm_host.so
+
+    ### Let ldd work for arm binaries in schroot
+    schroot --directory / -c $config_platform -p -- sed -i 's%RTLDLIST="/lib/ld-linux.so.2%RTLDLIST="/lib/ld-linux.so.2 /lib/ld-linux-armhf.so.3%g' /usr/bin/ldd
 }
 
 

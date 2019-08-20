@@ -1,0 +1,42 @@
+config_distro_name=buster
+config_distro_url=http://archive.raspbian.org/raspbian/
+config_distro_arch=armhf
+config_xbian_arch=RPI
+config_install_deb=autoconf automake autopoint bash-completion build-essential ca-certificates ccache cmake curl debhelper\
+ default-jre-headless fakeroot gawk git gperf locales nih-dbus-tool python3-dev python3-setuptools python3-yaml rapidjson-dev swig unzip zip\
+ clang-format:armhf default-libmysqlclient-dev:armhf xbian-package-firmware:armhf libacl1:armhf libafpclient-dev:armhf libasn1-8-heimdal:armhf\
+ libasound2-dev:armhf libass-dev:armhf libasyncns0:armhf libatomic1:armhf libattr1:armhf libaudit1:armhf libavahi-client-dev:armhf\
+ libavahi-common-dev:armhf libavahi-compat-libdnssd-dev:armhf libbluetooth-dev:armhf libbluray-dev:armhf libboost-dev:armhf libbsd0:armhf\
+ libbz2-dev:armhf libc6-dev:armhf libcap-dev:armhf libcdio-dev:armhf libcec-dev:armhf libcomerr2:armhf libcroco3:armhf libcups2:armhf\
+ libcurl4-openssl-dev:armhf libdb5.3:armhf libdbus-1-dev:armhf libdrm2:armhf libdrm-freedreno1:armhf libdrm-nouveau2:armhf libdrm-radeon1:armhf\
+ libdvbcsa-dev:armhf libeatmydata1:armhf libedit2:armhf libelf1:armhf libenca0:armhf libexpat1-dev:armhf libfakeroot:armhf libffi6:armhf\
+ libflac8:armhf libfmt-dev:armhf libfontconfig1-dev:armhf libfreetype6:armhf libfribidi0:armhf libfstrcmp-dev:armhf libfuse2:armhf\
+ libgbm1:armhf libgcc1:armhf libgcrypt20:armhf libgif-dev:armhf libgif-dev:armhf libglib2.0-0:armhf libgmp-dev:armhf libgmpxx4ldbl:armhf\
+ libgnutls28-dev:armhf libgnutls-openssl27:armhf libgnutlsxx28:armhf libgomp1:armhf libgpg-error0:armhf libgraphite2-3:armhf\
+ libgssapi3-heimdal:armhf libgssapi-krb5-2:armhf libharfbuzz0b:armhf libharfbuzz-gobject0:armhf libharfbuzz-icu0:armhf libhcrypto4-heimdal:armhf\
+ libheimbase1-heimdal:armhf libheimntlm0-heimdal:armhf libhogweed4:armhf libhx509-5-heimdal:armhf libice6:armhf libicu-dev:armhf\
+ libidn11:armhf libinput-dev:armhf libiso9660-dev:armhf libjbig-dev:armhf libjpeg62-turbo-dev:armhf libjson-c3:armhf\
+ libk5crypto3:armhf libkeyutils1:armhf libkrb5-26-heimdal:armhf libkrb5-3:armhf libkrb5support0:armhf libldap-2.4-2:armhf libldb1:armhf\
+ liblircclient-dev:armhf libltdl7:armhf liblzma-dev:armhf liblzo2-dev:armhf libmicrohttpd-dev:armhf libmp3lame-dev:armhf libmpeg2-4-dev:armhf\
+ libmpfr6:armhf libncurses5:armhf libncursesw5:armhf libncursesw5-dev:armhf libnettle6:armhf libnfs-dev:armhf libnih-dev:armhf libnih-dbus-dev:armhf\
+ libogg-dev:armhf libp11-kit0:armhf libpam0g:armhf libpcre3-dev:armhf libpcrecpp0v5:armhf libplist-dev:armhf libplymouth-dev:armhf libpng-dev:armhf\
+ libpopt0:armhf libpulse-dev:armhf libpulse-mainloop-glib0:armhf libpython2.7:armhf libpython2.7-dev:armhf libpython2.7-minimal:armhf\
+ libpython2.7-stdlib:armhf libpython-stdlib:armhf libraw-dev:armhf libroken18-heimdal:armhf librtmp1:armhf librtmp-dev:armhf libsasl2-2:armhf\
+ libsasl2-modules-db:armhf libselinux1:armhf libsigsegv2:armhf libsm6:armhf libsmbclient-dev:armhf libsndfile1:armhf libspeex-dev:armhf\
+ libsqlite3-dev:armhf libssh2-1-dev:armhf libssh-dev:armhf libssl-dev:armhf libstdc++6:armhf libsystemd0:armhf libtag1-dev:armhf\
+ libtag1v5-vanilla:armhf libtalloc2:armhf libtasn1-6:armhf libtdb1:armhf libtevent0:armhf libtiff5-dev:armhf libtiffxx5:armhf libtinfo5:armhf\
+ libtinyxml-dev:armhf libtntnet-dev:armhf libubsan0:armhf libudev-dev:armhf libunistring-dev:armhf libusb-1.0-0-dev:armhf libusb-dev:armhf\
+ libuuid1:armhf libvncserver-dev:armhf libvorbis-dev:armhf libvorbisenc2:armhf libvorbisfile3:armhf libwayland-client0:armhf\
+ libwayland-server0:armhf libwbclient0:armhf libwind0-heimdal:armhf libwrap0:armhf libx11-6:armhf libx11-xcb1:armhf libxau6:armhf libxcb1:armhf\
+ libxdmcp6:armhf libxext6:armhf libxi6:armhf libxkbcommon-dev:armhf libxml2-dev:armhf libxslt1-dev:armhf libxtst6:armhf libyajl-dev:armhf\
+ pkg-config:armhf samba-libs:armhf uuid-dev:armhf xbian-package-shairplay:armhf yasm:armhf zlib1g-dev:armhf
+
+#
+# Vanished:
+#   liblockdev1-dev libjasper-dev libasan1:armhf libjasper1:armhf 
+# Conflicts:
+#   libssl-dev:armhf 
+#
+# Vanished:
+#   libntdb1:armhf 
+#
