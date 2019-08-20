@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2017 XBian
+##      Copyright (C) 2012 - 2019 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -42,7 +42,7 @@ do_img()
     if [ -f /etc/centos-release ]; then
         yum -y install $config_yum_base 2>/dev/null 1>/dev/null
     else
-        [ "$(LC_ALL=C apt-get --version | awk '/^apt/{ print $2 }')" \< "1.1" ] && FORCE="-y --force-yes" || FORCE="--yes --allow-change-held-packages"
+        [ "$(LC_ALL=C apt-get --version | awk '/^apt/{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || FORCE="--yes --allow-change-held-packages"
         apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 $config_deb_base >/dev/null
     fi
 
@@ -238,10 +238,12 @@ do_xbian()
     export DEBIAN_FRONTEND=noninteractive
 
     ### Since apt-get version > 1.0.* --force-yes option is depreciated we have to use --allow options and gnupg is required for apt-key
-    [ "$(LC_ALL=C chroot ./rootfs apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || { \
-        FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"; \
-        LC_ALL=C chroot ./rootfs apt-get install $FORCE gnupg; \
-    }
+    if [ "$(LC_ALL=C chroot ./rootfs apt-get --version | awk '/^apt/{ print $2 }')" \< "1.1" ]; then
+        FORCE="--yes --force-yes"
+    else
+        FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"
+        LC_ALL=C chroot ./rootfs apt-get install $FORCE gnupg
+    fi
 
     chroot ./rootfs wget -r -l1 -q --no-parent $config_xbianrepository -P /tmp
     repofile="$(chroot ./rootfs find /tmp -name 'xbian-package-repo*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-repo)"
@@ -257,28 +259,35 @@ do_xbian()
         ### As it was written (for Debian Stretch) apt-get does not work with method mirror://
         case "$config_distro_name" in
             stretch)
-                  LC_ALL=C chroot ./rootfs sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
-                  ;;
+                LC_ALL=C chroot ./rootfs sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
+                ;;
             *)
                 echo "FIXME: apt-get update fails"
                 exit 1
                 ;;
         esac
-        chroot ./rootfs apt-get update
+        LC_ALL=C chroot ./rootfs apt-get update
     )
 
-    mkdir -p ./rootfs/fake
-    ( cd ./rootfs/fake
-    for f in initctl invoke-rc.d restart start stop start-stop-daemon service reboot; do
-        rm -f ./$f && ln -s /bin/true ./$f
-    done )
-
-    export PATH=/fake:$PATH
+    ### Since Debian Buster wie have to make sure that upstart is already installed before
+    ### replacing some services with a dummy
+    LC_ALL=C chroot ./rootfs apt-get install $FORCE upstart
 
     LC_ALL=C chroot ./rootfs apt-get upgrade $FORCE
 
+    ### Install fake services. Since Debian Buster modifying PATH variable does not longer work
+    ### because apt sets PATH variable to /usr/sbin:/usr/bin:/sbin:/bin
+    fpl=''
+    for f in initctl invoke-rc.d restart start stop start-stop-daemon service reboot udevadm; do
+        PATH=/usr/sbin:/usr/bin:/sbin:/bin fp=$(chroot ./rootfs which $f)
+        if [ -n "$fp" ]; then
+            chroot ./rootfs mv $fp $fp.orig && chroot ./rootfs ln -s /bin/true $fp
+            fpl="$fpl $fp"
+        fi
+    done
+
     ### let's settle down apt consistency after debootstrap (without initial install -f will not install
-    ### any packages in next loop even with correct dependencies
+    ### any packages in next loop even with correct dependencies)
     LC_ALL=C chroot ./rootfs apt-get install $FORCE -f
     for i in $(seq 1 3); do
         LC_ALL=C chroot ./rootfs apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dir::Cache=/tmp/tmp -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_xbian_deb $config_xbian_base_deb 2>&1 | tee /tmp/apt-get.out | grep --line-buffer -v 'Can not write log, openpty()\|/proc/mounts\|/com/ubuntu/upstart\|/var/run/dbus/system_bus_socket'
@@ -287,7 +296,10 @@ do_xbian()
 
     ### make pin settings effective
     LC_ALL=C chroot ./rootfs apt-get upgrade $FORCE
-    rm -fr ./rootfs/fake
+
+    for fp in $fpl; do
+        chroot ./rootfs mv $fp.orig $fp
+    done
 
     ### when all packages has been installed only stable repo is allowed again for stable release
     if ! echo $IMGNAME | grep -qE "devel|staging|test"; then
