@@ -1,7 +1,7 @@
 # ******************************************************************************
 # *                                                                            *
 # * This file is part of XBian --- Kodi on the Raspberry Pi.                   *
-# * Copyright © 2018 XBian Team -- http://www.xbian.org - info@xbian.org       *
+# * Copyright © 2019 XBian Team -- http://www.xbian.org - info@xbian.org       *
 # *                                                                            *
 # * XBian is free software: you can redistribute it and/or modify it under the *
 # * terms of the GNU General Public License as published by the Free Software  *
@@ -35,7 +35,10 @@ gpu_mem_256=100
 # See also https://www.raspberrypi.org/forums/viewtopic.php?f=29&t=180420
 #total_mem=1024
 
+[pi4]
+gpu_mem_1024=320
 
+[all]
 # ******************************************************************************
 # * Various settings see also: http://elinux.org/RPi_config.txt                *
 # * to obtain keys visit the shop at http://www.raspberrypi.com                *
@@ -125,6 +128,7 @@ dtoverlay=lirc-rpi,debug
 # * Raspberry Pi3/Pi3B+ onboard Bluetooth                                      *
 # ******************************************************************************
 
+[pi3]
 # This parameter enables usage of miniuart (ttyS0) for BT.
 # Please note that BT may not work properly if CPUFREQ_GOVERNOR
 # is set to something else than performance (see also
@@ -133,3 +137,11 @@ dtoverlay=lirc-rpi,debug
 
 # Disables onboard Bluetooth
 #dtoverlay=pi3-disable-bt
+
+# ******************************************************************************
+# * Raspberry Pi4                                                              *
+# ******************************************************************************
+
+[pi4]
+dtoverlay=vc4-fkms-v3d
+max_framebuffers=2
