@@ -1,6 +1,6 @@
 
 case $config_platform in
-    rpi2*|rpi3*)
+    rpi2*|rpi3*|rpi4*)
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt
 
         cp /usr/bin/qemu-arm-static ./rootfs/usr/bin || :

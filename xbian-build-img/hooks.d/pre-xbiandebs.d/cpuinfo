@@ -5,7 +5,7 @@ mountpoint -q ./rootfs/proc && umount ./rootfs/proc || :
 echo fuse > ./rootfs/proc/modules
 
 case $config_platform in
-    rpi2*|rpi3*)
+    rpi2*|rpi3*|rpi4*)
         AR=RPI
         echo "hardware BCM2709" > ./rootfs/proc/cpuinfo
         for i in $(seq 0 3); do echo "processor : $i" >> ./rootfs/proc/cpuinfo; done
