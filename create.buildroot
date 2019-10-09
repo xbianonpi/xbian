@@ -211,19 +211,23 @@ EOF
 
     case "$config_xbian_arch" in
         "iMX6")
-            # Install firmware files for RPi manually
-            schroot --directory /tmp -c $config_platform -p -- wget -r -l1 -q --no-parent $config_package_firmware
-            FW="$(schroot --directory /tmp -c $config_platform -p -- find ./ -name 'xbian-package-firmware*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-firmware)"
-            echo "Latest firmware is $FW"
-            schroot --directory /tmp -c $config_platform -p -- dpkg -x $FW /
-            schroot --directory /tmp -c $config_platform -p -- rm -f $FW
+            # Install firmware files for RPi manually if not already there
+            if ! schroot --directory / -c $config_platform -p -- dpkg-query -s xbian-package-firmware &>/dev/null; then
+                schroot --directory /tmp -c $config_platform -p -- wget -r -l1 -q --no-parent $config_package_firmware
+                FW="$(schroot --directory /tmp -c $config_platform -p -- find ./ -name 'xbian-package-firmware*.deb' 2>/dev/null | sort -r | grep -m1 xbian-package-firmware)"
+                echo "Latest firmware is $FW"
+                schroot --directory /tmp -c $config_platform -p -- dpkg -x $FW /
+                schroot --directory /tmp -c $config_platform -p -- rm -f $FW
+            fi
             # Copy OpenGLES libs for i.MX6 to the right place
-            schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \; || :
+            if schroot --directory / -c $config_platform -p -- dpkg-query -s firmware-imx &>/dev/null; then
+                schroot --directory / -c $config_platform -p -- find /usr/lib/xbmc -name "*" -exec cp -av {} /usr/lib/ \; || :
+            fi
             # Copy some .pc files to the correct place
             schroot --directory / -c $config_platform -p -- [ -e /usr/lib/pkgconfig/libcdio.pc ] && \
-                schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcdio.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
             schroot --directory / -c $config_platform -p -- [ -e /usr/lib/pkgconfig/libcec.pc ] && \
-                schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
+            schroot --directory / -c $config_platform -p -- cp -a /usr/lib/pkgconfig/libcec.pc /usr/lib/arm-linux-gnueabihf/pkgconfig || :
             ;;
     esac
 
