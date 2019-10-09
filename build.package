@@ -163,11 +163,19 @@ do_clone()
         do_wipe "$dir" && mkdir -p "$dir/working"
         sudo /bin/mount -o bind "$WORKSPACE" "$dir/working"
         (
-          cd "$dir/working"
-          do_run git fetch --all
-          do_run git checkout "$config_source_branch"
-          do_run git reset --hard "origin/$config_source_branch"
-          do_run git clean -dfx
+          if [ -d "$dir/working/.git" ]; then
+              cd "$dir/working"
+              do_run git fetch --all
+              do_run git checkout "$config_source_branch"
+              do_run git reset --hard "origin/$config_source_branch"
+              do_run git clean -dfx
+          else
+              cd "$dir"
+              config_branch=''
+              [ -n "$config_source_branch" ] && export config_branch="-b "
+              do_run git clone $config_branch$config_source_branch $config_source_type_extra $config_source_addr working
+              cd working
+          fi
           do_hooks post-clone.d
         )
         return 0
