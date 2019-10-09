@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2014 XBian
+##      Copyright (C) 2012 - 2019 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -64,6 +64,8 @@ rexp()
 
 do_readconfig() {
     dir="$1"
+
+    rexp "$dir/platforms" || :
 
     if [ -e "$dir/config_pkgver" ]; then
         rexp "$dir/config_pkgver"

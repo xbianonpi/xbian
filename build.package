@@ -131,8 +131,12 @@ do_patch()
 do_wipe()
 {
     dir="$1"
-    mountpoint -q "$dir/working" && while sudo /bin/umount "$dir/working"; do :; done
-    do_run rm -fr "$dir/working"
+    if [ -n "$config_use_workspace" ] && mountpoint -q "$dir/working"; then
+        do_run rm -fr "$dir/working" 2>/dev/null || :
+    else
+        mountpoint -q "$dir/working" && while sudo /bin/umount "$dir/working"; do :; done
+        do_run rm -fr "$dir/working"
+    fi
 }
 
 do_clean()
@@ -385,6 +389,20 @@ do_deb()
     [ ! -d $(pwd)/build/$config_platform_branch/working ] || touch $(pwd)/build/$config_platform_branch/working/.force.aptonly
 }
 
+do_release()
+{
+    if [ -n "$config_use_workspace" ]; then
+        echo -e "\nRelease userworkspace $config_use_workspace"
+        for d in "$dir/working" ./content ./content-dbg; do
+            if mountpoint -q "$d"; then
+                m=umount
+                [ "$2" = fullrun -o "$2" = flush ] && { m='flush and umount'; rm -rf "$d" 2>/dev/null || :; }
+                echo "$m $d"; sudo /bin/umount "$d" && rm -rf "$d"
+            fi
+        done
+    fi
+}
+
 do_show_help()
 {
 echo "
@@ -449,7 +467,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     while [ "$#" -gt '0' ]; do
         case "$1" in
             (-l|--list)
-                printf "ConfigName: %s\n\tTarget: %s\n\tBranch: %s\n\t   URL: %s\n\n" "${dir#*build/}" "$(printf "%s" "$config_build_env" | grep -ow ['armhfjessie'\|'armhfwheezy']\*)" $config_source_branch $config_source_addr
+                cbe=$(eval echo $config_build_env | sed "s/-c//g;s/schroot//g")
+                printf "ConfigName: %s\n\tTarget: %s\n\tBranch: %s\n\t   URL: %s\n\n" "${dir#*build/}" "$(printf "%s" "$cbe" | grep -ow \
+                    ['armhfbusterv6'\|'amd64buster'\|'armhfstretchv6'\|'amd64stretch'\|'amd64stretch_gcc7'\|'armhfjessie'\|'armhfwheezy'\|'cross']\*)" \
+                    $config_source_branch $config_source_addr
                 continue 2
                 ;;
             (--action|-a)
@@ -495,61 +516,102 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
         continue
     fi
 
-    echo "-------------------------------"
-    echo "PROCESSING $(basename $dir)";
-    echo "-------------------------------"
-
-    [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
-
-    export config_platform=${opt_arch%%-*}
-    export config_platform_branch=$opt_arch
-    export config_branch=${opt_arch##*-}
-    [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
-
-    trap "kill_gitbuilder; sync; mountpoint -q $dir/working && sudo /bin/umount $dir/working; " EXIT TERM
-
-    git_preloader
-
     [ "$opt_action" = '' ] && opt_action="build" || opt_action=$(echo $opt_action | tr ',' ' ')
 
-    for a in $opt_action; do
-      case $a in
-        wipe)
-            ( do_wipe "$dir" )
-            ;;
-        clean)
-            ( do_clean "$dir" )
-            ;;
-        patch)
-            ( do_patch "$dir" )
-            ;;
-        prepare)
-            ( do_prep "$dir" force )
-            ;;
-        make)
-            ( do_make "$dir" )
-            ;;
-        clone)
-            ( do_clone "$dir" )
-            ;;
-        install)
-            ( do_install "$dir" )
-            ;;
-        deb)
-            ( do_deb "$dir" )
-            ;;
-        ''|build)
-            dr=$(pwd)
-            [ -e "./.autowipe" ] && . "./.autowipe"
-            [ "$config_wipe_before" = "yes" ] && do_wipe "$dir" fullrun
-            for act in do_clone do_patch do_prep do_make do_install do_deb; do
-                ( $act "$dir" fullrun )
-            done 
-            [ "$config_wipe_after" = "yes" ] && do_wipe "$dir" fullrun
-            ;;
-      esac
-    done
+    if [ -z "$config_platforms" -o "$opt_action" != build ]; then
+        platforms=($config_platforms)
+        export config_platforms=none
+    fi
 
+    for arch_config in $config_platforms; do
+
+        echo "-------------------------------"
+        echo "PROCESSING $(basename $dir)";
+        if [ "$arch_config" = none ]; then
+            opt_actions="do_clone do_patch do_prep do_make do_install do_deb do_release"
+            opt_actions_done=''
+            [ ! -e "$dir/config" ] && [ -e $dir/config.${platforms[0]} ] && ln -srf $dir/config.${platforms[0]} $dir/config
+            [ ! -e "$dir/env" ]    && [ -e $dir/env.${platforms[0]} ]    && ln -srf $dir/env.${platforms[0]} $dir/env
+        else
+            opt_actions="do_clone do_patch do_prep do_make do_install"
+            opt_actions_done="do_deb do_release"
+            echo " for platform $arch_config"
+            [ -e $dir/config.$arch_config ] && ln -srf $dir/config.$arch_config $dir/config
+            [ -e $dir/env.$arch_config ]    && ln -srf $dir/env.$arch_config $dir/env
+        fi
+        unset $(env | grep config_ | awk -F'=' '{print $1}')
+        do_readconfig $dir
+        echo "-------------------------------"
+
+        [ -z "$opt_arch" ] && opt_arch=$(basename "$dir")
+
+        export config_platform=${opt_arch%%-*}
+        export config_platform_branch=$opt_arch
+        export config_branch=${opt_arch##*-}
+        [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
+
+        trap "kill_gitbuilder; sync; [ -z "$config_use_workspace" ] && mountpoint -q $dir/working && sudo /bin/umount $dir/working; \
+            [ -h "$dir/config" ] && rm -f $dir/config; [ -h "$dir/env" ] && rm -f $dir/env; " EXIT TERM
+
+        git_preloader
+        if [ -n "$config_use_workspace" ] && [ "$opt_action" != release ]; then
+            (
+                for d in "$dir/working" content content-dbg; do
+                    if ! mountpoint -q "$d" || ! findmnt -n $(readlink -m $d) >/dev/null; then
+                        ! mountpoint -q "$d" && rm -fr "$d" && mkdir -p "$d" "$config_use_workspace/$config_platform_branch/$(basename $d)" && sudo /bin/mount --bind "$config_use_workspace/$config_platform_branch/$(basename $d)" "$d"
+                    fi
+                done
+            )
+        fi
+
+        for a in $opt_action; do
+          case $a in
+            wipe)
+                ( do_wipe "$dir" )
+                ;;
+            clean)
+                ( do_clean "$dir" )
+                ;;
+            patch)
+                ( do_patch "$dir" )
+                ;;
+            prepare)
+                ( do_prep "$dir" force )
+                ;;
+            make)
+                ( do_make "$dir" )
+                ;;
+            clone)
+                ( do_clone "$dir" )
+                ;;
+            install)
+                ( do_install "$dir" )
+                ;;
+            deb)
+                ( do_deb "$dir" )
+                ;;
+            release|flush)
+                ( do_release "$dir" "$a" )
+                ;;
+            build)
+                dr=$(pwd)
+                [ -e "./.autowipe" ] && . "./.autowipe"
+                [ "$config_wipe_before" = "yes" ] && [ "$arch_config" = none ] && do_wipe "$dir" fullrun
+                for act in $opt_actions; do
+                    #echo "( $act "$dir" fullrun )"
+                    ( $act "$dir" fullrun )
+                done
+                [ "$config_wipe_after" = "yes" ] && [ "$arch_config" = none ] && do_wipe "$dir" fullrun
+                ;;
+          esac
+        done
+    done
+    if [ "$opt_action" = build ]; then
+        for act in $opt_actions_done; do
+            #echo "( $act "$dir" fullrun )"
+            ( $act "$dir" fullrun )
+        done
+    fi
     printf "\n-------------------------------\nFINISHED OK\n-------------------------------\n"
     exit 0
 done
