@@ -556,10 +556,11 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
         export config_platform=${opt_arch%%-*}
         export config_platform_branch=$opt_arch
         export config_branch=${opt_arch##*-}
+        export config_arch_config=$arch_config
         [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
         trap "kill_gitbuilder; sync; [ -z "$config_use_workspace" ] && mountpoint -q $dir/working && sudo /bin/umount $dir/working; \
-            [ -h "$dir/config" ] && rm -f $dir/config; [ -h "$dir/env" ] && rm -f $dir/env; " EXIT TERM
+            [ "$arch_config" != none ] && { [ -h "$dir/config" ] && rm -f $dir/config; [ -h "$dir/env" ] && rm -f $dir/env; }; " EXIT TERM
 
         git_preloader
         if [ -n "$config_use_workspace" ] && [ "$opt_action" != release ]; then
