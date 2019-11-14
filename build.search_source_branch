@@ -4,8 +4,8 @@
   cd "$1"
   PARAM=
   [ -z "$2" ] || PARAM="$2\$"
-  find ./build -maxdepth 2 -mindepth 2 -name config -exec grep ^config_source_branch=$PARAM {} + \
-    | xargs -L1 -I{} sh -c 'echo $(basename $(dirname {}))'
+  find ./build -maxdepth 2 -mindepth 2 \( -name config -o -name config.* \) -type f -exec grep ^config_source_branch=$PARAM {} + \
+    | xargs -L1 -I{} sh -c 'echo $(basename $(dirname {}))' | sort -u
 ) }
 
 [ -n "$1" ] || exit 0
