@@ -5,6 +5,6 @@ config_fstype_root=btrfs
 config_fsoptions_root=-o compress=lzo,noatime
 config_img_size=1200M
 config_fstype_boot=vfat
-config_xbian_deb=xbian-package-kernel xbian-package-firmware elogind
+config_xbian_deb=xbian-package-kernel xbian-package-firmware
 config_allow_staging_devel=no
 config_allow_staging=no
