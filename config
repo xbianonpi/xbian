@@ -7,6 +7,8 @@
 #
 config_patch_fuzzy=5
 
+config_limit_jobs=
+
 #
 # Options for building deb package
 #
