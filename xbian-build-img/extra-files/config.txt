@@ -142,6 +142,6 @@ dtoverlay=lirc-rpi,debug
 # ******************************************************************************
 
 [pi4]
-dtoverlay=vc4-fkms-v3d,cma-512
+dtoverlay=vc4-fkms-v3d,cma-384
 dtoverlay=rpivid-v4l2
 max_framebuffers=2
