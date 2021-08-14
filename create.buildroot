@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2019 XBian
+##      Copyright (C) 2012 - 2021 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -125,7 +125,7 @@ do_prep()
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
              ;;
-        amd64stretch|amd64buster)
+        amd64stretch|amd64buster|amd64bullseye)
              schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
@@ -165,7 +165,7 @@ do_other()
     esac
 
     case "$config_platform" in
-        *stretch*|*jessie*|*buster*)
+        *stretch*|*jessie*|*buster*|*bullseye*)
             # As it was written (for Debian Stretch) apt-get does not work with method mirror://
             schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
             ;;
@@ -265,6 +265,17 @@ EOF
 
     ### Let ldd work for arm binaries in schroot
     schroot --directory / -c $config_platform -p -- sed -i 's%RTLDLIST="/lib/ld-linux.so.2%RTLDLIST="/lib/ld-linux.so.2 /lib/ld-linux-armhf.so.3%g' /usr/bin/ldd
+
+    ### Tell some stupid configure scripts that we are building for ARM processor
+    cat << \EOF > /tmp/uname
+#!/bin/sh
+
+[ "$1" = '-m' ] && { echo armv7l; exit 0; }
+
+exec /usr/bin/uname $@
+EOF
+    chmod +x /tmp/uname
+    schroot --directory / -c $config_platform -p -- mv /tmp/uname /usr/local/bin
 }
 
 
