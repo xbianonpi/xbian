@@ -538,8 +538,8 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
         if [ "$arch_config" = none ]; then
             opt_actions="do_clone do_patch do_prep do_make do_install do_deb do_release"
             opt_actions_done=''
-            [ ! -e "$dir/config" ] && [ -e $dir/config.${platforms[0]} ] && ln -srf $dir/config.${platforms[0]} $dir/config
-            [ ! -e "$dir/env" ]    && [ -e $dir/env.${platforms[0]} ]    && ln -srf $dir/env.${platforms[0]} $dir/env
+            [ ! -e "$dir/config" ] && [ -e $dir/config.${platforms[0]} ] && { [ -h "$dir/config" ] && rm -f $dir/config; ln -srf $dir/config.${platforms[0]} $dir/config; }
+            [ ! -e "$dir/env" ]    && [ -e $dir/env.${platforms[0]} ]    && { [ -h "$dir/env" ] && rm -f $dir/env; ln -srf $dir/env.${platforms[0]} $dir/env; }
         else
             opt_actions="do_clone do_patch do_prep do_make do_install"
             opt_actions_done="do_deb do_release"
@@ -559,8 +559,7 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
         export config_arch_config=$arch_config
         [ $config_branch = $config_platform ] && export config_branch=$config_source_branch
 
-        trap "kill_gitbuilder; sync; [ -z "$config_use_workspace" ] && mountpoint -q $dir/working && sudo /bin/umount $dir/working; \
-            [ "$arch_config" != none ] && { [ -h "$dir/config" ] && rm -f $dir/config; [ -h "$dir/env" ] && rm -f $dir/env; }; " EXIT TERM
+        trap "kill_gitbuilder; sync; [ -z "$config_use_workspace" ] && mountpoint -q $dir/working && sudo /bin/umount $dir/working; " EXIT TERM
 
         git_preloader
         if [ -n "$config_use_workspace" ] && [ "$opt_action" != release ]; then

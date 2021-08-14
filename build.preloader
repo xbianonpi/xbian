@@ -50,8 +50,8 @@ while read B REPOX ARCHX; do
 			if [ "$BUILD_ONCE" == 'no' ]; then
 				rm -f ${DEST_DEB}/*.deb
 				echo "Running on $(pwd) \$xbiangit --arch $B (config_os_version=$config_os_version)"
-				grep -q "config_build_env=schroot" "build/$B/config" || BUILD_ONCE='yes'
 				$xbiangit --arch $B || exit $?
+				grep -q "config_build_env=schroot" "build/$B/config" || BUILD_ONCE='yes'
 			fi
 
 		elif [ -e gen.package.sh ]; then
