@@ -1,4 +1,4 @@
-config_distro_name=buster
+config_distro_name=bullseye
 config_distro_url=http://archive.raspbian.org/raspbian/
 config_distro_arch=armhf
 config_fstype_root=btrfs
