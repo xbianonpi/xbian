@@ -3,7 +3,7 @@ config_distro_url=http://deb.debian.org/debian
 config_distro_arch=armhf
 config_fstype_root=btrfs
 config_fsoptions_root=-o compress=none,noatime
-config_img_size=1500M
+config_img_size=1800M
 config_fstype_boot=vfat
 config_xbian_deb=linux-image-bcm2836 xbian-package-firmware
 config_allow_staging_devel=no
