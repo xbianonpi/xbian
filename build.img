@@ -406,6 +406,14 @@ do_post()
     if [ -n "$config_img_compress" ]; then
         echo "compressing $IMGNAME. this may take a while."
         do_run $config_img_compress "$dir/working/$IMGNAME"
+        (
+            IFS='
+'
+            for f in $(ls -1 $dir/working/$IMGNAME*); do
+                echo "building sha512 for $(basename $f)"
+                do_run sha512sum "$f" | awk '{print $1}' > "$f.sha512"
+            done
+        )
     fi
     mv "$dir"/working/$IMGNAME* "$dir"
 }
