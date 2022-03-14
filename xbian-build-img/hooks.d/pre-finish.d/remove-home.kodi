@@ -1,0 +1,2 @@
+
+chroot ./rootfs rm -rf /home/xbian/.kodi
