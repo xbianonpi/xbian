@@ -1,7 +1,7 @@
 # ******************************************************************************
 # *                                                                            *
 # * This file is part of XBian --- Kodi on the Raspberry Pi.                   *
-# * Copyright © 2021 XBian Team -- https://www.xbian.org - info@xbian.org      *
+# * Copyright © 2022 XBian Team -- https://www.xbian.org - info@xbian.org      *
 # *                                                                            *
 # * XBian is free software: you can redistribute it and/or modify it under the *
 # * terms of the GNU General Public License as published by the Free Software  *
@@ -36,14 +36,39 @@ gpu_mem_256=100
 #total_mem=1024
 
 [pi4]
-gpu_mem_1024=320
+gpu_mem_1024=70
+
+
+# ******************************************************************************
+# * Display configuration                                                      *
+# *  Raspberry Pi 1, Raspberry Pi 2:                                           *
+# *     The previous proprietary Raspberry Pi drivers are still used here.     *
+# *     fkms and kms drivers are not supported.                                *
+# *  Raspberry Pi 3, Pi 3B:                                                    *
+# *     Here, the use of the fkms or the kms driver is possible but not        *
+# *     recommended, as the playback of HEVC videos is severely limited        *
+# *     due to the lack of hardware acceleration. When using the kms driver,   *
+# *     please note that the standalone VNC service does not work.             *
+# *  Raspberry Pi 4:                                                           *
+# *     fkms or kms driver is required here, whereby kms is recommended,       *
+# *     especially for 4k displays. When using the kms driver, please note     *
+# *     that the standalone VNC service does not work.                         *
+# ******************************************************************************
+
+[pi3]
+#dtoverlay=vc4-fkms-v3d,cma-192
+
+[pi4]
+dtoverlay=vc4-kms-v3d,cma-384
+dtoverlay=rpivid-v4l2
+
+
+# ******************************************************************************
+# * Various settings see also: https://elinux.org/RPi_config.txt               *
+# * to obtain keys visit the shop at https://codecs.raspberrypi.com/           *
+# ******************************************************************************
 
 [all]
-# ******************************************************************************
-# * Various settings see also: http://elinux.org/RPi_config.txt                *
-# * to obtain keys visit the shop at http://www.raspberrypi.com                *
-# ******************************************************************************
-
 # Enables turbo mode from boot for the given value in seconds (up to 60) or
 # until cpufreq sets a frequency. Default 0
 initial_turbo=3
@@ -136,12 +161,3 @@ dtoverlay=lirc-rpi,debug
 
 # Disables onboard Bluetooth
 #dtoverlay=disable-bt
-
-# ******************************************************************************
-# * Raspberry Pi4                                                              *
-# ******************************************************************************
-
-[pi4]
-dtoverlay=vc4-fkms-v3d,cma-384
-dtoverlay=rpivid-v4l2
-max_framebuffers=2
