@@ -475,10 +475,10 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
     while [ "$#" -gt '0' ]; do
         case "$1" in
             (-l|--list)
-                cbe=$(eval echo $config_build_env | sed "s/-c//g;s/schroot//g")
+                cbe=$(eval echo $config_build_env | sed "s/\${config_os_version}/${config_os_version}/g;s/ARCH=.*//g" | sed "s/-c//g;s/schroot//g")
                 printf "ConfigName: %s\n\tTarget: %s\n\tBranch: %s\n\t   URL: %s\n\n" "${dir#*build/}" "$(printf "%s" "$cbe" | grep -ow \
-                    ['armhfbusterv6'\|'amd64buster'\|'armhfstretchv6'\|'amd64stretch'\|'amd64stretch_gcc7'\|'armhfjessie'\|'armhfwheezy'\|'cross']\*)" \
-                    $config_source_branch $config_source_addr
+                    ['amd64bookworm_gcc49'\|'armhfbookwormv6'\|'amd64bullseye_gcc49'\|'armhfbullseyev6'\|'amd64buster_gcc49'\|'armhfbusterv6'\|\
+'amd64stretch_gcc49'\|'armhstretchv6'\|'armhfjessiev6'\|'armhfwheezyv6'\|'cross']\*)" $config_source_branch $config_source_addr
                 continue 2
                 ;;
             (--action|-a)
