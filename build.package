@@ -37,7 +37,7 @@ do_prep()
 {
     dir="$1"
 
-    do_hooks pre-configure.d
+    ( rexp $dir/env; do_hooks pre-configure.d )
 
     cd "$dir/working"
     [ "$2" = force ] && runprepare=1 || runprepare=0
@@ -68,14 +68,14 @@ do_prep()
         [ $runconfigure -eq 1 ] && ( rexp ../env && do_run $config_build_env $config_source_configure; )
     fi
 
-    do_hooks post-configure.d
+    ( rexp ../env; do_hooks post-configure.d )
 }
 
 do_make()
 {
     dir="$1"
 
-    do_hooks pre-build.d
+    ( rexp $dir/env; do_hooks pre-build.d )
 
     cd "$dir/working"
 
@@ -87,7 +87,7 @@ do_make()
         ( rexp ../env; do_run $config_build_env $config_build_make; )
     fi
 
-    do_hooks post-build.d
+    ( rexp ../env; do_hooks post-build.d )
 }
 
 do_patch()
@@ -264,13 +264,14 @@ do_install()
 {
 #    export MAKEFLAGS=-j1
 
-    do_hooks pre-install.d
+    dir="$1"
+
+    ( rexp $dir/env; do_hooks pre-install.d )
 
     export INSTALL_MOD_PATH=$(readlink -f ./content)
     export INSTALL_FW_PATH=$(readlink -f ./content)
     export DESTDIR=$(readlink -f ./content)
 
-    dir="$1"
     if [ "$config_deb_contentclean" = yes -a -e ./content ]; then 
         find ./content/ -mindepth 1 -maxdepth 1 ! -regex '.*/DEBIAN' -print0 | \
             xargs -0 -L1 rm -r >/dev/null 2>&1|| :
@@ -283,7 +284,7 @@ do_install()
     done
 
     unset DESTDIR
-    do_hooks post-install.d
+    ( rexp ../env; do_hooks post-install.d )
 }
 
 do_deb()
