@@ -6,6 +6,8 @@ mount -o bind /dev/mapper ./rootfs/dev/mapper
 
 mkdir -p ./rootfs/tmp/dev.real
 mount -o bind /dev ./rootfs/tmp/dev.real
+mount -o bind /dev/pts ./rootfs/tmp/dev.real/pts
+mount -o bind ./rootfs/tmp/dev.real/pts ./rootfs/dev/pts
 
 rm -f ./rootfs/dev/${loopd}
 
