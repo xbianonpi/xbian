@@ -152,7 +152,6 @@ do_debootstrap()
             zfs mount ${config_rootfs_label}/root
             zpool set bootfs=${config_rootfs_label}/root ${config_rootfs_label} 2>&1
             zfs create -o com.sun:auto-snapshot=true -o mountpoint=/home ${config_rootfs_label}/home 2>&1
-            zfs create -o com.sun:auto-snapshot=true -o mountpoint=/lib/modules ${config_rootfs_label}/modules 2>&1
             ;;
         *)
             ;;
@@ -165,7 +164,6 @@ do_debootstrap()
             mount -t $config_fstype_root $config_fsoptions_root,subvol=root/@ /dev/mapper/${loopd}p${rootpart} ./rootfs
             mkdir ./rootfs/home; mkdir -p ./rootfs/lib/modules
             mount -t $config_fstype_root $config_fsoptions_root,subvol=home/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/home
-            mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/lib/modules
             ;;
         zfs)
             ;;
@@ -221,6 +219,15 @@ do_debootstrap()
         ### As it was written (for Debian Stretch) we have to do this ugly workaround
         chroot ./rootfs debootstrap/debootstrap --second-stage
     )
+
+    case $config_fstype_root in
+        btrfs)
+            mount -t $config_fstype_root $config_fsoptions_root,subvol=modules/@ /dev/mapper/${loopd}p${rootpart} ./rootfs/lib/modules
+            ;;
+        zfs)
+            zfs create -o com.sun:auto-snapshot=true -o mountpoint=/lib/modules ${config_rootfs_label}/modules 2>&1
+            ;;
+    esac
 
     echo "deb $config_distro_url $config_distro_name main" >> ./rootfs/etc/apt/sources.list
 }
