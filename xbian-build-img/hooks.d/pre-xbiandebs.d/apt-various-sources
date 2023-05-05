@@ -4,7 +4,14 @@ case $config_platform_branch in
         sed -i 's/trusty main/trusty main universe/g' ./rootfs/etc/apt/sources.list
         ;;
     imx6*|rk|bpi*|rpi*)
-        sed -i "s/$config_distro_name main/$config_distro_name main non-free/g" ./rootfs/etc/apt/sources.list
+        case $config_distro_name in
+            wheezy|jessie|stretch|buster|bullseye)
+                sed -i "s/$config_distro_name main/$config_distro_name main contrib non-free/g" ./rootfs/etc/apt/sources.list
+                ;;
+            *)
+                sed -i "s/$config_distro_name main/$config_distro_name main contrib non-free non-free-firmware/g" ./rootfs/etc/apt/sources.list
+                ;;
+        esac
         ;;
     *)
         ;;
