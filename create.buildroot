@@ -125,7 +125,7 @@ do_prep()
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
              ;;
-        amd64stretch|amd64buster|amd64bullseye)
+        amd64stretch|amd64buster|amd64bullseye|amd64bookworm)
              schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
@@ -157,6 +157,7 @@ do_other()
     esac
     [ -z $rpref ] || schroot --directory / -p -c $config_platform -- sed -i "s/unknown-/$rpref-/g" /etc/apt/sources.list.d/xbian.list
     [ -z $mpref ] || schroot --directory / -p -c $config_platform -- sed -i "s/x86_64-/$mpref-/g" /etc/apt/sources.list.d/xbian.list
+    [ -z $mpref ] || schroot --directory / -p -c $config_platform -- sed -i "s/armv7l-/$mpref-/g" /etc/apt/sources.list.d/xbian.list
     schroot --directory / -p -c $config_platform -- sed -i 's/### //g' /etc/apt/sources.list.d/xbian.list
     case "$config_platform" in
         amd64*)
@@ -165,7 +166,7 @@ do_other()
     esac
 
     case "$config_platform" in
-        *stretch*|*jessie*|*buster*|*bullseye*)
+        *stretch*|*jessie*|*buster*|*bullseye*|*bookworm*)
             # As it was written (for Debian Stretch) apt-get does not work with method mirror://
             schroot --directory / -c $config_platform -p -- sed -i -e 's%mirror://apt.xbian.org/mirror.txt%http://apt.xbian.org/%g' /etc/apt/sources.list.d/xbian.list
             ;;
@@ -188,15 +189,15 @@ do_other()
              schroot --directory /tmp -c $config_platform -p -- find ./ -name 'linux-libc-dev*.deb' -delete
              schroot --directory /tmp -c $config_platform -p -- apt-get download linux-libc-dev:armhf
              LIBCDEV="$(schroot --directory /tmp -c $config_platform -p -- find ./ -maxdepth 1 -name 'linux-libc-dev*.deb' 2>/dev/null | sort -r | grep -m1 linux-libc-dev)"
-             cat<<EOF>/tmp/01_linux-libc-dev_armhf
-Package: linux-libc-dev:armhf
+             cat<<EOF>/tmp/01_libc6_armhf
+Package: linux-libc-dev:armhf libc6:armhf libc6-dev:armhf libc-dev-bin:armhf libc-l10n locales
 Pin: release o=XBian
 Pin-Priority: -1
-Package: linux-libc-dev:armhf
+Package: linux-libc-dev:armhf libc6:armhf libc6-dev:armhf libc-dev-bin:armhf libc-l10n locales
 Pin: release o=Debian
 Pin-Priority: 1001
 EOF
-             schroot --directory / -c $config_platform -p -- mv /tmp/01_linux-libc-dev_armhf /etc/apt/preferences.d/
+             schroot --directory / -c $config_platform -p -- mv /tmp/01_libc6_armhf /etc/apt/preferences.d/
              ;;
     esac
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
