@@ -1,7 +1,7 @@
 # ******************************************************************************
 # *                                                                            *
 # * This file is part of XBian --- Kodi on the Raspberry Pi.                   *
-# * Copyright © 2022 XBian Team -- https://www.xbian.org - info@xbian.org      *
+# * Copyright © 2023 XBian Team -- https://www.xbian.org - info@xbian.org      *
 # *                                                                            *
 # * XBian is free software: you can redistribute it and/or modify it under the *
 # * terms of the GNU General Public License as published by the Free Software  *
@@ -60,7 +60,6 @@ gpu_mem_1024=70
 
 [pi4]
 dtoverlay=vc4-kms-v3d,cma-384
-dtoverlay=rpivid-v4l2
 
 
 # ******************************************************************************
