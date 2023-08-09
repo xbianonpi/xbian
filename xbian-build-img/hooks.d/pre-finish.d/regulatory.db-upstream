@@ -1,0 +1,14 @@
+
+case $config_platform_branch in
+    imx6*|rk|bpi*|rpi*)
+        case $config_distro_name in
+            wheezy|jessie|stretch|buster|bullseye)
+                ;;
+            *)
+                chroot ./rootfs update-alternatives --set regulatory.db /lib/firmware/regulatory.db-upstream || :
+                ;;
+        esac
+        ;;
+    *)
+        ;;
+esac
