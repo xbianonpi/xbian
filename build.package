@@ -123,7 +123,7 @@ do_patch()
         (
         cd extra-files/$dir
         find ./ -type f -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" 2>/dev/null|| :
-        find ./ -type l -print0 | xargs -0 cp -avr --parents --target-directory="../../$1/working" 2>/dev/null|| :
+        find ./ -type l -print0 | xargs -0 cp -avrL --parents --target-directory="../../$1/working" 2>/dev/null|| :
         )
     fi
 }
@@ -549,11 +549,13 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 \( -type d -o -type l \) | grep
             [ ! -e "$dir/config" ] && [ -e $dir/config.${platforms[0]} ] && { [ -h "$dir/config" ] && rm -f $dir/config; ln -srf $dir/config.${platforms[0]} $dir/config; }
             [ ! -e "$dir/env" ]    && [ -e $dir/env.${platforms[0]} ]    && { [ -h "$dir/env" ] && rm -f $dir/env; ln -srf $dir/env.${platforms[0]} $dir/env; }
         else
+            opt_extradir=$(readlink -fm $XBIANARCHDIR/../../extra-files/$(basename $dir))
             opt_actions="do_clone do_patch do_prep do_make do_install"
             opt_actions_done="do_deb do_release"
             echo " for platform $arch_config"
             [ -e $dir/config.$arch_config ] && ln -srf $dir/config.$arch_config $dir/config
             [ -e $dir/env.$arch_config ]    && ln -srf $dir/env.$arch_config $dir/env
+            [ -e $opt_extradir/.config.$arch_config ] && ln -srf $opt_extradir/.config.$arch_config $opt_extradir/.config
         fi
         unset $(env | grep config_ | awk -F'=' '{print $1}')
         do_readconfig $dir
