@@ -326,7 +326,12 @@ do_deb()
             DATE=$(date +%s)
             for cl in $(find ./debian/ -maxdepth 1 -mindepth 1 -type f -name \*changelog\*); do
                 ver=$(grep . -m1 $cl | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
-                xbiantag=${ver#*~}; [ "$xbiantag" != "$ver" -a "$xbiantag" = "xbian" ] && vernew="$ver$config_deb_version" || vernew="$ver-$DATE"
+                xbiantag=${ver#*~}
+                if [ "$xbiantag" != "$ver" -a "$xbiantag" = "xbian" ]; then
+                    vernew="$ver$config_deb_version"
+                elif [ -z "$config_distro" ]; then
+                    vernew="$ver-$DATE"
+                fi
                 for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
                     sed -i "s%^Version: $ver.*%Version: $vernew%g" $d/control
                 done
@@ -343,7 +348,7 @@ do_deb()
             done
 
             ver=$(grep . -m1 debian/changelog | awk '{print $2}'); ver=${ver#\(}; ver=${ver%\)};
-            vernew="$ver-$(date +%s)"
+            [ -z "$config_distro" ] && vernew="$ver-$(date +%s)" || vernew=$ver
             for d in $(find ./debian/ -maxdepth 2 -mindepth 2 -type d -name DEBIAN); do
                 sed -i "s%$ver%$vernew%g" $d/control
             done
