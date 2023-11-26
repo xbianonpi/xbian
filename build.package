@@ -363,7 +363,7 @@ do_deb()
     [ -z "$config_distro" ] && config_deb_version="$config_deb_version-$(date +%s)"
     sed -i "s%__VERSION__%$config_deb_version%" content/DEBIAN/control $ctrldbg
     sed -i "s%__ARCHBRANCH__%$config_platform/$config_branch%" content/DEBIAN/control $ctrldbg
-    [ -z "$config_deb_arch" ] && config_deb_arch=$(do_run $config_build_env dpkg-architecture -q DEB_TARGET_ARCH | grep -E "armhf|arm64")
+    [ -z "$config_deb_arch" ] && config_deb_arch=$(do_run $config_build_env dpkg-architecture -q DEB_TARGET_ARCH 2>/dev/null | grep -E "armhf|arm64") || :
     sed -i "s%__ARCHITECTURE__%$config_deb_arch%" content/DEBIAN/control $ctrldbg
     sed -i "s%__PKGNAME__%$config_deb_pkgname%" content/DEBIAN/control $ctrldbg
     sed -i "s%__PKGDEPS__%Depends: $config_deb_depends%" content/DEBIAN/control $ctrldbg
