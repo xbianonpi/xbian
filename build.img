@@ -187,17 +187,22 @@ do_debootstrap()
 
     debootstrap $config_exclude_deb $config_distro_variant $config_include_deb --no-check-gpg --arch $config_distro_arch --foreign $config_distro_name ./rootfs $config_distro_url
 
+    mkdir -p ./rootfs/usr/bin
     if [ -f /etc/centos-release ]; then
         [ -d qemu ] && rm -rf qemu
         mkdir qemu; cd qemu
         wget -q http://security.ubuntu.com/ubuntu/pool/universe/q/qemu/qemu-user-static_2.0.0+dfsg-2ubuntu1.9_amd64.deb
         ar -x *.deb
         tar -xf data.tar.*
-        mkdir -p ../rootfs/usr/bin; cp usr/bin/qemu-arm-static ../rootfs/usr/bin/qemu-arm-static
+        cp usr/bin/qemu-arm-static ../rootfs/usr/bin/qemu-arm-static
         cd ..
         rm -rf qemu
     else
-        mkdir -p ./rootfs/usr/bin; cp /usr/bin/qemu-arm-static ./rootfs/usr/bin
+        case "$config_distro_arch" in
+            arm64) QEMU="/usr/bin/qemu-aarch64-static /usr/bin/qemu-arm-static" ;;
+            *)     QEMU="/usr/bin/qemu-arm-static" ;;
+        esac
+        cp $QEMU ./rootfs/usr/bin
     fi
 
     #### hack to remove packages which raspbian considers essential and doesn't want them remove even when excluded and 
@@ -391,7 +396,7 @@ do_finish()
 
     cd "$dir/working"
 
-    rm rootfs/usr/bin/qemu-arm-static
+    rm -f rootfs/usr/bin/qemu-*-static
 
     df -h | grep /working/
 

@@ -11,7 +11,7 @@ case $config_platform in
         sed -i 's/compress=lzo/compress=none/' ./rootfs/boot/cmdline.default
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt
 
-        cp /usr/bin/qemu-arm-static ./rootfs/usr/bin || :
+        cp /usr/bin/qemu-{arm,aarch64}-static ./rootfs/usr/bin || :
         ;;
     rpi*)
         cp ./rootfs/boot/cmdline.default ./rootfs/boot/cmdline.txt

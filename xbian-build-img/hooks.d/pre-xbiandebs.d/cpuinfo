@@ -10,7 +10,11 @@ case $config_platform in
         echo "hardware BCM2709" > ./rootfs/proc/cpuinfo
         for i in $(seq 0 3); do echo "processor : $i" >> ./rootfs/proc/cpuinfo; done
         [ -e ./rootfs/etc/apt/sources.list.d/xbian.list ] && sed -i 's/rpi-jessie/rpi2-jessie/g' ./rootfs/etc/apt/sources.list.d/xbian.list || :
-        echo "Machine : armv7l" >> ./rootfs/proc/cpuinfo
+        case "$config_distro_arch" in
+            arm64) ARCH=aarch64 ;;
+            *)     ARCH=armv7l ;;
+        esac
+        echo "Machine : $ARCH" >> ./rootfs/proc/cpuinfo
         ;;
     rpi*)
         AR=RPI
