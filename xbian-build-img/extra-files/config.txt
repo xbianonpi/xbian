@@ -1,7 +1,7 @@
 # ******************************************************************************
 # *                                                                            *
 # * This file is part of XBian --- Kodi on the Raspberry Pi.                   *
-# * Copyright © 2023 XBian Team -- https://www.xbian.org - info@xbian.org      *
+# * Copyright © 2024 XBian Team -- https://www.xbian.org - info@xbian.org      *
 # *                                                                            *
 # * XBian is free software: you can redistribute it and/or modify it under the *
 # * terms of the GNU General Public License as published by the Free Software  *
@@ -38,6 +38,9 @@ gpu_mem_256=100
 [pi4]
 gpu_mem_1024=70
 
+[pi5]
+gpu_mem_1024=70
+
 
 # ******************************************************************************
 # * Display configuration                                                      *
@@ -49,7 +52,7 @@ gpu_mem_1024=70
 # *     recommended, as the playback of HEVC videos is severely limited        *
 # *     due to the lack of hardware acceleration. When using the kms driver,   *
 # *     please note that the standalone VNC service does not work.             *
-# *  Raspberry Pi 4:                                                           *
+# *  Raspberry Pi 4, Pi 5:                                                     *
 # *     fkms or kms driver is required here, whereby kms is recommended,       *
 # *     especially for 4k displays. When using the kms driver, please note     *
 # *     that the standalone VNC service does not work.                         *
@@ -61,6 +64,9 @@ gpu_mem_1024=70
 [pi4]
 dtoverlay=vc4-kms-v3d,cma-384
 
+[pi5]
+dtoverlay=vc4-kms-v3d,cma-512
+
 
 # ******************************************************************************
 # * Various settings see also: https://elinux.org/RPi_config.txt               *
@@ -68,6 +74,8 @@ dtoverlay=vc4-kms-v3d,cma-384
 # ******************************************************************************
 
 [all]
+dtoverlay=
+
 # Enables turbo mode from boot for the given value in seconds (up to 60) or
 # until cpufreq sets a frequency. Default 0
 initial_turbo=3
