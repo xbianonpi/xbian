@@ -500,7 +500,11 @@ for dir in $(find build/ -mindepth 1 -maxdepth 1 -type d | sort); do
     export config_platform_branch=$opt_arch
     export config_branch=${opt_arch##*-}
 
-    export IMGNAME=${config_img_name}_$(date +%Y.%m.%d)_$(basename $dir).img
+    case ${config_distro_arch} in
+        arm64) export config_arch="${config_distro_arch}_" ;;
+        *)     export config_arch='' ;;
+    esac
+    export IMGNAME=${config_img_name}_$(date +%Y.%m.%d)_${config_arch}$(basename $dir | sed "s/-64//g").img
 
     touch $XBIANPKGDIR/build.~lock
     trap "kill_gitbuilder; sync; clean_tmp; clean_all; clean_loopd; rm -f $XBIANPKGDIR/build.~lock" EXIT TERM
