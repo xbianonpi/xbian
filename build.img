@@ -423,7 +423,7 @@ do_post()
 '
             for f in $(ls -1 $dir/working/$IMGNAME*); do
                 echo "building sha512 for $(basename $f)"
-                do_run sha512sum "$f" | awk '{print $1}' > "$f.sha512"
+                do_run sha512sum "$f" | awk '{print $1}' > $(echo "$f" | sed "s/.gz/.sha512/g")
             done
         )
     fi
