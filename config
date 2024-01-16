@@ -21,7 +21,7 @@ config_dpkg_deb_addarch=yes
 # Building packages for versions invoked by
 # script build.preloader (Jenkins)
 #
-config_os_versions="bookworm bullseye"
+config_os_versions="bookworm"
 
 # Building for version, invoked by
 # script $xbiangit
