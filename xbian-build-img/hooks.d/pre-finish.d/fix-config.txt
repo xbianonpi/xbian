@@ -1,0 +1,7 @@
+case "$config_distro_arch" in
+    arm64) 
+        sed -i '/#dtoverlay=vc4.*$/a arm_64bit=1' ./rootfs/boot/config.txt
+        sed -i 's/#dtoverlay=vc4/dtoverlay=vc4/g' ./rootfs/boot/config.txt
+        sed -i 's/vc4-fkms-v3d/vc4-kms-v3d/g' ./rootfs/boot/config.txt
+        ;;
+esac
