@@ -380,8 +380,8 @@ do_deb()
         sed -i '/__CTRLEXTRA__/d' content/DEBIAN/control $ctrldbg
     fi
 
-     if [ -n "$config_deb_replaces" ]; then
-         sed -i "s%__REPLACES__%$config_deb_replaces,%" content/DEBIAN/control
+    if [ -n "$config_deb_replaces" ]; then
+        sed -i "s%__REPLACES__%$config_deb_replaces,%" content/DEBIAN/control
         printf "%b\n" "$(cat content/DEBIAN/control)" > content/DEBIAN/control.new
         mv content/DEBIAN/control.new content/DEBIAN/control
     fi
