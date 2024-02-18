@@ -1,0 +1,2 @@
+
+LC_ALL=C chroot ./rootfs xbian-update-initramfs
