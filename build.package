@@ -376,6 +376,13 @@ do_deb()
         sed -i '/__CTRLEXTRA__/d' content/DEBIAN/control $ctrldbg
     fi
 
+     if [ -n "$config_deb_replaces" ]; then
+         sed -i "s%__REPLACES__%$config_deb_replaces,%" content/DEBIAN/control
+        printf "%b\n" "$(cat content/DEBIAN/control)" > content/DEBIAN/control.new
+        mv content/DEBIAN/control.new content/DEBIAN/control
+    fi
+    sed -i "s%__REPLACES__%%;s%  % %" content/DEBIAN/control
+
     if [ -d hooks.d/pre-deb.d ]; then
         for f in $(ls hooks.d/pre-deb.d); do
             (
