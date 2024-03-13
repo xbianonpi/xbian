@@ -1,5 +1,5 @@
 ##
-##      Copyright (C) 2012 - 2021 XBian
+##      Copyright (C) 2012 - 2024 XBian
 ##
 ##  Find us at: http://www.xbian.org http://github.com/xbianonpi/xbian
 ##
@@ -115,7 +115,7 @@ do_prep()
     echo "deb $config_distro_url $config_distro_name main" > $dir/etc/apt/sources.list
 
     ### Since apt-get version > 1.0.* --force-yes option is depreciated we have to use --allow options
-    [ "$(schroot --directory / -p -c $config_platform -- apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || FORCE="--yes --allow-downgrades --allow-remove-essential --allow-change-held-packages"
+    [ "$(schroot --directory / -p -c $config_platform -- apt-get --version | grep ^apt | awk '{ print $2 }')" \< "1.1" ] && FORCE="--yes --force-yes" || FORCE="--yes --allow-downgrades --allow-remove-essential"
 
     case "$config_platform" in
         "amd64jessie")
@@ -126,9 +126,10 @@ do_prep()
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
              ;;
         amd64stretch|amd64buster|amd64bullseye|amd64bookworm)
-             schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf
+             echo $config_install_deb | grep -q -m1 :armhf && schroot -c $config_platform --directory / -p -- dpkg --add-architecture armhf && crossbuilds=crossbuild-essential-armhf
+             echo $config_install_deb | grep -q -m1 :arm64 && schroot -c $config_platform --directory / -p -- dpkg --add-architecture arm64 && crossbuilds="$crossbuilds crossbuild-essential-arm64"
              LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get update
-             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE crossbuild-essential-armhf
+             LC_ALL=C schroot -c $config_platform --directory / -p -- apt-get install $FORCE $crossbuilds
              ;;
     esac
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get clean
@@ -162,6 +163,14 @@ do_other()
     case "$config_platform" in
         amd64*)
              schroot --directory / -c $config_platform -p -- sed -i -e 's/^deb m/deb [arch=armhf] m/g' /etc/apt/sources.list.d/xbian.list
+             #distri="$(echo $config_platform | sed 's/amd64//g')"
+             distri="$(lsb_release -cs 2>/dev/null)"
+             #echo $distri
+             schroot --directory / -c $config_platform -p -- sed -i "s/ -$distri/ /g;s/\(^deb.*\)$/\1\ armv7l-$distri    arm64-$distri/g" /etc/apt/sources.list.d/xbian.list
+             myarch=armhf # Eeek
+             ;;
+        *)
+             myarch=$config_distro_arch
              ;;
     esac
 
@@ -184,24 +193,31 @@ do_other()
              ;;
         *)
              ### Since Debian's linux-libc-dev package breaks XBian's (as it was written for Debian Stetch), we have to install files manually later
-             schroot --directory / -c $config_platform -p -- rm -f /etc/apt/preferences.d/01_linux-libc-dev_armhf
+             schroot --directory / -c $config_platform -p -- rm -f /etc/apt/preferences.d/01_linux-libc-dev_$myarch
              LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
              schroot --directory /tmp -c $config_platform -p -- find ./ -name 'linux-libc-dev*.deb' -delete
-             schroot --directory /tmp -c $config_platform -p -- apt-get download linux-libc-dev:armhf
+             schroot --directory /tmp -c $config_platform -p -- apt-get download linux-libc-dev:$myarch
              LIBCDEV="$(schroot --directory /tmp -c $config_platform -p -- find ./ -maxdepth 1 -name 'linux-libc-dev*.deb' 2>/dev/null | sort -r | grep -m1 linux-libc-dev)"
-             cat<<EOF>/tmp/01_libc6_armhf
-Package: linux-libc-dev:armhf libc6:armhf libc6-dev:armhf libc-dev-bin:armhf libc-l10n locales
+             cat<<EOF>/tmp/01_libc6_$myarch
+Package: linux-libc-dev:$myarch libc6:$myarch libc6-dev:$myarch libc-dev-bin:$myarch libc-l10n locales
 Pin: release o=XBian
 Pin-Priority: -1
-Package: linux-libc-dev:armhf libc6:armhf libc6-dev:armhf libc-dev-bin:armhf libc-l10n locales
+Package: linux-libc-dev:$myarch libc6:$myarch libc6-dev:$myarch libc-dev-bin:$myarch libc-l10n locales
 Pin: release o=Debian
 Pin-Priority: 1001
 EOF
-             schroot --directory / -c $config_platform -p -- mv /tmp/01_libc6_armhf /etc/apt/preferences.d/
+             schroot --directory / -c $config_platform -p -- mv /tmp/01_libc6_$myarch /etc/apt/preferences.d/
              ;;
     esac
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get update
     LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb
+    [ -z "$config_install_deb_s2" ] || LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb_s2
+    [ -z "$config_install_deb_s3" ] || {
+        LC_ALL=C schroot --directory /tmp/apt.xbian.org -p -c $config_platform -- apt-get download $config_install_deb_s3
+        ( cd /tmp/apt.xbian.org; $XBIANROOT/modify-debs Multi-Arch:\ same; LC_ALL=C schroot --directory /tmp/apt.xbian.org -p -c $config_platform -- dpkg -i --force-all repacked/*.deb; )
+        LC_ALL=C schroot --directory /tmp/apt.xbian.org -p -c $config_platform -- apt-mark hold $config_install_deb_s3 || :
+    }
+    [ -z "$config_install_deb_s4" ] || LC_ALL=C schroot --directory / -p -c $config_platform -- apt-get install $FORCE -o Acquire::Languages=none -o APT::Install-Suggests=0 -o APT::Install-Recommends=0 -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" $config_install_deb_s4
 
     L1=$(schroot --directory / -p -c $config_platform -- locale 2>/dev/null | grep "LANG=" | cut -d '=' -f 2)
     L2=$(echo $L1 | sed -e "s/UTF-8/utf8/g")
@@ -234,13 +250,33 @@ EOF
 
     case "$config_platform" in
         amd64*)
-            GPP=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-g++)
-            schroot --directory / -c $config_platform -p -- find /usr/bin/g++ -type l -delete 2>/dev/null || :
-            schroot --directory / -c $config_platform -p -- ln -s $GPP /usr/bin/g++ || :
-            GCC=$(schroot --directory / -c $config_platform -p -- which arm-linux-gnueabihf-gcc)
-            schroot --directory / -c $config_platform -p -- find /usr/bin/gcc -type l -delete 2>/dev/null || :
-            schroot --directory / -c $config_platform -p -- ln -s $GCC /usr/bin/gcc || :
-            # install libtool if still needed. Unfortunately because of wrong dependencies can't do it in the normal way
+            ### Set for some stupid configure scripts the correct compiler we use
+            cat<<EOF>/tmp/gcc
+#!/bin/bash
+BASENAME=${0##*/}
+echo $BASENAME: $@ >&2
+env | grep -wE "CROSS_COMPILE|CPP" >&2
+if [ -n "$CROSS_COMPILE" ]; then
+    case $BASENAME in
+        cc|gcc) exec /usr/bin/x86_64-linux-gnu-gcc $@ ;;
+        g++) exec /usr/bin/x86_64-linux-gnu-g++ $@ ;;
+    esac
+fi
+case $BASENAME in
+    gcc) cxx=$(echo $CPP | sed "s/ .*//g") ;;
+    g++) cxx=$(echo $CPP | sed "s/gcc .*/g++/g") ;;
+esac
+[ -n "$cxx" ] && exec $cxx $@
+echo "$BASENAME: $@" > /tmp/gcc-hook.err
+env >> /tmp/gcc-hook.err
+echo "No $BASENAME"
+exit 1
+EOF
+            chmod +x /tmp/gcc
+            schroot --directory /usr/bin -c $config_platform -p -- rm -f gcc g++ || :
+            schroot --directory /usr/bin -c $config_platform -p -- mv /tmp/gcc . || :
+            schroot --directory /usr/bin -c $config_platform -p -- ln -s gcc g++ || :
+            ### Install libtool if still needed. Unfortunately because of wrong dependencies can't do it in the normal way
             schroot --directory / -c $config_platform -p -- dpkg-query -s libtool &>/dev/null || { \
                 schroot --directory /tmp -c $config_platform -p -- rm -f libtool*.deb; \
                 schroot --directory /tmp -c $config_platform -p -- apt-get download libtool; \
@@ -249,6 +285,27 @@ EOF
                 schroot --directory /tmp -c $config_platform -p -- dpkg -x $LIBTOOL /; \
                 schroot --directory /tmp -c $config_platform -p -- rm -f libtool*.deb; \
             }
+            ### Tell some stupid configure scripts that we are building for armXX architecture
+            cat << \EOF > /tmp/uname
+#!/bin/bash
+BASENAME=${0##*/}
+if [ "$1" = '-m' ] ; then
+   cxx=$(echo $CPP | sed "s/gcc .*/g++/g")
+   case "$cxx" in
+       arm*)     echo armv7l;  exit 0 ;;
+       aarch64*) echo aarch64; exit 0 ;;
+   esac
+   cxx=$(echo $CROSS_COMPILE | sed "s/gcc .*/g++/g")
+   case "$cxx" in
+       arm*)     echo armv7l;  exit 0 ;;
+       aarch64*) echo aarch64; exit 0 ;;
+       *)        echo "$BASENAME: $@" > /tmp/uname-hook.err; env >> /tmp/uname-hook.err; exit 1 ;;
+   esac
+fi
+exec /usr/bin/uname $@
+EOF
+            chmod +x /tmp/uname
+            schroot --directory / -c $config_platform -p -- mv /tmp/uname /usr/local/bin
             ;;
     esac
 
@@ -265,18 +322,7 @@ EOF
     schroot --directory /usr/lib -c $config_platform -p -- ln -s /opt/vc/lib/libbcm_host.so
 
     ### Let ldd work for arm binaries in schroot
-    schroot --directory / -c $config_platform -p -- sed -i 's%RTLDLIST="/lib/ld-linux.so.2%RTLDLIST="/lib/ld-linux.so.2 /lib/ld-linux-armhf.so.3%g' /usr/bin/ldd
-
-    ### Tell some stupid configure scripts that we are building for ARM processor
-    cat << \EOF > /tmp/uname
-#!/bin/sh
-
-[ "$1" = '-m' ] && { echo armv7l; exit 0; }
-
-exec /usr/bin/uname $@
-EOF
-    chmod +x /tmp/uname
-    schroot --directory / -c $config_platform -p -- mv /tmp/uname /usr/local/bin
+    schroot --directory / -c $config_platform -p -- sed -i 's%RTLDLIST="/lib/ld-linux.so.2%RTLDLIST="/lib/ld-linux.so.2 /lib/ld-linux-$myarch.so.3%g' /usr/bin/ldd
 }
 
 

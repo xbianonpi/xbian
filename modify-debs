@@ -1,0 +1,49 @@
+#!/bin/bash
+
+#
+# Based on https://unix.stackexchange.com/questions/138188/easily-unpack-deb-edit-postinst-and-repack-deb
+#
+
+modify_control() {
+    #echo "modify_control $1"
+    case "$1" in 
+        Multi-Arch*)
+            grep -q "^$1" control || sed -i "/^Architecture:/a $1" control
+        ;;
+    esac
+}
+
+repack_control() {
+    cp ../$1 . && rm -rf tmp && mkdir -p tmp && cd tmp || return
+    t=$(ar t ../$1 | grep control | sed "s/control.tar.//")
+    d=$(ar t ../$1 | grep data)
+    case "$t" in
+        xz) 
+            echo "Please note: changing control archive in package $1 from xz to gz"
+            ar p ../$1 control.tar.xz | tar -xJ
+            ar d ../$1 control.tar.xz
+        ;;
+        gz)
+            ar p ../$1 control.tar.gz | tar -xz
+        ;;
+        *)
+            return
+        ;;
+    esac
+    modify_control "$2"
+    tar czf control.tar.gz *[!z]
+    ar -i $d -r ../$1 control.tar.gz
+}
+
+for deb in *.deb; do
+    (
+        mkdir -p repacked && cd repacked && rm -rf ./content && repack_control $deb "$1"
+    )
+done
+
+if [ -d "$2" ]; then
+    mv repacked/*.deb $2 && rm -rf repacked
+    echo "Repacked packages has been put in folder $2"
+else
+    echo "Repacked packages are in repacked folder now"
+fi

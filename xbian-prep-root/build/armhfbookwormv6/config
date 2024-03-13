@@ -15,8 +15,8 @@ config_install_deb=autoconf automake autopoint bash-completion build-essential c
  libgnutls28-dev:armhf libgnutls-openssl27:armhf libgnutlsxx30:armhf libgomp1:armhf libgpg-error0:armhf libgraphite2-3:armhf\
  libgssapi3-heimdal:armhf libgssapi-krb5-2:armhf libharfbuzz0b:armhf libharfbuzz-gobject0:armhf libharfbuzz-icu0:armhf libhcrypto5-heimdal:armhf\
  libheimbase1-heimdal:armhf libheimntlm0-heimdal:armhf libhogweed6:armhf libhx509-5-heimdal:armhf libice6:armhf libicu-dev:armhf\
- libidn12:armhf libinput-dev:armhf libiso9660-dev:armhf libjbig-dev:armhf libjpeg62-turbo-dev:armhf libjson-c5:armhf\
- libk5crypto3:armhf libkeyutils1:armhf libkrb5-26-heimdal:armhf libkrb5-3:armhf libkrb5support0:armhf libldap-2.5-0:armhf libldb2:armhf\
+ libidn12:armhf libinput-dev:armhf libiso9660-dev:armhf libjbig-dev:armhf libjpeg62-turbo-dev:armhf libjson-c5:armhf libk5crypto3:armhf libkeyutils1:armhf\
+ libkissfft-dev:armhf libkrb5-26-heimdal:armhf libkrb5-3:armhf libkrb5support0:armhf libldap-2.5-0:armhf libldb2:armhf\
  liblircclient-dev:armhf libltdl7:armhf liblzma-dev:armhf liblzo2-dev:armhf libmicrohttpd-dev:armhf libmp3lame-dev:armhf libmpeg2-4-dev:armhf\
  libmpfr6:armhf libncurses-dev:armhf libnettle8:armhf libnfs-dev:armhf libnih-dev:armhf libnih-dbus-dev:armhf\
  libogg-dev:armhf libp11-kit0:armhf libpam0g:armhf libpcre3-dev:armhf libpcrecpp0v5:armhf libplist-dev:armhf libplymouth-dev:armhf libpng-dev:armhf\
@@ -25,7 +25,7 @@ config_install_deb=autoconf automake autopoint bash-completion build-essential c
  libsasl2-modules-db:armhf libselinux1:armhf libsigsegv2:armhf libsm6:armhf libsmbclient-dev:armhf libsndfile1:armhf libspeex-dev:armhf\
  libsqlite3-dev:armhf libssh2-1-dev:armhf libssh-dev:armhf libssl-dev:armhf libspdlog-dev:armhf libstdc++6:armhf libsystemd0:armhf libtag1-dev:armhf\
  libtag1v5-vanilla:armhf libtalloc2:armhf libtasn1-6:armhf libtdb1:armhf libtevent0:armhf libtiff5-dev:armhf libtiffxx6:armhf libtinfo5:armhf\
- libtinyxml-dev:armhf libubsan1:armhf libudev-dev:armhf libunistring-dev:armhf libusb-1.0-0-dev:armhf libusb-dev:armhf\
+ libtinyxml-dev:armhf libtinyxml2-dev:armhf libubsan1:armhf libudev-dev:armhf libunistring-dev:armhf libusb-1.0-0-dev:armhf libusb-dev:armhf\
  libuuid1:armhf libvncserver-dev:armhf libvorbis-dev:armhf libvorbisenc2:armhf libvorbisfile3:armhf libwayland-client0:armhf\
  libwayland-server0:armhf libwbclient0:armhf libwind0-heimdal:armhf libwrap0:armhf libx11-6:armhf libx11-xcb1:armhf libxau6:armhf libxcb1:armhf\
  libxdmcp6:armhf libxext6:armhf libxi6:armhf libxkbcommon-dev:armhf libxml2-dev:armhf libxslt1-dev:armhf libxtst6:armhf libyajl-dev:armhf\
@@ -33,6 +33,7 @@ config_install_deb=autoconf automake autopoint bash-completion build-essential c
 
 #
 # Added:
+#   libkissfft-dev:armhf
 #
 # Vanished:
 #   libtntnet-dev:armhf
@@ -43,10 +44,14 @@ config_install_deb=autoconf automake autopoint bash-completion build-essential c
 #   
 # Replaced:
 #
+# Required from Bullseye:
+#   libcxxtools-dev:armhf
+#   libtntnet-dev:armhf
+#
 # Updated:
 #   libflac8:armhf              ->      libflac12:armhf
 #   libffi7:armhf               ->      libffi8:armhf
-#   libgnutlsxx28:armhf         ->      libgnutlsxx30:armhf
+#
 #   libhcrypto4-heimdal:armhf   ->      libhcrypto5-heimdal:armhf
 #   libidn11:armhf              ->      libidn12:armhf
 #   libroken18-heimdal:armhf    ->      libroken19-heimdal:armhf

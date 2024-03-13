@@ -1,0 +1,62 @@
+config_distro_name=bookworm
+config_distro_url=http://deb.debian.org/debian
+config_distro_arch=arm64
+config_xbian_arch=iMX6
+config_install_deb=autoconf automake autopoint bash-completion build-essential ca-certificates ccache cmake curl debhelper\
+ default-jre-headless fakeroot gawk git gperf locales nih-dbus-tool python3-dev python3-setuptools python3-yaml rapidjson-dev swig unzip zip\
+ clang-format:arm64 default-libmysqlclient-dev:arm64 xbian-package-firmware:all libacl1:arm64 libafpclient-dev:arm64 libasn1-8-heimdal:arm64\
+ libasound2-dev:arm64 libass-dev:arm64 libasyncns0:arm64 libatomic1:arm64 libattr1:arm64 libaudit1:arm64 libavahi-client-dev:arm64\
+ libavahi-common-dev:arm64 libavahi-compat-libdnssd-dev:arm64 libbluetooth-dev:arm64 libbluray-dev:arm64 libboost-dev:arm64 libbsd0:arm64\
+ libbz2-dev:arm64 libc6-dev:arm64 libcap-dev:arm64 libcdio-dev:arm64 libcec-dev:arm64 libcomerr2:arm64 libcups2:arm64\
+ libcurl4-openssl-dev:arm64 libdb5.3:arm64 libdbus-1-dev:arm64 libdrm2:arm64 libdrm-freedreno1:arm64 libdrm-nouveau2:arm64 libdrm-radeon1:arm64\
+ libdvbcsa-dev:arm64 libeatmydata1:arm64 libedit2:arm64 libelf1:arm64 libenca0:arm64 libexpat1-dev:arm64 libfakeroot:arm64 libffi8:arm64\
+ libflac12:arm64 libfmt-dev:arm64 libfontconfig1-dev:arm64 libfreetype6:arm64 libfribidi0:arm64 libfstrcmp-dev:arm64 libfuse2:arm64\
+ libgbm1:arm64 libgcc1:arm64 libgcrypt20:arm64 libgif-dev:arm64 libgif-dev:arm64 libglib2.0-0:arm64 libgmp-dev:arm64 libgmpxx4ldbl:arm64\
+ libgnutls28-dev:arm64 libgnutls-openssl27:arm64 libgnutlsxx30:arm64 libgomp1:arm64 libgpg-error0:arm64 libgraphite2-3:arm64\
+ libgssapi3-heimdal:arm64 libgssapi-krb5-2:arm64 libharfbuzz0b:arm64 libharfbuzz-gobject0:arm64 libharfbuzz-icu0:arm64 libhcrypto5-heimdal:arm64\
+ libheimbase1-heimdal:arm64 libheimntlm0-heimdal:arm64 libhogweed6:arm64 libhx509-5-heimdal:arm64 libice6:arm64 libicu-dev:arm64\
+ libidn12:arm64 libinput-dev:arm64 libiso9660-dev:arm64 libjbig-dev:arm64 libjpeg62-turbo-dev:arm64 libjson-c5:arm64\
+ libk5crypto3:arm64 libkeyutils1:arm64 libkrb5-26-heimdal:arm64 libkrb5-3:arm64 libkrb5support0:arm64 libldap-2.5-0:arm64 libldb2:arm64\
+ liblircclient-dev:arm64 libltdl7:arm64 liblzma-dev:arm64 liblzo2-dev:arm64 libmicrohttpd-dev:arm64 libmp3lame-dev:arm64 libmpeg2-4-dev:arm64\
+ libmpfr6:arm64 libncurses-dev:arm64 libnettle8:arm64 libnfs-dev:arm64 libnih-dev:arm64 libnih-dbus-dev:arm64\
+ libogg-dev:arm64 libp11-kit0:arm64 libpam0g:arm64 libpcre3-dev:arm64 libpcrecpp0v5:arm64 libplist-dev:arm64 libplymouth-dev:arm64 libpng-dev:arm64\
+ libpopt0:arm64 libpulse-dev:arm64 libpulse-mainloop-glib0:arm64 libpython3-stdlib:arm64 libraw-dev:arm64 libroken19-heimdal:arm64 librtmp1:arm64 librtmp-dev:arm64 libsasl2-2:arm64\
+ libsasl2-modules-db:arm64 libselinux1:arm64 libsigsegv2:arm64 libsm6:arm64 libsmbclient-dev:arm64 libsndfile1:arm64 libspeex-dev:arm64\
+ libsqlite3-dev:arm64 libssh2-1-dev:arm64 libssh-dev:arm64 libssl-dev:arm64 libstdc++6:arm64 libsystemd0:arm64 libtag1-dev:arm64\
+ libtag1v5-vanilla:arm64 libtalloc2:arm64 libtasn1-6:arm64 libtdb1:arm64 libtevent0:arm64 libtiff5-dev:arm64 libtiffxx6:arm64 libtinfo5:arm64\
+ libtinyxml-dev:arm64 libubsan1:arm64 libudev-dev:arm64 libunistring-dev:arm64 libusb-1.0-0-dev:arm64 libusb-dev:arm64\
+ libuuid1:arm64 libvncserver-dev:arm64 libvorbis-dev:arm64 libvorbisenc2:arm64 libvorbisfile3:arm64 libwayland-client0:arm64\
+ libwayland-server0:arm64 libwbclient0:arm64 libwind0-heimdal:arm64 libwrap0:arm64 libx11-6:arm64 libx11-xcb1:arm64 libxau6:arm64 libxcb1:arm64\
+ libxdmcp6:arm64 libxext6:arm64 libxi6:arm64 libxkbcommon-dev:arm64 libxml2-dev:arm64 libxslt1-dev:arm64 libxtst6:arm64 libyajl-dev:arm64\
+ pkg-config:arm64 samba-libs:arm64 uuid-dev:arm64 xbian-package-shairplay:arm64 yasm:arm64 zlib1g-dev:arm64
+
+#
+# Added:
+#
+# Vanished:
+#   libtntnet-dev:armhf
+#
+# Breaks:
+#
+# Removed:
+#   libpython2.7:armhf
+#   libpython2.7-dev:armhf
+#   libpython2.7-minimal:armhf\
+#   libpython2.7-stdlib:armhf
+#
+# Replaced:
+#
+# Required from Bullseye:
+# libcxxtools-dev:armhf
+# libtntnet-dev:armhf
+#
+# Updated:
+#   libflac8:armhf              ->      libflac12:armhf
+#   libffi7:armhf               ->      libffi8:armhf
+#   libgnutlsxx28:armhf         ->      libgnutlsxx30:armhf
+#   libhcrypto4-heimdal:armhf   ->      libhcrypto5-heimdal:armhf
+#   libidn11:armhf              ->      libidn12:armhf
+#   libroken18-heimdal:armhf    ->      libroken19-heimdal:armhf
+#   libtiffxx5:armhf            ->      libtiffxx6:armhf
+#   libldap-2.4-2:armhf         ->      libldap-2.5-0:armhf
+#

@@ -46,6 +46,10 @@ config_install_deb=autoconf automake autopoint bash-completion build-essential c
 #
 # Replaced:
 #
+# Required from Bullseye:
+#   libcxxtools-dev:armhf
+#   libtntnet-dev:armhf
+#
 # Updated:
 #   libflac8:armhf              ->      libflac12:armhf
 #   libffi7:armhf               ->      libffi8:armhf

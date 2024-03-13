@@ -4,10 +4,11 @@ config_distro_arch=amd64
 config_xbian_arch=iMX6
 config_install_deb=autoconf automake autopoint bash-completion bc bison ca-certificates ccache cmake curl debhelper default-jre-headless fakeroot flex gawk git\
  gperf locales python3-setuptools qemu-user-static rapidjson-dev swig unzip zip\
- clang-format:armhf default-libmysqlclient-dev:armhf xbian-package-firmware libacl1:armhf libafpclient-dev:armhf libasn1-8-heimdal:armhf\
+ clang-format:armhf yasm:armhf xbian-package-firmware\
+ default-libmysqlclient-dev:armhf xbian-package-firmware libacl1:armhf libafpclient-dev:armhf libasn1-8-heimdal:armhf\
  libasound2-dev:armhf libass-dev:armhf libasyncns0:armhf libatomic1:armhf libattr1:armhf libaudit1:armhf libavahi-client-dev:armhf\
  libavahi-common-dev:armhf libavahi-compat-libdnssd-dev:armhf libbluetooth-dev:armhf libbluray-dev:armhf libboost-dev:armhf libbsd0:armhf\
- libbz2-dev:armhf libc6-dev:armhf libcap-dev:armhf libcdio-dev:armhf libcdio++-dev:armhf libcec-dev:armhf libcomerr2:armhf libcups2:armhf\
+ libbz2-dev:armhf libc6-dev:armhf libcap-dev:armhf libcdio++-dev:armhf libcec-dev:armhf libcomerr2:armhf libcups2:armhf\
  libcurl4-openssl-dev:armhf libdav1d-dev:armhf libdb5.3:armhf libdbus-1-dev:armhf libdisplay-info-dev:armhf libdrm2:armhf libdrm-freedreno1:armhf\
  libdrm-nouveau2:armhf libdrm-radeon1:armhf libdvbcsa-dev:armhf libeatmydata1:armhf libedit2:armhf libegl1-mesa-dev:armhf libelf1:armhf libenca0:armhf\
  libexpat1-dev:armhf libfakeroot:armhf libffi8:armhf libflac12:armhf libflatbuffers-dev:armhf libfmt-dev:armhf libfontconfig1-dev:armhf\
@@ -17,8 +18,8 @@ config_install_deb=autoconf automake autopoint bash-completion bc bison ca-certi
  libgssapi3-heimdal:armhf libgssapi-krb5-2:armhf libharfbuzz0b:armhf libharfbuzz-gobject0:armhf libharfbuzz-icu0:armhf libhcrypto5-heimdal:armhf\
  libheimbase1-heimdal:armhf libheimntlm0-heimdal:armhf libhogweed6:armhf libhx509-5-heimdal:armhf libice6:armhf libicu-dev:armhf\
  libidn12:armhf libinput-dev:armhf libiso9660-dev:armhf libjbig-dev:armhf libjpeg62-turbo-dev:armhf libjson-c5:armhf\
- libk5crypto3:armhf libkeyutils1:armhf libkrb5-26-heimdal:armhf libkrb5-3:armhf libkrb5support0:armhf libldap-2.5-0:armhf libldb2:armhf\
- liblircclient-dev:armhf libltdl7:armhf liblzma-dev:armhf liblzo2-dev:armhf libmicrohttpd-dev:armhf libmp3lame-dev:armhf libmpeg2-4-dev:armhf\
+ libk5crypto3:armhf libkeyutils1:armhf libkissfft-dev:armhf libkrb5-26-heimdal:armhf libkrb5-3:armhf libkrb5support0:armhf libldap-2.5-0:armhf libldb2:armhf\
+ liblirc-dev:armhf libltdl7:armhf liblzma-dev:armhf liblzo2-dev:armhf libmicrohttpd-dev:armhf libmp3lame-dev:armhf libmpeg2-4-dev:armhf\
  libmpfr6:armhf libncurses-dev libncurses-dev:armhf libnettle8:armhf libnfs-dev:armhf libnih-dev:armhf libnih-dbus-dev:armhf\
  libogg-dev:armhf libp11-kit0:armhf libpam0g:armhf libpcre3-dev:armhf libpcrecpp0v5:armhf libplist-dev:armhf libplymouth-dev:armhf libpng-dev:armhf\
  libpopt0:armhf libpulse-dev:armhf libpulse-mainloop-glib0:armhf libpython3-dev:armhf\
@@ -26,16 +27,65 @@ config_install_deb=autoconf automake autopoint bash-completion bc bison ca-certi
  libsasl2-modules-db:armhf libselinux1:armhf libsigsegv2:armhf libsm6:armhf libsmbclient-dev:armhf libsndfile1:armhf libspdlog-dev:armhf libspeex-dev:armhf\
  libsqlite3-dev:armhf libssh2-1-dev:armhf libssh-dev:armhf libssl-dev libssl-dev:armhf libstdc++6:armhf libsystemd0:armhf libtag1-dev:armhf\
  libtag1v5-vanilla:armhf libtalloc2:armhf libtasn1-6:armhf libtdb1:armhf libtevent0:armhf libtiff5-dev:armhf libtiffxx6:armhf libtinfo5:armhf\
- libtinyxml-dev:armhf libubsan1:armhf libudev-dev:armhf libunistring-dev:armhf libusb-1.0-0-dev:armhf libusb-dev:armhf\
+ libtinyxml-dev:armhf libtinyxml2-dev:armhf libubsan1:armhf libudev-dev:armhf libunistring-dev:armhf libusb-1.0-0-dev:armhf libusb-dev:armhf\
  libuuid1:armhf libvncserver-dev:armhf libvorbis-dev:armhf libvorbisenc2:armhf libvorbisfile3:armhf libwayland-client0:armhf\
  libwayland-server0:armhf libwbclient0:armhf libwind0-heimdal:armhf libwrap0:armhf libx11-6:armhf libx11-xcb1:armhf libxau6:armhf libxcb1:armhf\
  libxdmcp6:armhf libxext6:armhf libxi6:armhf libxkbcommon-dev:armhf libxml2-dev:armhf libxslt1-dev:armhf libxtst6:armhf libyajl-dev:armhf\
- mesa-common-dev:armhf pkg-config:armhf rsync samba-libs:armhf uuid-dev:armhf xbian-package-shairplay:armhf yasm:armhf zlib1g-dev:armhf
+ mesa-common-dev:armhf pkg-config:armhf rsync samba-libs:armhf uuid-dev:armhf xbian-package-shairplay:armhf zlib1g-dev:armhf\
+ libacl1:arm64 libafpclient-dev:arm64 libasn1-8-heimdal:arm64\
+ libasound2-dev:arm64 libass-dev:arm64 libasyncns0:arm64 libatomic1:arm64 libattr1:arm64 libaudit1:arm64 libavahi-client-dev:arm64\
+ libavahi-common-dev:arm64 libavahi-compat-libdnssd-dev:arm64 libbluetooth-dev:arm64 libbluray-dev:arm64 libboost-dev:arm64 libbsd0:arm64\
+ libbz2-dev:arm64 libc6-dev:arm64 libcap-dev:arm64 libcec-dev:arm64 libcomerr2:arm64 libcups2:arm64\
+ libcurl4-openssl-dev:arm64 libdav1d-dev:arm64 libdb5.3:arm64 libdbus-1-dev:arm64 libdisplay-info-dev:arm64 libdrm2:arm64 libdrm-freedreno1:arm64\
+ libdrm-nouveau2:arm64 libdrm-radeon1:arm64 libdvbcsa-dev:arm64 libeatmydata1:arm64 libedit2:arm64 libegl1-mesa-dev:arm64 libelf1:arm64 libenca0:arm64\
+ libexpat1-dev:arm64 libfakeroot:arm64 libffi8:arm64 libflac12:arm64 libflatbuffers-dev:arm64 libfmt-dev:arm64 libfontconfig1-dev:arm64\
+ libfreetype6:arm64 libfribidi0:arm64 libfuse2:arm64 libgbm-dev:arm64 libgcc1:arm64 libgcrypt20:arm64 libgif-dev:arm64\
+ libgif-dev:arm64 libgl1-mesa-dev:arm64 libgles2-mesa-dev:arm64 libglib2.0-0:arm64 libgmp-dev:arm64 libgmpxx4ldbl:arm64\
+ libgnutls28-dev:arm64 libgnutls-openssl27:arm64 libgnutlsxx30:arm64 libgomp1:arm64 libgpg-error0:arm64 libgraphite2-3:arm64\
+ libgssapi3-heimdal:arm64 libgssapi-krb5-2:arm64 libharfbuzz0b:arm64 libharfbuzz-gobject0:arm64 libharfbuzz-icu0:arm64 libhcrypto5-heimdal:arm64\
+ libheimbase1-heimdal:arm64 libheimntlm0-heimdal:arm64 libhogweed6:arm64 libhx509-5-heimdal:arm64 libice6:arm64 libicu-dev:arm64\
+ libidn12:arm64 libinput-dev:arm64 libjbig-dev:arm64 libjpeg62-turbo-dev:arm64 libjson-c5:arm64\
+ libk5crypto3:arm64 libkeyutils1:arm64 libkissfft-dev:arm64 libkrb5-26-heimdal:arm64 libkrb5-3:arm64 libkrb5support0:arm64 libldap-2.5-0:arm64 libldb2:arm64\
+ libltdl7:arm64 liblzma-dev:arm64 liblzo2-dev:arm64 libmicrohttpd-dev:arm64 libmp3lame-dev:arm64 libmpeg2-4-dev:arm64\
+ libmpfr6:arm64 libncurses-dev libncurses-dev:arm64 libnettle8:arm64 libnfs-dev:arm64 libnih-dev:arm64 libnih-dbus-dev:arm64\
+ libogg-dev:arm64 libp11-kit0:arm64 libpam0g:arm64 libpcre3-dev:arm64 libpcrecpp0v5:arm64 libplist-dev:arm64 libplymouth-dev:arm64 libpng-dev:arm64\
+ libpopt0:arm64 libpulse-dev:arm64 libpulse-mainloop-glib0:arm64 libpython3-dev:arm64\
+ libpython3-stdlib:arm64 libraw-dev:arm64 libroken19-heimdal:arm64 librtmp1:arm64 librtmp-dev:arm64 libsasl2-2:arm64\
+ libsasl2-modules-db:arm64 libselinux1:arm64 libsigsegv2:arm64 libsm6:arm64 libsmbclient-dev:arm64 libsndfile1:arm64 libspdlog-dev:arm64 libspeex-dev:arm64\
+ libsqlite3-dev:arm64 libssh2-1-dev:arm64 libssh-dev:arm64 libssl-dev libssl-dev:arm64 libstdc++6:arm64 libsystemd0:arm64 libtag1-dev:arm64\
+ libtag1v5-vanilla:arm64 libtalloc2:arm64 libtasn1-6:arm64 libtdb1:arm64 libtevent0:arm64 libtiff5-dev:arm64 libtiffxx6:arm64 libtinfo5:arm64\
+ libtinyxml-dev:arm64 libtinyxml2-dev:arm64 libubsan1:arm64 libudev-dev:arm64 libunistring-dev:arm64 libusb-1.0-0-dev:arm64\
+ libuuid1:arm64 libvorbis-dev:arm64 libvorbisenc2:arm64 libvorbisfile3:arm64 libwayland-client0:arm64\
+ libwayland-server0:arm64 libwbclient0:arm64 libwind0-heimdal:arm64 libwrap0:arm64 libx11-6:arm64 libx11-xcb1:arm64 libxau6:arm64 libxcb1:arm64\
+ libxdmcp6:arm64 libxext6:arm64 libxi6:arm64 libxkbcommon-dev:arm64 libxml2-dev:arm64 libxslt1-dev:arm64 libxtst6:arm64 libyajl-dev:arm64\
+ mesa-common-dev:arm64 pkg-config:arm64 rsync samba-libs:arm64 uuid-dev:arm64 xbian-package-shairplay:arm64 zlib1g-dev:arm64
+
+# These packages cannot be installed together with the armhf pedants due to conflicts that may arise
+#
+config_install_deb_s2=default-libmysqlclient-dev:arm64 libcdio-dev:arm64 libfstrcmp-dev:arm64 liblirc-dev:arm64 libusb-dev:arm64 libvncserver-dev:arm64
+
+# These packages cannot be installed without modifying this file due to incorrect entries in the control file
+#
+config_install_deb_s3=libcdio-dev:armhf libgcrypt20-dev:armhf libgpg-error-dev:armhf liblirc-dev:armhf libmariadb-dev:armhf\
+ libmariadb-dev-compat:armhf libsasl2-dev:armhf libusb-dev:armhf libvncserver-dev:armhf\
+ libcdio-dev:arm64 libgcrypt20-dev:arm64 libgpg-error-dev:arm64 liblirc-dev:arm64 libmariadb-dev:arm64\
+ libmariadb-dev-compat:arm64 libsasl2-dev:arm64 libusb-dev:arm64 libvncserver-dev:arm64
+
+# These packages can only be installed at the end due to the above problems
+# 
+config_install_deb_s4=libiso9660-dev:armhf libiso9660-dev:arm64 libcdio++-dev:armhf libcdio++-dev:arm64
+
+#
+# armhf pedants are sufficiant
+#
+#    clang-format:arm64
+#    yasm:arm64
 
 #
 # Added:
 #    libdav1d-dev:armhf
 #    libdisplay-info-dev:armhf
+#    libkissfft-dev:armhf
 #
 # Vanished:
 #    libtntnet-dev:armhf
