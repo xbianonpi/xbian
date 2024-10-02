@@ -3,8 +3,8 @@ config_distro_url=http://deb.debian.org/debian
 config_distro_arch=armhf
 config_fstype_root=btrfs
 config_fsoptions_root=-o compress=none,noatime
-config_img_size=2500M
+config_img_size=3000M
 config_fstype_boot=vfat
-config_xbian_deb=linux-image-bcm2710 xbian-package-firmware
+config_xbian_deb=linux-image-bcm2710 xbian-package-firmware libpam-elogind
 config_allow_staging_devel=no
 config_allow_staging=yes
